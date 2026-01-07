@@ -1,0 +1,30 @@
+nav ul li{
+    list-style: none;
+}
+
+nav ul{
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-row: 1fr;
+}
+
+nav{
+    background-color: #7A8A06;
+}
+
+nav *{
+    color: white;
+}
+
+#perfil:hover > ul{
+    display: block !important;
+}
+
+#perfil ul a li:hover{
+    background-color: #7A8A06 !important;
+    color: white !important;
+}
+
+#perfil ul a{
+    text-decoration: none !important;
+}
