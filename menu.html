@@ -22,12 +22,12 @@
                     <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Otros espacios</a></li>
                     <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Incidencias</a></li>
                     <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Liberar aula</a></li>
-                    <li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><a href="#" id="menudesplegable" target="_blank" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
+                    <li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
                         <ul class="dropdown-menu" data-target="#menudesplegable">
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis datos</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis reservas</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis incidencias</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Cerrar sesión</li></a>
+                            <a href="#"><li class="dropdown-item">Mis datos</li></a>
+                            <a href="#"><li class="dropdown-item">Mis reservas</li></a>
+                            <a href="#"><li class="dropdown-item">Mis incidencias</li></a>
+                            <a href="#"><li class="dropdown-item">Cerrar sesión</li></a>
                         </ul>
                     </li>
                 </ul>
@@ -36,34 +36,38 @@
                 <ul class="col-12 d-flex d-lg-none text-center fs-5 pt-3">
                     <li class="col-2"><a href="#"><img src="imagenes/ieslogo.png" alt="Logo"></a></li>
                     <li class="offset-6 offset-sm-7"></li>
-                    <li class="mx-3 list-group-item pt-5 pb-5 d-lg-none ms-5" id="perfil"><a href="#" id="menudesplegable" target="_blank" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list fs-1"></i></a>
-                        <ul class="dropdown-menu" data-target="#menudesplegable">
-                            <a href="#" target="_blank"><li class="dropdown-item">Aulas</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Salón de actos</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Material</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Otros espacios</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Incidencias</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Liberar aula</li></a>
+                    <li class="mx-3 list-group-item pt-5 pb-5 d-lg-none ms-5" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list fs-1"></i></a>
+                        <ul class="dropdown-menu" data-target="#menudesplegable" class="bg-light">
+                            <a href="#"><li class="dropdown-item bg-light">Aulas</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Salón de actos</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Material</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Otros espacios</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Incidencias</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Liberar aula</li></a>
                         </ul>
                     </li>
-                    <li class="list-group-item pt-5 pb-5 d-lg-none" id="perfil"><a href="#" id="menudesplegable" target="_blank" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
-                        <ul class="dropdown-menu" data-target="#menudesplegable">
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis datos</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis reservas</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Mis incidencias</li></a>
-                            <a href="#" target="_blank"><li class="dropdown-item">Cerrar sesión</li></a>
+                    <li class="list-group-item pt-5 pb-5 d-lg-none" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
+                        <ul class="dropdown-menu" data-target="#menudesplegable" class="bg-light">
+                            <a href="#"><li class="dropdown-item bg-light">Mis datos</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Mis reservas</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Mis incidencias</li></a>
+                            <a href="#"><li class="dropdown-item bg-light">Cerrar sesión</li></a>
                         </ul>
                     </li>
                 </ul>
             </nav>
         </header>
-        <main class="container menu">
-            <button class="menu p-5">Aulas</button>
-            <button class="menu p-5">Salón de actos</button>
-            <button class="menu p-5">Material</button>
-            <button class="menu p-5">Otros espacios</button>
-            <button class="menu p-5">Incidencias</button>
-            <button class="menu p-5">Liberar aula</button>
+        <main>
+            <div class="container-fluid menu row text-center">
+                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas</a>
+                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Salón de actos</a>
+                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Material</a>
+                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Otros espacios</a>
+                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Incidencias</a>
+                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Liberar aula</a>
+                <a href="menuadministrador.html" class="menu bg-verde d-lg-none p-5 fs-5">Ir al menú de administrador</a>
+            </div>
+            <a href="menuadministrador.html" class="menu bg-verde offset-8 col-3 me-5 mt-0 text-center d-none d-lg-block p-5 fs-5 text-light">Ir al menú de administrador</a>
         </main>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/ulg/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

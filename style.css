@@ -53,21 +53,52 @@ nav ul li a img{
 
 body.menu{
     background-color: #E6F5F0;
+    height: 100vh;
+    overflow: hidden;
 }
 
-main.menu{
-    margin-top: 12%;
+main.menu, div.menu{
+    padding-top: 11%;
     background-color: #E6F5F0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    row-gap: 25%;
-    column-gap: 5%;
+    justify-content: center;
 }
 
-button.menu{
+a.menu{
+    margin-bottom: 9%;
     background-color: #274C9C;
-    border: 1px solid color #264C9C;
+    border: 1px solid #274C9C !important;
     border-radius: 25px;
     color: white;
+    text-decoration: none;
+}
+
+a.menu:hover{
+    background-color: #0051ff !important;
+    border: 1px solid #0051ff !important;
+}
+
+.bg-lightgrey, .bg-lightgray{
+    background-color: lightgrey !important;
+}
+
+a.bg-lightgrey, a.bg-lightgray{
+    border: 1px solid lightgrey !important;
+}
+
+a.bg-lightgrey:hover, a.bg-lightgray:hover{
+    background-color: rgb(170, 170, 170) !important;
+    border: 1px solid rgb(170, 170, 170) !important;
+}
+
+.bg-verde{
+    background-color: #7A8A06 !important;
+}
+
+a.bg-verde, button.bg-verde{
+    border: 1px solid #7A8A06 !important;
+}
+
+a.bg-verde:hover, button.bg-verde:hover{
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
 }
