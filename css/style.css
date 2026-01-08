@@ -109,7 +109,7 @@ a.bg-verde:hover, button.bg-verde:hover{
     box-shadow: 7px 7px 7px 0px rgba(144, 163, 0, 0.5);
 }
 
-button.enviar{
+a.enviar, button.enviar{
     background-color: #274C9C;
     border: 1px solid #274C9C !important;
     border-radius: 25px;
@@ -117,7 +117,7 @@ button.enviar{
     text-decoration: none;
 }
 
-button.enviar:hover{
+a.enviar:hover, button.enviar:hover{
     background-color: #0051ff !important;
     border: 1px solid #0051ff !important;
 }
