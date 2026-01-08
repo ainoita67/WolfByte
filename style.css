@@ -8,7 +8,7 @@ nav ul li{
 nav ul{
     display: grid;
     grid-template-columns: repeat(9, auto);
-    grid-template-rows: 4.75em;
+    grid-template-rows: 3em;
 }
 
 nav{
@@ -29,7 +29,7 @@ nav *{
 }
 
 nav ul li a img{
-    height: 5em;
+    height: 4em;
 }
 
 #perfil:hover > ul{
