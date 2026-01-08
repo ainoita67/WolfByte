@@ -72,9 +72,21 @@ main.menu{
     column-gap: 5%;
 }
 
-button.menu{
+button.menu,
+.btn.menu {
     background-color: #274C9C;
-    border: 1px solid color #264C9C;
+    border: 1px solid #274C9C;
     border-radius: 25px;
     color: white;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: 0.3s ease;
 }
+
+button.menu:hover,
+.btn.menu:hover {
+    background-color: #1f3a7a;
+    border-color: #1f3a7a;
+    cursor: pointer;
+}
+
