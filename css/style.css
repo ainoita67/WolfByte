@@ -1,0 +1,104 @@
+nav ul li{
+    list-style: none;
+    height: min-content;
+    vertical-align: middle;
+    align-self: center;
+}
+
+nav ul{
+    display: grid;
+    grid-template-columns: repeat(9, auto);
+    grid-template-rows: 3em;
+}
+
+nav{
+    background-color: #7A8A06;
+}
+
+#menumovil ul{
+    height: 3em;
+}
+
+#menumovil ul li a img{
+    height: 3em;
+}
+
+nav *{
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li a img{
+    height: 4em;
+}
+
+#perfil:hover > ul{
+    display: block !important;
+}
+
+#perfil ul a li:hover{
+    background-color: #7A8A06 !important;
+    color: white !important;
+}
+
+#perfil ul a{
+    text-decoration: none !important;
+}
+
+.dropdown-menu{
+    right: 0;
+    background-color: white !important;
+    border: 1px solid white !important;
+}
+
+body.menu{
+    background-color: #E6F5F0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+main.menu, div.menu{
+    padding-top: 11%;
+    background-color: #E6F5F0;
+    justify-content: center;
+}
+
+a.menu{
+    margin-bottom: 9%;
+    background-color: #274C9C;
+    border: 1px solid #274C9C !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+a.menu:hover{
+    background-color: #0051ff !important;
+    border: 1px solid #0051ff !important;
+}
+
+.bg-lightgrey, .bg-lightgray{
+    background-color: lightgrey !important;
+}
+
+a.bg-lightgrey, a.bg-lightgray{
+    border: 1px solid lightgrey !important;
+}
+
+a.bg-lightgrey:hover, a.bg-lightgray:hover{
+    background-color: rgb(170, 170, 170) !important;
+    border: 1px solid rgb(170, 170, 170) !important;
+}
+
+.bg-verde{
+    background-color: #7A8A06 !important;
+}
+
+a.bg-verde, button.bg-verde{
+    border: 1px solid #7A8A06 !important;
+}
+
+a.bg-verde:hover, button.bg-verde:hover{
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
+}
