@@ -12,6 +12,7 @@ header{
     grid-column: 1/2;
     position: fixed;
     width: 100%;
+    z-index: 999999999999999999999999;
 }
 
 main{
@@ -50,6 +51,24 @@ nav *{
     text-decoration: none !important;
 }
 
+#menuordenador ul li:not(:last-child) a{
+    padding: 1.7em !important;
+    width: 100% !important;
+}
+
+#menuordenador ul li:not(:last-child){
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#menuordenador ul li:not(:first-child) a:hover{
+    background-color: #90a300;
+}
+
+#perfil a:hover{
+    background-color: #00000000 !important;
+}
+
 nav ul li a img{
     height: 4em;
 }
@@ -63,8 +82,17 @@ nav ul li a img{
     color: white !important;
 }
 
-#perfil ul a li{
+#menuordenador ul #perfil ul a li{
     text-decoration: none !important;
+    color: black !important;
+    padding: 0.25em !important;
+}
+
+#menuordenador ul #perfil ul a li:hover{
+    color: white !important;
+}
+
+#perfil ul *{
     color: black !important;
 }
 
