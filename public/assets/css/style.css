@@ -3,7 +3,7 @@ body{
     padding: 0 !important;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 5.75em 1fr;
+    grid-template-rows: 5.75em 1fr auto;
     min-height: 100vh;
 }
 
@@ -17,6 +17,7 @@ header{
 main{
     grid-row: 2/3;
     grid-column: 1/2;
+    min-height: 75vh;
 }
 
 nav ul li{
@@ -159,4 +160,9 @@ input{
 input:hover, input:active{
     border: 1px solid #0051ff !important;
     background-color: #e9f0ff;
+}
+
+footer{
+    grid-row: 3/4;
+    grid-column: 1/2;
 }
