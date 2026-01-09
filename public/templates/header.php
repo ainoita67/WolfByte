@@ -7,7 +7,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../assets/css/style.css">
         <title>IES Bajo Aragón</title>
     </head>
     <body class="container-fluid menu">
@@ -57,18 +57,6 @@
                 </ul>
             </nav>
         </header>
-        <main>
-            <div class="container-fluid menu row text-center">
-                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas</a>
-                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Salón de actos</a>
-                <a href="#" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Material</a>
-                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Otros espacios</a>
-                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Incidencias</a>
-                <a href="#" class="menu col-lg-3 mx-lg-5 mb-lg-5 p-5 fs-5">Liberar aula</a>
-                <a href="menuadministrador.html" class="menu bg-verde d-lg-none p-5 fs-5">Ir al menú de administrador</a>
-            </div>
-            <a href="menuadministrador.html" class="menu bg-verde offset-8 col-3 me-5 mt-0 text-center d-none d-lg-block p-5 fs-5 text-light">Ir al menú de administrador</a>
-        </main>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/ulg/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>

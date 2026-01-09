@@ -77,3 +77,9 @@ table.tabla-reservas thead {
 .tabla-reservas .btn:hover {
     opacity: 0.85;
 }
+
+div.card{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
