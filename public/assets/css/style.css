@@ -46,8 +46,8 @@ nav{
 }
 
 nav *{
-    color: white;
-    text-decoration: none;
+    color: white !important;
+    text-decoration: none !important;
 }
 
 nav ul li a img{
@@ -63,8 +63,9 @@ nav ul li a img{
     color: white !important;
 }
 
-#perfil ul a{
+#perfil ul a li{
     text-decoration: none !important;
+    color: black !important;
 }
 
 .dropdown-menu{
