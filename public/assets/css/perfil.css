@@ -11,12 +11,17 @@ table.tabla-reservas thead {
 }
 
 
-.tabla-reservas thead th {
-    background-color: #274C9C !important;
-    color: #ffffff !important;
-    border: none;
-    padding: 14px;
+.tabla-reservas thead {
+    background-color: #274C9C;
+    color: #ffffff;
 }
+
+.tabla-reservas thead th {
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
 
 .tabla-reservas tbody tr {
     background-color: var(#7A8A06);
