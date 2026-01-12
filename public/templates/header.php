@@ -1,3 +1,6 @@
+<?php
+$base_url="http://localhost/home/daw/Documentos/Wolfbyte";
+?>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -14,7 +17,7 @@
         <header>
             <nav class="row">
                 <ul class="col-12 d-none d-lg-grid text-center fs-5 pt-3">
-                    <li class="col-12"><a href="#"><img src="imagenes/ieslogo.png" alt="Logo"></a></li>
+                    <li class="col-12"><a href="public/perfil/menu.html"><img src="public/assets/imagenes/ieslogo.png" alt="Logo"></a></li>
                     <li></li>
                     <li class="pt-5 pb-5 d-none d-lg-block ms-5"><a href="#">Aulas</a></li>
                     <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Salón de actos</a></li>
@@ -34,7 +37,7 @@
             </nav>
             <nav class="row" id="menumovil">
                 <ul class="col-12 d-flex d-lg-none text-center fs-5 pt-3">
-                    <li class="col-2"><a href="#"><img src="imagenes/ieslogo.png" alt="Logo"></a></li>
+                    <li class="col-2"><a href="#"><img src="public/assets/imagenes/ieslogo.png" alt="Logo"></a></li>
                     <li class="offset-6 offset-sm-7"></li>
                     <li class="mx-3 list-group-item pt-5 pb-5 d-lg-none ms-5" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list fs-1"></i></a>
                         <ul class="dropdown-menu" data-target="#menudesplegable" class="bg-light">
