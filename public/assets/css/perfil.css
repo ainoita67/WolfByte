@@ -1,72 +1,54 @@
-.tabla-reservas {
+#tabla-reservas{
     width: 100%;
     background-color: var(white);
     border-radius: 15px;
     overflow: hidden;
 }
 
-table.tabla-reservas thead {
+#tabla-reservas thead{
     background-color: #274C9C !important;
     color: #ffffff !important;
 }
 
-
-.tabla-reservas thead {
-    background-color: #274C9C;
-    color: #ffffff;
-}
-
-.tabla-reservas thead th {
+#tabla-reservas thead th{
     background-color: #274C9C;
     color: #ffffff;
     border: none;
 }
 
-
-.tabla-reservas tbody tr {
+#tabla-reservas tbody tr{
     background-color: var(#7A8A06);
     transition: background-color 0.3s ease;
 }
 
-.tabla-reservas tbody tr:nth-child(even) {
+#tabla-reservas tbody tr:nth-child(even){
     background-color: #d9efe7;
 }
 
-.tabla-reservas tbody tr:hover {
+#tabla-reservas tbody tr:hover{
     background-color: var(#90a300);
 }
 
-.tabla-reservas td {
+#tabla-reservas td{
     padding: 12px;
     vertical-align: middle;
     border-color: var(#d0d0d0);
 }
 
-.tabla-reservas .badge {
+#tabla-reservas .badge{
     padding: 8px 12px;
     border-radius: 20px;
     font-weight: 500;
 }   
 
-.tabla-reservas .btn {
+#tabla-reservas .btn{
     border-radius: 50%;
     width: 36px;
     height: 36px;
     padding: 0;
 }
 
-.tabla-reservas .btn-warning {
-    background-color: var(#7A8A06);
-    border: none;
-    color: var(--blanco);
-}
-
-.tabla-reservas .btn-danger {
-    background-color: #c0392b;
-    border: none;
-}
-
-.tabla-reservas .btn:hover {
+#tabla-reservas .btn:hover{
     opacity: 0.85;
 }
 
@@ -74,4 +56,29 @@ div.card{
     border: 1px solid white !important;
     border-radius: 25px !important;
     box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+.estadobadge{
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estadobadge.confirmada {
+    background-color: #007E33;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estadobadge.pendiente {
+    background-color: #FFBB33;
+    color: black;
+    border: 1px solid #FFBB33 !important;
+}
+
+.estadobadge.cancelada {
+    font-weight: 700 !important;
+    background-color: #CC0000;
+    color: white;
+    border: 1px solid #CC0000 !important;
 }
