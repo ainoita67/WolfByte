@@ -79,25 +79,18 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>Aula 101</td>
-                            <td>12/02/2026</td>
-                            <td class="d-none d-md-table-cell">08:30 - 09:25</td>
-                            <td class="d-none d-md-table-cell">Juan Pérez</td>
-                            <td class="d-none d-md-table-cell">2º ESO A</td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="espacio">Aula 101</td>
+                            <td class="fecha">12/02/2026</td>
+                            <td class="hora d-none d-md-table-cell">08:30 - 09:25</td>
+                            <td class="profesor d-none d-md-table-cell">Juan Pérez</td>
+                            <td class="grupo d-none d-md-table-cell">2º ESO A</td>
+                            <td class="estado d-none d-md-table-cell">
                                 <span class="badge bg-success">Confirmada</span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-primary"
+                                <button class="btn btn-sm btn-primary btn-ver"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#modalReserva"
-                                    onclick="cargarReserva(this)"
-                                    data-espacio="Salón de actos"
-                                    data-fecha="13/02/2026"
-                                    data-hora="10:20 - 11:15"
-                                    data-profesor="María López"
-                                    data-grupo="1º Bachillerato"
-                                    data-estado="Pendiente">
+                                    data-bs-target="#modalReserva">
                                     <i class="bi bi-eye"></i>
                                 </button>
                                 <button class="btn btn-sm btn-warning">
@@ -111,25 +104,18 @@
 
                         <tr>
                             <td>2</td>
-                            <td>Salón de actos</td>
-                            <td>13/02/2026</td>
-                            <td class="d-none d-md-table-cell">10:20 - 11:15</td>
-                            <td class="d-none d-md-table-cell">María López</td>
-                            <td class="d-none d-md-table-cell">1º Bachillerato</td>
-                            <td class="d-none d-md-table-cell">
+                            <td class="espacio">Salón de actos</td>
+                            <td class="fecha">13/02/2026</td>
+                            <td class="hora d-none d-md-table-cell">10:20 - 11:15</td>
+                            <td class="profesor d-none d-md-table-cell">María López</td>
+                            <td class="grupo d-none d-md-table-cell">1º Bachillerato</td>
+                            <td class="estado d-none d-md-table-cell">
                                 <span class="badge bg-warning text-dark">Pendiente</span>
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-primary"
+                                <button class="btn btn-sm btn-primary btn-ver"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#modalReserva"
-                                    onclick="cargarReserva(this)"
-                                    data-espacio="Salón de actos"
-                                    data-fecha="13/02/2026"
-                                    data-hora="10:20 - 11:15"
-                                    data-profesor="María López"
-                                    data-grupo="1º Bachillerato"
-                                    data-estado="Pendiente">
+                                    data-bs-target="#modalReserva">
                                     <i class="bi bi-eye"></i>
                                 </button>
                                 <button class="btn btn-sm btn-warning">
@@ -174,14 +160,19 @@
 
         <!-- JS -->
         <script>
-            function cargarReserva(btn) {
-                document.getElementById("mEspacio").textContent=btn.dataset.espacio;
-                document.getElementById("mFecha").textContent=btn.dataset.fecha;
-                document.getElementById("mHora").textContent=btn.dataset.hora;
-                document.getElementById("mProfesor").textContent=btn.dataset.profesor;
-                document.getElementById("mGrupo").textContent=btn.dataset.grupo;
-                document.getElementById("mEstado").textContent=btn.dataset.estado;
-            }
+            document.querySelector("tbody").addEventListener("click", e => {
+                const btn = e.target.closest(".btn-ver");
+                if (!btn) return;
+
+                const fila = btn.closest("tr");
+
+                mEspacio.textContent  = fila.querySelector(".espacio").textContent;
+                mFecha.textContent    = fila.querySelector(".fecha").textContent;
+                mHora.textContent     = fila.querySelector(".hora").textContent;
+                mProfesor.textContent = fila.querySelector(".profesor").textContent;
+                mGrupo.textContent    = fila.querySelector(".grupo").textContent;
+                mEstado.textContent   = fila.querySelector(".estado").textContent.trim();
+            });
         </script>
     </body>
 </html>
