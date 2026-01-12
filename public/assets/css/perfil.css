@@ -46,20 +46,7 @@ table.tabla-reservas thead {
     padding: 8px 12px;
     border-radius: 20px;
     font-weight: 500;
-}
-
-.tabla-reservas .badge.bg-success {
-    background-color: var(#274C9C) !important;
-}
-
-.tabla-reservas .badge.bg-warning {
-    background-color: var(#7A8A06) !important;
-    color: var(--blanco) !important;
-}
-
-.tabla-reservas .badge.bg-danger {
-    background-color: #c0392b !important;
-}
+}   
 
 .tabla-reservas .btn {
     border-radius: 50%;
