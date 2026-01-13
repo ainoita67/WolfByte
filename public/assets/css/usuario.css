@@ -1,15 +1,15 @@
-.tabla-usuarios thead {
+.tabla-cabezera thead {
     background-color: #274C9C;
     color: #ffffff;
 }
 
-.tabla-usuarios thead th {
+.tabla-cabezera thead th {
     background-color: #274C9C;
     color: #ffffff;
     border: none;
 }
 
-.tabla-usuarios {
+.tabla-cabezera {
     width: 100%;
     background-color: var(white);
     border-radius: 15px;
@@ -35,15 +35,4 @@
     background-color: #CC0000;
     color: white;
     border: 1px solid #CC0000 !important;
-}
-
-.tabla-aulasreservas thead{
-    background-color: #274C9C;
-    color: #ffffff;
-}
-
-.tabla-aulasreservas thead th {
-    background-color: #274C9C;
-    color: #ffffff;
-    border: none;
 }
