@@ -239,13 +239,13 @@ footer{
 }
 
 .tabla-cabecera thead {
-    background-color: #274C9C;
-    color: #ffffff;
+    background-color: #274C9C !important;
+    color: #ffffff !important;
 }
 
 .tabla-cabecera thead th {
-    background-color: #274C9C;
-    color: #ffffff;
+    background-color: #274C9C !important;
+    color: #ffffff !important;
     border: none;
 }
 
