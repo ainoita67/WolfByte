@@ -3,7 +3,7 @@
     $directorio='../';
     $ruta='misdatos';
     $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
+    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
     include '../../templates/header.php';
 ?>
 
