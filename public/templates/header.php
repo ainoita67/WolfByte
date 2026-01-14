@@ -33,8 +33,4 @@
                     include $directorio.'../templates/menu.php';
                 }
             ?>
-<<<<<<< HEAD
         </header>
-=======
-        </header>
->>>>>>> main

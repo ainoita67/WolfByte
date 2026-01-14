@@ -18,7 +18,7 @@
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
     <a href="menuadministrador.php" class="menu bg-verde col-3 mt-5 mb-0 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
-    <a href="menuadministrador.php" class="menu bg-verde d-lg-none p-5 fs-5">Ir al menú de administrador</a>
+    <a href="administrador/menuadministrador.php" class="menu bg-verde d-lg-none p-5 fs-5">Ir al menú de administrador</a>
 </main>
 
 <?php
