@@ -8,6 +8,7 @@
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <?php
+            echo '<link rel="shortcut icon" href="'.$directorio.'../assets/imagenes/favicon.png">';
             echo '<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
             echo $style;
             echo '<title>'.$title.'</title>';

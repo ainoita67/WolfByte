@@ -1,6 +1,7 @@
 <?php
     $title='Menú de administrador';
 <<<<<<< HEAD
+<<<<<<< HEAD
     $directorio='';
     $ruta='menuadministrador';
     $seccion='';
@@ -25,6 +26,8 @@
     include '../templates/footer.php';
 
 =======
+=======
+>>>>>>> origin/panel-de-administrador
     $directorio='../';
     $ruta='menuadministrador';
     $seccion='';
@@ -47,5 +50,9 @@
 
 <?php
     include '../../templates/footer.php';
+<<<<<<< HEAD
 ?>
 >>>>>>> origin/main
+=======
+?>
+>>>>>>> origin/panel-de-administrador

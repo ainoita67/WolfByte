@@ -1,7 +1,7 @@
 <?php
-    $title='Características espacio';
+    $title='Edificios';
     $directorio='../../../';
-    $ruta='caracteristicasespacio';
+    $ruta='edificios';
     $seccion='';
     $style='';
     include '../../../../templates/header.php';
@@ -9,7 +9,7 @@
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Características espacio</h2>
+        <h2>Edificios</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
             <i class="bi bi-plus-circle"></i> Crear material
         </button>

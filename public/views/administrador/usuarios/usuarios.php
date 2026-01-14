@@ -3,7 +3,10 @@
     $directorio='../../';
     $ruta='misdatos';
     $seccion='';
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/panel-de-administrador
     $style='';
     include '../../../templates/header.php';
 ?>

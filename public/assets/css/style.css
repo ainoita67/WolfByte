@@ -66,7 +66,7 @@ nav ul li:not(:first-child) a:hover{
 
 #menumovil ul{
     height: 3em;
-    padding-left: 10% !important;
+    padding-left: 5% !important;
 }
 
 #menumovil ul li a img, #menumovillogin ul li a img{

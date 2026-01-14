@@ -3,13 +3,20 @@
     $directorio='../../';
     $ruta='materiales';
     $seccion='';
+<<<<<<< HEAD
     $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
+=======
+    $style='';
+>>>>>>> origin/panel-de-administrador
     include '../../../templates/header.php';
 ?>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/panel-de-administrador
         <h2>Materiales</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
             <i class="bi bi-plus-circle"></i> Crear material
@@ -69,7 +76,10 @@
 
 <!-- Modal Crear -->
 <div class="modal fade" id="modalCrear" tabindex="-1">
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/panel-de-administrador
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,7 +117,10 @@
 
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1">
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/panel-de-administrador
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -161,5 +174,9 @@ document.querySelectorAll(".btn-editar").forEach(boton => {
 
 <?php
     include '../../../templates/footer.php';
+<<<<<<< HEAD
 ?>
 
+=======
+?>
+>>>>>>> origin/panel-de-administrador
