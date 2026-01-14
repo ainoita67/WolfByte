@@ -7,58 +7,34 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <link rel="stylesheet" href="../assets/css/style.css">
-        <title>IES Bajo Aragón</title>
+        <?php
+            echo '<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
+            echo $style;
+            echo '<title>'.$title.'</title>';
+        ?>
     </head>
     <body class="container-fluid menu">
         <header>
-            <nav class="row">
-                <ul class="col-12 d-none d-lg-grid text-center fs-5 pt-3">
-                    <li class="col-12"><a href="#"><img src="imagenes/ieslogo.png" alt="Logo"></a></li>
-                    <li></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block ms-5"><a href="#">Aulas</a></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Salón de actos</a></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Material</a></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Otros espacios</a></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Incidencias</a></li>
-                    <li class="pt-5 pb-5 d-none d-lg-block"><a href="#">Liberar aula</a></li>
-                    <li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
-                        <ul class="dropdown-menu" data-target="#menudesplegable">
-                            <a href="perfil/datos.html"><li class="dropdown-item">Mis datos</li></a>
-                            <a href="perfil/reserva.html"><li class="dropdown-item">Mis reservas</li></a>
-                            <a href="perfil/misincidencias.html"><li class="dropdown-item">Mis incidencias</li></a>
-                            <a href="../../../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <nav class="row" id="menumovil">
-                <ul class="col-12 d-flex d-lg-none text-center fs-5 pt-3">
-                    <li class="col-2"><a href="#"><img src="imagenes/ieslogo.png" alt="Logo"></a></li>
-                    <li class="offset-6 offset-sm-7"></li>
-                    <li class="mx-3 list-group-item pt-5 pb-5 d-lg-none ms-5" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-list fs-1"></i></a>
-                        <ul class="dropdown-menu" data-target="#menudesplegable" class="bg-light">
-                            <a href="#"><li class="dropdown-item bg-light">Aulas</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Salón de actos</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Material</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Otros espacios</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Incidencias</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Liberar aula</li></a>
-                        </ul>
-                    </li>
-                    <li class="list-group-item pt-5 pb-5 d-lg-none" id="perfil"><a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>
-                        <ul class="dropdown-menu" data-target="#menudesplegable" class="bg-light">
-                            <a href="perfil/datos.html"><li class="dropdown-item bg-light">Mis datos</li></a>
-                            <a href="perfil/reserva.html"><li class="dropdown-item bg-light">Mis reservas</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Mis incidencias</li></a>
-                            <a href="#"><li class="dropdown-item bg-light">Cerrar sesión</li></a>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+            <?php
+                if($ruta=='login'){
+                    echo '<nav class="row d-none d-lg-grid">';
+                        echo '<ul class="col-7 d-none d-lg-grid text-center fs-5 pt-3 pe-1">';
+                            echo '<li class="col-12 ps-2 pe-5"><a href="#"><img src="'.$directorio.'../assets/imagenes/ieslogo.png" alt="Logo"></a></li>';
+                            echo '<li></li>';
+                        echo '</ul>';
+                    echo '</nav>';
+                    echo '<nav class="row mt-0 d-lg-none" id="menumovillogin">';
+                        echo '<ul class="col-7 d-grid d-lg-none text-center fs-5 pt-2">';
+                            echo '<li class="col-12 ps-2 pe-5"><a href="#"><img src="'.$directorio.'../assets/imagenes/ieslogo.png" alt="Logo"></a></li>';
+                            echo '<li></li>';
+                        echo '</ul>';
+                    echo '</nav>';
+                }else{
+                    include $directorio.'../templates/menu.php';
+                }
+            ?>
+<<<<<<< HEAD
         </header>
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/ulg/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    </body>
-</html>
+=======
+        </header>
+>>>>>>> main
