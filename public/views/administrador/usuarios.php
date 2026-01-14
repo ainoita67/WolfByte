@@ -101,7 +101,11 @@
                 </table>
             </div>
             <div class="mt-5 container-fluid text-end">
+<<<<<<< HEAD:public/views/administrador/usuarios.php
                 <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+=======
+                <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
+>>>>>>> origin/main:public/views/administrador/usuarios.html
             </div>
         </main>
         <script>
