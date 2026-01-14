@@ -162,4 +162,8 @@ crossorigin="anonymous"></script>
 
 <?php
     include '../../templates/footer.php'
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> main
