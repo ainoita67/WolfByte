@@ -55,7 +55,7 @@
     document.querySelectorAll(".estado").forEach(td=>{
         const texto=td.textContent.trim().toLowerCase();
 
-        td.classList.revome("activo", "inactivo");
+        td.classList.remove("activo", "inactivo");
 
         if(texto==="activo"){
             td.classList.add("activo");
