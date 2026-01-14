@@ -26,8 +26,8 @@
                         <ul class="dropdown-menu" data-target="#menudesplegable">
                             <a href="perfil/datos.html"><li class="dropdown-item">Mis datos</li></a>
                             <a href="perfil/reserva.html"><li class="dropdown-item">Mis reservas</li></a>
-                            <a href="#"><li class="dropdown-item">Mis incidencias</li></a>
-                            <a href="#"><li class="dropdown-item">Cerrar sesión</li></a>
+                            <a href="perfil/misincidencias.html"><li class="dropdown-item">Mis incidencias</li></a>
+                            <a href="../../../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>
                         </ul>
                     </li>
                 </ul>

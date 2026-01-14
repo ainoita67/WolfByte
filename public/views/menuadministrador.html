@@ -26,8 +26,8 @@
                         <ul class="dropdown-menu" data-target="#menudesplegable">
                             <a href="perfil/datos.html"><li class="dropdown-item">Mis datos</li></a>
                             <a href="perfil/reserva.html"><li class="dropdown-item">Mis reservas</li></a>
-                            <a href="#"><li class="dropdown-item">Mis incidencias</li></a>
-                            <a href="#"><li class="dropdown-item">Cerrar sesión</li></a>
+                            <a href="perfil/misincidencias.html"><li class="dropdown-item">Mis incidencias</li></a>
+                            <a href="../../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>
                         </ul>
                     </li>
                 </ul>
@@ -57,13 +57,17 @@
                 </ul>
             </nav>
         </header>
-        <main class="container-fluid menu row text-center">
-            <a href="administrador/usuarios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Usuarios</a>
-            <a href="administrador/aulasyespacios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas y espacios</a>
-            <a href="administrador/reservaspermanentes.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservas permanentes</a>
-            <a href="administrador/materiales.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 mb-lg-0">Materiales</a>
-            <a href="administrador/tablaspermanentes.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 mb-lg-0">Tablas permanentes</a>
-            <a href="menu.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 bg-lightgrey text-dark mb-lg-0">Volver al menú principal</a>
+        <main class="ps-4 container-fluid menu row text-center">
+            <a href="administrador/usuarios.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5">Usuarios</a>
+            <a href="administrador/logacciones.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5">Log de acciones</a>
+            <a href="administrador/aulasyespacios.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5">Aulas y espacios</a>
+            <a href="administrador/reservaspermanentes.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5 mb-lg-0">Reservas permanentes</a>
+            <a href="administrador/materiales.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5 mb-lg-0">Materiales</a>
+            <a href="administrador/tablasauxiliares.html" class="menu col-lg-3 mx-lg-5 p-5 ms-2 fs-5 mb-lg-0">Tablas auxiliares</a>
+            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
+            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
+            <a href="menu.html" class="menu bg-lightgrey col-3 mt-5 mb-0 p-menu text-center d-none d-lg-block p-5 fs-5 text-dark">Volver al menú principal</a>
+            <a href="menu.html" class="menu bg-lightgrey d-lg-none p-5 fs-5 text-dark">Volver al menú principal</a>
         </main>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/ulg/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
