@@ -1,10 +1,10 @@
 <?php
     $title='Reservas permanentes';
-    $directorio='../';
+    $directorio='../../';
     $ruta='reservaspermanentes';
     $seccion='';
     $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
-    include '../../templates/header.php';
+    include '../../../templates/header.php';
 ?>
 
 <main class="container mt-5">
@@ -62,12 +62,10 @@
     </div>
 
     <div class="mt-5 container-fluid text-end">
-        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
     </div>
 </main>
 
 <?php
-    include '../../templates/footer.php';
-
+    include '../../../templates/footer.php';
 ?>
-

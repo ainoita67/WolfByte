@@ -1,10 +1,10 @@
 <?php
     $title='Aulas y espacios';
-    $directorio='../';
+    $directorio='../../';
     $ruta='aulasyespacios';
     $seccion='';
     $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
-    include '../../templates/header.php';
+    include '../../../templates/header.php';
 ?>
 
 <main class="container mt-5">
@@ -61,7 +61,7 @@
         </table>
     </div>
     <div class="mt-5 container-fluid text-end">
-        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
     </div>
 
 </main>
@@ -161,9 +161,5 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
-    include '../../templates/footer.php'
-<<<<<<< HEAD
+    include '../../../templates/footer.php';
 ?>
-=======
-?>
->>>>>>> main
