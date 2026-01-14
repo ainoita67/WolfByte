@@ -63,7 +63,7 @@
         <main class="container mt-5">
             <h2 class="text-center mb-4">Listado de usuarios</h2>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered align-middle text-center tabla-usuarios">
+                <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
                     <thead>
                         <tr>
                             <th>Usuario</th>
@@ -117,5 +117,6 @@
                 }
             });
         </script>
+        
     </body>
 </html>
