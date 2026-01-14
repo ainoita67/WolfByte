@@ -9,7 +9,7 @@
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Gestión de Material</h2>
+        <h2>Materiales</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
             <i class="bi bi-plus-circle"></i> Crear material
         </button>
