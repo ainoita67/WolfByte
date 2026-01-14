@@ -68,7 +68,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabezera">
+                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
                     <thead>
                         <tr>
                             <th>Nombre</th>
