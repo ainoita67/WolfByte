@@ -114,7 +114,10 @@ main.menu, div.menu{
 }
 
 a.menu, button.menu{
-    margin-bottom: 9%;
+    font-size: 1.5em !important;
+    font-weight: bolder;
+    padding: 7% 0 !important;
+    margin-bottom: 3%;
     background-color: #274C9C;
     border: 1px solid #274C9C !important;
     border-radius: 25px;
@@ -149,7 +152,7 @@ a.bg-lightgrey, a.bg-lightgray, button.bg-lightgrey, button.bg-lightgray, .volve
 a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg-lightgray:hover{
     background-color: rgb(170, 170, 170) !important;
     border: 1px solid rgb(170, 170, 170) !important;
-    box-shadow: 7px 7px 7px 0px rgb(0, 0, 0, 0.5);
+    box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.5);
 }
 
 .bg-verde{
@@ -165,6 +168,15 @@ a.bg-verde:hover, button.bg-verde:hover{
     background-color: #90a300 !important;
     border: 1px solid #90a300 !important;
     box-shadow: 7px 7px 7px 0px rgba(144, 163, 0, 0.5);
+}
+
+main.menu a.bg-verde, main.menu a.bg-lightgrey{
+    font-weight: normal !important;
+    font-size: 1.3em !important;
+}
+
+a.p-menu{
+    padding: 1% 0 !important;
 }
 
 a.enviar, button.enviar{
