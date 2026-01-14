@@ -161,15 +161,6 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
-<<<<<<< HEAD
-<<<<<<<< HEAD:public/views/administrador/espacios/aulasyespacios.php
+
     include '../../templates/footer.php'
 ?>
-========
-    include '../../../templates/footer.php';
-?>
->>>>>>>> origin/main:public/views/administrador/aulasyespacios/aulasyespacios.php
-=======
-    include '../../../templates/footer.php';
-?>
->>>>>>> origin/panel-de-administrador
