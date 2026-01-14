@@ -68,4 +68,8 @@
 
 <?php
     include '../../templates/footer.php';
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> main

@@ -159,4 +159,8 @@ document.querySelectorAll(".btn-editar").forEach(boton => {
 
 <?php
     include '../../templates/footer.php';
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> main
