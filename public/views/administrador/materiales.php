@@ -69,7 +69,7 @@
 
 <!-- Modal Crear -->
 <div class="modal fade" id="modalCrear" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Crear material</h5>
@@ -106,7 +106,7 @@
 
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Editar material</h5>
@@ -159,8 +159,4 @@ document.querySelectorAll(".btn-editar").forEach(boton => {
 
 <?php
     include '../../templates/footer.php';
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> main
