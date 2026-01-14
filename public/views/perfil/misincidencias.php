@@ -1,16 +1,16 @@
 <?php
-    $title='Mis reservas';
+    $title='Mis incidencias';
     $directorio='../';
-    $ruta='misreservas';
+    $ruta='misincidencias';
     $seccion='';
     $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/perfil.css">';
     include '../../templates/header.php';
 ?>
 
 <main class="container mt-5">
-    <h2 class="text-center mb-4">Mis reservas</h2>
+    <h2 class="text-center mb-4">Mis incidencias</h2>
     <div class="table-responsive">
-        <table class="table table-hover align-middle text-center" id="tabla-reservas">
+        <table class="table table-hover align-middle text-center" id="tabla-incidencias">
 
             <thead>
                 <tr>
