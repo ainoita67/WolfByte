@@ -3,7 +3,7 @@
     $directorio='../';
     $ruta='reservaspermanentes';
     $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
+    $style='';
     include '../../templates/header.php';
 ?>
 

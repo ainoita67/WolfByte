@@ -1,27 +1,16 @@
 <?php
     $title='Materiales';
-<<<<<<< HEAD
-    $directorio='../';
-    $ruta='materiales';
-    $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
-    include '../../templates/header.php';
-=======
     $directorio='../../';
     $ruta='materiales';
     $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
+    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
     include '../../../templates/header.php';
->>>>>>> origin/main
 ?>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-<<<<<<< HEAD
-        <h2>Gestión de Material</h2>
-=======
+
         <h2>Materiales</h2>
->>>>>>> origin/main
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
             <i class="bi bi-plus-circle"></i> Crear material
         </button>
@@ -74,23 +63,14 @@
     </div>
 
     <div class="mt-5 container-fluid text-end">
-<<<<<<< HEAD
-        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
-    </div>
-    
-=======
         <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
     </div>
->>>>>>> origin/main
 </main>
 
 <!-- Modal Crear -->
 <div class="modal fade" id="modalCrear" tabindex="-1">
-<<<<<<< HEAD
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-=======
+
     <div class="modal-dialog">
->>>>>>> origin/main
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Crear material</h5>
@@ -127,11 +107,8 @@
 
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1">
-<<<<<<< HEAD
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-=======
+
     <div class="modal-dialog">
->>>>>>> origin/main
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Editar material</h5>
@@ -183,10 +160,6 @@ document.querySelectorAll(".btn-editar").forEach(boton => {
 </script>
 
 <?php
-<<<<<<< HEAD
-    include '../../templates/footer.php';
-?>
-=======
     include '../../../templates/footer.php';
 ?>
->>>>>>> origin/main
+

@@ -3,13 +3,9 @@
     $directorio='../../';
     $ruta='misdatos';
     $seccion='';
-<<<<<<< HEAD
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/style.css">';
-    include '../../templates/header.php';
-=======
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
+
+    $style='';
     include '../../../templates/header.php';
->>>>>>> origin/main
 ?>
 
 <main class="container mt-5">
