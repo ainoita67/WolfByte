@@ -1,12 +1,11 @@
 <?php
-include_once "/templates/header.php";
+include_once "../templates/header.php";
 ?>
 
 <script>
     const menu = "no";
-    const rol = "usuario";
+    const rol = "aulas";
     generateHeaderNav(menu, rol);
-
 </script>
 
 <main class="container-fluid menu row text-center">
@@ -24,5 +23,5 @@ include_once "/templates/header.php";
 </main>
 
 <?php
-    include '/templates/footer.php';
+include_once "../templates/footer.php";
 ?>

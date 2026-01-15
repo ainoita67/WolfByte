@@ -22,7 +22,7 @@ function generateHeaderNav(menuactivo, role) {
         navd.innerHTML = 
             `<ul class="col-7 d-none d-lg-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
-                    <a href="#"><img src="/assets/imagenes/ieslogo.png" alt="Logo"></a>
+                    <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
                 <li></li>
             </ul>
@@ -32,7 +32,7 @@ function generateHeaderNav(menuactivo, role) {
         navm.innerHTML = 
             `<ul class="col-7 d-grid d-lg-none text-center fs-5 pt-2">
                 <li class="col-12 ps-2 pe-5">
-                    <a href="#"><img src="/assets/imagenes/ieslogo.png" alt="Logo"></a>
+                    <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
                 <li></li>
             </ul>
@@ -42,12 +42,12 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: "/views/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salon de Actos", href: "/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
-            { texto: "Material", href: "/views/reservas/materiales/materiales.php", key: "material" },
-            { texto: "Otros Espacios", href: "/views/reservas/otros/otros.php", key: "otros" },
-            { texto: "Incidencias", href: "/views/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar Aulas", href: "/views/liberar/liberar.php", key: "liberar" }
+            { texto: "Aulas", href: "/public/views/reservas/aulas/aulas.php", key: "aulas" },
+            { texto: "Salon de Actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Material", href: "/public/views/reservas/materiales/materiales.php", key: "material" },
+            { texto: "Otros Espacios", href: "/public/views/reservas/otros/otros.php", key: "otros" },
+            { texto: "Incidencias", href: "/public/views/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar Aulas", href: "/public/views/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -56,8 +56,8 @@ function generateHeaderNav(menuactivo, role) {
             uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
             uld.innerHTML = 
             `<li class="col-12">
-                <a href="/views/menu.php">
-                    <img src="/assets/imagenes/ieslogo.png" alt="Logo">
+                <a href="/public/views/menu.php">
+                    <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
                 </a>
             </li>
             `;
@@ -83,8 +83,8 @@ function generateHeaderNav(menuactivo, role) {
 
         // apartado perfil
         const lipd = document.createElement('li');
-        uld.appendChild('lipd');
-        lipd.classList.add("list-group-item pt-5 pb-5 d-none d-lg-block");
+        uld.appendChild(lipd);
+        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-lg-block");
         lipd.id = "perfil";
         lipd.innerHTML = 
             `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
@@ -113,8 +113,8 @@ function generateHeaderNav(menuactivo, role) {
         // logo
         ulm.innerHTML = 
             `<li class="col-2">
-                <a href="/views/menu.php">
-                    <img src="/assets/imagenes/ieslogo.png" alt="Logo">
+                <a href="/public/views/menu.php">
+                    <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
                 </a>
             </li>
             <li class="offset-6 offset-sm-7"></li>
@@ -137,15 +137,14 @@ function generateHeaderNav(menuactivo, role) {
             // Crear UL del dropdown
             const dropdown = document.createElement('ul');
                 dropdown.classList.add("dropdown-menu");
-                dropdown.setAttribute("data-target", "#menudesplegable");
+                dropdown.setAttribute("aria-labelledby", "menudesplegable");
 
                 menus.forEach(menu => {
                     const li = document.createElement('li');
-                        li.classList.add("dropdown-item");
-                    
                         const a = document.createElement('a');
                             a.href = menu.href;
                             a.textContent = menu.texto;
+                            a.classList.add("dropdown-item");
                             li.appendChild(a);
                     dropdown.appendChild(li);
                 });
@@ -155,8 +154,8 @@ function generateHeaderNav(menuactivo, role) {
 
         // apartado perfil
         const lipm = document.createElement('li');
-        ulm.appendChild('lipm');
-        lipm.classList.add("list-group-item pt-5 pb-5 d-lg-none");
+        ulm.appendChild(lipm);
+        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
         lipm.id = "perfil";
         lipm.innerHTML = 
             `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">

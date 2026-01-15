@@ -3,7 +3,7 @@
     $directorio='../../';
     $ruta='aulasyespacios';
     $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
+    $style='';
     include '../../../templates/header.php';
 ?>
 
@@ -67,7 +67,7 @@
 </main>
 
 <div class="modal fade" id="modalCrear" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Crear aula/espacio</h5>
@@ -105,7 +105,7 @@
 </div>
 
 <div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Editar aula/espacio</h5>
@@ -161,5 +161,6 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
-    include '../../../templates/footer.php';
+
+    include '../../templates/footer.php'
 ?>
