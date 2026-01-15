@@ -58,7 +58,7 @@
             }
 
             // MENÚ DESPLEGABLE PERFIL
-            echo '<li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><a href="'.$directorio.'" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-1"></i></a>';
+            echo '<li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><i class="bi bi-person-circle fs-1"></i>';
                 echo '<ul class="dropdown-menu" data-target="#menudesplegable">';
                     if($ruta=='misdatos'){
                         echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis datos</li></a>';
