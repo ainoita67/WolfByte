@@ -43,7 +43,7 @@ function generateHeaderNav(menuactivo, role) {
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
             { texto: "Aulas", href: "/public/views/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salon de Actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Salón de Actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
             { texto: "Material", href: "/public/views/reservas/materiales/materiales.php", key: "material" },
             { texto: "Otros Espacios", href: "/public/views/reservas/otros/otros.php", key: "otros" },
             { texto: "Incidencias", href: "/public/views/incidencias/incidencias.php", key: "incidencias" },
@@ -73,8 +73,8 @@ function generateHeaderNav(menuactivo, role) {
             a.textContent = menu.texto;
 
             if(menuactivo === menu.key){
-                a.classList.add("fw-bold");
-                a.style.color = "var(--bs-orange-200)";
+                a.classList.add("fw-bold", "text-lightgrey");
+                a.style.color = "grey";
             }
 
             li.appendChild(a);
