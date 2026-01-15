@@ -75,7 +75,7 @@
                     if($ruta=='misincidencias'){
                         echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis incidencias</li></a>';
                     }else{
-                        echo '<a href="'.$directorio.'perfil/incidencias.php"><li class="dropdown-item">Mis incidencias</li></a>';
+                        echo '<a href="'.$directorio.'perfil/misincidencias.php"><li class="dropdown-item">Mis incidencias</li></a>';
                     }
                     echo '<a href="'.$directorio.'../../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>';
                 echo '</ul>';
