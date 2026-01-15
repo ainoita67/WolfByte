@@ -1,11 +1,13 @@
 <?php
-    $title='Menú';
-    $directorio='';
-    $ruta='menu';
-    $seccion='';
-    $style='';
-    include '../templates/header.php';
+include_once "/templates/header.php";
 ?>
+
+<script>
+    const menu = "no";
+    const rol = "usuario";
+    generateHeaderNav(menu, rol);
+
+</script>
 
 <main class="container-fluid menu row text-center">
     <a href="aulas/aulas.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas</a>
@@ -22,5 +24,5 @@
 </main>
 
 <?php
-    include '../templates/footer.php';
+    include '/templates/footer.php';
 ?>
