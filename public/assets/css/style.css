@@ -277,3 +277,21 @@ footer{
     color: white;
     border: 1px solid #CC0000 !important;
 }
+
+#accesibilidad{
+    z-index: 9999999999999999999999;
+    margin-left: -2.5%;
+    position: fixed;
+}
+
+#accesibilidad button ul{
+    display: none;
+}
+
+#accesibilidad button:hover > ul{
+    display: block;
+}
+
+#accesibilidad button:hover > ul{
+    display: block;
+}
