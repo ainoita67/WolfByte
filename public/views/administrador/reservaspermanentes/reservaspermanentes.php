@@ -4,10 +4,14 @@
     $ruta='reservaspermanentes';
     $seccion='';
 <<<<<<< HEAD
+<<<<<<< HEAD
     $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
 =======
     $style='';
 >>>>>>> origin/panel-de-administrador
+=======
+    $style='';
+>>>>>>> main
     include '../../../templates/header.php';
 ?>
 
