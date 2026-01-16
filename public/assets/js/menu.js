@@ -101,7 +101,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="/perfil/incidencias.php" class="dropdown-item"> Mis incidencias</a>
                 </li>
                 <li>
-                    <a href="/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>
+                    <button id="logoutBtn" class="dropdown-item btn btn-link p-0">Cerrar sesión</button>
                 </li>
             </ul>
             `;
@@ -179,3 +179,31 @@ function generateHeaderNav(menuactivo, role) {
         }
 
 }
+
+// Logout
+document.addEventListener('click', async (e) => {
+    if (e.target && e.target.id === 'logoutBtn') {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://192.168.13.202/API/public/logout', {
+                method: 'POST',           // tu API acepta POST
+                credentials: 'include',   // 🔑 permite enviar cookies de sesión
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al cerrar sesión');
+            }
+
+            console.log('Sesión cerrada:', data);
+            window.location.href = '/auth/login.php';  // Redirige al login
+
+        } catch (err) {
+            alert('Error al cerrar sesión: ' + err.message);
+        }
+    }
+});

@@ -1,5 +1,3 @@
-alert('JS cargado');
-
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -9,7 +7,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     try {
         const response = await fetch('http://192.168.13.202/API/public/login', {
             method: 'POST',
-            credentials: 'include', // 🔴 ESTO ES LO QUE FALTABA
+            credentials: 'include', 
             headers: {
                 'Content-Type': 'application/json'
             },
