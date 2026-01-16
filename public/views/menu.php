@@ -3,7 +3,7 @@ include_once "../templates/header.php";
 ?> 
 
 <script>
-    const menu = "aulas";
+    const menu = "";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>

@@ -54,6 +54,7 @@ function generateHeaderNav(menuactivo, role) {
         // crear ul y logo
         const uld = document.createElement('ul');
             uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
+            uld.id = "menudesktop"
             uld.innerHTML = 
             `<li class="col-12">
                 <a href="/public/views/menu.php">
@@ -66,7 +67,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartados menu desktop
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
+            li.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             const a = document.createElement('a');
             a.href = menu.href;
@@ -81,10 +82,29 @@ function generateHeaderNav(menuactivo, role) {
             uld.appendChild(li);
         });
 
+        // administrador
+        if (role == "admin"){
+            const liadmin = document.createElement('li');
+            liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
+
+            const aa = document.createElement('a');
+            aa.href = "/public/views/administrador/menuadministrador.php";
+            aa.textContent = "Administrador";
+
+            if(menuactivo === "admin"){
+                aa.classList.add("fw-bold", "text-lightgrey");
+                aa.style.color = "grey";
+            }
+
+            liadmin.appendChild(aa);
+            uld.appendChild(liadmin);
+        }
+        
+
         // apartado perfil
         const lipd = document.createElement('li');
         uld.appendChild(lipd);
-        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-lg-block");
+        lipd.classList.add("list-group-item", "pt-4", "pb-4", "d-none", "d-lg-block");
         lipd.id = "perfil";
         lipd.innerHTML = 
             `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
@@ -148,6 +168,16 @@ function generateHeaderNav(menuactivo, role) {
                             li.appendChild(a);
                     dropdown.appendChild(li);
                 });
+                //administrador
+                if (role == "admin"){
+                    const liad = document.createElement('li');
+                        const aad = document.createElement('a');
+                            aad.href = "/public/views/administrador/menuadministrador.php";
+                            aad.textContent = "Administrador";
+                            aad.classList.add("dropdown-item");
+                            liad.appendChild(aad);
+                    dropdown.appendChild(liad);
+                }
 
         liMenu.appendChild(dropdown);
         ulm.appendChild(liMenu);

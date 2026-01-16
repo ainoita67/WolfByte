@@ -11,3 +11,6 @@
 2026-01-16T09:27:38+01:00 - Exception: Route not found for GET /
 2026-01-16T09:27:44+01:00 - Exception: Route not found for GET /login
 2026-01-16T09:28:12+01:00 - Exception: Error de conexión a la base de datos.
+2026-01-16T12:01:03+01:00 - Exception: Call to undefined method Core\Router::dpatch()
+2026-01-16T12:01:21+01:00 - Exception: Call to undefined method Core\Router::dpatch()
+2026-01-16T12:01:29+01:00 - Exception: Call to undefined method Core\Router::dpatch()
