@@ -1,11 +1,12 @@
 <?php
-    $title='Menú de administrador';
-    $directorio='../';
-    $ruta='menuadministrador';
-    $seccion='';
-    $style='';
-    include '../../templates/header.php';
+    include_once "../templates/header.php";
 ?>
+
+<script>
+    const menu = "menu";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container-fluid menu row text-center">
     <a href="usuarios/usuarios.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Usuarios</a>

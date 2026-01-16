@@ -105,22 +105,26 @@ nav ul li a img{
     height: max-content !important;
 }
 
-#perfil ul a li:hover{
+#perfil ul li:hover{
     background-color: #7A8A06 !important;
     color: white !important;
 }
 
-#menuordenador ul #perfil ul a li{
+#menuordenador ul #perfil ul li a{
     text-decoration: none !important;
     color: black !important;
     padding: 0.25em !important;
 }
 
-#menuordenador ul #perfil ul a li:hover{
+#perfil ul li:hover *{
     color: white !important;
 }
 
-#perfil ul *{
+#perfil ul li *{
+    padding: 0.5em !important;
+}
+
+#perfil ul li a{
     color: black !important;
 }
 

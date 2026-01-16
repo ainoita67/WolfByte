@@ -1,9 +1,9 @@
 <?php
-include_once "../templates/header.php";
+    include_once "../templates/header.php";
 ?>
 
 <script>
-    const menu = "aulas";
+    const menu = "menu";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
@@ -23,5 +23,5 @@ include_once "../templates/header.php";
 </main>
 
 <?php
-include_once "../templates/footer.php";
+    include_once "../templates/footer.php";
 ?>
