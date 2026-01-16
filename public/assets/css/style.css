@@ -1,4 +1,5 @@
 body{
+    background-color: #E6F5F0 !important;
     margin: 0 !important;
     padding: 0 !important;
     display: grid;
@@ -21,6 +22,17 @@ main{
     grid-column: 1/2;
     min-height: 75vh;
 }
+
+footer{
+    grid-row: 3/4;
+    grid-column: 1/2;
+}
+
+
+
+
+
+/*MENÚ NAV*/
 
 nav ul li{
     list-style: none;
@@ -59,45 +71,23 @@ nav ul li:not(:first-child) a:hover{
     background-color: #90a300 !important;
 }
 
-#menumovillogin ul{
-    height: 3em;
-    padding-left: 7.5% !important;
-}
-
-#menumovil ul{
-    height: 3em;
-    padding-left: 10% !important;
-}
-
-#menumovil ul li a img, #menumovillogin ul li a img{
-    height: 3em;
-}
-
 nav *{
     color: white !important;
     text-decoration: none !important;
 }
 
-#menuordenador ul li:not(:last-child) a{
-    padding: 1.7em !important;
-    width: 100% !important;
+nav ul li a img{
+    height: 4em;
 }
 
-#menuordenador ul li:not(:last-child){
-    margin: 0 !important;
-    padding: 0 !important;
-}
 
-#menuordenador ul li:not(:first-child) a:hover{
-    background-color: #90a300;
-}
+
+
+
+/*MENÚ NAV PERFIL*/
 
 #perfil a:hover{
     background-color: #00000000 !important;
-}
-
-nav ul li a img{
-    height: 4em;
 }
 
 #perfil:hover > ul{
@@ -128,15 +118,57 @@ nav ul li a img{
     color: black !important;
 }
 
+
+
+
+
+/*MENÚ NAV MÓVIL*/
+
+#menumovillogin ul{
+    height: 3em;
+    padding-left: 7.5% !important;
+}
+
+#menumovil ul{
+    height: 3em;
+    padding-left: 10% !important;
+}
+
+#menumovil ul li a img, #menumovillogin ul li a img{
+    height: 3em;
+}
+
+
+
+
+
+/*MENÚ NAV ORDENADOR*/
+
+#menuordenador ul li:not(:last-child) a{
+    padding: 1.7em !important;
+    width: 100% !important;
+}
+
+#menuordenador ul li:not(:last-child){
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#menuordenador ul li:not(:first-child) a:hover{
+    background-color: #90a300;
+}
+
 .dropdown-menu{
     right: 0;
     background-color: white !important;
     border: 1px solid white !important;
 }
 
-body.menu, body.login{
-    background-color: #E6F5F0;
-}
+
+
+
+
+/*PÁGINA MENÚ*/
 
 main.menu, div.menu{
     padding-left: 5% !important;
@@ -212,6 +244,11 @@ a.p-menu{
     padding: 1% 0 !important;
 }
 
+
+
+
+/*FORMULARIOS*/
+
 .enviar{
     background-color: #274C9C;
     border: 1px solid #274C9C !important;
@@ -236,10 +273,11 @@ input:hover, input:active{
     background-color: #e9f0ff;
 }
 
-footer{
-    grid-row: 3/4;
-    grid-column: 1/2;
-}
+
+
+
+
+/*ACCESIBILIDAD*/
 
 #accesibilidad{
     z-index: 9999999999999999999999;
@@ -259,4 +297,159 @@ footer{
 
 #accesibilidad:hover button{
     display: block !important;
+}
+
+
+
+
+
+/*ESTILOS TABLAS*/
+
+.tabla-cabecera thead {
+    background-color: #274C9C;
+    color: #ffffff;
+}
+
+.tabla-cabecera thead th {
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+.tabla-cabecera {
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.estado{
+    font-weight: 500;
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+
+.estado.activo{
+    background-color: #007E33 !important;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estado.inactivo{
+    font-weight: 700;
+    background-color: #CC0000 !important;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*ESTILOS PERFIL*/
+
+#tabla-reservas{
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#tabla-reservas thead{
+    background-color: #274C9C !important;
+    color: #ffffff !important;
+}
+
+#tabla-reservas thead th{
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+#tabla-reservas tbody tr{
+    background-color: var(#7A8A06);
+    transition: background-color 0.3s ease;
+}
+
+#tabla-reservas tbody tr:nth-child(even){
+    background-color: #d9efe7;
+}
+
+#tabla-reservas tbody tr:hover{
+    background-color: var(#90a300);
+}
+
+#tabla-reservas td{
+    padding: 12px;
+    vertical-align: middle;
+    border-color: var(#d0d0d0);
+}
+
+#tabla-reservas .badge{
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}   
+
+#tabla-reservas .btn{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+#tabla-reservas .btn:hover{
+    opacity: 0.85;
+}
+
+div.card{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+.estadobadge{
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estadobadge.confirmada {
+    background-color: #007E33;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estadobadge.pendiente {
+    background-color: #FFBB33;
+    color: black;
+    border: 1px solid #FFBB33 !important;
+}
+
+.estadobadge.cancelada {
+    font-weight: 700 !important;
+    background-color: #CC0000;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*LOGIN*/
+
+main.login{
+    justify-items: center;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+form.login{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
