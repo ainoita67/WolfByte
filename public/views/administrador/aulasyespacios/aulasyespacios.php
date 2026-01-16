@@ -1,10 +1,10 @@
 <?php
     $title='Aulas y espacios';
-    $directorio='../';
+    $directorio='../../';
     $ruta='aulasyespacios';
     $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/usuario.css">';
-    include '../../templates/header.php';
+    $style='';
+    include '../../../templates/header.php';
 ?>
 
 <main class="container mt-5">
@@ -61,13 +61,13 @@
         </table>
     </div>
     <div class="mt-5 container-fluid text-end">
-        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+        <a href="../menuadministrador.php" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
     </div>
 
 </main>
 
 <div class="modal fade" id="modalCrear" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Crear aula/espacio</h5>
@@ -105,7 +105,7 @@
 </div>
 
 <div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title">Editar aula/espacio</h5>
@@ -161,9 +161,6 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
+
     include '../../templates/footer.php'
-<<<<<<< HEAD
 ?>
-=======
-?>
->>>>>>> main
