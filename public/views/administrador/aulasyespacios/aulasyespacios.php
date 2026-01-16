@@ -1,11 +1,12 @@
 <?php
-    $title='Aulas y espacios';
-    $directorio='../../';
-    $ruta='aulasyespacios';
-    $seccion='';
-    $style='';
-    include '../../../templates/header.php';
+include_once "../../../templates/header.php";
 ?>
+
+<script>
+    const menu = "no";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -161,6 +162,5 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
-
-    include '../../../templates/footer.php'
+    include '../../templates/footer.php'
 ?>

@@ -1,11 +1,12 @@
 <?php
-    $title='Tablas auxiliares';
-    $directorio='../../';
-    $ruta='tablasauxiliares';
-    $seccion='';
-    $style='';
-    include '../../../templates/header.php';
+include_once "../../../templates/header.php";
 ?>
+
+<script>
+    const menu = "no";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container-fluid menu row text-center">
     <a href="caracteristicasespacio/caracteristicasespacio.php" class="menu col-lg-5 mx-lg-5 p-5 fs-5">Características de espacio</a>

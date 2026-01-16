@@ -1,15 +1,12 @@
 <?php
-    include_once "../templates/header.php";
+    $ruta='login';
+    $directorio='../public/views/';
+    $title='Inicio de sesión';
+    include '../public/templates/header.php';
 ?>
 
-<script>
-    const login = "login";
-    const rol = "5";
-    generateHeaderNav(login, rol);
-</script>
-
-<main class="p-5 row align-items-center main-content login">
-    <form class="card col-md-6 offset-md-3 p-5 text-center login" action="" method="post">
+<main class="p-5 row align-items-center main-content">
+    <form class="card col-md-6 offset-md-3 p-5 text-center" action="" method="post">
         <h1 class="mb-4 fw-bold fs-4">Inicio de sesión</h1>
 
         <div class="mb-3 text-start mt-lg-3">
@@ -27,5 +24,5 @@
 </main>
 
 <?php
-    include '../templates/footer.php';
+    include '../public/templates/footer.php';
 ?>

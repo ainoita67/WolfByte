@@ -1,11 +1,12 @@
 <?php
-    $title='Mis datos';
-    $directorio='../../';
-    $ruta='misdatos';
-    $seccion='';
-    $style='';
-    include '../../../templates/header.php';
+include_once "../../../templates/header.php";
 ?>
+
+<script>
+    const menu = "no";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container mt-5">
     <h2 class="text-center mb-4">Listado de usuarios</h2>
