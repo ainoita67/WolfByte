@@ -1,9 +1,8 @@
 <?php
     $ruta='login';
-    $directorio='../views/';
+    $directorio='../public/views/';
     $title='Inicio de sesión';
-    $style='';
-    include '../templates/header.php';
+    include '../public/templates/header.php';
 ?>
 
 <main class="p-5 row align-items-center main-content">
@@ -25,5 +24,5 @@
 </main>
 
 <?php
-    include '../templates/footer.php';
+    include '../public/templates/footer.php';
 ?>

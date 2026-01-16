@@ -3,7 +3,7 @@
     $directorio='../';
     $ruta='salonactos';
     $seccion='salonactos';
-    $style='';
+    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/perfil.css">';
     include '../../templates/header.php';
 ?>
 

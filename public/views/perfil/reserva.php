@@ -1,16 +1,18 @@
 <?php
-    $title='Mis reservas';
-    $directorio='../';
-    $ruta='misreservas';
-    $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/perfil.css">';
-    include '../../templates/header.php';
+include_once "../../templates/header.php";
 ?>
 
+<script>
+    const menu = "no";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
+
+
 <main class="container mt-5">
-    <h2 class="text-center mb-4">Mis reservas</h2>
+    <h2 class="text-center mb-4">Listado de Reservas</h2>
     <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center align-middle tabla-cabecera" id="tabla-reservas">
+        <table class="table table-hover align-middle text-center" id="tabla-reservas">
 
             <thead>
                 <tr>

@@ -66,7 +66,7 @@ nav ul li:not(:first-child) a:hover{
 
 #menumovil ul{
     height: 3em;
-    padding-left: 5% !important;
+    padding-left: 10% !important;
 }
 
 #menumovil ul li a img, #menumovillogin ul li a img{
@@ -94,7 +94,6 @@ nav *{
 
 #perfil a:hover{
     background-color: #00000000 !important;
-    margin-left: 0 !important;
 }
 
 nav ul li a img{
@@ -161,6 +160,10 @@ a.menu:hover, button.menu:hover{
     background-color: #0051ff !important;
     border: 1px solid #0051ff !important;
     box-shadow: 7px 7px 7px 0px rgba(0, 81, 255, 0.5);
+}
+
+.text-lightgrey{
+    color: lightgrey !important;
 }
 
 .bg-lightgrey, .bg-lightgray{
@@ -237,43 +240,4 @@ input:hover, input:active{
 footer{
     grid-row: 3/4;
     grid-column: 1/2;
-}
-
-.tabla-cabecera thead {
-    background-color: #274C9C !important;
-    color: #ffffff !important;
-}
-
-.tabla-cabecera thead th {
-    background-color: #274C9C !important;
-    color: #ffffff !important;
-    border: none;
-}
-
-.tabla-cabecera {
-    width: 100%;
-    background-color: var(white);
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.estado{
-    font-weight: 500;
-    font-size: 0.85em !important;
-    padding: 4% 5.75%;
-    display: inline-block;
-}
-
-
-.estado.activo{
-    background-color: #007E33 !important;
-    color: white;
-    border: 1px solid #007E33 !important;
-}
-
-.estado.inactivo{
-    font-weight: 700;
-    background-color: #CC0000 !important;
-    color: white;
-    border: 1px solid #CC0000 !important;
 }

@@ -1,0 +1,38 @@
+.tabla-cabecera thead {
+    background-color: #274C9C;
+    color: #ffffff;
+}
+
+.tabla-cabecera thead th {
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+.tabla-cabecera {
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.estado{
+    font-weight: 500;
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+
+.estado.activo{
+    background-color: #007E33 !important;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estado.inactivo{
+    font-weight: 700;
+    background-color: #CC0000 !important;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}

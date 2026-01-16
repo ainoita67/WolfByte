@@ -1,11 +1,12 @@
 <?php
-    $title='Mis datos';
-    $directorio='../';
-    $ruta='misdatos';
-    $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/perfil.css">';
-    include '../../templates/header.php';
+include_once "../../templates/header.php";
 ?>
+
+<script>
+    const menu = "no";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="row justify-content-center align-items-center main-content">
     <div class="col-11 col-sm-8 col-md-6 col-lg-4">

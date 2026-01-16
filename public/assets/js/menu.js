@@ -43,11 +43,11 @@ function generateHeaderNav(menuactivo, role) {
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
             { texto: "Aulas", href: "/public/views/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salon de Actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Salón de actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
             { texto: "Material", href: "/public/views/reservas/materiales/materiales.php", key: "material" },
-            { texto: "Otros Espacios", href: "/public/views/reservas/otros/otros.php", key: "otros" },
+            { texto: "Otros espacios", href: "/public/views/reservas/otros/otros.php", key: "espacios" },
             { texto: "Incidencias", href: "/public/views/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar Aulas", href: "/public/views/liberar/liberar.php", key: "liberar" }
+            { texto: "Liberar aulas", href: "/public/views/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -73,8 +73,8 @@ function generateHeaderNav(menuactivo, role) {
             a.textContent = menu.texto;
 
             if(menuactivo === menu.key){
-                a.classList.add("fw-bold");
-                a.style.color = "var(--bs-orange-200)";
+                a.classList.add("fw-bold", "text-lightgrey");
+                a.style.color = "grey";
             }
 
             li.appendChild(a);
@@ -92,13 +92,13 @@ function generateHeaderNav(menuactivo, role) {
             </a>
             <ul class="dropdown-menu" data-target="#perfildesktop" id="ulpd">
                 <li>
-                    <a href="/perfil/datos.php" class="dropdown-item">Mis datos</a>
+                    <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="/perfil/reserva.php" class="dropdown-item"> Mis reservas</a>
+                    <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
-                    <a href="/perfil/incidencias.php" class="dropdown-item"> Mis incidencias</a>
+                    <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
                     <a href="/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>
@@ -163,13 +163,13 @@ function generateHeaderNav(menuactivo, role) {
             </a>
             <ul class="dropdown-menu" data-target="#perfilmovil">
                 <li>
-                    <a href="/perfil/datos.php" class="dropdown-item">Mis datos</a>
+                    <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="/perfil/reserva.php" class="dropdown-item"> Mis reservas</a>
+                    <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
-                    <a href="/perfil/incidencias.php" class="dropdown-item"> Mis incidencias</a>
+                    <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
                     <a href="/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>

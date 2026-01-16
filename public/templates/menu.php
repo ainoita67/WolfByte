@@ -29,64 +29,6 @@
             <a href="<?= $ruta=='liberar' || $seccion=='liberar' ? '#' : $directorio.'liberar/liberar.php' ?>" class="<?= $ruta=='liberar' || $seccion=='liberar' ? 'text-dark' : '' ?>">Liberar aula</a>
         </li>
 
-<<<<<<< HEAD
-            if($ruta=='material'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="#" class="text-dark">Material</a></li>';
-            }else if($seccion=='material'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'material/material.php" class="text-dark">Material</a></li>';
-            }else{
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'material/material.php">Material</a></li>';
-            }
-
-            if($ruta=='espacios'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="#" class="text-dark">Otros espacios</a></li>';
-            }else if($seccion=='espacios'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'espacios/espacios.php" class="text-dark">Otros espacios</a></li>';
-            }else{
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'espacios/espacios.php">Otros espacios</a></li>';
-            }
-
-            if($ruta=='incidencias'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="#" class="text-dark">Incidencias</a></li>';
-            }else if($seccion=='incidencias'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'incidencias/incidencias.php" class="text-dark">Incidencias</a></li>';
-            }else{
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'incidencias/incidencias.php">Incidencias</a></li>';
-            }
-
-            if($ruta=='liberar'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="#" class="text-dark">Liberar aula</a></li>';
-            }else if($seccion=='liberar'){
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'liberar/liberar.php" class="text-dark">Liberar aula</a></li>';
-            }else{
-                echo '<li class="pt-5 pb-5 d-none d-lg-block"><a href="'.$directorio.'liberar/liberar.php">Liberar aula</a></li>';
-            }
-
-            // MENÚ DESPLEGABLE PERFIL
-            echo '<li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil"><i class="bi bi-person-circle fs-1"></i>';
-                echo '<ul class="dropdown-menu" data-target="#menudesplegable">';
-                    if($ruta=='misdatos'){
-                        echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis datos</li></a>';
-                    }else{
-                        echo '<a href="'.$directorio.'perfil/datos.php"><li class="dropdown-item">Mis datos</li></a>';
-                    }
-                
-                    if($ruta=='misreservas'){
-                        echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis reservas</li></a>';
-                    }else{
-                        echo '<a href="'.$directorio.'perfil/reserva.php"><li class="dropdown-item">Mis reservas</li></a>';
-                    }
-
-                    if($ruta=='misincidencias'){
-                        echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis incidencias</li></a>';
-                    }else{
-                        echo '<a href="'.$directorio.'perfil/misincidencias.php"><li class="dropdown-item">Mis incidencias</li></a>';
-                    }
-                    echo '<a href="'.$directorio.'../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>';
-                echo '</ul>';
-            echo '</li>';
-        ?>
-=======
         <!-- Menú desplegable Perfil -->
         <li class="list-group-item pt-5 pb-5 d-none d-lg-block" id="perfil">
             <a href="#" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false">
@@ -107,7 +49,6 @@
                 </li>
             </ul>
         </li>
->>>>>>> main
     </ul>
 </nav>
 
@@ -137,17 +78,6 @@
             </ul>
         </li>
 
-<<<<<<< HEAD
-                    if($ruta=='misincidencias'){
-                        echo '<a href="#"><li class="dropdown-item bg-lightgrey">Mis incidencias</li></a>';
-                    }else{
-                        echo '<a href="'.$directorio.'perfil/misincidencias.php"><li class="dropdown-item">Mis incidencias</li></a>';
-                    }
-                    echo '<a href="'.$directorio.'../auth/logout.php"><li class="dropdown-item">Cerrar sesión</li></a>';
-                echo '</ul>';
-            echo '</li>';
-        ?>
-=======
         <!-- Menú desplegable Perfil móvil -->
         <li class="list-group-item pt-5 pb-5 d-lg-none" id="perfil">
             <a href="<?= $directorio ?>" id="menudesplegable" data-bs-toggle="dropdown" aria-expanded="false">
@@ -160,6 +90,5 @@
                 <a href="<?= $directorio ?>"><li class="dropdown-item">Cerrar sesión</li></a>
             </ul>
         </li>
->>>>>>> main
     </ul>
 </nav>
