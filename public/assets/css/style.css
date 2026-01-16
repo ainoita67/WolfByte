@@ -157,13 +157,11 @@ a.menu, button.menu{
     border-radius: 25px;
     color: white;
     text-decoration: none;
-    box-shadow: 7px 7px 7px 0px rgba(0, 0, 0, 0.25);
 }
 
 a.menu:hover, button.menu:hover{
     background-color: #0051ff !important;
     border: 1px solid #0051ff !important;
-    box-shadow: 7px 7px 7px 0px rgba(0, 81, 255, 0.5);
 }
 
 .text-lightgrey{
@@ -190,7 +188,6 @@ a.bg-lightgrey, a.bg-lightgray, button.bg-lightgrey, button.bg-lightgray, .volve
 a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg-lightgray:hover{
     background-color: rgb(170, 170, 170) !important;
     border: 1px solid rgb(170, 170, 170) !important;
-    box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.5);
 }
 
 .bg-verde{
@@ -199,13 +196,11 @@ a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg
 
 a.bg-verde, button.bg-verde{
     border: 1px solid #7A8A06 !important;
-    box-shadow: 7px 7px 7px 0px rgba(0, 0, 0, 0.25);
 }
 
 a.bg-verde:hover, button.bg-verde:hover{
     background-color: #90a300 !important;
     border: 1px solid #90a300 !important;
-    box-shadow: 7px 7px 7px 0px rgba(144, 163, 0, 0.5);
 }
 
 main.menu a.bg-verde, main.menu a.bg-lightgrey{
@@ -217,7 +212,7 @@ a.p-menu{
     padding: 1% 0 !important;
 }
 
-a.enviar, button.enviar{
+.enviar{
     background-color: #274C9C;
     border: 1px solid #274C9C !important;
     border-radius: 25px;
@@ -244,4 +239,24 @@ input:hover, input:active{
 footer{
     grid-row: 3/4;
     grid-column: 1/2;
+}
+
+#accesibilidad{
+    z-index: 9999999999999999999999;
+    margin-top: 5em !important;
+    margin-left: -2.5% !important;
+    position: fixed;
+}
+
+#accesibilidad button:not(:first-child){
+    display: none;
+}
+
+#accesibilidad:hover{
+    background-color: #274C9C !important;
+    border-radius: 25px;
+}
+
+#accesibilidad:hover button{
+    display: block !important;
 }
