@@ -1,6 +1,6 @@
 <?php
 include_once "../templates/header.php";
-?>
+?> 
 
 <script>
     const menu = "aulas";
