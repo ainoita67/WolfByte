@@ -11,7 +11,7 @@ include_once "../templates/header.php";
 <main class="container-fluid menu row text-center">
     <a href="aulas/aulas.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Resevar Aulas</a>
     <a href="salonactos/salonactos.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar Salón de actos</a>
-    <a href="material/material.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar de Portatiles</a>
+    <a href="material/material.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar Carritos Portatiles</a>
     <a href="espacios/espacios.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Reservar otros espacios</a>
     <a href="incidencias/incidencias.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Realizar Incidencias</a>
     <a href="liberar/liberar.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Liberar aula</a>
