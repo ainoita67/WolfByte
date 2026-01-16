@@ -1,12 +1,8 @@
 <?php
-    $ruta='login';
-    $directorio='../public/views/';
-    $title='Inicio de sesión';
-    include '../public/templates/header.php';
 ?>
 
 <main class="p-5 row align-items-center main-content">
-    <form class="card col-md-6 offset-md-3 p-5 text-center" action="" method="post">
+    <form id="loginForm" class="card col-md-6 offset-md-3 p-5 text-center">
         <h1 class="mb-4 fw-bold fs-4">Inicio de sesión</h1>
 
         <div class="mb-3 text-start mt-lg-3">
@@ -21,8 +17,7 @@
 
         <button type="submit" id="iniciosesion" class="enviar p-2 mt-5 mt-lg-5 mb-3 fs-6">Iniciar sesión</button>
     </form>
-</main>
-
+</main>s
 <?php
     include '../public/templates/footer.php';
 ?>
