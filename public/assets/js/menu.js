@@ -18,9 +18,9 @@ function generateHeaderNav(menuactivo, role) {
 
     //si no hay usuario cargar menus vacios
     if (!role){
-        navd.classList.add("row", "d-none", "d-lg-grid");
+        navd.classList.add("row", "d-none", "d-xl-grid");
         navd.innerHTML = 
-            `<ul class="col-7 d-none d-lg-grid text-center fs-5 pt-3 pe-1">
+            `<ul class="col-7 d-none d-xl-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
@@ -28,9 +28,9 @@ function generateHeaderNav(menuactivo, role) {
             </ul>
             `;
         
-        navm.classList.add("row", "mt-0", "d-lg-none");
+        navm.classList.add("row", "mt-0", "d-xl-none");
         navm.innerHTML = 
-            `<ul class="col-7 d-grid d-lg-none text-center fs-5 pt-2">
+            `<ul class="col-7 d-grid d-xl-none text-center fs-5 pt-2">
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
@@ -43,17 +43,17 @@ function generateHeaderNav(menuactivo, role) {
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
             { texto: "Aulas", href: "/public/views/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salón de Actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
-            { texto: "Material", href: "/public/views/reservas/materiales/materiales.php", key: "material" },
-            { texto: "Otros espacios", href: "/public/views/reservas/otros/otros.php", key: "espacios" },
-            { texto: "Incidencias", href: "/public/views/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar aulas", href: "/public/views/liberar/liberar.php", key: "liberar" }
+            { texto: "Salón de actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Portátiles", href: "/public/views/reservas/portatiles/portatiles.php", key: "portatiles" },
+            { texto: "Otros espacios", href: "/public/views/reservas/espacios/espacios.php", key: "espacios" },
+            { texto: "Incidencias", href: "/public/views/reservas/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/public/views/reservas/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
         // crear ul y logo
         const uld = document.createElement('ul');
-            uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
+            uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
             uld.innerHTML = 
             `<li class="col-12">
                 <a href="/public/views/menu.php">
@@ -66,7 +66,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartados menu desktop
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
+            li.classList.add("pt-5", "pb-5", "d-none", "d-xl-block", "ms-5");
 
             const a = document.createElement('a');
             a.href = menu.href;
@@ -84,7 +84,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartado perfil
         const lipd = document.createElement('li');
         uld.appendChild(lipd);
-        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-lg-block");
+        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-xl-block");
         lipd.id = "perfil";
         lipd.innerHTML = 
             `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
@@ -109,7 +109,7 @@ function generateHeaderNav(menuactivo, role) {
         // MENU MOVIL
         // Crear UL principal
         const ulm = document.createElement('ul');
-        ulm.classList.add("col-12", "d-flex", "d-lg-none", "text-center", "fs-5", "pt-3", "ps-4");
+        ulm.classList.add("col-12", "d-flex", "d-xl-none", "text-center", "fs-5", "pt-3", "ps-4");
         // logo
         ulm.innerHTML = 
             `<li class="col-2">
@@ -123,7 +123,7 @@ function generateHeaderNav(menuactivo, role) {
 
         // Menú hamburguesa
         const liMenu = document.createElement('li');
-            liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-lg-none", "ms-5");
+            liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-xl-none", "ms-5");
             liMenu.id = "perfil";
 
             const aMenu = document.createElement('a');
@@ -155,7 +155,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartado perfil
         const lipm = document.createElement('li');
         ulm.appendChild(lipm);
-        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
+        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-xl-none");
         lipm.id = "perfil";
         lipm.innerHTML = 
         `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">

@@ -51,12 +51,17 @@ nav{
     background-color: #7A8A06;
 }
 
+nav:nth-child(1) ul li:not(:last-child){
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 nav:nth-child(1) ul li:not(:last-child) a{
     padding: 1.7em 1.5em !important;
 }
 
 nav:nth-child(1) ul li:last-child{
-    padding-right: 1.5em !important;
+    padding: 0 !important;
 }
 
 nav:nth-child(1) ul li:nth-child(1){
@@ -103,7 +108,7 @@ nav ul li a img{
 #menuordenador ul #perfil ul li a{
     text-decoration: none !important;
     color: black !important;
-    padding: 0.25em !important;
+    padding: 0.25em 0 !important;
 }
 
 #perfil ul li:hover *{
@@ -112,6 +117,7 @@ nav ul li a img{
 
 #perfil ul li *{
     padding: 0.5em !important;
+    text-align: center !important;
 }
 
 #perfil ul li a{

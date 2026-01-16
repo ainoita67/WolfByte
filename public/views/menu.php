@@ -9,12 +9,12 @@
 </script>
 
 <main class="container-fluid menu row text-center">
-    <a href="aulas/aulas.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas</a>
-    <a href="salonactos/salonactos.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Salón de actos</a>
-    <a href="material/material.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Material</a>
-    <a href="espacios/espacios.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Otros espacios</a>
-    <a href="incidencias/incidencias.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Incidencias</a>
-    <a href="liberar/liberar.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Liberar aula</a>
+    <a href="reservas/aulas/aulas.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar aulas</a>
+    <a href="reservas/salondeactos/salondeactos.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar salón de actos</a>
+    <a href="reservas/portatiles/portatiles.php" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar portátiles</a>
+    <a href="reservas/espacios/espacios.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Reservar otros espacios</a>
+    <a href="reservas/incidencias/incidencias.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Incidencias</a>
+    <a href="reservas/liberar/liberar.php" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Liberar aula</a>
     <!--Superadministrador-->
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>

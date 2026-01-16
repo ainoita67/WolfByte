@@ -3,7 +3,7 @@
 ?>
 
 <script>
-    const menu = "menu";
+    const menu = "admin";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>

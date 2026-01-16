@@ -1,11 +1,12 @@
 <?php
-    $title='Reservas permanentes';
-    $directorio='../../';
-    $ruta='reservaspermanentes';
-    $seccion='';
-    $style='';
-    include '../../../templates/header.php';
+    include_once "../../../templates/header.php";
 ?>
+
+<script>
+    const menu = "admin";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
