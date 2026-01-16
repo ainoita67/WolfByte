@@ -95,13 +95,13 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="/public/views/perfil/reserva.php" class="dropdown-item"> Mis reservas</a>
+                    <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
-                    <a href="/public/views/perfil/incidencias.php" class="dropdown-item"> Mis incidencias</a>
+                    <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
-                    <a href="/public/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>
+                    <a href="/public/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
                 </li>
             </ul>
             `;
@@ -166,13 +166,13 @@ function generateHeaderNav(menuactivo, role) {
                 <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
             </li>
             <li>
-                <a href="/public/views/perfil/reserva.php" class="dropdown-item"> Mis reservas</a>
+                <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
             </li>
             <li>
-                <a href="/public/views/perfil/incidencias.php" class="dropdown-item"> Mis incidencias</a>
+                <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
             </li>
             <li>
-                <a href="/public/views/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>
+                <a href="/public/views/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
             </li>
         </ul>
         `;
