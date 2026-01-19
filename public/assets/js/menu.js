@@ -121,11 +121,8 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
-<<<<<<< HEAD
                     <button id="logoutBtn" class="dropdown-item btn btn-link p-0">Cerrar sesión</button>
-=======
-                    <a href="/public/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
->>>>>>> origin/panel-de-administrador
+
                 </li>
             </ul>
             `;
@@ -209,7 +206,7 @@ function generateHeaderNav(menuactivo, role) {
                 <li>
                     <a href="/auth/logout.php" class="dropdown-item"> Cerrar sesión</a>
                 </li>
-            </ul>
+            </ul>   
             `;
         }
 
