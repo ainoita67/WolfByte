@@ -1,6 +1,16 @@
 <?php
 include_once "../../../templates/header.php";
+<<<<<<< HEAD
 ?>
+=======
+?> 
+
+<script>
+    const menu = "admin";
+    const rol = "admin";
+    generateHeaderNav(menu, rol);
+</script>
+>>>>>>> origin/API
 
 <script>
     const menu = "no";
