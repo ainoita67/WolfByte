@@ -14,3 +14,4 @@
 2026-01-16T12:01:03+01:00 - Exception: Call to undefined method Core\Router::dpatch()
 2026-01-16T12:01:21+01:00 - Exception: Call to undefined method Core\Router::dpatch()
 2026-01-16T12:01:29+01:00 - Exception: Call to undefined method Core\Router::dpatch()
+2026-01-19T09:49:47+01:00 - Exception: Call to undefined method Core\Router::dpatch()
