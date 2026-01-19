@@ -20,27 +20,23 @@
         <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
             <thead>
                 <tr>
-                    <th>Nombre del espacio</th>
-                    <th>Tipo</th>
-                    <th>Capacidad</th>
-                    <th>Equipamiento</th>
-                    <th>Días disponibles</th>
+                    <th>Necesidad</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Horario</th>
+                    <th>Prioridad</th>
+                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Aula 101</td>
-                    <td>Aula teórica</td>
-                    <td>30 personas</td>
-                    <td>
-                        Proyector, Pizarra digital, Altavoces
-                    </td>
-                    <td>
-                        <span class="badge bg-primary">Lunes</span>
-                        <span class="badge bg-primary">Miércoles</span>
-                        <span class="badge bg-primary">Viernes</span>
-                    </td>
+                    <td>Clase Matemáticas</td>
+                    <td>Aula con proyector para clase teórica</td>
+                    <td>15/02/2026</td>
+                    <td>08:00 - 10:00</td>
+                    <td><span class="badge bg-danger">Alta</span></td>
+                    <td><span class="badge bg-success">Aprobada</span></td>
                     <td>
                         <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
                             <i class="bi bi-pencil"></i>
@@ -52,16 +48,12 @@
                 </tr>
 
                 <tr>
-                    <td>Sala Informática</td>
-                    <td>Laboratorio</td>
-                    <td>20 personas</td>
-                    <td>
-                        Ordenadores, Proyector, Impresora
-                    </td>
-                    <td>
-                        <span class="badge bg-primary">Martes</span>
-                        <span class="badge bg-primary">Jueves</span>
-                    </td>
+                    <td>Práctica Informática</td>
+                    <td>Sala con 20 ordenadores</td>
+                    <td>18/02/2026</td>
+                    <td>10:00 - 12:00</td>
+                    <td><span class="badge bg-warning text-dark">Media</span></td>
+                    <td><span class="badge bg-secondary">Pendiente</span></td>
                     <td>
                         <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
                             <i class="bi bi-pencil"></i>
@@ -74,6 +66,7 @@
             </tbody>
         </table>
     </div>
+
 
     <div class="mt-5 container-fluid text-end">
         <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>

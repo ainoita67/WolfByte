@@ -30,7 +30,7 @@
 
             <div class="d-flex justify-content-center gap-5 mb-3 px-4">
                 <a href="reserva.php" class="enviar p-2 px-4 col-6">Mis reservas</a>
-                <a href="#" class="enviar p-2 px-4 col-6">Mis incidencias</a>
+                <a href="misincidencias.php" class="enviar p-2 px-4 col-6">Mis incidencias</a>
             </div>
 
             <a href="../menu.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
