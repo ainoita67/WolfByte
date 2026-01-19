@@ -137,7 +137,7 @@ class UsuarioService
         $data = Validator::validate($input, [
             'nombre'        => 'required|string|min:3|max:100',
             'correo'        => 'required|email|max:150',
-            'contraseña'    => 'required|string|min:6|max:255',
+            'contrasena'    => 'required|string|min:6|max:255',
             'id_rol'        => 'required|int|min:1'
         ]);
 

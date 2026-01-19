@@ -13,6 +13,7 @@ session_start();
 require_once __DIR__ . '/../config/config.php';
 
 
+
 // ---------------------------
 // Cabeceras de seguridad y CORS
 // ---------------------------

@@ -5,6 +5,8 @@ namespace Models;
 
 use Core\DB;
 
+//die('CARGADO UsuarioModel CORRECTO');
+
 class UsuarioModel
 {
     private DB $db;
@@ -102,21 +104,21 @@ class UsuarioModel
 
     public function create(array $data): int
     {
-        return $this->db
-            ->query("INSERT INTO Usuario (nombre, correo, contrasena, id_rol) VALUES (:nombre, :correo, :contraseña, :id_rol)")
+        $this->db
+            ->query("INSERT INTO Usuario (nombre, correo, contrasena, id_rol) VALUES (:nombre, :correo, :contrasena, :id_rol)")
             ->bind(':nombre', $data['nombre'])
             ->bind(':correo', $data['correo'])
-            ->bind(':contraseña', $data['contraseña'])
+            ->bind(':contrasena', $data['contrasena'])
             ->bind(':id_rol', $data['id_rol'])
-            ->execute()
-            ->lastInsertId();
+            ->execute();
+        return (int) $this->db->lastId();
     }
 
 // $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
 
     public function update(int $id, array $data): bool
     {
-        return $this->db
+        $this->db
             ->query("UPDATE Usuario SET nombre = :nombre, correo = :correo, contrasena = :contrasena, id_rol = :id_rol, usuario_activo = :usuario_activo WHERE id_usuario = :id")
             ->bind(':nombre', $data['nombre'])
             ->bind(':correo', $data['correo'])
@@ -124,28 +126,28 @@ class UsuarioModel
             ->bind(':id_rol', $data['id_rol'])
             ->bind(':usuario_activo', $data['usuario_activo'])
             ->bind(':id', $id)
-            ->execute()
-            ->rowCount() > 0;
+            ->execute();
+        return $this->db->rowCount() > 0;
     }
 
 // $router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
 
     public function setInactive(int $id): bool
     {
-        return $this->db
+        $this->db
             ->query("UPDATE Usuario SET usuario_activo = false WHERE id_usuario = :id")
             ->bind(':id', $id)
-            ->execute()
-            ->rowCount() > 0;
+            ->execute();
+        return $this->db->rowCount() > 0;
     }
 
     public function setActive(int $id): bool
     {
-        return $this->db
+        $this->db
             ->query("UPDATE Usuario SET usuario_activo = true WHERE id_usuario = :id")
             ->bind(':id', $id)
-            ->execute()
-            ->rowCount() > 0;
+            ->execute();
+        return $this->db->rowCount() > 0;
     }
 
     public function isActive(int $id): bool
@@ -162,13 +164,13 @@ class UsuarioModel
 
     public function setToken(int $id, string $token, string $expiration): bool
     {
-        return $this->db
+        $this->db
             ->query("UPDATE Usuario SET token = :token, expira_token = :expiration WHERE id_usuario = :id")
             ->bind(':token', $token)    
             ->bind(':expiration', $expiration)
             ->bind(':id', $id)
-            ->execute()
-            ->rowCount() > 0;
+            ->execute();
+        return $this->db->rowCount() > 0;
     }
 
 }
