@@ -61,13 +61,16 @@ nav:nth-child(1) ul li:not(:last-child){
 }
 
 nav:nth-child(1) ul li:not(:last-child) a{
-    padding: 1.7em 1.5em !important;
+    padding: 1.5em 0 !important;
 }
 
-nav:nth-child(1) ul li:last-child{
-    padding: 0 !important;
+nav:nth-child(1) ul li:last-child i{
+    padding: 1.5em 0 !important;
 }
 
+nav:nth-child(1) ul li:nth-child(1){
+    margin-left: 1.5em !important;
+}
 
 nav:nth-child(1) ul li:nth-child(1) a img{
     margin-top: -0.2em !important;
@@ -110,6 +113,11 @@ nav ul li a img{
     text-decoration: none !important;
     color: black !important;
     padding: 0.25em 0 !important;
+}
+
+#perfil ul li{
+    margin: 0 !important;
+    width: 100%;
 }
 
 #perfil ul li:hover *{

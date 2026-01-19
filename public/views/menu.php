@@ -4,7 +4,7 @@
 
 <script>
     const menu = "menu";
-    const rol = "5";
+    const rol = "admin";
     generateHeaderNav(menu, rol);
 </script>
 

@@ -24,7 +24,6 @@ function generateHeaderNav(menuactivo, role) {
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
-                <li></li>
             </ul>
             `;
         
@@ -55,13 +54,24 @@ function generateHeaderNav(menuactivo, role) {
         const uld = document.createElement('ul');
             uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
             uld.id = "menudesktop"
-            uld.innerHTML = 
-            `<li class="col-12">
-                <a href="/public/views/menu.php">
-                    <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
-                </a>
-            </li>
-            `;
+            if (role == "admin"){
+                uld.innerHTML = 
+                    `<li class="col-12 text-start">
+                        <a href="/public/views/menu.php">
+                            <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                        </a>
+                    </li>
+                `;
+            }else{
+                uld.innerHTML = 
+                    `<li class="col-12 text-start">
+                        <a href="/public/views/menu.php">
+                            <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                        </a>
+                    </li>
+                    <li></li>
+                `;
+            }
         navd.appendChild(uld);
 
         // apartados menu desktop
@@ -72,6 +82,7 @@ function generateHeaderNav(menuactivo, role) {
             const a = document.createElement('a');
             a.href = menu.href;
             a.textContent = menu.texto;
+            a.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             if(menuactivo === menu.key){
                 a.classList.add("fw-bold", "text-lightgrey");
@@ -90,6 +101,7 @@ function generateHeaderNav(menuactivo, role) {
             const aa = document.createElement('a');
             aa.href = "/public/views/administrador/menuadministrador.php";
             aa.textContent = "Administrador";
+            aa.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             if(menuactivo === "admin"){
                 aa.classList.add("fw-bold", "text-lightgrey");
