@@ -1,12 +1,13 @@
 <?php
-include_once "../../../../templates/header.php";
+    include_once "../../../../templates/header.php";
 ?>
 
 <script>
-    const menu = "no";
+    const menu = "admin";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
+
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Plantas</h2>

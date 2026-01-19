@@ -1,9 +1,9 @@
 <?php
-include_once "../../../../templates/header.php";
+    include_once "../../../../templates/header.php";
 ?>
 
 <script>
-    const menu = "no";
+    const menu = "admin";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
