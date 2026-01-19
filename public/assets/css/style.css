@@ -51,13 +51,11 @@ nav{
     background-color: #7A8A06;
 }
 
-<<<<<<< HEAD
+
 
 ul#menudesktop li:not(:first-child):hover{
     background-color: #90a300;
 }
-
-=======
 nav:nth-child(1) ul li:not(:last-child){
     padding: 0 !important;
     margin: 0 !important;
@@ -82,7 +80,6 @@ nav:nth-child(1) ul li:nth-child(1) a img{
 nav ul li:not(:first-child) a:hover{
     background-color: #90a300 !important;
 }
->>>>>>> origin/panel-de-administrador
 
 nav *{
     color: white !important;
@@ -178,7 +175,6 @@ nav ul li a img{
     border: 1px solid white !important;
 }
 
-<<<<<<< HEAD
 .dropdown-menu li:hover{
     background-color: white !important;
 }
@@ -186,13 +182,6 @@ nav ul li a img{
 body.menu, body.login{
     background-color: #E6F5F0;
 }
-=======
-
-
-
-
-/*PÁGINA MENÚ*/
->>>>>>> origin/panel-de-administrador
 
 main.menu, div.menu{
     padding-left: 5% !important;
@@ -297,18 +286,6 @@ input:hover, input:active{
     background-color: #e9f0ff;
 }
 
-<<<<<<< HEAD
-footer{
-    grid-row: 3/4;
-    grid-column: 1/2;
-}
-
-
-/* USUARIO */
-=======
-
-
-
 
 /*ACCESIBILIDAD*/
 
@@ -338,7 +315,6 @@ footer{
 
 /*ESTILOS TABLAS*/
 
->>>>>>> origin/panel-de-administrador
 .tabla-cabecera thead {
     background-color: #274C9C;
     color: #ffffff;
@@ -377,12 +353,6 @@ footer{
     color: white;
     border: 1px solid #CC0000 !important;
 }
-<<<<<<< HEAD
-=======
-
-
-
-
 
 /*ESTILOS PERFIL*/
 
@@ -489,4 +459,3 @@ form.login{
     border-radius: 25px !important;
     box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
->>>>>>> origin/panel-de-administrador

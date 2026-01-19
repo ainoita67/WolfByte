@@ -3,11 +3,8 @@
 ?>
 
 <script>
-<<<<<<< HEAD
     const menu = "";
-=======
-    const menu = "menu";
->>>>>>> origin/panel-de-administrador
+
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>

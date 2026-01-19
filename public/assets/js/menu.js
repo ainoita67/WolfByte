@@ -192,7 +192,7 @@ function generateHeaderNav(menuactivo, role) {
         lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
         lipm.id = "perfil";
         lipm.innerHTML = 
-<<<<<<< HEAD
+
             `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle fs-1"></i>
             </a>
@@ -242,25 +242,3 @@ document.addEventListener('click', async (e) => {
         }
     }
 });
-=======
-        `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-1"></i>
-        </a>
-        <ul class="dropdown-menu" data-target="#perfilmovil">
-            <li>
-                <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
-            </li>
-            <li>
-                <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
-            </li>
-            <li>
-                <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
-            </li>
-            <li>
-                <a href="/public/views/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
-            </li>
-        </ul>
-        `;
-    }
-}
->>>>>>> origin/panel-de-administrador
