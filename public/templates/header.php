@@ -8,7 +8,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -27,4 +27,20 @@
     <title>Reservas - IES Bajo Aragón</title>
 </head>
 <body>
-    <header></header>
+    <header>
+
+    </header>
+    <div id="accesibilidad" class="mt-5 fs-3 text-right">
+        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 col-12">
+            <i class="bi bi-universal-access-circle" title="Accesibilidad" alt="Accesibilidad"></i>
+        </button>
+        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
+            <p class="m-0 p-0" title="Mayor tamaño de letra" alt="Mayor tamaño de letra">+A</p>
+        </button>
+        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
+            <p class="m-0 p-0" title="Menor tamaño de letra" alt="Menor tamaño de letra">-A</p>
+        </button>
+        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
+            <i class="bi bi-brilliance" title="Alto contraste" alt="Alto contraste"></i>
+        </button>
+    </div>
