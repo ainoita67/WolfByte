@@ -10,7 +10,7 @@
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-center mb-4">Aulas</h2>
+        <h2 class="text-center mb-4">Otros espacios</h2>
         <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
             <i class="bi bi-filter"></i> Filtrar
         </button>
@@ -58,8 +58,8 @@
                 <div class="modal-body">
                     <form class="row px-2">
                         <div class="mb-3 col-6 col-lg-4">
-                            <label for="edificio">Edificio</label>
-                            <select class="form-control" id="edificio" name="edificio">
+                            <label>Edificio</label>
+                            <select class="form-control" id="edificio">
                                 <option value="" selected disabled>Seleccionar edificio</option>
                                 <option>RAM</option>
                                 <option>Loscos</option>
@@ -67,24 +67,24 @@
                             </select>
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label for="planta">Planta</label>
-                            <select class="form-control" id="planta" name="planta">
+                            <label>Planta</label>
+                            <select class="form-control" id="planta">
                                 <option value="" selected disabled>Seleccionar planta</option>
                                 <option>Planta baja</option>
                                 <option>1ª planta</option>
                             </select>
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label for="capacidad">Capacidad</label>
-                            <input type="number" min="0" max="50" value="25" class="form-control" id="capacidad" name="capacidad">
+                            <label>Capacidad</label>
+                            <input type="number" min="0" max="50" value="25" class="form-control" id="capacidad">
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label for="fecha">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha">
+                            <label>Fecha</label>
+                            <input type="date" class="form-control" id="fecha">
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horainicio">Hora inicio</label>
-                            <select class="form-control" id="horainicio" name="horainicio">
+                            <select class="form-control" id="horainicio">
                                 <option value="" selected disabled>Seleccionar hora de inicio</option>
                                 <option>8:50</option>
                                 <option>9:45</option>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horafin">Hora fin</label>
-                            <select class="form-control" id="horafin" name="horafin">
+                            <select class="form-control" id="horafin">
                                 <option value="" selected disabled>Seleccionar hora de fin</option>
                                 <option>9:40</option>
                                 <option>10:35</option>

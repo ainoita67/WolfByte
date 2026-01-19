@@ -28,6 +28,10 @@ footer{
     grid-column: 1/2;
 }
 
+a{
+    text-decoration: none;
+}
+
 
 
 
@@ -57,28 +61,23 @@ nav:nth-child(1) ul li:not(:last-child){
 }
 
 nav:nth-child(1) ul li:not(:last-child) a{
-    padding: 1.7em 1.5em !important;
+    padding: 1.5em 0 !important;
 }
 
-nav:nth-child(1) ul li:last-child{
-    padding: 0 !important;
-ul#menudesktop li:not(:first-child):hover{
-    background-color: #90a300;
+nav:nth-child(1) ul li:last-child i{
+    padding: 1.5em 0 !important;
 }
 
-
-#menumovillogin ul{
-    height: 3em;
-    padding-left: 7.5% !important;
+nav:nth-child(1) ul li:nth-child(1){
+    margin-left: 1.5em !important;
 }
 
-#menumovil ul{
-    height: 3em;
-    padding-left: 10% !important;
+nav:nth-child(1) ul li:nth-child(1) a img{
+    margin-top: -0.2em !important;
 }
 
-#menumovil ul li a img, #menumovillogin ul li a img{
-    height: 3em;
+nav ul li:not(:first-child) a:hover{
+    background-color: #90a300 !important;
 }
 
 nav *{
@@ -114,6 +113,11 @@ nav ul li a img{
     text-decoration: none !important;
     color: black !important;
     padding: 0.25em 0 !important;
+}
+
+#perfil ul li{
+    margin: 0 !important;
+    width: 100%;
 }
 
 #perfil ul li:hover *{
@@ -175,13 +179,6 @@ nav ul li a img{
     border: 1px solid white !important;
 }
 
-.dropdown-menu li:hover{
-    background-color: white !important;
-}
-
-body.menu, body.login{
-    background-color: #E6F5F0;
-}
 
 
 
@@ -212,6 +209,10 @@ a.menu, button.menu{
 a.menu:hover, button.menu:hover{
     background-color: #0051ff !important;
     border: 1px solid #0051ff !important;
+}
+
+.bg-azul{
+    background-color: #274C9C !important;
 }
 
 .text-lightgrey{
@@ -281,12 +282,12 @@ a.enviar:hover, button.enviar:hover{
     border: 1px solid #0051ff !important;
 }
 
-input{
+input, select, textarea{
     border: 1px solid #274C9C !important;
     border-radius: 10px !important;
 }
 
-input:hover, input:active{
+input:hover, input:active, select:hover, select:active, textarea:hover, textarea:active{
     border: 1px solid #0051ff !important;
     background-color: #e9f0ff;
 }
@@ -492,6 +493,14 @@ form.login{
     overflow: hidden;
 }
 
+.table-striped tr:nth-child(odd){
+    background-color: lightgrey !important;
+}
+
+.table-striped tr:nth-child(even){
+    background-color: white !important;
+}
+
 .estado{
     font-weight: 500;
     font-size: 0.85em !important;
@@ -511,4 +520,114 @@ form.login{
     background-color: #CC0000 !important;
     color: white;
     border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*ESTILOS PERFIL*/
+
+#tabla-reservas{
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#tabla-reservas thead{
+    background-color: #274C9C !important;
+    color: #ffffff !important;
+}
+
+#tabla-reservas thead th{
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+#tabla-reservas tbody tr{
+    background-color: var(#7A8A06);
+    transition: background-color 0.3s ease;
+}
+
+#tabla-reservas tbody tr:nth-child(even){
+    background-color: #d9efe7;
+}
+
+#tabla-reservas tbody tr:hover{
+    background-color: var(#90a300);
+}
+
+#tabla-reservas td{
+    padding: 12px;
+    vertical-align: middle;
+    border-color: var(#d0d0d0);
+}
+
+#tabla-reservas .badge{
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}   
+
+#tabla-reservas .btn{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+#tabla-reservas .btn:hover{
+    opacity: 0.85;
+}
+
+div.card{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+.estadobadge{
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estadobadge.confirmada {
+    background-color: #007E33;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estadobadge.pendiente {
+    background-color: #FFBB33;
+    color: black;
+    border: 1px solid #FFBB33 !important;
+}
+
+.estadobadge.cancelada {
+    font-weight: 700 !important;
+    background-color: #CC0000;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*LOGIN*/
+
+main.login{
+    justify-items: center;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+form.login{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
