@@ -1,9 +1,9 @@
 <?php
-include_once "../../../../templates/header.php";
+    include_once "../../../../templates/header.php";
 ?>
 
 <script>
-    const menu = "no";
+    const menu = "admin";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
@@ -12,7 +12,7 @@ include_once "../../../../templates/header.php";
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Necesidades de Reservas</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear necesidades
+            <i class="bi bi-plus-circle"></i> Crear espacio
         </button>
     </div>
 
@@ -66,6 +66,7 @@ include_once "../../../../templates/header.php";
             </tbody>
         </table>
     </div>
+
 
 
     <div class="mt-5 container-fluid text-end">
