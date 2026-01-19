@@ -58,8 +58,8 @@
                 <div class="modal-body">
                     <form class="row px-2">
                         <div class="mb-3 col-6 col-lg-4">
-                            <label>Edificio</label>
-                            <select class="form-control" id="edificio">
+                            <label for="edificio">Edificio</label>
+                            <select class="form-control" id="edificio" name="edificio">
                                 <option value="" selected disabled>Seleccionar edificio</option>
                                 <option>RAM</option>
                                 <option>Loscos</option>
@@ -67,24 +67,24 @@
                             </select>
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label>Planta</label>
-                            <select class="form-control" id="planta">
+                            <label for="planta">Planta</label>
+                            <select class="form-control" id="planta" name="planta">
                                 <option value="" selected disabled>Seleccionar planta</option>
                                 <option>Planta baja</option>
                                 <option>1ª planta</option>
                             </select>
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label>Capacidad</label>
-                            <input type="number" min="0" max="50" value="25" class="form-control" id="capacidad">
+                            <label for="capacidad">Capacidad</label>
+                            <input type="number" min="0" max="50" value="25" class="form-control" id="capacidad" name="capacidad">
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
-                            <label>Fecha</label>
-                            <input type="date" class="form-control" id="fecha">
+                            <label for="fecha">Fecha</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horainicio">Hora inicio</label>
-                            <select class="form-control" id="horainicio">
+                            <select class="form-control" id="horainicio" name="horainicio">
                                 <option value="" selected disabled>Seleccionar hora de inicio</option>
                                 <option>8:50</option>
                                 <option>9:45</option>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horafin">Hora fin</label>
-                            <select class="form-control" id="horafin">
+                            <select class="form-control" id="horafin" name="horafin">
                                 <option value="" selected disabled>Seleccionar hora de fin</option>
                                 <option>9:40</option>
                                 <option>10:35</option>
