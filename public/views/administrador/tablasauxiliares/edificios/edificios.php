@@ -23,7 +23,7 @@
     </div>
 
     <div class="mt-5 container-fluid text-end">
-        <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú de tablas auxiliares</a>
+        <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
     </div>
 </main>
 
