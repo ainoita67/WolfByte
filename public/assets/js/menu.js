@@ -53,6 +53,7 @@ function generateHeaderNav(menuactivo, role) {
         //MENU DESKTOP
         // crear ul y logo
         const uld = document.createElement('ul');
+            uld.id = "menudesktop"
             uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
             uld.innerHTML = 
             `<li class="col-12">
@@ -80,6 +81,25 @@ function generateHeaderNav(menuactivo, role) {
             li.appendChild(a);
             uld.appendChild(li);
         });
+
+        // administrador
+        if (role == "admin"){
+            const liadmin = document.createElement('li');
+            liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
+
+            const aa = document.createElement('a');
+            aa.href = "/public/views/administrador/menuadministrador.php";
+            aa.textContent = "Administrador";
+
+            if(menuactivo === "admin"){
+                aa.classList.add("fw-bold", "text-lightgrey");
+                aa.style.color = "grey";
+            }
+
+            liadmin.appendChild(aa);
+            uld.appendChild(liadmin);
+        }
+        
 
         // apartado perfil
         const lipd = document.createElement('li');
@@ -148,6 +168,16 @@ function generateHeaderNav(menuactivo, role) {
                             li.appendChild(a);
                     dropdown.appendChild(li);
                 });
+                //administrador
+                if (role == "admin"){
+                    const liad = document.createElement('li');
+                        const aad = document.createElement('a');
+                            aad.href = "/public/views/administrador/menuadministrador.php";
+                            aad.textContent = "Administrador";
+                            aad.classList.add("dropdown-item");
+                            liad.appendChild(aad);
+                    dropdown.appendChild(liad);
+                }
 
         liMenu.appendChild(dropdown);
         ulm.appendChild(liMenu);
@@ -178,3 +208,31 @@ function generateHeaderNav(menuactivo, role) {
         `;
     }
 }
+
+// Logout
+document.addEventListener('click', async (e) => {
+    if (e.target && e.target.id === 'logoutBtn') {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://192.168.13.202/API/public/logout', {
+                method: 'POST',           // tu API acepta POST
+                credentials: 'include',   // 🔑 permite enviar cookies de sesión
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al cerrar sesión');
+            }
+
+            console.log('Sesión cerrada:', data);
+            window.location.href = '/auth/login.php';  // Redirige al login
+
+        } catch (err) {
+            alert('Error al cerrar sesión: ' + err.message);
+        }
+    }
+});

@@ -1,10 +1,10 @@
 <?php
-    include_once "../../../templates/header.php";
-?>
+include_once "../../../templates/header.php";
+?> 
 
 <script>
     const menu = "admin";
-    const rol = "5";
+    const rol = "admin";
     generateHeaderNav(menu, rol);
 </script>
 
