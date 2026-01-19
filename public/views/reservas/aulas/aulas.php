@@ -60,7 +60,7 @@
                         <div class="mb-3 col-6 col-lg-4">
                             <label>Edificio</label>
                             <select class="form-control" id="edificio">
-                                <option selected disabled>Seleccionar edificio</option>
+                                <option value="" selected disabled>Seleccionar edificio</option>
                                 <option>RAM</option>
                                 <option>Loscos</option>
                                 <option>Redondo</option>
@@ -69,7 +69,7 @@
                         <div class="mb-3 col-6 col-lg-4">
                             <label>Planta</label>
                             <select class="form-control" id="planta">
-                                <option selected disabled>Seleccionar planta</option>
+                                <option value="" selected disabled>Seleccionar planta</option>
                                 <option>Planta baja</option>
                                 <option>1ª planta</option>
                             </select>
@@ -85,7 +85,7 @@
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horainicio">Hora inicio</label>
                             <select class="form-control" id="horainicio">
-                                <option selected disabled>Seleccionar hora de inicio</option>
+                                <option value="" selected disabled>Seleccionar hora de inicio</option>
                                 <option>8:50</option>
                                 <option>9:45</option>
                                 <option>10:40</option>
@@ -97,7 +97,7 @@
                         <div class="mb-3 col-6 col-lg-4">
                             <label for="horafin">Hora fin</label>
                             <select class="form-control" id="horafin">
-                                <option selected disabled>Seleccionar hora de fin</option>
+                                <option value="" selected disabled>Seleccionar hora de fin</option>
                                 <option>9:40</option>
                                 <option>10:35</option>
                                 <option>11:30</option>

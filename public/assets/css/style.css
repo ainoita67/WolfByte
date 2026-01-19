@@ -270,12 +270,12 @@ a.enviar:hover, button.enviar:hover{
     border: 1px solid #0051ff !important;
 }
 
-input, select.form-control{
+input, select, textarea{
     border: 1px solid #274C9C !important;
     border-radius: 10px !important;
 }
 
-input:hover, input:active, select.form-control:hover, select.form-control:active{
+input:hover, input:active, select:hover, select:active, textarea:hover, textarea:active{
     border: 1px solid #0051ff !important;
     background-color: #e9f0ff;
 }

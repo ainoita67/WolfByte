@@ -8,9 +8,9 @@
     generateHeaderNav(menu, rol);
 </script>
 
-<main class="container-fluid mt-4">
-
-    <div class="p-4 row" style="background:#eaf6f3;">
+<main class="container mt-5">
+    <h2 class="text-center mb-4">Incidencias</h2>
+    <div class="p-4 row">
         <div class="col-lg-6">
             <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
 
@@ -38,26 +38,48 @@
                 </div>
             </div>
         </div>
-        <div class="row col-lg-6">
-            <div class=" ms-auto">
-                <div class="border rounded overflow-hidden">
-
-                    <div class="p-2 bg-secondary text-white">R1</div>
-                    <div class="p-2">R2</div>
-                    <div class="p-2 bg-secondary text-white">R3</div>
-                    <div class="p-2">R4</div>
-                    <div class="p-2 bg-secondary text-white">R5</div>
-                    <div class="p-2">R6</div>
-                    <div class="p-2 bg-secondary text-white">R7</div>
-                    <div class="p-2">R8</div>
-                    <div class="p-2 bg-secondary text-white">R9</div>
-                    <div class="p-2">R10</div>
-                    <div class="p-2 bg-secondary text-white">R11</div>
-                    <div class="p-2">R12</div>
-                    <div class="p-2 bg-secondary text-white">R13</div>
-
-                </div>
-            </div>
+        <div class="col-lg-6">
+            <table class="border rounded overflow-hidden col-12">
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R1</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R2</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R3</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R4</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R5</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R6</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R7</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R8</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R9</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R10</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R11</td>
+                </tr>
+                <tr>
+                    <td class="p-2">R12</td>
+                </tr>
+                <tr>
+                    <td class="p-2 bg-secondary text-white">R13</td>
+                </tr>
+            </table>
         </div>
 
     </div>
