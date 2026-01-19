@@ -24,60 +24,64 @@
             </div>
 
             <div class="row mb-4">
-                <div class="col-md-3">
+                <div class="col-md-5">
                     <label class="form-label">Ubicación</label>
                     <select class="form-select">
-                        <option>Edificio Ram</option>
+                        <option value="" selected disabled>Seleccionar ubicación</option>
+                        <option value="RAM">Edificio Ram</option>
+                        <option value="Loscos">Edificio Loscos</option>
+                        <option value="Redondo">Edificio Redondo</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-5">
                     <label class="form-label">&nbsp;</label>
                     <select class="form-select">
+                        <option value="" selected disabled>Seleccionar planta</option>
                         <option>Primera planta</option>
                     </select>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <table class="border rounded overflow-hidden col-12">
+        <div class="col-lg-6 mt-3 mt-md-0">
+            <table class="rounded-1 overflow-hidden table-striped col-12" id="tablaincidencias">
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R1</td>
+                    <td class="p-2">R1</td>
                 </tr>
                 <tr>
                     <td class="p-2">R2</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R3</td>
+                    <td class="p-2">R3</td>
                 </tr>
                 <tr>
                     <td class="p-2">R4</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R5</td>
+                    <td class="p-2">R5</td>
                 </tr>
                 <tr>
                     <td class="p-2">R6</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R7</td>
+                    <td class="p-2">R7</td>
                 </tr>
                 <tr>
                     <td class="p-2">R8</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R9</td>
+                    <td class="p-2">R9</td>
                 </tr>
                 <tr>
                     <td class="p-2">R10</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R11</td>
+                    <td class="p-2">R11</td>
                 </tr>
                 <tr>
                     <td class="p-2">R12</td>
                 </tr>
                 <tr>
-                    <td class="p-2 bg-secondary text-white">R13</td>
+                    <td class="p-2">R13</td>
                 </tr>
             </table>
         </div>
