@@ -64,9 +64,6 @@ nav:nth-child(1) ul li:last-child{
     padding: 0 !important;
 }
 
-nav:nth-child(1) ul li:nth-child(1){
-    padding-top: 0.2em !important;
-}
 
 nav:nth-child(1) ul li:nth-child(1) a img{
     margin-top: -0.2em !important;
@@ -202,6 +199,10 @@ a.menu:hover, button.menu:hover{
     border: 1px solid #0051ff !important;
 }
 
+.bg-azul{
+    background-color: #274C9C !important;
+}
+
 .text-lightgrey{
     color: lightgrey !important;
 }
@@ -269,12 +270,12 @@ a.enviar:hover, button.enviar:hover{
     border: 1px solid #0051ff !important;
 }
 
-input{
+input, select.form-control{
     border: 1px solid #274C9C !important;
     border-radius: 10px !important;
 }
 
-input:hover, input:active{
+input:hover, input:active, select.form-control:hover, select.form-control:active{
     border: 1px solid #0051ff !important;
     background-color: #e9f0ff;
 }
