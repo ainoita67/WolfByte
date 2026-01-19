@@ -162,6 +162,5 @@ crossorigin="anonymous"></script>
 </script>
 
 <?php
-
     include '../../templates/footer.php'
 ?>

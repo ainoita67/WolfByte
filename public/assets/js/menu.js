@@ -44,11 +44,10 @@ function generateHeaderNav(menuactivo, role) {
         const menus = [
             { texto: "Aulas", href: "/public/views/reservas/aulas/aulas.php", key: "aulas" },
             { texto: "Salón de actos", href: "/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
-
-            { texto: "Material", href: "/public/views/reservas/materiales/materiales.php", key: "material" },
-            { texto: "Otros espacios", href: "/public/views/reservas/otros/otros.php", key: "espacios" },
-            { texto: "Incidencias", href: "/public/views/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar aulas", href: "/public/views/liberar/liberar.php", key: "liberar" }
+            { texto: "Portátiles", href: "/public/views/reservas/portatiles/portatiles.php", key: "portatiles" },
+            { texto: "Otros espacios", href: "/public/views/reservas/espacios/espacios.php", key: "espacios" },
+            { texto: "Incidencias", href: "/public/views/reservas/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/public/views/reservas/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -122,7 +121,11 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
+<<<<<<< HEAD
                     <button id="logoutBtn" class="dropdown-item btn btn-link p-0">Cerrar sesión</button>
+=======
+                    <a href="/public/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+>>>>>>> origin/panel-de-administrador
                 </li>
             </ul>
             `;
@@ -189,6 +192,7 @@ function generateHeaderNav(menuactivo, role) {
         lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
         lipm.id = "perfil";
         lipm.innerHTML = 
+<<<<<<< HEAD
             `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle fs-1"></i>
             </a>
@@ -238,3 +242,25 @@ document.addEventListener('click', async (e) => {
         }
     }
 });
+=======
+        `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-1"></i>
+        </a>
+        <ul class="dropdown-menu" data-target="#perfilmovil">
+            <li>
+                <a href="/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
+            </li>
+            <li>
+                <a href="/public/views/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
+            </li>
+            <li>
+                <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
+            </li>
+            <li>
+                <a href="/public/views/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+            </li>
+        </ul>
+        `;
+    }
+}
+>>>>>>> origin/panel-de-administrador
