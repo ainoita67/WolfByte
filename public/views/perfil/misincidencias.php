@@ -1,11 +1,12 @@
 <?php
-    $title='Mis incidencias';
-    $directorio='../';
-    $ruta='misincidencias';
-    $seccion='';
-    $style='<link rel="stylesheet" href="'.$directorio.'../assets/css/perfil.css">';
-    include '../../templates/header.php';
+    include_once "../../templates/header.php";
 ?>
+
+<script>
+    const menu = "menu";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
 
 <main class="container mt-5">
     <h2 class="text-center mb-4">Mis incidencias</h2>

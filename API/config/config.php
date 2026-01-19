@@ -37,16 +37,16 @@ date_default_timezone_set('Europe/Madrid');
  *   URL: https://midominio.com/mi-app/
  *   BASE_PATH: '/mi-app'
  */
-define('BASE_PATH', '/api1');
+define('BASE_PATH', '/API');
 
 
 // ----------------------------------------------------
 // DATABASE
 // ----------------------------------------------------
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'API_mantenimiento');
-define('DB_USER', 'root');
-define('DB_PASS', 'Contrasena_123');
+define('DB_HOST', '192.168.13.202:3306');
+define('DB_NAME', 'gestion_reservas');
+define('DB_USER', 'wolfbyte');
+define('DB_PASS', 'Wolf1234');
 define('DB_CHARSET', 'utf8mb4');
 
 
@@ -59,7 +59,7 @@ define('TMP_SESION', 60 * 60 * 24 * 365); // 1 año
 // ----------------------------------------------------
 // CORS
 // ----------------------------------------------------
-define('CONFIG_CORS', '*');    // Cambiar por dominio real  // CORS CONFIGURACIÓN ACTUAL (DEMASIADO PERMISIVA): Permite acceso desde CUALQUIER dominio
+define('CONFIG_CORS', 'http://192.168.13.202');    // Cambiar por dominio real  // CORS CONFIGURACIÓN ACTUAL (DEMASIADO PERMISIVA): Permite acceso desde CUALQUIER dominio
 
 
 // ----------------------------------------------------
