@@ -1,0 +1,141 @@
+<?php
+    include_once "../../../templates/header.php";
+?>
+
+<script>
+    const menu = "aulas";
+    const rol = "5";
+    generateHeaderNav(menu, rol);
+</script>
+
+<main class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center mb-4">Otros espacios</h2>
+        <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+            <i class="bi bi-filter"></i> Filtrar
+        </button>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
+            <thead>
+                <tr>
+                    <th>Edificio</th>
+                    <th>Planta baja</th>
+                    <th>1ª planta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="bg-azul text-light">RAM</th>
+                    <td>R1, R2, R3, R4, R5</td>
+                    <td>R25, R26, R27, R28, R29</td>
+                </tr>
+                <tr>
+                    <th class="bg-azul text-light">Loscos</th>
+                    <td>L1, L2, L3, L4, L5</td>
+                    <td>L25, L26, L27, L28, L29</td>
+                </tr>
+                <tr>
+                    <th class="bg-azul text-light">Redondo</th>
+                    <td></td>
+                    <td>RPL1, RPL2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-5 container-fluid text-end">
+        <a href="/public/views/menu.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+    </div>
+
+    <!--Modal filtrar-->
+    <div class="modal fade mt-5" id="modalFiltrar" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filtrar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row px-2">
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label>Edificio</label>
+                            <select class="form-control" id="edificio">
+                                <option value="" selected disabled>Seleccionar edificio</option>
+                                <option>RAM</option>
+                                <option>Loscos</option>
+                                <option>Redondo</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label>Planta</label>
+                            <select class="form-control" id="planta">
+                                <option value="" selected disabled>Seleccionar planta</option>
+                                <option>Planta baja</option>
+                                <option>1ª planta</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label>Capacidad</label>
+                            <input type="number" min="0" max="50" value="25" class="form-control" id="capacidad">
+                        </div>
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label>Fecha</label>
+                            <input type="date" class="form-control" id="fecha">
+                        </div>
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label for="horainicio">Hora inicio</label>
+                            <select class="form-control" id="horainicio">
+                                <option value="" selected disabled>Seleccionar hora de inicio</option>
+                                <option>8:50</option>
+                                <option>9:45</option>
+                                <option>10:40</option>
+                                <option>12:00</option>
+                                <option>12:55</option>
+                                <option>13:50</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-6 col-lg-4">
+                            <label for="horafin">Hora fin</label>
+                            <select class="form-control" id="horafin">
+                                <option value="" selected disabled>Seleccionar hora de fin</option>
+                                <option>9:40</option>
+                                <option>10:35</option>
+                                <option>11:30</option>
+                                <option>12:50</option>
+                                <option>13:45</option>
+                                <option>14:40</option>
+                            </select>
+                        </div>
+                        <div class="row px-3 mt-4 pt-2 text-center d-flex justify-content-center">
+                            <button type="submit" class="btn enviar text-light col-5 mx-3 col-lg-3 mx-lg-4 ms-lg-5 mb-3">Filtrar</button>
+                            <button type="reset" class="btn border rounded-pill bg-verde text-light col-5 ms-3 col-lg-3 mx-lg-4 mb-3">Restablecer</button>
+                            <button type="button" class="btn border rounded-pill bg-lightgrey text-light col-11 ms-3 col-lg-3 mx-lg-4 mb-3 text-dark" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+crossorigin="anonymous"></script>
+
+<script>
+    document.querySelectorAll(".btn-editar").forEach(boton => {
+        boton.addEventListener("click", function () {
+            const fila = this.closest("tr");
+            const celdas = fila.querySelectorAll("td");
+
+            document.getElementById("editNombre").value = celdas[0].textContent.trim();
+            document.getElementById("editTipo").value = celdas[1].textContent.trim();
+            document.getElementById("editCapacidad").value = celdas[2].textContent.trim();
+            document.getElementById("editEstado").value = celdas[3].textContent.trim();
+        });
+    });
+</script>
+
+<?php
+    include '../../../templates/footer.php';
+?>

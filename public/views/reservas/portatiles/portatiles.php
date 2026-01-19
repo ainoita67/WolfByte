@@ -9,153 +9,60 @@
 </script>
 
 <main class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Portátiles</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear material
-        </button>
-    </div>
+    <div class="card p-5 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Portátiles</h2>
+        </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Unidades</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Proyector Epson</td>
-                    <td>Proyectores</td>
-                    <td>5</td>
-                    <td>Disponible</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                            <i class="bi bi-pencil"></i>
-                        </button>
+        <form action="/public/views/confirmar_reserva.php" method="post" class="row g-4">
 
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Portátil HP</td>
-                    <td>Ordenadores</td>
-                    <td>10</td>
-                    <td>En uso</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                            <i class="bi bi-pencil"></i>
-                        </button>
+            <div class="col-md-4">
+                <label class="form-label">Fecha *</label>
+                <input type="date" class="form-control" name="fecha" required>
+            </div>
 
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+            <div class="col-md-4">
+                <label class="form-label">Hora inicio *</label>
+                <select class="form-select" name="horainicio" required>
+                    <option value="" selected disabled>Seleccionar hora de inicio</option>
+                    <option>8:50</option>
+                    <option>9:45</option>
+                    <option>10:40</option>
+                    <option>12:00</option>
+                    <option>12:55</option>
+                    <option>13:50</option>
+                </select>
+            </div>
 
-    <div class="mt-5 container-fluid text-end">
-        <a href="/public/views/menu.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+            <div class="col-md-4">
+                <label class="form-label">Hora fin *</label>
+                <select class="form-select" name="horafin" required>
+                    <option value="" selected disabled>Seleccionar hora de fin</option>
+                    <option>9:40</option>
+                    <option>10:35</option>
+                    <option>11:30</option>
+                    <option>12:50</option>
+                    <option>13:45</option>
+                    <option>14:40</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 text-center d-flex">
+                <a href="/public/views/reservas/portatiles/reserva_portatil.php " class="col-12 border rounded-pill bg-azul w-100 text-light p-2 pb-2 mb-0">Ver Portátiles</a>
+            </div>
+
+            <div class="col-md-6 text-center d-flex">
+                <a href="/public/views/menu.php" class="col-12 bg-lightgrey w-100 text-dark p-2 pb-0 mb-0">Volver</a>
+            </div>
+
+        </form>
     </div>
 </main>
 
-<!-- Modal Crear -->
-<div class="modal fade" id="modalCrear" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Crear material</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Categoría</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Unidades</label>
-                        <input type="number" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control">
-                            <option>Disponible</option>
-                            <option>En uso</option>
-                            <option>Averiado</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-success w-100">Guardar</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal Editar -->
-<div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar material</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" id="editNombre">
-                    </div>
-                    <div class="mb-3">
-                        <label>Categoría</label>
-                        <input type="text" class="form-control" id="editCategoria">
-                    </div>
-                    <div class="mb-3">
-                        <label>Unidades</label>
-                        <input type="number" class="form-control" id="editUnidades">
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control" id="editEstado">
-                            <option>Disponible</option>
-                            <option>En uso</option>
-                            <option>Averiado</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary w-100">Guardar cambios</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-document.querySelectorAll(".btn-editar").forEach(boton => {
-    boton.addEventListener("click", function () {
-        const fila = this.closest("tr");
-        const celdas = fila.querySelectorAll("td");
-
-        document.getElementById("editNombre").value = celdas[0].textContent.trim();
-        document.getElementById("editCategoria").value = celdas[1].textContent.trim();
-        document.getElementById("editUnidades").value = celdas[2].textContent.trim();
-        document.getElementById("editEstado").value = celdas[3].textContent.trim();
-    });
-});
-</script>
 
 <?php
     include '../../../templates/footer.php';
