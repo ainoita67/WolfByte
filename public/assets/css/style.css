@@ -31,6 +31,11 @@ footer{
 a{
     text-decoration: none;
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/panel-de-administrador
 
 
 
@@ -330,6 +335,14 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     background-color: var(white);
     border-radius: 15px;
     overflow: hidden;
+}
+
+.table-striped tr:nth-child(odd){
+    background-color: lightgrey !important;
+}
+
+.table-striped tr:nth-child(even){
+    background-color: white !important;
 }
 
 .estado{
