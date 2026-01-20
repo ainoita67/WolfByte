@@ -49,26 +49,42 @@
 </div>
 
 <!-- MODAL EDITAR -->
+<!-- MODAL EDITAR (CARD POPUP) -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Editar edificio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 bg-transparent">
+
+      <div class="card shadow-lg animate-popup">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Editar edificio</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="card-body">
+          <form id="formEditar">
+            <input type="hidden" id="editId">
+
+            <div class="mb-3">
+              <label for="editNombre" class="form-label">Nombre del edificio</label>
+              <input type="text" id="editNombre" class="form-control" required>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="modal-body">
-        <form id="formEditar">
-          <input type="hidden" id="editId">
-          <div class="mb-3">
-            <label for="editNombre" class="form-label">Nombre edificio</label>
-            <input type="text" id="editNombre" class="form-control" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </form>
-      </div>
+
     </div>
   </div>
 </div>
+
 
 <?php
     include '../../../../templates/footer.php';

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarEdificios() {
         try {
-            const res = await fetch('http://192.168.13.202/API/public/edificios');
+            const res = await fetch('http://192.168.13.202/API/edificios');
             const data = await res.json();
 
             if (data.status === 'error') {
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (!confirm('¿Seguro que quieres borrar este edificio?')) return;
 
-                    const res = await fetch(`http://192.168.13.202/API/public/edificios/${id}`, {
+                    const res = await fetch(`http://192.168.13.202/edificios/${id}`, {
                         method: 'DELETE'
                     });
                     
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const nombre = document.getElementById('crearNombre').value;
 
-        const res = await fetch('http://192.168.13.202/API/public/edificios', {
+        const res = await fetch('http://192.168.13.202/API/edificios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = document.getElementById('editId').value;
         const nombre = document.getElementById('editNombre').value;
 
-        const res = await fetch(`http://192.168.13.202/API/public/edificios/${id}`, {
+        const res = await fetch(`http://192.168.13.202/API/edificios/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

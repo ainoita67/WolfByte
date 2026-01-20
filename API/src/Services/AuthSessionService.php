@@ -18,16 +18,16 @@ class AuthSessionService
         $this->model = new UsuarioModel();
     }
 
-    public function login(string $login, string $password): array
+    public function login(string $email, string $password): array
     {
         // Validar datos
-        Validator::validate(compact('login','password'), [
-            'login'    => 'required|string|min:3|max:30',
+        Validator::validate(compact('email','password'), [
+            'email'    => 'required|string|min:3|max:30',
             'password' => 'required|string|min:6|max:100'
         ]);
 
         try {
-            $user = $this->model->findByLogin($login);
+            $user = $this->model->findByEmail($email);
         } catch (PDOException $e) {
             throw new \Exception("Error interno en la base de datos", 500);
         }
