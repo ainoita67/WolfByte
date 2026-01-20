@@ -36,7 +36,7 @@
 
         <div class="mb-3 text-start mt-lg-3">
             <label for="usuario">Usuario</label>
-            <input type="text" name="usuario" id="usuario" class="form-control" placeholder="&#128100 Usuario" required>
+            <input type="email" name="usuario" id="usuario" class="form-control" placeholder="&#128100 Usuario" required>
         </div>
 
         <div class="mb-4 text-start mt-lg-5">

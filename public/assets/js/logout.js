@@ -1,6 +1,6 @@
 document.getElementById('logoutBtn').addEventListener('click', async () => {
     try {
-        const response = await fetch('http://192.168.13.202/API/public/logout', {
+        const response = await fetch('http://192.168.13.202/API/logout', {
             method: 'POST',      // O 'GET', tu API soporta ambos
             credentials: 'include'  // Muy importante para enviar la cookie de sesión
         });
