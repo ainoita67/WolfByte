@@ -20,3 +20,15 @@ $router->post('/user',              'Controllers\\UsuarioController@store'); // 
 $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
 $router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
 $router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
+//$router->dpatch('/user/{id}',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive del usuario del que se pase el id
+
+
+// EDIFICIOS
+$router->get('/edificios', 'Controllers\\EdificioController@index');
+$router->get('/edificios/{id}', 'Controllers\\EdificioController@show');
+$router->post('/edificios', 'Controllers\\EdificioController@store');
+$router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
+$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
+
+
+// AULAS
