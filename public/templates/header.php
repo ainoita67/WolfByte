@@ -1,10 +1,10 @@
 <?php
-// session_start();
+session_start();
 
-// if (!isset($_SESSION['user'])) {
-//     header('Location: /auth/login.php');
-//     exit;
-// }
+if (!isset($_SESSION['user'])) {
+    header('Location: /auth/login.php');
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
     <header>
 
     </header>
-    <div id="accesibilidad">
+<div id="accesibilidad">
     <button title="Accesibilidad">
         <i class="bi bi-universal-access-circle"></i>
     </button>
