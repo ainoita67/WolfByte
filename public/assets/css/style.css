@@ -292,27 +292,51 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 
-/*ACCESIBILIDAD*/
-
-#accesibilidad{
-    z-index: 9999999999999999999999;
-    margin-top: 5em !important;
-    margin-left: -2.5% !important;
+/* ACCESIBILIDAD */
+#accesibilidad {
     position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    background-color: #0066CC;
+    border-radius: 0 0.5em 0.5em 0;
 }
 
-#accesibilidad button:not(:first-child){
+#accesibilidad button {
     display: none;
+    width: 3em;       /* tamaño pequeño */
+    height: 3em;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2em;
+    background-color: #0066CC;
 }
 
-#accesibilidad:hover{
-    background-color: #274C9C !important;
-    border-radius: 25px;
+#accesibilidad button i {
+    font-size: 1.5em;
 }
 
-#accesibilidad:hover button{
-    display: block !important;
+/* Siempre mostrar el primer botón */
+#accesibilidad button:first-child {
+    display: block;
 }
+
+/* Al pasar el mouse por el contenedor, mostrar los botones */
+#accesibilidad:hover button {
+    display: block;
+}
+
+/* Efecto de hover individual */
+#accesibilidad button:hover {
+    background-color: #274C9C;
+}
+
 
 
 
@@ -504,18 +528,24 @@ form.login{
     display: inline-block;
 }
 
-
-.estado.activo{
-    background-color: #007E33 !important;
+.estado.Comun{
+    background-color: #274C9C !important;
     color: white;
-    border: 1px solid #007E33 !important;
+    border: 1px solid #274C9C !important;
 }
 
-.estado.inactivo{
+.estado.Administrador{
     font-weight: 700;
-    background-color: #CC0000 !important;
+    background-color: #B53422 !important;
     color: white;
-    border: 1px solid #CC0000 !important;
+    border: 1px solid #B53422 !important;
+}
+
+.estado.Superadministrador{
+    font-weight: 700;
+    background-color: #578047 !important;
+    color: white;
+    border: 1px solid #578047 !important;
 }
 
 
