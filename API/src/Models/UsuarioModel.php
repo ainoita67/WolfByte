@@ -31,7 +31,7 @@ class UsuarioModel
     public function findAll(): array
     {
         return $this->db
-            ->query("SELECT * FROM Usuario")
+            ->query("SELECT * FROM Usuario ORDER BY id_usuario DESC; ")
             ->fetchAll();
     }
 

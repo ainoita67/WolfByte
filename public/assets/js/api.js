@@ -38,9 +38,9 @@ async function getUsuarios() {
 
 function obtenerNombreRol(idRol) {
     switch (idRol) {
-        case 1: return "Administrador";
-        case 2: return "Superadministrador";
-        case 3: return "Comun";
+        case 1: return "Comun";
+        case 2: return "Administrador";
+        case 3: return "Superadministrador";
         default: return "Desconocido";
     }
 }
