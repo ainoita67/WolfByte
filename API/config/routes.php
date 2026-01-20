@@ -13,7 +13,7 @@ $router->post('/logout', 'Controllers\\AuthSessionController@logout');
 // $router->get('/profesores/{id}', 'Controllers\\ProfesorController@show'); // ver info de un profesor por id
 
 // $router->post('/profesores', 'Controllers\\ProfesorController@store'); // insertar nuevo profesor
-// $router->put('/profesores/{id}', 'Controllers\\ProfesorController@update'); // actualizar profesor por id
+// $router->put('/profesores/{id}', 'Controllers\\ProfesorController@update'); // actualizar profesor por id    
 // $router->delete('/profesores/{id}', 'Controllers\\ProfesorController@destroy'); // eliminar profesor por id
 // $router->patch('/profesores/{id}/email','Controllers\\ProfesorController@updateEmail'); // actualizar email de profesor
 
@@ -35,3 +35,10 @@ $router->post('/user',              'Controllers\\UsuarioController@store'); // 
 $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
 $router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
 $router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
+
+// Necesidad Reservas
+$router->post('/necesidad-reserva',           'Controllers\\NecesidadReservaController@create');   // Crear
+$router->get('/necesidad-reserva',            'Controllers\\NecesidadReservaController@list');     // Listar
+$router->get('/necesidad-reserva/{id}',       'Controllers\\NecesidadReservaController@show');     // Mostrar uno
+$router->put('/necesidad-reserva/{id}',       'Controllers\\NecesidadReservaController@update');   // Actualizar
+$router->delete('/necesidad-reserva/{id}',    'Controllers\\NecesidadReservaController@cancel');   // Cancelar
