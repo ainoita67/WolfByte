@@ -5,6 +5,8 @@ if (!isset($_SESSION['user'])) {
     header('Location: /auth/login.php');
     exit;
 }
+
+require_once BASE_DIR . '/helpers/config.php';
 ?>
 
 <!DOCTYPE html>
@@ -21,10 +23,10 @@ if (!isset($_SESSION['user'])) {
         integrity="sha384-C6RzsynM9MNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/style.css">
     <!-- Header Nav -->
-    <script src="/public/assets/js/menu.js"></script>
-    <script src="/public/assets/js/api.js"></script>
+    <script src="<?= BASE_URL; ?>/assets/js/menu.js"></script>
+    <script src="<?= BASE_URL; ?>/assets/js/api.js"></script>
     <title>Reservas - IES Bajo Aragón</title>
 </head>
 <body>
