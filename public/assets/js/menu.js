@@ -9,6 +9,7 @@ function generateHeaderNav(menuactivo, role) {
     //crear los 2 navs vacios ordenador y movil
     const navd = document.createElement('nav');
         navd.classList.add("row");
+        navd.id = "menuordenador";
     const navm = document.createElement('nav');
         navm.classList.add("row");
         navm.id = "menumovil";
@@ -55,13 +56,24 @@ function generateHeaderNav(menuactivo, role) {
         const uld = document.createElement('ul');
             uld.id = "menudesktop"
             uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
-            uld.innerHTML = 
-            `<li class="col-12">
-                <a href="/public/views/menu.php">
-                    <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
-                </a>
-            </li>
-            `;
+            if(role=="admin"){
+                uld.innerHTML = 
+                `<li class="col-12">
+                    <a href="/public/views/menu.php">
+                        <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                    </a>
+                </li>
+                `;
+            }else{
+                uld.innerHTML = 
+                `<li class="col-12">
+                    <a href="/public/views/menu.php">
+                        <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                    </a>
+                </li>
+                <li class="col-1"></li>
+                `;
+            }
         navd.appendChild(uld);
 
         // apartados menu desktop
