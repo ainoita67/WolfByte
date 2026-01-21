@@ -3,85 +3,72 @@
 ?>
 
 <script>
-    const menu = "admin";
+    const menu = "";
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
+<script src="/public/assets/js/edificios.js" defer></script>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Edificios</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear espacio
+            <i class="bi bi-plus-circle"></i> Crear edificio
         </button>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-            <thead>
-                <tr>
-                    <th>Nombre del edificio</th>
-                    <th>Dirección</th>
-                    <th>Nº de plantas</th>
-                    <th>Uso principal</th>
-                    <th>Horario disponible</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Edificio Central</td>
-                    <td>Av. Universidad 123</td>
-                    <td>4</td>
-                    <td>Docencia</td>
-                    <td>
-                        <span class="badge bg-primary">Lunes</span>
-                        <span class="badge bg-primary">Martes</span>
-                        <span class="badge bg-primary">Miércoles</span>
-                        <span class="badge bg-primary">Jueves</span>
-                        <span class="badge bg-primary">Viernes</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Edificio Tecnológico</td>
-                    <td>Calle Innovación 45</td>
-                    <td>3</td>
-                    <td>Laboratorios</td>
-                    <td>
-                        <span class="badge bg-primary">Lunes</span>
-                        <span class="badge bg-primary">Martes</span>
-                        <span class="badge bg-primary">Miércoles</span>
-                        <span class="badge bg-primary">Jueves</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Aquí irán las tarjetas -->
+    <div id="contenedorTarjetas" class="row g-4 mt-3">
+        <!-- tarjetas generadas por JS -->
     </div>
-
-
-
 
     <div class="mt-5 container-fluid text-end">
         <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
     </div>
 </main>
+
+<!-- MODAL CREAR -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear edificio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCrear">
+          <div class="mb-3">
+            <label for="crearNombre" class="form-label">Nombre edificio</label>
+            <input type="text" id="crearNombre" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-success">Crear</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar edificio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditar">
+          <input type="hidden" id="editId">
+          <div class="mb-3">
+            <label for="editNombre" class="form-label">Nombre edificio</label>
+            <input type="text" id="editNombre" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php
     include '../../../../templates/footer.php';

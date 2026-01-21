@@ -1,3 +1,14 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header('Location: /auth/login.php');
+    exit;
+}
+
+require_once BASE_DIR . '/helpers/config.php';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,26 +23,23 @@
         integrity="sha384-C6RzsynM9MNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL; ?>/assets/css/style.css">
     <!-- Header Nav -->
-    <script src="/public/assets/js/menu.js"></script>
+    <script src="<?= BASE_URL; ?>/assets/js/menu.js"></script>
+    <script src="<?= BASE_URL; ?>/assets/js/api.js"></script>
     <title>Reservas - IES Bajo Aragón</title>
 </head>
 <body>
     <header>
 
     </header>
-    <div id="accesibilidad" class="mt-5 fs-3 text-right">
-        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 col-12">
-            <i class="bi bi-universal-access-circle" title="Accesibilidad" alt="Accesibilidad"></i>
-        </button>
-        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
-            <p class="m-0 p-0" title="Mayor tamaño de letra" alt="Mayor tamaño de letra">+A</p>
-        </button>
-        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
-            <p class="m-0 p-0" title="Menor tamaño de letra" alt="Menor tamaño de letra">-A</p>
-        </button>
-        <button class="enviar ps-4 ps-md-5 ps-lg-5 px-2 mt-1 col-12">
-            <i class="bi bi-brilliance" title="Alto contraste" alt="Alto contraste"></i>
-        </button>
-    </div>
+<div id="accesibilidad">
+    <button title="Accesibilidad">
+        <i class="bi bi-universal-access-circle"></i>
+    </button>
+    <button title="Mayor tamaño de letra">+A</button>
+    <button title="Menor tamaño de letra">-A</button>
+    <button title="Alto contraste">
+        <i class="bi bi-brilliance"></i>
+    </button>
+</div>

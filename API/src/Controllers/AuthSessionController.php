@@ -6,10 +6,9 @@ namespace Controllers;
 use Core\Request;
 use Core\Response;
 use Core\Session;
-use Validation\ValidationException;
-use Throwable;
-
 use Services\AuthSessionService;
+use Throwable;
+use Validation\ValidationException;
 
 class AuthSessionController
 {
@@ -18,22 +17,32 @@ class AuthSessionController
     public function __construct()
     {
         $this->service = new AuthSessionService();
+        // Aseguramos que la sesión de PHP esté iniciada
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
-
 
     public function login(Request $req, Response $res): void
     {
         try {
-            $data = $req->json(); // Se reciben los datos del request en JSON
+            $data = $req->json(); // Recibe {login, password}
+            $user = $this->service->login(
+                $data['login'] ?? '',
+                $data['password'] ?? ''
+            );
 
-            $user = $this->service->login($data['login'] ?? '', $data['password'] ?? ''); 
-            // Se valida y busca el usuario en la base de datos
+            // Guardamos sesión tradicional PHP
+            $_SESSION['user'] = $user;
 
-            Session::createUserSession($user); 
-            // Se crea la sesión con los datos del usuario
+            // También usamos tu Session helper si lo quieres mantener
+            Session::createUserSession($user);
 
-            $res->status(200)->json(['user' => $user], "Profesor logueado"); 
-            // Se devuelve respuesta exitosa
+            $res->status(200)->json([
+                'user' => $user,
+                'session_id' => session_id() // Opcional, para debugging
+            ], "Usuario logueado correctamente");
+
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
         } catch (Throwable $e) {
@@ -42,41 +51,30 @@ class AuthSessionController
         }
     }
 
-
-    /**
-     * Logout (GET /logout o POST /logout)
-     */
     public function logout(Request $req, Response $res): void
     {
-        Session::destroy(); // Destruye la sesión completa
-        $res->status(200)->json([], "Sesión cerrada correctamente"); // Devuelve respuesta
-    }
+        // Destruye la sesión PHP
+        if (session_status() !== PHP_SESSION_NONE) {
+            $_SESSION = [];
+            session_destroy();
+        }
 
+        // También destruye la sesión en tu helper
+        Session::destroy();
 
-    public function register(Request $req, Response $res): void
-    {
-
+        $res->status(200)->json([], "Sesión cerrada correctamente");
     }
 
     /**
-     * Activar usuario (GET /activate?token=...)
+     * Opcional: para verificar si hay un usuario logueado
      */
-    public function activate(Request $req, Response $res): void
+    public function check(Request $req, Response $res): void
     {
-
-    }
-
-
-
-    public function forgotPassword(Request $req, Response $res): void
-    {
-
-    }
-
-
-
-    public function resetPassword(Request $req, Response $res): void
-    {
-
+        $user = $_SESSION['user'] ?? null;
+        if ($user) {
+            $res->status(200)->json(['user' => $user], "Usuario activo");
+        } else {
+            $res->status(401)->json([], "No hay usuario logueado");
+        }
     }
 }

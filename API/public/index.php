@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+session_start();
 
 /**
  * Front Controller
@@ -12,6 +13,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/config.php';
 
 
+
 // ---------------------------
 // Cabeceras de seguridad y CORS
 // ---------------------------
@@ -20,11 +22,10 @@ if (php_sapi_name() !== 'cli') {
     @header_remove('Server');                                   // El @ suprime errores si no puede eliminar el header
 
     header('Access-Control-Allow-Origin: ' . CONFIG_CORS);
-    if (CONFIG_CORS !== '*') {                 // Para permitir cookies en CORS (en sesiones desde otro dominio):
-        header('Access-Control-Allow-Credentials: true');
-    }
-    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');  // Métodos permitidos
-    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');    // Headers permitidos
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+
 
     // Manejar preflight requests (consultas previas de CORS)
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

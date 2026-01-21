@@ -24,7 +24,6 @@ function generateHeaderNav(menuactivo, role) {
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
                 </li>
-                <li></li>
             </ul>
             `;
         
@@ -53,14 +52,25 @@ function generateHeaderNav(menuactivo, role) {
         //MENU DESKTOP
         // crear ul y logo
         const uld = document.createElement('ul');
-            uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
-            uld.innerHTML = 
-            `<li class="col-12">
-                <a href="/public/views/menu.php">
-                    <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
-                </a>
-            </li>
-            `;
+            uld.id = "menudesktop"
+            if (role == "admin"){
+                uld.innerHTML = 
+                    `<li class="col-12 text-start">
+                        <a href="/public/views/menu.php">
+                            <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                        </a>
+                    </li>
+                `;
+            }else{
+                uld.innerHTML = 
+                    `<li class="col-12 text-start">
+                        <a href="/public/views/menu.php">
+                            <img src="/public/assets/imagenes/ieslogo.png" alt="Logo">
+                        </a>
+                    </li>
+                    <li></li>
+                `;
+            }
         navd.appendChild(uld);
 
         // apartados menu desktop
@@ -71,6 +81,7 @@ function generateHeaderNav(menuactivo, role) {
             const a = document.createElement('a');
             a.href = menu.href;
             a.textContent = menu.texto;
+            a.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             if(menuactivo === menu.key){
                 a.classList.add("fw-bold", "text-lightgrey");
@@ -80,6 +91,26 @@ function generateHeaderNav(menuactivo, role) {
             li.appendChild(a);
             uld.appendChild(li);
         });
+
+        // administrador
+        if (role == "admin"){
+            const liadmin = document.createElement('li');
+            liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
+
+            const aa = document.createElement('a');
+            aa.href = "/public/views/administrador/menuadministrador.php";
+            aa.textContent = "Administrador";
+            aa.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
+
+            if(menuactivo === "admin"){
+                aa.classList.add("fw-bold", "text-lightgrey");
+                aa.style.color = "grey";
+            }
+
+            liadmin.appendChild(aa);
+            uld.appendChild(liadmin);
+        }
+        
 
         // apartado perfil
         const lipd = document.createElement('li');
@@ -101,7 +132,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="/public/views/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
-                    <a href="/public/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+                    <a id="logoutBtn" class="dropdown-item">Cerrar sesión</a>
                 </li>
             </ul>
             `;
@@ -148,6 +179,16 @@ function generateHeaderNav(menuactivo, role) {
                             li.appendChild(a);
                     dropdown.appendChild(li);
                 });
+                //administrador
+                if (role == "admin"){
+                    const liad = document.createElement('li');
+                        const aad = document.createElement('a');
+                            aad.href = "/public/views/administrador/menuadministrador.php";
+                            aad.textContent = "Administrador";
+                            aad.classList.add("dropdown-item");
+                            liad.appendChild(aad);
+                    dropdown.appendChild(liad);
+                }
 
         liMenu.appendChild(dropdown);
         ulm.appendChild(liMenu);
@@ -178,3 +219,31 @@ function generateHeaderNav(menuactivo, role) {
         `;
     }
 }
+
+// Logout
+document.addEventListener('click', async (e) => {
+    if (e.target && e.target.id === 'logoutBtn') {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://192.168.13.202/API/public/logout', {
+                method: 'POST',           // tu API acepta POST
+                credentials: 'include',   // 🔑 permite enviar cookies de sesión
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al cerrar sesión');
+            }
+
+            console.log('Sesión cerrada:', data);
+            window.location.href = '/auth/login.php';  // Redirige al login
+
+        } catch (err) {
+            alert('Error al cerrar sesión: ' + err.message);
+        }
+    }
+});

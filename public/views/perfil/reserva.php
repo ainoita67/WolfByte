@@ -9,7 +9,7 @@
 </script>
 
 <main class="container mt-5">
-    <h2 class="text-center mb-4">Listado de Reservas</h2>
+    <h2 class="text-center mb-4">Mis reservas</h2>
     <div class="table-responsive">
         <table class="table table-hover align-middle text-center" id="tabla-reservas">
 

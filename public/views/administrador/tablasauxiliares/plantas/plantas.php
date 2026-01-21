@@ -12,7 +12,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Necesidades de Reservas</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear espacio
+            <i class="bi bi-plus-circle"></i> Crear plantas
         </button>
     </div>
 
@@ -66,8 +66,6 @@
             </tbody>
         </table>
     </div>
-
-
 
 
     <div class="mt-5 container-fluid text-end">
