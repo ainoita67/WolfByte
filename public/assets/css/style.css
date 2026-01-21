@@ -70,10 +70,14 @@ nav:nth-child(1) ul li:not(:last-child) a{
     padding: 1.5em 0 !important;
 }
 
-nav:nth-child(1) ul li:last-child i{
+nav:nth-child(1) ul li:last-child a{
+    padding: 2em 2em 1.3em 2em !important;
+    margin-left: -1em !important;
+}
+
+nav:nth-child(1) ul li:last-child a i{
     padding: 1.5em 0 !important;
-    margin-right: 0.5em !important;
-    margin-left: -0.5em !important;
+    margin-top: 1.7em !important;
 }
 
 nav:nth-child(1) ul li:nth-child(1){
@@ -103,10 +107,6 @@ nav ul li a img{
 
 /*MENÚ NAV PERFIL*/
 
-#perfil a:hover{
-    background-color: #00000000 !important;
-}
-
 #perfil:hover > ul{
     display: block !important;
     height: max-content !important;
@@ -134,6 +134,7 @@ nav ul li a img{
 #perfil ul li *{
     padding: 0.5em !important;
     text-align: center !important;
+    margin-left: 0 !important;
 }
 
 #perfil ul li a{
@@ -311,7 +312,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 /* ACCESIBILIDAD */
 #accesibilidad {
-    top: 50%;
+    top: 44%;
     left: 0;
     transform: translateY(-50%);
     display: flex;
