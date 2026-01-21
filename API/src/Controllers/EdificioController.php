@@ -69,18 +69,24 @@ class EdificioController
      * PUT /edificios/{id}
      * Actualiza un edificio existente
      */
-    public function update(Request $req, Response $res, array $args): void
-    {
-        try {
-            $data = $req->getBody();
-            $edificio = $this->service->updateEdificio((int)$args['id'], $data);
-            $res->status(200)->json($edificio);
-        } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
+    public function update(Request $req, Response $res, $args): void
+{
+    try {
+        // El router pasa el ID como string
+        $id = is_array($args) ? (int)$args['id'] : (int)$args;
+
+        $data = $req->getBody();
+
+        $edificio = $this->service->updateEdificio($id, $data);
+
+        $res->status(200)->json($edificio);
+    } catch (ValidationException $e) {
+        $res->errorJson($e->getMessage(), 422);
+    } catch (Throwable $e) {
+        $res->errorJson($e->getMessage(), 500);
     }
+}
+
 
     /**
      * DELETE /edificios/{id}

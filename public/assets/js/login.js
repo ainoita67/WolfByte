@@ -1,17 +1,17 @@
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const login = document.getElementById('usuario').value.trim();
+    const email = document.getElementById('usuario').value.trim();
     const password = document.getElementById('clave').value;
 
     try {
-        const response = await fetch('http://192.168.13.202/API/public/login', {
+        const response = await fetch('http://192.168.13.202/API/login', {
             method: 'POST',
             credentials: 'include', 
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ login, password })
+            body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();

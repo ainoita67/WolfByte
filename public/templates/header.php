@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user'])) {
-    header('Location: /auth/login.php');
+    header('Location: /IKER/auth/login.php');
     exit;
 }
 ?>
@@ -17,14 +17,12 @@ if (!isset($_SESSION['user'])) {
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9MNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/IKER/public/assets/css/style.css">
     <!-- Header Nav -->
-    <script src="/public/assets/js/menu.js"></script>
-    <script src="/public/assets/js/api.js"></script>
+    <script src="/IKER/public/assets/js/menu.js"></script>
+    <script src="/IKER/public/assets/js/api.js"></script>
     <title>Reservas - IES Bajo Aragón</title>
 </head>
 <body>

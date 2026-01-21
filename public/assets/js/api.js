@@ -1,5 +1,5 @@
 // URL de tu API
-const API_URL = "http://192.168.13.202";
+const API_URL = "http://192.168.13.202/IKER";
 
 
 // USUARIOS
