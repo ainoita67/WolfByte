@@ -14,7 +14,6 @@ define('APP_DIR', BASE_DIR . '/src');
 define('CONFIG_DIR', BASE_DIR . '/config');
 define('STORAGE_DIR', BASE_DIR . '/storage');
 
-
 // ----------------------------------------------------
 // ENTORNO
 // ----------------------------------------------------
@@ -37,7 +36,7 @@ date_default_timezone_set('Europe/Madrid');
  *   URL: https://midominio.com/mi-app/
  *   BASE_PATH: '/mi-app'
  */
-define('BASE_PATH', '/API');
+define('BASE_PATH', '/AINOA/API');
     
 
 // ----------------------------------------------------
