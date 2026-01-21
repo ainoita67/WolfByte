@@ -23,7 +23,7 @@
     </div>
 
     <div class="mt-5 container-fluid text-end">
-        <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+        <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú de tablas auxiliares</a>
     </div>
 </main>
 
@@ -49,26 +49,43 @@
 </div>
 
 <!-- MODAL EDITAR -->
+<!-- MODAL EDITAR (CARD POPUP) -->
+<!-- MODAL EDITAR -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
+
+      <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">Editar edificio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
+
       <div class="modal-body">
         <form id="formEditar">
           <input type="hidden" id="editId">
+
           <div class="mb-3">
-            <label for="editNombre" class="form-label">Nombre edificio</label>
+            <label for="editNombre" class="form-label">Nombre del edificio</label>
             <input type="text" id="editNombre" class="form-control" required>
           </div>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Guardar cambios
+            </button>
+          </div>
         </form>
       </div>
+
     </div>
   </div>
 </div>
+
+</div>
+
 
 <?php
     include '../../../../templates/footer.php';

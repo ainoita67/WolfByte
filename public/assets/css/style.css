@@ -32,6 +32,16 @@ a{
     text-decoration: none;
 }
 
+.bg-verde{
+    background-color: #578047 !important;
+}
+
+.bg-azul{
+    background-color: #274C9C !important;
+}
+
+
+
 /*MENÚ NAV*/
 
 nav ul li{
@@ -736,3 +746,25 @@ form.login{
 }
 
 
+.reserva-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.reserva-body {
+    padding: 16px;
+}
+
+.reserva-estado {
+    height: 15px;
+    width: 100%;
+}
+
+.estado-verde {
+    background: #28a745;
+}
+
+.estado-rojo {
+    background: #dc3545;
+}
