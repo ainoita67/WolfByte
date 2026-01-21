@@ -7,7 +7,7 @@
     const rol = "5";
     generateHeaderNav(menu, rol);
 </script>
-<script src="/public/assets/js/edificios.js" defer></script>
+<script src="/ALEX/public/assets/js/edificios.js" defer></script>
 
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">

@@ -4,7 +4,7 @@
     $title='Inicio de sesión';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,9 +17,9 @@
         integrity="sha384-C6RzsynM9MNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <!-- Estilos -->
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/ALEX/public/assets/css/style.css">
     <!-- Header Nav -->
-    <script src="/public/assets/js/menu.js"></script>
+    <script src="/ALEX/public/assets/js/menu.js"></script>
     <title>Reservas - IES Bajo Aragón</title>
 </head>
 <body>
@@ -31,7 +31,7 @@
 </script>
 <script src=""></script>
 <main class="p-5 row align-items-center main-content">
-    <form id="loginForm" class="card col-md-6 offset-md-3 p-5 text-center">
+    <form method="post" id="loginForm" class="card col-md-6 offset-md-3 p-5 text-center">
         <h1 class="mb-4 fw-bold fs-4">Inicio de sesión</h1>
 
         <div class="mb-3 text-start mt-lg-3">
@@ -48,7 +48,7 @@
     </form>
 </main>
 
-<script src="/public/assets/js/login.js"></script>
+<script src="/ALEX/public/assets/js/login.js"></script>
 <?php
     include '../public/templates/footer.php';
 ?>

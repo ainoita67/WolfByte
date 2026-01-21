@@ -9,6 +9,7 @@ function generateHeaderNav(menuactivo, role) {
     //crear los 2 navs vacios ordenador y movil
     const navd = document.createElement('nav');
         navd.classList.add("row");
+        navd.id = "menuordenador";
     const navm = document.createElement('nav');
         navm.classList.add("row");
         navm.id = "menumovil";

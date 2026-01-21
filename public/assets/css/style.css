@@ -217,6 +217,20 @@ a.menu:hover, button.menu:hover{
     border: 1px solid #0051ff !important;
 }
 
+main.menu a.bg-verde, main.menu button.bg-verde{
+    font-size: 1.5em !important;
+    background-color: #7A8A06;
+    border: 1px solid #7A8A06 !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+main.menu a.bg-verde:hover, main.menu button.bg-verde:hover{
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
+}
+
 .text-lightgrey{
     color: lightgrey !important;
 }
@@ -244,12 +258,12 @@ a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg
 }
 
 a.bg-verde, button.bg-verde{
-    border: 1px solid #578047 !important;
+    border: 1px solid #7A8A06 !important;
 }
 
 a.bg-verde:hover, button.bg-verde:hover{
-    background-color: #486b3a !important;
-    border: 1px solid #578047 !important;
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
 }
 
 main.menu a.bg-verde, main.menu a.bg-lightgrey{
@@ -303,7 +317,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     z-index: 200;
     display: flex;
     flex-direction: column;
-    background-color: #0066CC;
+    background-color: #274C9C;
     border-radius: 0 0.5em 0.5em 0;
 }
 
@@ -317,7 +331,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1.2em;
-    background-color: #0066CC;
+    background-color: #274C9C;
 }
 
 #accesibilidad button i {
@@ -336,7 +350,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 /* Efecto de hover individual */
 #accesibilidad button:hover {
-    background-color: #274C9C;
+    background-color: #0051ff;
 }
 
 
