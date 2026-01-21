@@ -24,5 +24,5 @@
 </main>
 
 <?php
-    include_once "../templates/footer.php";
+    include_once RAIZ_PUBLIC . "/templates/footer.php";
 ?>
