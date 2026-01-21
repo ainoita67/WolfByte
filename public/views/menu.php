@@ -1,5 +1,6 @@
 <?php
-    include_once "../templates/header.php";
+    require_once dirname(__DIR__) . '/helpers/config.php';
+    include_once RAIZ_PUBLIC . "/templates/header.php";
 ?>
 
 <script>
