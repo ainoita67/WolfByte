@@ -25,8 +25,14 @@ function cargarHeadHTML(url, callback) {
 
             // Para scripts, los añadimos por separado
             temp.querySelectorAll('script').forEach(s => {
-                cargarScript(s.src); // si tienen src externo
-                if(!s.src) eval(s.textContent); // si es inline
+                if(s.src) {
+                    // Si el src ya es una URL absoluta (http, https) no concatenamos BASE
+                    const src = s.src.startsWith('http') ? s.src : BASE + s.getAttribute('src');
+                    cargarScript(src);
+                }
+                else {
+                    eval(s.textContent);
+                }
             });
 
             if(callback) callback();
@@ -50,13 +56,10 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
-    document.addEventListener("DOMContentLoaded", () => {
-        cargarHeadHTML("/ALEX/frontend/includes/head.html", () => {
-            cargarHTML("/ALEX/frontend/includes/header.php", "#header", () => {
-                generateHeaderNav(menu, rol);
-            });
-
-            cargarHTML("/ALEX/frontend/includes/footer.php", "#footer");
+    cargarHeadHTML(BASE + "/includes/head.html", () => {
+        cargarHTML(BASE + "/includes/header.php", "#header", () => {
+            generateHeaderNav(menu, rol);
         });
+        cargarHTML(BASE + "/includes/footer.php", "#footer");
     });
 }
