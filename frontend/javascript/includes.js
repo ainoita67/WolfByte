@@ -51,12 +51,12 @@ function cargarHTML(pagina, selector, callback) {
 // includes.js
 function generarPagina(menu, rol){
     document.addEventListener("DOMContentLoaded", () => {
-        cargarHeadHTML("/ALEX/frontend/includes/head.html", () => {
-            cargarHTML("/ALEX/frontend/includes/header.php", "#header", () => {
+        cargarHeadHTML("/frontend/includes/head.html", () => {
+            cargarHTML("/frontend/includes/header.html", "#header", () => {
                 generateHeaderNav(menu, rol);
             });
 
-            cargarHTML("/ALEX/frontend/includes/footer.php", "#footer");
+            cargarHTML("/frontend/includes/footer.html", "#footer");
         });
     });
 }
