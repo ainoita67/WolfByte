@@ -4,7 +4,7 @@
  * @param {string} role - Rol del usuario (ej: 'admin', 'usuario')
  */
 function generateHeaderNav(menuactivo, role) {
-    const header = document.getElementsByTagName('header')[0];
+    const header = document.getElementById('navegador');
     
     //crear los 2 navs vacios ordenador y movil
     const navd = document.createElement('nav');
@@ -23,7 +23,11 @@ function generateHeaderNav(menuactivo, role) {
         navd.innerHTML = 
             `<ul class="col-7 d-none d-xl-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
+<<<<<<< HEAD
                     <a href="#"><img src="/ALEX/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
+=======
+                    <a href="#"><img src="/ALEX/frontend/assets/img/ieslogo.png" alt="Logo"></a>
+>>>>>>> origin/main
                 </li>
                 <li></li>
             </ul>
@@ -33,7 +37,11 @@ function generateHeaderNav(menuactivo, role) {
         navm.innerHTML = 
             `<ul class="col-7 d-grid d-xl-none text-center fs-5 pt-2">
                 <li class="col-12 ps-2 pe-5">
+<<<<<<< HEAD
                     <a href="#"><img src="/ALEX/public/assets/imagenes/ieslogo.png" alt="Logo"></a>
+=======
+                    <a href="#"><img src="/ALEX/frontend/assets/img/ieslogo.png" alt="Logo"></a>
+>>>>>>> origin/main
                 </li>
                 <li></li>
             </ul>
@@ -43,12 +51,21 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
+<<<<<<< HEAD
             { texto: "Aulas", href: "/ALEX/public/views/reservas/aulas/aulas.php", key: "aulas" },
             { texto: "Salón de actos", href: "/ALEX/public/views/reservas/salondeactos/salondeactos.php", key: "salonactos" },
             { texto: "Portátiles", href: "/ALEX/public/views/reservas/portatiles/portatiles.php", key: "portatiles" },
             { texto: "Otros espacios", href: "/ALEX/public/views/reservas/espacios/espacios.php", key: "espacios" },
             { texto: "Incidencias", href: "/ALEX/public/views/reservas/incidencias/incidencias.php", key: "incidencias" },
             { texto: "Liberar aulas", href: "/ALEX/public/views/reservas/liberar/liberar.php", key: "liberar" }
+=======
+            { texto: "Aulas", href: "/ALEX/frontend/vistas/reservas/aulas/aulas.php", key: "aulas" },
+            { texto: "Salón de actos", href: "/ALEX/frontend/vistas/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Portátiles", href: "/ALEX/frontend/vistas/reservas/portatiles/portatiles.php", key: "portatiles" },
+            { texto: "Otros espacios", href: "/ALEX/frontend/vistas/reservas/espacios/espacios.php", key: "espacios" },
+            { texto: "Incidencias", href: "/ALEX/frontend/vistas/reservas/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/ALEX/frontend/vistas/reservas/liberar/liberar.php", key: "liberar" }
+>>>>>>> origin/main
         ];
 
         //MENU DESKTOP
@@ -59,16 +76,26 @@ function generateHeaderNav(menuactivo, role) {
             if(role=="admin"){
                 uld.innerHTML = 
                 `<li class="col-12">
+<<<<<<< HEAD
                     <a href="/ALEX/public/views/menu.php">
                         <img src="/ALEX/public/assets/imagenes/ieslogo.png" alt="Logo">
+=======
+                    <a href="/ALEX/frontend/vistas/menu.php">
+                        <img src="/ALEX/frontend/assets/img/ieslogo.png" alt="Logo">
+>>>>>>> origin/main
                     </a>
                 </li>
                 `;
             }else{
                 uld.innerHTML = 
                 `<li class="col-12">
+<<<<<<< HEAD
                     <a href="/ALEX/public/views/menu.php">
                         <img src="/ALEX/public/assets/imagenes/ieslogo.png" alt="Logo">
+=======
+                    <a href="/ALEX/frontend/vistas/menu.php">
+                        <img src="/ALEX/frontend/assets/img/ieslogo.png" alt="Logo">
+>>>>>>> origin/main
                     </a>
                 </li>
                 <li class="col-1"></li>
@@ -100,7 +127,11 @@ function generateHeaderNav(menuactivo, role) {
             liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             const aa = document.createElement('a');
+<<<<<<< HEAD
             aa.href = "/ALEX/public/views/administrador/menuadministrador.php";
+=======
+            aa.href = "/ALEX/frontend/vistas/administrador/menuadministrador.php";
+>>>>>>> origin/main
             aa.textContent = "Administrador";
 
             if(menuactivo === "admin"){
@@ -124,6 +155,7 @@ function generateHeaderNav(menuactivo, role) {
             </a>
             <ul class="dropdown-menu" data-target="#perfildesktop" id="ulpd">
                 <li>
+<<<<<<< HEAD
                     <a href="/ALEX/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
@@ -134,6 +166,18 @@ function generateHeaderNav(menuactivo, role) {
                 </li>
                 <li>
                     <a href="/ALEX/public/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+=======
+                    <a href="/ALEX/frontend/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
+                </li>
+                <li>
+                    <a href="/ALEX/frontend/vistas/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
+                </li>
+                <li>
+                    <a href="/ALEX/frontend/vistas/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
+                </li>
+                <li>
+                    <a href="/ALEX/frontend/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+>>>>>>> origin/main
                 </li>
             </ul>
             `;
@@ -145,8 +189,13 @@ function generateHeaderNav(menuactivo, role) {
         // logo
         ulm.innerHTML = 
             `<li class="col-2">
+<<<<<<< HEAD
                 <a href="/ALEX/public/views/menu.php">
                     <img src="/ALEX/public/assets/imagenes/ieslogo.png" alt="Logo">
+=======
+                <a href="/ALEX/frontend/vistas/menu.php">
+                    <img src="/ALEX/frontend/assets/img/ieslogo.png" alt="Logo">
+>>>>>>> origin/main
                 </a>
             </li>
             <li class="offset-6 offset-sm-7"></li>
@@ -184,7 +233,11 @@ function generateHeaderNav(menuactivo, role) {
                 if (role == "admin"){
                     const liad = document.createElement('li');
                         const aad = document.createElement('a');
+<<<<<<< HEAD
                             aad.href = "/ALEX/public/views/administrador/menuadministrador.php";
+=======
+                            aad.href = "/ALEX/frontend/vistas/administrador/menuadministrador.php";
+>>>>>>> origin/main
                             aad.textContent = "Administrador";
                             aad.classList.add("dropdown-item");
                             liad.appendChild(aad);
@@ -205,6 +258,7 @@ function generateHeaderNav(menuactivo, role) {
         </a>
         <ul class="dropdown-menu" data-target="#perfilmovil">
             <li>
+<<<<<<< HEAD
                 <a href="/ALEX/public/views/perfil/datos.php" class="dropdown-item">Mis datos</a>
             </li>
             <li>
@@ -215,6 +269,18 @@ function generateHeaderNav(menuactivo, role) {
             </li>
             <li>
                 <a href="/ALEX/public/views/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+=======
+                <a href="/ALEX/frontend/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
+            </li>
+            <li>
+                <a href="/ALEX/frontend/vistas/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
+            </li>
+            <li>
+                <a href="/ALEX/frontend/vistas/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
+            </li>
+            <li>
+                <a href="/ALEX/frontend/vistas/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
+>>>>>>> origin/main
             </li>
         </ul>
         `;
@@ -226,7 +292,11 @@ document.addEventListener('click', async (e) => {
     if (e.target && e.target.id === 'logoutBtn') {
         e.preventDefault();
         try {
+<<<<<<< HEAD
             const response = await fetch('http://192.168.13.202/API/ALEX/public/logout', {
+=======
+            const response = await fetch('http://192.168.13.202/API/ALEX/frontend/logout', {
+>>>>>>> origin/main
                 method: 'POST',           // tu API acepta POST
                 credentials: 'include',   // 🔑 permite enviar cookies de sesión
                 headers: {
