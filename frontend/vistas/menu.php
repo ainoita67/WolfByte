@@ -5,7 +5,7 @@
 
 <script>
     const menu = "menu";
-    const rol = "5";
+    const rol = "admin";
     generateHeaderNav(menu, rol);
 </script>
 
@@ -19,10 +19,10 @@
     <!--Superadministrador-->
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
     <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-    <a href="administrador/menuadministrador.php" class="menuadministrador bg-verde col-3 mt-5 mb-0 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
-    <a href="administrador/menuadministrador.php" class="menuadministrador bg-verde d-lg-none p-5 fs-5">Ir al menú de administrador</a>
+    <a href="administrador/menuadministrador.php" class="menuadministrador col-3 mt-5 mb-0 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
+    <a href="administrador/menuadministrador.php" class="menuadministrador d-lg-none p-5 fs-5 mb-3">Ir al menú de administrador</a>
 </main>
 
 <?php
-    include_once "../templates/footer.php";
+    include_once RAIZ_PUBLIC . "/templates/footer.php";
 ?>
