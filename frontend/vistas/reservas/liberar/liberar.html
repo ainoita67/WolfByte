@@ -10,20 +10,20 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("incidencias", "admin");
+                generarPagina("liberar", "admin");
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
         </script>
 
-        <title>Aulas - IES Bajo Aragón</title>
+        <title>Liberar - IES Bajo Aragón</title>
     </head>
     <body>
         <div id="header"></div>
-        <main class="container mt-5">
+        <main class="container-fluid p-5">
 
-            <div class="card p-5 shadow-sm">
+            <div class="card p-5 shadow-sm m-5">
                 <h2 class="mb-4">Liberar aula</h2>
 
                 <form class="row g-4">

@@ -17,7 +17,7 @@
             document.head.appendChild(script1);
         </script>
 
-        <title>Aulas - IES Bajo Aragón</title>
+        <title>Incidencias - IES Bajo Aragón</title>
     </head>
     <body>
         <div id="header"></div>
@@ -27,19 +27,17 @@
                 <div class="col-lg-6">
                     <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
 
-                    <div class="mb-3">
-                        <label class="me-3">
-                            <input type="radio" name="tipo" checked> Espacio
-                        </label>
-                        <label>
-                            <input type="radio" name="tipo"> Material
-                        </label>
+                    <div class="mb-3 espacio">
+                        <input type="radio" name="tipo" id="espacio" checked>
+                        <label for="espacio" class="me-3">Espacio</label>
+                        <input type="radio" name="tipo" id="portatiles">
+                        <label for="portatiles">Portátiles</label>
                     </div>
 
                     <div class="row mb-4">
-                        <div class="col-md-5">
-                            <label class="form-label">Ubicación</label>
-                            <select class="form-select">
+                        <div class="col-md-5 ubicacion">
+                            <label class="form-label" for="ubicacion">Ubicación</label>
+                            <select class="form-select" name="ubicacion" id="ubicacion">
                                 <option value="" selected disabled>Seleccionar ubicación</option>
                                 <option value="RAM">Edificio Ram</option>
                                 <option value="Loscos">Edificio Loscos</option>
@@ -48,9 +46,9 @@
                                 <option value="Azul">Pista Azul</option>
                             </select>
                         </div>
-                        <div class="col-md-5">
-                            <label class="form-label">&nbsp;</label>
-                            <select class="form-select">
+                        <div class="col-md-5 mt-4 mt-md-0 planta d-none">
+                            <label class="form-label" for="planta">Planta</label>
+                            <select class="form-select" name="planta" id="planta">
                                 <option value="" selected disabled>Seleccionar planta</option>
                                 <option value="Baja">Planta baja</option>
                                 <option value="Primera">Primera planta</option>
@@ -101,14 +99,45 @@
                         </tr>
                     </table>
                 </div>
-
             </div>
 
-            <div class="mt-5 container-fluid text-end">
-                <a href="../../menu.html" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
+            <div class="divvolver container p-0 mt-5 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="volver rounded-pill p-2 px-3 ms-5 text-dark"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
-
         </main>
+        <script>
+            const espacio = document.getElementById("espacio");
+            const ubicacion = document.getElementsByClassName("ubicacion")[0];
+            const selectubicacion = document.getElementById("ubicacion");
+            const planta = document.getElementsByClassName("planta")[0];
+            const selectplanta = document.getElementById("planta");
+
+            // Cuando se cambia cualquier radio
+            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+                radio.addEventListener("change", () => {
+                if (espacio.checked) {
+                    ubicacion.classList.remove("d-none");
+                    actualizarPlanta()
+                } else {
+                    ubicacion.classList.add("d-none");
+                    planta.classList.add("d-none");
+                    selectubicacion.value = "";
+                    selectplanta.value = "";
+                }
+                });
+            });
+
+            // Cuando cambia el primer select
+            function actualizarPlanta() {
+                if (selectubicacion.value === "RAM" || selectubicacion.value === "Loscos" || selectubicacion.value === "Redondo") {
+                    planta.classList.remove("d-none");
+                } else {
+                    planta.classList.add("d-none");
+                }
+            }
+
+            selectubicacion.addEventListener("change", actualizarPlanta);
+            </script>
         <footer id="footer"></footer>
     </body>
 </html>
