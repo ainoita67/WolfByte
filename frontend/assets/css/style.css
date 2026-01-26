@@ -45,11 +45,19 @@ a{
 }
 
 .bg-verde{
-    background-color: #578047 !important;
+    background-color: #7A8A06 !important;
+}
+
+.bg-verde:hover{
+    background-color: #90a300 !important;
 }
 
 .bg-azul{
     background-color: #274C9C !important;
+}
+
+.bg-azul:hover{
+    background-color: #0051ff !important;
 }
 
 
@@ -698,61 +706,7 @@ form.login{
 
 
 
-
-/* Fondo y animación */
-.modal {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1000; /* Esto bloquea tu modal */
-}
-
-.modal.is-visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Modal container */
-.modal-dialog {
-  width: 100%;
-  max-width: 900px;
-  margin: 1rem;
-  animation: slideDown 0.35s ease-out;
-}
-
-/* Contenido blanco */
-.modal-content {
-  background-color: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-}
-
-/* Header */
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.close-modal {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-/* Body */
-.modal-body {
-  padding: 1.5rem;
-}
-
+/*MODAL*/
 /* Animación de entrada */
 @keyframes slideDown {
   from { transform: translateY(-50px); opacity: 0; }
