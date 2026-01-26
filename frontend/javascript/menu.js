@@ -124,13 +124,13 @@ function generateHeaderNav(menuactivo, role) {
             </a>
             <ul class="dropdown-menu" data-target="#perfildesktop" id="ulpd">
                 <li>
-                    <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
+                    <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
+                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
+                    <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
                     <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
@@ -205,13 +205,13 @@ function generateHeaderNav(menuactivo, role) {
         </a>
         <ul class="dropdown-menu" data-target="#perfilmovil">
             <li>
-                <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
+                <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
             </li>
             <li>
-                <a href="${BASE}/vistas/perfil/reserva.php" class="dropdown-item">Mis reservas</a>
+                <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
             </li>
             <li>
-                <a href="${BASE}/vistas/perfil/misincidencias.php" class="dropdown-item">Mis incidencias</a>
+                <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
             </li>
             <li>
                 <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
