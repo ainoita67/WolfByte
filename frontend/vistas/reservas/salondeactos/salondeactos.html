@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Salón de Actos - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main>
+            <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
+            
+            <div class="container my-5">
+                <div id="dp"></div>
+            </div>
+
+
+            <script>
+                  const dp = new DayPilot.Calendar("dp", {
+                    viewType: "Week",
+                    theme: "calendar_green"
+                });
+                dp.events.list = [
+                    {
+                    "start": "2026-01-26T10:30:00",
+                    "end": "2026-01-26T13:30:00",
+                    "id": "225eb40f-5f78-b53b-0447-a885c8e92233",
+                    "text": "Calendar Event 1"
+                    },
+                    {
+                    "start": "2026-01-27T12:30:00",
+                    "end": "2026-01-27T15:00:00",
+                    "id": "1f67def5-e1dd-57fc-2d39-eb7a5f8e789a",
+                    "text": "Calendar Event 2"
+                    },
+                    {
+                    "start": "2026-01-28T10:30:00",
+                    "end": "2026-01-28T16:00:00",
+                    "id": "aba78fd9-09d0-642e-612d-0e7e002c29f5",
+                    "text": "Calendar Event 3"
+                    }
+                ];
+
+                dp.init();
+            </script>
+
+        </main>
+        <footer id="footer"></footer>
+    </body>
+</html>
