@@ -247,3 +247,18 @@
 2026-01-20T13:57:40+01:00 - Exception: Route not found for GET /favicon.ico
 2026-01-20T13:59:09+01:00 - Exception: Route not found for GET /favicon.ico
 2026-01-20T14:00:30+01:00 - Exception: Route not found for GET /favicon.ico
+2026-01-23T10:11:29+01:00 - Exception: Route not found for GET /
+2026-01-23T11:42:24+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:43:33+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:45:15+01:00 - Exception: Route not found for GET /login
+2026-01-23T11:45:18+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:47:14+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:47:49+01:00 - Exception: Unclosed '{' on line 13
+2026-01-23T11:48:01+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:50:05+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:51:53+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:51:54+01:00 - Exception: Undefined array key "password"
+2026-01-23T11:55:01+01:00 - Exception: Class "Firebase\JWT\JWT" not found
+2026-01-23T11:55:58+01:00 - Exception: Provided key is too short
+2026-01-23T11:56:20+01:00 - Exception: Provided key is too short
+2026-01-23T11:56:22+01:00 - Exception: Provided key is too short

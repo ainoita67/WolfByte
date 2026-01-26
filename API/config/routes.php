@@ -4,9 +4,12 @@ declare(strict_types=1);
 // config/routes.php
 
 //
-$router->post('/login', 'Controllers\\AuthSessionController@login');
-$router->get('/logout', 'Controllers\\AuthSessionController@logout');
-$router->post('/logout', 'Controllers\\AuthSessionController@logout');
+
+$router->protected('GET', '/usuarios', 'Controllers\\UsuarioController@index');
+
+$router->post('/login', 'Controllers\\AuthController@login');
+$router->get('/logout', 'Controllers\\AuthController@logout');
+$router->post('/logout', 'Controllers\\AuthController@logout');
 
 // //aqui se redirigen las peticiones hechas con el protocolo que sea (get, post ...) a la direccion (primer parametro)  y ejecuta la funcion (segundo parametro). La funcion es carpeta\\directorio@funcion.
 // $router->get('/profesores', 'Controllers\\ProfesorController@index'); //seleccionar todos los profesores

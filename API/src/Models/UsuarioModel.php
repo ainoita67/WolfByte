@@ -19,10 +19,11 @@ class UsuarioModel
     public function findByEmail(string $email): array|false
     {
         return $this->db
-            ->query("SELECT * FROM Usuario WHERE correo = :email")
+            ->query("SELECT *, contrasena AS password FROM Usuario WHERE correo = :email")
             ->bind(':email', $email)
             ->fetch();
     }
+
 
     // Otros métodos CRUD
 
