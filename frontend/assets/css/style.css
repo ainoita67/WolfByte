@@ -1,0 +1,783 @@
+body{
+    background-color: #E6F5F0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 5.75em 1fr auto;
+    min-height: 100vh;
+    width: 100vw !important;
+}
+
+header{
+    grid-row: 1/2;
+    grid-column: 1/2;
+    position: fixed;
+    width: 100%;
+    z-index: 999999999999999999999999;
+}
+
+main{
+    grid-row: 2/3;
+    grid-column: 1/2;
+    min-height: 75vh;
+}
+
+footer{
+    grid-row: 3/4;
+    grid-column: 1/2;
+}
+
+a{
+    text-decoration: none;
+}
+
+.bg-verde{
+    background-color: #578047 !important;
+}
+
+.bg-azul{
+    background-color: #274C9C !important;
+}
+
+
+
+/*MENÚ NAV*/
+
+nav ul li{
+    list-style: none;
+    height: min-content;
+    vertical-align: middle;
+    align-self: center;
+}
+
+nav ul{
+    display: grid;
+    grid-template-columns: repeat(9, auto);
+    grid-template-rows: 3em;
+}
+
+nav{
+    background-color: #7A8A06;
+}
+
+nav:nth-child(1) ul li:not(:last-child){
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+nav:nth-child(1) ul li:not(:last-child) a{
+    padding: 1.5em 0 !important;
+}
+
+nav:nth-child(1) ul li:last-child a{
+    padding: 2em 2em 1.3em 2em !important;
+    margin-left: -1em !important;
+}
+
+nav:nth-child(1) ul li:last-child a i{
+    padding: 1.5em 0 !important;
+    margin-top: 1.7em !important;
+}
+
+nav:nth-child(1) ul li:nth-child(1){
+    margin-left: 1.5em !important;
+}
+
+nav:nth-child(1) ul li:nth-child(1) a img{
+    margin-top: -0.2em !important;
+}
+
+nav ul li:not(:first-child) a:hover{
+    background-color: #90a300 !important;
+}
+
+nav *{
+    color: white !important;
+    text-decoration: none !important;
+}
+
+nav ul li a img{
+    height: 4em;
+}
+
+
+
+
+
+/*MENÚ NAV PERFIL*/
+
+#perfil:hover > ul{
+    display: block !important;
+    height: max-content !important;
+}
+
+#perfil ul li:hover{
+    background-color: #7A8A06 !important;
+    color: white !important;
+}
+
+#menuordenador ul #perfil ul li a{
+    text-decoration: none !important;
+    padding: 0.25em 0 !important;
+}
+
+#perfil ul li{
+    margin: 0 !important;
+    width: 100%;
+}
+
+#perfil ul li:hover *{
+    color: white !important;
+}
+
+#perfil ul li *{
+    padding: 0.5em !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+}
+
+#perfil ul li a{
+    color: black !important;
+}
+
+
+
+
+
+/*MENÚ NAV MÓVIL*/
+
+#menumovillogin ul{
+    height: 3em;
+    padding-left: 7.5% !important;
+}
+
+#menumovil ul{
+    height: 3em;
+    padding-left: 10% !important;
+}
+
+#menumovil ul li a img, #menumovillogin ul li a img{
+    height: 3em;
+}
+
+
+
+
+
+/*MENÚ NAV ORDENADOR*/
+
+#menuordenador ul li:not(:last-child) a{
+    padding: 1.7em !important;
+    width: 100% !important;
+}
+
+#menuordenador ul li:not(:last-child){
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#menuordenador ul li:not(:first-child) a:hover{
+    background-color: #90a300;
+}
+
+.dropdown-menu{
+    right: 0;
+    background-color: white !important;
+    border: 1px solid white !important;
+}
+
+
+
+
+
+/*PÁGINA MENÚ*/
+
+main.menu, div.menu{
+    padding-left: 5% !important;
+    padding-right: 1% !important;
+    background-color: #E6F5F0;
+    justify-content: center !important;
+    align-content: center !important;
+    vertical-align: middle;
+}
+
+a.menu, button.menu{
+    font-size: 1.5em !important;
+    font-weight: bolder;
+    padding: 7% 0 !important;
+    margin-bottom: 3%;
+    background-color: #274C9C;
+    border: 1px solid #274C9C !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+a.menu:hover, button.menu:hover{
+    background-color: #0051ff !important;
+    border: 1px solid #0051ff !important;
+}
+
+.menuadministrador{
+    padding: 7% 0 !important;
+    background-color: #7A8A06;
+    border: 1px solid #7A8A06 !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+.menuadministrador:hover, .menuadministrador:active{
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
+}
+
+.text-lightgrey{
+    color: lightgrey !important;
+}
+
+.bg-lightgrey, .bg-lightgray{
+    background-color: lightgrey !important;
+}
+
+a.bg-lightgrey, a.bg-lightgray, button.bg-lightgrey, button.bg-lightgray, .volver{
+    background-color: lightgrey !important;
+    border: 1px solid lightgrey !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+}
+
+.volver:hover{
+    background-color: rgb(170, 170, 170) !important;
+    border: 1px solid rgb(170, 170, 170) !important;
+}
+
+a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg-lightgray:hover{
+    background-color: rgb(170, 170, 170) !important;
+    border: 1px solid rgb(170, 170, 170) !important;
+}
+
+a.bg-verde, button.bg-verde{
+    border: 1px solid #7A8A06 !important;
+}
+
+a.bg-verde:hover, button.bg-verde:hover{
+    background-color: #90a300 !important;
+    border: 1px solid #90a300 !important;
+}
+
+main.menu a.bg-verde, main.menu a.bg-lightgrey{
+    font-weight: normal !important;
+    font-size: 1.3em !important;
+}
+
+a.p-menu{
+    padding: 1% 0 !important;
+}
+
+
+
+
+/*FORMULARIOS*/
+
+.enviar{
+    background-color: #274C9C;
+    border: 1px solid #274C9C !important;
+    border-radius: 25px;
+    color: white;
+    text-decoration: none;
+    align-content: center;
+}
+
+a.enviar:hover, button.enviar:hover{
+    background-color: #0051ff !important;
+    border: 1px solid #0051ff !important;
+}
+
+input, select, textarea{
+    border: 1px solid #274C9C !important;
+    border-radius: 10px !important;
+}
+
+input:hover, input:active, select:hover, select:active, textarea:hover, textarea:active{
+    border: 1px solid #0051ff !important;
+    background-color: #e9f0ff;
+}
+
+
+
+
+
+/* ACCESIBILIDAD */
+#accesibilidad {
+    top: 44%;
+    left: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    background-color: #274C9C;
+    border-radius: 0 0.5em 0.5em 0;
+    z-index: 9999999999999999999999;
+    margin-left: -2.25% !important;
+    position: fixed;
+}
+
+#accesibilidad button {
+    border-radius: 25px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #274C9C;
+}
+
+/* Siempre mostrar el primer botón */
+#accesibilidad button:not(:first-child){
+    display: none;
+}
+
+/* Al pasar el mouse por el contenedor, mostrar los botones */
+#accesibilidad:hover button, #accesibilidad:active button{
+    display: block !important;
+}
+
+#accesibilidad:hover, #accesibilidad:active{
+    background-color: #274C9C !important;
+    border-radius: 25px;
+}
+
+/* Efecto de hover individual */
+#accesibilidad button:hover {
+    background-color: #0051ff;
+}
+
+
+
+
+
+/*ESTILOS TABLAS*/
+
+.tabla-cabecera thead {
+    background-color: #274C9C;
+    color: #ffffff;
+}
+
+.tabla-cabecera thead th {
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+.tabla-cabecera {
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.estado{
+    font-weight: 500;
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+
+.estado.activo{
+    background-color: #007E33 !important;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estado.inactivo{
+    font-weight: 700;
+    background-color: #CC0000 !important;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*ESTILOS PERFIL*/
+
+#tabla-reservas{
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#tabla-reservas thead{
+    background-color: #274C9C !important;
+    color: #ffffff !important;
+}
+
+#tabla-reservas thead th{
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+#tabla-reservas tbody tr{
+    background-color: var(#7A8A06);
+    transition: background-color 0.3s ease;
+}
+
+#tabla-reservas tbody tr:nth-child(even){
+    background-color: #d9efe7;
+}
+
+#tabla-reservas tbody tr:hover{
+    background-color: var(#90a300);
+}
+
+#tabla-reservas td{
+    padding: 12px;
+    vertical-align: middle;
+    border-color: var(#d0d0d0);
+}
+
+#tabla-reservas .badge{
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}   
+
+#tabla-reservas .btn{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+#tabla-reservas .btn:hover{
+    opacity: 0.85;
+}
+
+div.card{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+.estadobadge{
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estadobadge.confirmada {
+    background-color: #007E33;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estadobadge.pendiente {
+    background-color: #FFBB33;
+    color: black;
+    border: 1px solid #FFBB33 !important;
+}
+
+.estadobadge.cancelada {
+    font-weight: 700 !important;
+    background-color: #CC0000;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*LOGIN*/
+
+main.login{
+    justify-items: center;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+form.login{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+
+/* USUARIO */
+.tabla-cabecera thead {
+    background-color: #274C9C;
+    color: #ffffff;
+}
+
+.tabla-cabecera thead th {
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+.tabla-cabecera {
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.table-striped tr:nth-child(odd){
+    background-color: lightgrey !important;
+}
+
+.table-striped tr:nth-child(even){
+    background-color: white !important;
+}
+
+.estado{
+    font-weight: 500;
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estado.Comun{
+    background-color: #274C9C !important;
+    color: white;
+    border: 1px solid #274C9C !important;
+}
+
+.estado.Administrador{
+    font-weight: 700;
+    background-color: #B53422 !important;
+    color: white;
+    border: 1px solid #B53422 !important;
+}
+
+.estado.Superadministrador{
+    font-weight: 700;
+    background-color: #578047 !important;
+    color: white;
+    border: 1px solid #578047 !important;
+}
+
+
+
+
+
+/*ESTILOS PERFIL*/
+
+#tabla-reservas{
+    width: 100%;
+    background-color: var(white);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#tabla-reservas thead{
+    background-color: #274C9C !important;
+    color: #ffffff !important;
+}
+
+#tabla-reservas thead th{
+    background-color: #274C9C;
+    color: #ffffff;
+    border: none;
+}
+
+#tabla-reservas tbody tr{
+    background-color: var(#7A8A06);
+    transition: background-color 0.3s ease;
+}
+
+#tabla-reservas tbody tr:nth-child(even){
+    background-color: #d9efe7;
+}
+
+#tabla-reservas tbody tr:hover{
+    background-color: var(#90a300);
+}
+
+#tabla-reservas td{
+    padding: 12px;
+    vertical-align: middle;
+    border-color: var(#d0d0d0);
+}
+
+#tabla-reservas .badge{
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+}   
+
+#tabla-reservas .btn{
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+#tabla-reservas .btn:hover{
+    opacity: 0.85;
+}
+
+div.card{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+.estadobadge{
+    font-size: 0.85em !important;
+    padding: 4% 5.75%;
+    display: inline-block;
+}
+
+.estadobadge.confirmada {
+    background-color: #007E33;
+    color: white;
+    border: 1px solid #007E33 !important;
+}
+
+.estadobadge.pendiente {
+    background-color: #FFBB33;
+    color: black;
+    border: 1px solid #FFBB33 !important;
+}
+
+.estadobadge.cancelada {
+    font-weight: 700 !important;
+    background-color: #CC0000;
+    color: white;
+    border: 1px solid #CC0000 !important;
+}
+
+
+
+
+
+/*LOGIN*/
+
+main.login{
+    justify-items: center;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+form.login{
+    border: 1px solid white !important;
+    border-radius: 25px !important;
+    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
+}
+
+
+
+
+
+
+/* Fondo y animación */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.modal.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal container */
+.modal-dialog {
+  width: 100%;
+  max-width: 900px;
+  margin: 1rem;
+  animation: slideDown 0.35s ease-out;
+}
+
+/* Contenido blanco */
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Body */
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Animación de entrada */
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 95%;
+  }
+  .modal-header h2 {
+    font-size: 1.25rem;
+  }
+}
+
+
+.reserva-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.reserva-body {
+    padding: 16px;
+}
+
+.reserva-estado {
+    height: 15px;
+    width: 100%;
+}
+
+.estado-verde {
+    background: #28a745;
+}
+
+.estado-rojo {
+    background: #dc3545;
+}
