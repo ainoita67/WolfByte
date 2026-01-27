@@ -60,3 +60,8 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
+// Espacios
+
+$router->get('/espacios', 'Controllers\\EspacioController@index');
+$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
+$router->get('/ubicacion/{id}/espacio', 'Controllers\\EspacioController@index');
