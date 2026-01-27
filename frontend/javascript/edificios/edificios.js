@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarEdificios() {
         try {
-            const res = await fetch('http://192.168.13.202/API/edificios');
+            const res = await fetch('http://192.168.13.202:80/API/edificios');
             const data = await res.json();
 
             if (data.status === 'error') {
@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
         modal.hide();
         cargarEdificios();
+        
     });
 
     cargarEdificios();
