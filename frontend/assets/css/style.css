@@ -10,6 +10,7 @@ body{
 }
 
 #header{
+    background-color: #7A8A06;
     grid-row: 1/2;
     grid-column: 1/2;
     top: 0 !important;
@@ -89,6 +90,7 @@ nav:nth-child(1) ul li:not(:last-child){
 
 nav:nth-child(1) ul li:not(:last-child) a{
     padding: 1.5em 0 !important;
+    margin: 0 !important;
 }
 
 nav:nth-child(1) ul li:last-child{
@@ -134,7 +136,7 @@ nav ul li a img{
 }
 
 #perfil ul li:hover{
-    background-color: #7A8A06 !important;
+    background-color: #90a300 !important;
     color: white !important;
 }
 
@@ -173,13 +175,24 @@ nav ul li a img{
     padding-left: 7.5% !important;
 }
 
-#menumovil ul{
-    height: 3em;
-    padding-left: 10% !important;
-}
-
 #menumovil ul li a img, #menumovillogin ul li a img{
     height: 3em;
+}
+
+#menumovil ul{
+    height: 3em;
+    padding-left: -10% !important;
+}
+
+#menumovil ul li:nth-child(3), #menumovil ul li:nth-child(4){
+    padding-left: 1em !important;
+    padding-right: 1em !important;
+    margin: 0 !important;
+}
+
+#menumovil ul li:nth-child(3):hover, #menumovil ul li:nth-child(3):active,
+#menumovil ul li:nth-child(4):hover, #menumovil ul li:nth-child(4):active{
+    background-color: #90a300;
 }
 
 
