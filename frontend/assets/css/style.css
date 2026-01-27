@@ -325,7 +325,11 @@ a.enviar:hover, button.enviar:hover{
     border: 1px solid #0051ff !important;
 }
 
-input, select, textarea{
+input{
+    border: 1px solid #274C9C !important;
+}
+
+input:not([type="checkbox"]), select, textarea{
     border: 1px solid #274C9C !important;
     border-radius: 10px !important;
 }
@@ -536,6 +540,9 @@ form.login{
     border-radius: 25px !important;
     box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
+
+
+
 
 
 /* USUARIO */
