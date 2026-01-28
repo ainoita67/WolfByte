@@ -23,9 +23,9 @@ class CaracteristicaModel
             ->query("SELECT * FROM Caracteristica")
             ->fetchAll();
     }
-    /**
-     * Obtener Caracteristica por ID
-     */
+
+    // Obtener Caracteristica por ID
+
     public function findById(int $id): ?array
     {
         $result = $this->db
@@ -36,9 +36,9 @@ class CaracteristicaModel
         return $result ?: null;
     }
 
-    /**
-     * Crear Caracteristica
-     */
+
+    // Crear Caracteristica
+
     public function create(array $data): int|false
     {
         $this->db
@@ -52,9 +52,7 @@ class CaracteristicaModel
         return (int) $this->db->lastId();
     }
 
-    /**
-     * Actualizar Caracteristica
-     */
+    // Actualizar Caracteristica
     public function update(int $id, array $data): int
     {
         $this->db

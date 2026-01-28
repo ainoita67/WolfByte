@@ -60,3 +60,14 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
+// Espacios
+
+$router->get('/espacios', 'Controllers\\EspacioController@index');
+$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
+$router->post('/espacios', 'Controllers\\EspacioController@store');
+
+// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
+// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
+// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
+// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
+// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
