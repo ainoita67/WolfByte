@@ -1,105 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <script>const BASE = window.location.origin + "/frontend";</script>
-        <script>
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
+<head>
+    <meta charset="utf-8">
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
                 generarPagina("admin", "admin");
-                };
-                document.head.appendChild(script2);
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
 
-        <title>Portátiles - IES Bajo Aragón</title>
-    </head>
-    <body>
-        <script>
-            const menu = "admin";
-            const rol = "admin";
-            generarPagina(menu, rol);
-        </script>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edificios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear edificio
-                </button>
+    <title>Edificios - IES Bajo Aragón</title>
+</head>
+
+<body>
+<script>
+    const menu = "admin";
+    const rol = "admin";
+    generarPagina(menu, rol);
+</script>
+
+<div id="header"></div>
+
+<main class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Edificios</h2>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            <i class="bi bi-plus-circle"></i> Crear edificio
+        </button>
+    </div>
+
+    <!-- TARJETAS -->
+    <div class="row g-4">
+
+        <!-- EDIFICIO -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Ram</h5>
+
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><strong>Nº de aulas:</strong> 12</li>
+                        <li><strong>Plantas:</strong> 3</li>
+                        <li><strong>Espacios especiales:</strong></li>
+                        <ul>
+                            <li>Laboratorio de Física</li>
+                            <li>Laboratorio de Informática</li>
+                            <li>Biblioteca</li>
+                        </ul>
+                    </ul>
+
+                    <div class="mt-auto d-flex justify-content-end gap-2">
+                        <button class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EDIFICIO -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Loscos</h5>
+
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><strong>Nº de aulas:</strong> 8</li>
+                        <li><strong>Plantas:</strong> 2</li>
+                        <li><strong>Espacios especiales:</strong></li>
+                        <ul>
+                            <li>Taller de Tecnología</li>
+                            <li>Aula de Música</li>
+                        </ul>
+                    </ul>
+
+                    <div class="mt-auto d-flex justify-content-end gap-2">
+                        <button class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<!-- EDIFICIO -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Redondo</h5>
+
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li><strong>Nº de aulas:</strong> 12</li>
+                        <li><strong>Plantas:</strong> 3</li>
+                        <li><strong>Espacios especiales:</strong></li>
+                        <ul>
+                            <li>Laboratorio de Física</li>
+                            <li>Laboratorio de Informática</li>
+                            <li>Biblioteca</li>
+                        </ul>
+                    </ul>
+
+                    <div class="mt-auto d-flex justify-content-end gap-2">
+                        <button class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditar">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-5 container-fluid text-end">
+        <a href="../tablasauxiliares.html" class="volver p-2 px-4 text-dark">
+            Volver al menú de tablas auxiliares
+        </a>
+    </div>
+
+</main>
+
+<!-- MODAL CREAR -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Crear edificio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <!-- Aquí irán las tarjetas -->
-            <div id="contenedorTarjetas" class="row g-4 mt-3">
-                <!-- tarjetas generadas por JS -->
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre del edificio</label>
+                    <input type="text" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de aulas</label>
+                    <input type="number" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de plantas</label>
+                    <input type="number" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Espacios especiales</label>
+                    <textarea class="form-control" rows="3"
+                        placeholder="Ej: Laboratorio de Física, Taller de Tecnología, Biblioteca"></textarea>
+                </div>
+
             </div>
 
-            <div class="mt-5 container-fluid text-end">
-                <a href="../tablasauxiliares.html" class="volver p-2 px-4 text-dark">Volver al menú de tablas auxiliares</a>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success">Crear</button>
             </div>
-        </main>
 
-        <!-- MODAL CREAR -->
-        <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Crear edificio</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-					</div>
-					<div class="modal-body">
-						<form id="formCrear">
-							<div class="mb-3">
-								<label for="crearNombre" class="form-label">Nombre edificio</label>
-								<input type="text" id="crearNombre" class="form-control" required>
-							</div>
-							<button type="submit" class="btn btn-success">Crear</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+        </div>
+    </div>
+</div>
 
-			<!-- MODAL EDITAR -->
-			<!-- MODAL EDITAR (CARD POPUP) -->
-			<!-- MODAL EDITAR -->
-		<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
+<!-- MODAL EDITAR -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
 
-					<div class="modal-header bg-primary text-white">
-						<h5 class="modal-title">Editar edificio</h5>
-						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-					</div>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar edificio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
 
-					<div class="modal-body">
-						<form id="formEditar">
-							<input type="hidden" id="editId">
+            <div class="modal-body">
 
-							<div class="mb-3">
-								<label for="editNombre" class="form-label">Nombre del edificio</label>
-								<input type="text" id="editNombre" class="form-control" required>
-							</div>
+                <div class="mb-3">
+                    <label class="form-label">Nombre del edificio</label>
+                    <input type="text" class="form-control" value="Loscos">
+                </div>
 
-							<div class="d-flex justify-content-end gap-2">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-									Cancelar
-								</button>
-								<button type="submit" class="btn btn-primary">
-									Guardar cambios
-								</button>
-							</div>
-						</form>
-					</div>
+                <div class="mb-3">
+                    <label class="form-label">Número de aulas</label>
+                    <input type="number" class="form-control" value="12">
+                </div>
 
-				</div>
-			</div>
-		</div>
-        <footer id="footer"></footer>
-    </body>
+                <div class="mb-3">
+                    <label class="form-label">Número de plantas</label>
+                    <input type="number" class="form-control" value="3">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Espacios especiales</label>
+                    <textarea class="form-control" rows="3">Laboratorio de Física, Laboratorio de Informática, Biblioteca</textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar cambios</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer id="footer"></footer>
+
+</body>
 </html>

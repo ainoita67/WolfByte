@@ -46,7 +46,6 @@ $router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
 
 
-<<<<<<< HEAD
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
@@ -68,6 +67,3 @@ $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaControlle
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
-=======
-// AULAS
->>>>>>> origin/API
