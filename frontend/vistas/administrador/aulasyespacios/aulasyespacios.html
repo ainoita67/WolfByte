@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="UTF-8">
-        <script src="/frontend/javascript/includes.js"></script>
-        <script src="/frontend/javascript/menu.js"></script>
+        <meta charset="utf-8">
+
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
         <title>Aulas y espacios - IES Bajo Aragón</title>
     </head>
     <body>
-        <script>
-            const menu = "admin";
-            const rol = "admin";
-            generarPagina(menu, rol);
-        </script>
         <div id="header"></div>
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -66,46 +75,46 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mt-5 container-fluid text-end">
-                <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
-            </div>
 
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
         </main>
 
         <div class="modal fade" id="modalCrear" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Crear aula/espacio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crear aula/espacio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="mb-3">
-                        <label>Tipo</label>
-                        <select class="form-control">
-                        <option>Aula</option>
-                        <option>Espacio</option>
-                        </select>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Tipo</label>
+                                <select class="form-control">
+                                <option>Aula</option>
+                                <option>Espacio</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>Capacidad</label>
+                                <input type="number" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label>Estado</label>
+                                <select class="form-control">
+                                <option>Disponible</option>
+                                <option>Ocupado</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success w-100">Guardar</button>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label>Capacidad</label>
-                        <input type="number" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control">
-                        <option>Disponible</option>
-                        <option>Ocupado</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-success w-100">Guardar</button>
-                    </form>
-                </div>
                 </div>
             </div>
         </div>
@@ -113,40 +122,40 @@
         <div class="modal fade" id="modalEditar" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar aula/espacio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar aula/espacio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label>Nombre</label>
+                                <input type="text" class="form-control" id="editNombre">
+                            </div>
+                            <div class="mb-3">
+                                <label>Tipo</label>
+                                <select class="form-control" id="editTipo">
+                                <option>Aula</option>
+                                <option>Espacio</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>Capacidad</label>
+                                <input type="number" class="form-control" id="editCapacidad">
+                            </div>
+                            <div class="mb-3">
+                                <label>Estado</label>
+                                <select class="form-control" id="editEstado">
+                                <option>Disponible</option>
+                                <option>Ocupado</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary w-100">Guardar cambios</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form>
-                    <div class="mb-3">
-                        <label>Nombre</label>
-                        <input type="text" class="form-control" id="editNombre">
-                    </div>
-                    <div class="mb-3">
-                        <label>Tipo</label>
-                        <select class="form-control" id="editTipo">
-                        <option>Aula</option>
-                        <option>Espacio</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label>Capacidad</label>
-                        <input type="number" class="form-control" id="editCapacidad">
-                    </div>
-                    <div class="mb-3">
-                        <label>Estado</label>
-                        <select class="form-control" id="editEstado">
-                        <option>Disponible</option>
-                        <option>Ocupado</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-primary w-100">Guardar cambios</button>
-                    </form>
-                </div>
-                </div>
-                    </div>
             </div>
+        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

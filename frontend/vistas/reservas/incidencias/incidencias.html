@@ -4,13 +4,14 @@
         <meta charset="utf-8">
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>
+            const rol="admin"
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("incidencias", "admin");
+                generarPagina("incidencias", rol);
                 };
                 document.head.appendChild(script2);
             };
@@ -22,8 +23,13 @@
     <body>
         <div id="header"></div>
         <main class="container mt-5">
-            <h2 class="text-center mb-4">Incidencias</h2>
-            <div class="p-4 row">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Incidencias</h2>
+                <a href="verincidencias.html" id="btn-verincidencias"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-eye"></i> Ver incidencias
+                </button></a>
+            </div>
+            <div class="pt-4 row">
                 <div class="col-lg-6">
                     <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
 
@@ -105,7 +111,13 @@
                 <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
+        <footer id="footer"></footer>
         <script>
+            const btnverincidencias = document.getElementById("btn-verincidencias");
+            if(rol!=="admin"){
+                btnverincidencias.classList.add("d-none");
+            }
+
             const espacio = document.getElementById("espacio");
             const ubicacion = document.getElementsByClassName("ubicacion")[0];
             const selectubicacion = document.getElementById("ubicacion");
@@ -137,7 +149,6 @@
             }
 
             selectubicacion.addEventListener("change", actualizarPlanta);
-            </script>
-        <footer id="footer"></footer>
+        </script>
     </body>
 </html>

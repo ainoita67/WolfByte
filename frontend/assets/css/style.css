@@ -16,7 +16,7 @@ body{
     top: 0 !important;
     position: fixed !important;
     width: 100%;
-    z-index: 1050; /* Bootstrap modal default es 1050 */
+    z-index: 1050 !important; /* Bootstrap modal default es 1050 */
 }
 
 header{
@@ -33,7 +33,7 @@ main div.divvolver{
     bottom: 0 !important;
     position: fixed !important;
     width: 100%;
-    z-index: 999999999999999999999999;
+    z-index: 1030 !important;
 }
 
 footer{
@@ -357,7 +357,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 /* ACCESIBILIDAD */
-#accesibilidad {
+#accesibilidad{
     top: 44%;
     left: 0;
     transform: translateY(-50%);
@@ -370,7 +370,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     position: fixed;
 }
 
-#accesibilidad button {
+#accesibilidad button{
     border-radius: 25px;
     border: none;
     color: white;
@@ -395,7 +395,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 }
 
 /* Efecto de hover individual */
-#accesibilidad button:hover {
+#accesibilidad button:hover{
     background-color: #0051ff;
 }
 
@@ -405,18 +405,18 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 /*ESTILOS TABLAS*/
 
-.tabla-cabecera thead {
+.tabla-cabecera thead{
     background-color: #274C9C;
     color: #ffffff;
 }
 
-.tabla-cabecera thead th {
+.tabla-cabecera thead th{
     background-color: #274C9C;
     color: #ffffff;
     border: none;
 }
 
-.tabla-cabecera {
+.tabla-cabecera{
     width: 100%;
     background-color: var(white);
     border-radius: 15px;
@@ -516,19 +516,19 @@ div.card{
     display: inline-block;
 }
 
-.estadobadge.confirmada {
+.estadobadge.confirmada{
     background-color: #007E33;
     color: white;
     border: 1px solid #007E33 !important;
 }
 
-.estadobadge.pendiente {
+.estadobadge.pendiente{
     background-color: #FFBB33;
     color: black;
     border: 1px solid #FFBB33 !important;
 }
 
-.estadobadge.cancelada {
+.estadobadge.cancelada{
     font-weight: 700 !important;
     background-color: #CC0000;
     color: white;
@@ -559,18 +559,18 @@ form.login{
 
 
 /* USUARIO */
-.tabla-cabecera thead {
+.tabla-cabecera thead{
     background-color: #274C9C;
     color: #ffffff;
 }
 
-.tabla-cabecera thead th {
+.tabla-cabecera thead th{
     background-color: #274C9C;
     color: #ffffff;
     border: none;
 }
 
-.tabla-cabecera {
+.tabla-cabecera{
     width: 100%;
     background-color: var(white);
     border-radius: 15px;
@@ -684,19 +684,19 @@ div.card{
     display: inline-block;
 }
 
-.estadobadge.confirmada {
+.estadobadge.confirmada{
     background-color: #007E33;
     color: white;
     border: 1px solid #007E33 !important;
 }
 
-.estadobadge.pendiente {
+.estadobadge.pendiente{
     background-color: #FFBB33;
     color: black;
     border: 1px solid #FFBB33 !important;
 }
 
-.estadobadge.cancelada {
+.estadobadge.cancelada{
     font-weight: 700 !important;
     background-color: #CC0000;
     color: white;
@@ -728,41 +728,44 @@ form.login{
 
 /*MODAL*/
 /* Animación de entrada */
-@keyframes slideDown {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.modal{
+    z-index: 1040 !important;
+}
+
+@keyframes slideDown{
+  from{ transform: translateY(-50px); opacity: 0; }
+  to{ transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .modal-dialog {
+@media (max-width: 768px){
+  .modal-dialog{
     max-width: 95%;
   }
-  .modal-header h2 {
+  .modal-header h2{
     font-size: 1.25rem;
   }
 }
 
-
-.reserva-card {
+.reserva-card{
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
 }
 
-.reserva-body {
+.reserva-body{
     padding: 16px;
 }
 
-.reserva-estado {
+.reserva-estado{
     height: 15px;
     width: 100%;
 }
 
-.estado-verde {
+.estado-verde{
     background: #28a745;
 }
 
-.estado-rojo {
+.estado-rojo{
     background: #dc3545;
 }

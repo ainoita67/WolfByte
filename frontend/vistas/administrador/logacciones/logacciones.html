@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <meta charset="UTF-8">
-        <script src="/frontend/javascript/includes.js"></script>
-        <script src="/frontend/javascript/menu.js"></script>
+        <meta charset="utf-8">
+
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
         <title>Log de acciones - IES Bajo Aragón</title>
     </head>
     <body>
-        <script>
-            const menu = "admin";
-            const rol = "admin";
-            generarPagina(menu, rol);
-        </script>
         <div id="header"></div>
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -67,10 +76,9 @@
                 </table>
             </div>
 
-            <div class="mt-5 container-fluid text-end">
-                <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
-            
         </main>
 
         <!-- Modal Crear -->

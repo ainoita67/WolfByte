@@ -1,201 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-    <script>const BASE = window.location.origin + "/frontend";</script>
-    <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-                generarPagina("espaciosdeportivos", "admin");
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("espacios", "admin");
+                };
+                document.head.appendChild(script2);
             };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
-    </script>
+            document.head.appendChild(script1);
+        </script>
 
-    <title>Espacios deportivos - IES Bajo Aragón</title>
-</head>
+        <title>Otros espacios - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-center">Otros espacios</h2>
+                <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+                    <i class="bi bi-filter"></i> Filtrar
+                </button>
+            </div>
 
-<body>
+            <!-- Tabla de otros espacios -->
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
+                    <thead>
+                        <tr>
+                            <th>Espacio</th>
+                            <th>Tipo</th>
+                            <th>Ubicación</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pista exterior</td>
+                            <td>Fútbol sala</td>
+                            <td>Patio</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn bg-azul text-light btn-sm btn-reservar"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalReservaEspacio">
+                                    <i class="bi bi-calendar-check"></i> Reservar
+                                </button>
+                            </td>
+                        </tr>
 
-<div id="header"></div>
+                        <tr>
+                            <td>Gimnasio</td>
+                            <td>Multiuso</td>
+                            <td>Gimnasio</td>
+                            <td>Disponible</td>
+                            <td>
+                                <button class="btn bg-azul text-light btn-sm btn-reservar"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalReservaEspacio">
+                                    <i class="bi bi-calendar-check"></i> Reservar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-<main class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-center">Espacios deportivos</h2>
-        <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
-            <i class="bi bi-filter"></i> Filtrar
-        </button>
-    </div>
-
-    <!-- Tabla de espacios deportivos -->
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
-            <thead>
-                <tr>
-                    <th>Espacio</th>
-                    <th>Tipo</th>
-                    <th>Ubicación</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Pista exterior</td>
-                    <td>Fútbol sala</td>
-                    <td>Patio</td>
-                    <td>Disponible</td>
-                    <td>
-                        <button class="btn bg-azul text-light btn-sm btn-reservar"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalReservaEspacio">
-                            <i class="bi bi-calendar-check"></i> Reservar
-                        </button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Gimnasio</td>
-                    <td>Multiuso</td>
-                    <td>Gimnasio</td>
-                    <td>Disponible</td>
-                    <td>
-                        <button class="btn bg-azul text-light btn-sm btn-reservar"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalReservaEspacio">
-                            <i class="bi bi-calendar-check"></i> Reservar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal Filtrar -->
-    <div class="modal fade" id="modalFiltrar" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="bi bi-filter me-2"></i>Filtrar espacios deportivos
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Tipo</label>
-                            <select class="form-select">
-                                <option value="">Todos</option>
-                                <option>Fútbol sala</option>
-                                <option>Baloncesto</option>
-                                <option>Voleibol</option>
-                                <option>Multiuso</option>
-                            </select>
+            <!-- Modal Filtrar -->
+            <div class="modal fade" id="modalFiltrar" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="bi bi-filter me-2"></i>Filtrar espacios deportivos
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Ubicación</label>
-                            <select class="form-select">
-                                <option value="">Todas</option>
-                                <option>Patio</option>
-                                <option>Edificio principal</option>
-                            </select>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label>Tipo</label>
+                                    <select class="form-select">
+                                        <option value="">Todos</option>
+                                        <option>Fútbol sala</option>
+                                        <option>Baloncesto</option>
+                                        <option>Voleibol</option>
+                                        <option>Multiuso</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Ubicación</label>
+                                    <select class="form-select">
+                                        <option value="">Todas</option>
+                                        <option>Patio</option>
+                                        <option>Edificio principal</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Fecha</label>
-                            <input type="date" class="form-control">
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                            <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
+                            <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer d-flex justify-content-between">
-                    <button class="btn bg-azul text-light">
-                        <i class="bi bi-check2"></i> Aplicar filtros
-                    </button>
-                    <button class="btn bg-lightgrey" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
+            <!-- Modal Reservar Espacio -->
+            <div class="modal fade" id="modalReservaEspacio" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Reservar espacio</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label>Espacio</label>
+                                    <input type="text" class="form-control" id="reservaEspacio" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Tipo</label>
+                                    <input type="text" class="form-control" id="reservaTipo" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Hora inicio</label>
+                                    <input type="time" class="form-control" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Hora fin</label>
+                                    <input type="time" class="form-control" required>
+                                </div>
+
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Reservar</button>
+                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Modal Reservar Espacio Deportivo -->
-    <div class="modal fade" id="modalReservaEspacio" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Reservar espacio deportivo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label>Espacio</label>
-                            <input type="text" class="form-control" id="reservaEspacio" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Tipo</label>
-                            <input type="text" class="form-control" id="reservaTipo" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Fecha</label>
-                            <input type="date" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Hora inicio</label>
-                            <input type="time" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>Hora fin</label>
-                            <input type="time" class="form-control" required>
-                        </div>
-
-                        <button class="btn bg-verde text-light w-100">
-                            Confirmar reserva
-                        </button>
-                    </form>
-                </div>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
-        </div>
-    </div>
+        </main>
 
-    <div class="divvolver container p-0 pb-3 mt-5 text-end fs-5">
-        <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 text-light">
-            <i class="bi bi-caret-left-fill"></i> Volver
-        </a>
-    </div>
-</main>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        document.querySelectorAll(".btn-reservar").forEach(boton => {
+            boton.addEventListener("click", function () {
+                const fila = this.closest("tr");
+                const celdas = fila.querySelectorAll("td");
 
-<script>
-document.querySelectorAll(".btn-reservar").forEach(boton => {
-    boton.addEventListener("click", function () {
-        const fila = this.closest("tr");
-        const celdas = fila.querySelectorAll("td");
+                document.getElementById("reservaEspacio").value = celdas[0].textContent.trim();
+                document.getElementById("reservaTipo").value = celdas[1].textContent.trim();
+            });
+        });
+        </script>
 
-        document.getElementById("reservaEspacio").value = celdas[0].textContent.trim();
-        document.getElementById("reservaTipo").value = celdas[1].textContent.trim();
-    });
-});
-</script>
-
-<footer id="footer"></footer>
-
-</body>
+        <footer id="footer"></footer>
+    </body>
 </html>
