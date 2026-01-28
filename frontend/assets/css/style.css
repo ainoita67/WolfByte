@@ -16,7 +16,7 @@ body{
     top: 0 !important;
     position: fixed !important;
     width: 100%;
-    z-index: 1050 !important; /* Bootstrap modal default es 1050 */
+    z-index: 1030 !important; /* Bootstrap modal default es 1050 */
 }
 
 header{
@@ -365,7 +365,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     flex-direction: column;
     background-color: #274C9C;
     border-radius: 0 0.5em 0.5em 0;
-    z-index: 9999999999999999999999;
+    z-index: 1030;
     margin-left: -2.25% !important;
     position: fixed;
 }
@@ -404,6 +404,11 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 /*ESTILOS TABLAS*/
+table{
+    border: 1px solid #d9efe7 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
 
 .tabla-cabecera thead{
     background-color: #274C9C;
@@ -728,10 +733,6 @@ form.login{
 
 /*MODAL*/
 /* Animación de entrada */
-.modal{
-    z-index: 1040 !important;
-}
-
 @keyframes slideDown{
   from{ transform: translateY(-50px); opacity: 0; }
   to{ transform: translateY(0); opacity: 1; }
