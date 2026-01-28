@@ -46,4 +46,26 @@ $router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
 
 
-// AULAS
+// RESERVAS
+$router->get('/necesidad-reservas','Controllers\\NecesidadReservaController@index'); // Devuelve todas las necesidades de reservas
+$router->get('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@show'); // Devuelve las necesidades de una reserva de un espacio por ID
+$router->post('/necesidad-reservas','Controllers\\NecesidadReservaController@store'); // Crea una nueva necesidad de reserva de un espacio
+$router->put('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@update'); // Actualiza una necesidad de reserva de un espacio por ID
+$router->delete('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@destroy'); // Elimina una necesidad de reserva de un espacio por ID
+
+// RESERVAS PERMANENTES
+$router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
+$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
+$router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@updateActivar'); //activar o desactivar una reserva permanente
+$router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
+$router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
+$router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
+
+
+// NECESIDAD RESERVA
+$router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');
+$router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
+$router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
+$router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
+$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
