@@ -47,9 +47,11 @@ $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
 
 
 // RESERVAS
-$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
-
-
+$router->get('/necesidad-reservas','Controllers\\NecesidadReservaController@index'); // Devuelve todas las necesidades de reservas
+$router->get('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@show'); // Devuelve las necesidades de una reserva de un espacio por ID
+$router->post('/necesidad-reservas','Controllers\\NecesidadReservaController@store'); // Crea una nueva necesidad de reserva de un espacio
+$router->put('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@update'); // Actualiza una necesidad de reserva de un espacio por ID
+$router->delete('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@destroy'); // Elimina una necesidad de reserva de un espacio por ID
 
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
