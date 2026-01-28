@@ -23,7 +23,7 @@
             };
             document.head.appendChild(script1);
         </script>
-
+        
 
         <title>Reservas - IES Bajo Aragón</title>
     </head>
@@ -31,9 +31,12 @@
 
         <div id="header"></div>
 
-        <script src="/ALEX/public/assets/js/edificios.js" defer></script>
+        <script src="../../../../javascript/edificios/edificios.js" defer></script>
 
 <main class="container mt-5">
+  <body>
+    
+  
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Edificios</h2>
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
@@ -49,7 +52,6 @@
     <div class="mt-5 container-fluid text-end">
         <a href="../tablasauxiliares.php" class="volver p-2 px-4 text-dark">Volver al menú de tablas auxiliares</a>
     </div>
-</main>
 
 <!-- MODAL CREAR -->
 <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
@@ -57,7 +59,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Crear edificio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+        <i class="bi bi-plus-circle"></i> Crear edificio
+        </button>
+
       </div>
       <div class="modal-body">
         <form id="formCrear">
@@ -108,7 +113,33 @@
   </div>
 </div>
 
+<!-- MODAL ELIMINAR -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Eliminar edificio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>¿Estás seguro de que quieres eliminar este edificio?</p>
+        <p class="fw-bold" id="eliminarNombre"></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
+      </div>
+
+    </div>
+  </div>
 </div>
+</body>   
+</main>
+
+
         <footer id="footer"></footer>
     </body>
 </html>
