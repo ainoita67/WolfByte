@@ -14,7 +14,6 @@ define('APP_DIR', BASE_DIR . '/src');
 define('CONFIG_DIR', BASE_DIR . '/config');
 define('STORAGE_DIR', BASE_DIR . '/storage');
 
-
 // ----------------------------------------------------
 // ENTORNO
 // ----------------------------------------------------

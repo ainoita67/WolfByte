@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+        <title>Edificios - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Edificios</h2>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-plus-circle"></i> Crear edificio
+                </button>
+            </div>
+
+            <!-- Aquí irán las tarjetas -->
+            <div id="contenedorTarjetas" class="row g-4 mt-3">
+                <!-- tarjetas generadas por JS -->
+            </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+
+        <!-- MODAL CREAR -->
+        <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Crear edificio</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<form id="formCrear">
+							<div class="mb-3">
+								<label for="crearNombre" class="form-label">Nombre edificio</label>
+								<input type="text" id="crearNombre" class="form-control" required>
+							</div>
+							<button type="submit" class="btn btn-success">Crear</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+			<!-- MODAL EDITAR -->
+			<!-- MODAL EDITAR (CARD POPUP) -->
+			<!-- MODAL EDITAR -->
+		<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+
+					<div class="modal-header bg-primary text-white">
+						<h5 class="modal-title">Editar edificio</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+					</div>
+
+					<div class="modal-body">
+						<form id="formEditar">
+							<input type="hidden" id="editId">
+
+							<div class="mb-3">
+								<label for="editNombre" class="form-label">Nombre del edificio</label>
+								<input type="text" id="editNombre" class="form-control" required>
+							</div>
+
+							<div class="d-flex justify-content-end gap-2">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+									Cancelar
+								</button>
+								<button type="submit" class="btn btn-primary">
+									Guardar cambios
+								</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+        <footer id="footer"></footer>
+    </body>
+</html>

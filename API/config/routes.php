@@ -53,9 +53,11 @@ $router->post('/necesidad-reservas','Controllers\\NecesidadReservaController@sto
 $router->put('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@update'); // Actualiza una necesidad de reserva de un espacio por ID
 $router->delete('/necesidad-reservas/{id}','Controllers\\NecesidadReservaController@destroy'); // Elimina una necesidad de reserva de un espacio por ID
 
+
+
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
-$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
 $router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
 $router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@updateActivar'); //activar o desactivar una reserva permanente
 $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente

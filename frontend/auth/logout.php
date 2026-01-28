@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 <?php
 declare(strict_types=1);
 
@@ -19,4 +16,3 @@ try {
 } catch (Throwable $e) {
     $response->status(500)->json([], 'Error al cerrar sesión');
 }
->>>>>>> origin/API

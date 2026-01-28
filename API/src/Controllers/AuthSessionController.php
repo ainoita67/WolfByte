@@ -34,6 +34,10 @@ class AuthSessionController
 
             // Guardamos sesión tradicional PHP
             $_SESSION['user'] = $user;
+<<<<<<< HEAD
+            
+=======
+>>>>>>> origin/API
 
             // También usamos tu Session helper si lo quieres mantener
             Session::createUserSession($user);
