@@ -51,3 +51,12 @@ $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
+
+// Caracteristicas
+
+$router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
+$router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');
+$router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store');
+$router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
+$router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
+
