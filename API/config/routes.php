@@ -46,14 +46,9 @@ $router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
 
 
+<<<<<<< HEAD
 // RESERVAS
-$router->get('/mis-reservas','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
-$router->get('/reservas','Controllers\\ReservaController@index'); // Devuelve todas las reservas (para admin o listado general)
-$router->get('/reservas/{id}','Controllers\\ReservaController@show'); // Devuelve los detalles de una reserva específica por ID
-$router->post('/reservas','Controllers\\ReservaController@store'); // Crea una nueva reserva
-$router->put('/reservas/{id}','Controllers\\ReservaController@update'); // Actualiza una reserva existente por ID
-$router->delete('/reservas/{id}','Controllers\\ReservaController@destroy'); // Elimina una reserva por ID
-
+$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
 
 
@@ -68,8 +63,11 @@ $router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaP
 
 
 // NECESIDAD RESERVA
-$router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index'); //Devuelve las necesidades de reservas
-$router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show'); //Devuelve las necesidades de una reserva de un espacio
-$router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store'); // Crea una nueva necesidad de reserva de un espacio
-$router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update'); // Actualiza una necesidad de reserva de un espacio por ID
-$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy'); // Elimina una necesidad de reserva de un espacio por ID
+$router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');
+$router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
+$router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
+$router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
+$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+=======
+// AULAS
+>>>>>>> origin/API

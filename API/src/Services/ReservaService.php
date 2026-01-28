@@ -16,15 +16,7 @@ class ReservaService
     }
 
     /**
-     * Devuelve todas las reservas
-     */
-    public function getAllReservas(): array
-    {
-        return $this->model->getAll();
-    }
-
-    /**
-     * Reservas de un usuario
+     * Reservas del usuario
      */
     public function getReservasUsuario(int $idUsuario): array
     {
@@ -47,55 +39,5 @@ class ReservaService
         }
 
         return $reserva;
-    }
-
-    /**
-     * Crear una nueva reserva
-     */
-    public function createReserva(array $data): array
-    {
-        $this->validateReservaData($data);
-        return $this->model->create($data);
-    }
-
-    /**
-     * Actualizar una reserva existente
-     */
-    public function updateReserva(int $id, array $data): array
-    {
-        $this->getReservaById($id); // Verifica que exista
-        $this->validateReservaData($data, false);
-        return $this->model->update($id, $data);
-    }
-
-    /**
-     * Eliminar una reserva
-     */
-    public function deleteReserva(int $id): void
-    {
-        $this->getReservaById($id); // Verifica que exista
-        $this->model->delete($id);
-    }
-
-    /**
-     * Validación básica de datos de reserva
-     */
-    private function validateReservaData(array $data, bool $isNew = true): void
-    {
-        if ($isNew && empty($data['id_usuario'])) {
-            throw new ValidationException("El usuario es obligatorio");
-        }
-
-        if (empty($data['inicio'])) {
-            throw new ValidationException("La fecha de inicio es obligatoria");
-        }
-
-        if (empty($data['fin'])) {
-            throw new ValidationException("La fecha de fin es obligatoria");
-        }
-
-        if (strtotime($data['fin']) <= strtotime($data['inicio'])) {
-            throw new ValidationException("La fecha de fin debe ser posterior a la de inicio");
-        }
     }
 }
