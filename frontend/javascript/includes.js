@@ -57,9 +57,9 @@ function cargarHTML(pagina, selector, callback) {
 // includes.js
 function generarPagina(menu, rol){
     cargarHeadHTML(BASE + "/includes/head.html", () => {
-        cargarHTML(BASE + "/includes/header.php", "#header", () => {
+        cargarHTML(BASE + "/includes/header.html", "#header", () => {
             generateHeaderNav(menu, rol);
         });
-        cargarHTML(BASE + "/includes/footer.php", "#footer");
+        cargarHTML(BASE + "/includes/footer.html", "#footer");
     });
 }
