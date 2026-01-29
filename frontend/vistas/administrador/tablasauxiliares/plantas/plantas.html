@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Reservas - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main>
+                             
+            <div class="container mt-5">
+            
+                <h2 class="text-center mb-4">Listado de plantas</h2>
+            
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre edificio</th>
+                                <th>Planta</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaPlantas">
+                            <!-- Ejemplo -->
+                            <tr>
+                                <td>1</td>
+                                <td>Edificio Central</td>
+                                <td>Planta 1</td>
+                                <td class="acciones">
+                                    <button class="btn btn-success btn-sm" title="Editar">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Crear
+                    </button>
+                
+                    <button class="btn btn-secondary">
+                        Volver al menú de administrador
+                    </button>
+                </div>
+            
+            </div>
+
+        </main>
+
+        <!-- Modal Crear / Editar Planta -->
+        <div class="modal fade" id="modalPlanta" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitulo">Crear planta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                
+                    <div class="modal-body">
+                        <form id="formPlanta">
+                        
+                            <input type="hidden" id="idPlanta">
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Nombre del edificio</label>
+                                <input type="text" class="form-control" id="nombreEdificio" required>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">Planta</label>
+                                <input type="text" class="form-control" id="planta" required>
+                            </div>
+                        
+                        </form>
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-success" id="btnGuardar">Guardar</button>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../../../../javascript/plantas/plantas.js"></script>
+
+
+        <footer id="footer"></footer>
+    </body>
+</html>
+

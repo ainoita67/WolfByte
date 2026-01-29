@@ -39,14 +39,13 @@ $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); //
 $router->patch('/user/{id}', 'Controllers\\UsuarioController@patch');
  // Actualizar la contraseña de un usuario o modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id 
 
-
 // EDIFICIOS
-$router->get('/edificios', 'Controllers\\EdificioController@index');
-$router->get('/edificios/{id}', 'Controllers\\EdificioController@show');
-$router->post('/edificios', 'Controllers\\EdificioController@store');
-$router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
-$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
-
+$router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
+$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
+$router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
+$router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
+$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
+ 
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
@@ -60,6 +59,10 @@ $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@upd
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
 // Espacios
+//Reservas de portatiles
+$router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
+$router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
+$router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
 
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');

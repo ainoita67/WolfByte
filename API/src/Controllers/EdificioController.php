@@ -96,11 +96,15 @@ public function destroy(Request $req, Response $res, $id): Response
 {
     try {
         $this->service->deleteEdificio((int)$id);
-        return $res->status(204)->json([]);
+        return $res->status(204); // 👈 sin JSON
     } catch (Throwable $e) {
-        return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        return $res->errorJson(
+            $e->getMessage(),
+            $e->getCode() ?: 500
+        );
     }
 }
+
 
 
 }

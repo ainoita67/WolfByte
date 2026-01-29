@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contenedor.innerHTML = '';
 
             edificios.forEach(edificio => {
+                console.log('EDIFICIO:', edificio);
                 const tarjeta = document.createElement('div');
                 tarjeta.classList.add('col-12', 'col-md-6', 'col-lg-4');
 
@@ -63,29 +64,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.querySelectorAll('.btnBorrar').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
-                    const id = e.target.dataset.id;
+                    const id = e.currentTarget.dataset.id;
 
                     if (!confirm('¿Seguro que quieres borrar este edificio?')) return;
 
-                    const res = await fetch(`http://192.168.13.202/edificios/${id}`, {
+                    console.log('ID a borrar:', id);
+
+
+                    const res = await fetch(`http://192.168.13.202/API/edificios/${id}`, {
                         method: 'DELETE'
                     });
-                    
-                    // Si devuelve 204, no hay JSON
+
                     if (res.status === 204) {
                         alert('Edificio borrado');
-                        cargarEdificios();  // <-- recarga solo la lista
-                        return;
-                    }
-                    
-                    const data = await res.json();
-                    if (data.status === 'error') {
-                        alert(data.message);
+                        cargarEdificios();
                         return;
                     }
 
+                    // SOLO si no es 204 intentas leer JSON
+                    const data = await res.json();
+
+                    if (data.status === 'error') {
+                        alert(data.message);
+}
+
                 });
             });
+
 
         } catch (err) {
             contenedor.innerHTML = `<p class="text-danger">Error al cargar edificios</p>`;
