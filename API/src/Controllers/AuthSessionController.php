@@ -26,14 +26,15 @@ class AuthSessionController
     public function login(Request $req, Response $res): void
     {
         try {
-            $data = $req->json(); // Recibe {login, password}
+            $data = $req->json(); // {email, password}
             $user = $this->service->login(
-                $data['login'] ?? '',
+                $data['email'] ?? '',
                 $data['password'] ?? ''
             );
 
             // Guardamos sesión tradicional PHP
             $_SESSION['user'] = $user;
+            
 
             // También usamos tu Session helper si lo quieres mantener
             Session::createUserSession($user);

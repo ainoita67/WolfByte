@@ -16,13 +16,14 @@ class UsuarioModel
         $this->db = new DB();
     }
 
-    public function findByLogin(string $login): array|false
+    public function findByEmail(string $email): array|false
     {
         return $this->db
-            ->query("SELECT * FROM Usuario WHERE nombre = :login")
-            ->bind(':login', $login)
+            ->query("SELECT *, contrasena AS password FROM Usuario WHERE correo = :email")
+            ->bind(':email', $email)
             ->fetch();
     }
+
 
     // Otros métodos CRUD
 
@@ -31,7 +32,7 @@ class UsuarioModel
     public function findAll(): array
     {
         return $this->db
-            ->query("SELECT * FROM Usuario ORDER BY id_usuario DESC; ")
+            ->query("SELECT * FROM Usuario")
             ->fetchAll();
     }
 
