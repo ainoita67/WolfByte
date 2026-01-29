@@ -19,129 +19,131 @@ class NecesidadReservaController
     }
 
     /**
-     * Crear una nueva necesidad de reserva
-     * POST /necesidad-reserva
-     * Body JSON: { "usuario_id": 1, "fecha": "2026-01-20", "hora": "12:00", "cantidad_personas": 2, "tipo_servicio": "comida", "notas": "opcional" }
+     * Asignar una necesidad a una reserva-espacio
      */
-    public function create(Request $req, Response $res): void
+    public function store(Request $req, Response $res): void
     {
         try {
-            $data = $req->json(); 
+            $data = $req->json();
+            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
 
-            if (!isset($data['usuario_id'])) {
-                $res->status(422)->json(['errors' => ['usuario_id' => 'Campo requerido']], "Falta usuario_id");
+            if (!isset($data['id_necesidad'])) {
+                $res->status(422)->json(['errors' => ['id_necesidad' => 'Campo requerido']]);
                 return;
             }
 
-            $reservation = $this->service->create($data);
+            $relacion = $this->service->create($idReservaEspacio, (int)$data['id_necesidad']);
 
-            $res->status(201)->json([
-                'reservation' => $reservation
-            ], "Necesidad de reserva creada correctamente");
+            $res->status(201)->json(['data' => $relacion], "Necesidad asignada correctamente");
 
         } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
-        } catch (Throwable $e) {
-            $code = ($e->getCode() >= 400 && $e->getCode() < 600) ? $e->getCode() : 500;
-            $res->errorJson($e->getMessage(), $code);
-        }
-    }
-
-    /**
-     * Listar necesidades de reserva de un usuario
-     * GET /necesidad-reserva?usuario_id=1
-     */
-    public function list(Request $req, Response $res): void
-    {
-        $usuarioId = $_GET['usuario_id'] ?? null;
-
-        if (!$usuarioId) {
-            $res->status(422)->json(['errors' => ['usuario_id' => 'Campo requerido']], "Falta usuario_id");
-            return;
-        }
-
-        try {
-            $reservations = $this->service->getByUsuario((int)$usuarioId);
-            $res->status(200)->json(['reservations' => $reservations], "Necesidades de reserva del usuario");
+            $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
     /**
-     * Mostrar una necesidad de reserva
-     * GET /necesidad-reserva/{id}?usuario_id=1
+     * Listar necesidades de una reserva
      */
-    public function show(Request $req, Response $res): void
+    public function index(Request $req, Response $res): void
     {
-        $usuarioId = $_GET['usuario_id'] ?? null;
-        $id = $req->param('id');
+        try {
+            $idReserva = (int)$req->param('id_reserva');
+            $data = $this->service->getByReserva($idReserva);
 
-        if (!$usuarioId) {
-            $res->status(422)->json(['errors' => ['usuario_id' => 'Campo requerido']], "Falta usuario_id");
-            return;
+            $res->status(200)->json(['data' => $data], "Necesidades de la reserva");
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
         }
-
-        $reservation = $this->service->getById((int)$id);
-
-        if (!$reservation || $reservation['usuario_id'] !== (int)$usuarioId) {
-            $res->status(404)->json([], "Reserva no encontrada");
-            return;
-        }
-
-        $res->status(200)->json(['reservation' => $reservation], "Reserva encontrada");
     }
 
     /**
-     * Actualizar una necesidad de reserva
-     * PUT /necesidad-reserva/{id}
-     * Body JSON: { "usuario_id": 1, "fecha": "...", "hora": "...", "cantidad_personas": ..., "tipo_servicio": "...", "notas": "..." }
+     * Ver una necesidad asignada específica
+     */
+    public function show(Request $req, Response $res): void
+    {
+        $idReservaEspacio = (int)$req->param('id_reserva_espacio');
+        $idNecesidad = (int)$req->param('id_necesidad');
+
+        $data = $this->service->getOne($idReservaEspacio, $idNecesidad);
+
+        if (!$data) {
+            $res->status(404)->json([], "Relación no encontrada");
+            return;
+        }
+
+        $res->status(200)->json(['data' => $data], "Relación encontrada");
+    }
+
+    /**
+     * Cambiar una necesidad por otra
      */
     public function update(Request $req, Response $res): void
     {
         try {
-            $data = $req->json(); 
-            $id = $req->param('id');
+            $data = $req->json();
+            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
+            $idNecesidad = (int)$req->param('id_necesidad');
 
-            if (!isset($data['usuario_id'])) {
-                $res->status(422)->json(['errors' => ['usuario_id' => 'Campo requerido']], "Falta usuario_id");
+            if (!isset($data['id_necesidad_nueva'])) {
+                $res->status(422)->json(['errors' => ['id_necesidad_nueva' => 'Campo requerido']]);
                 return;
             }
 
-            $updated = $this->service->update((int)$id, $data);
+            $updated = $this->service->update(
+                $idReservaEspacio,
+                $idNecesidad,
+                (int)$data['id_necesidad_nueva']
+            );
 
-            $res->status(200)->json(['reservation' => $updated], "Reserva actualizada correctamente");
+            $res->status(200)->json(['data' => $updated], "Necesidad actualizada");
 
         } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
+            $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
-            $code = ($e->getCode() >= 400 && $e->getCode() < 600) ? $e->getCode() : 500;
-            $res->errorJson($e->getMessage(), $code);
+            $res->errorJson($e->getMessage(), 500);
         }
     }
 
     /**
-     * Cancelar una necesidad de reserva
-     * DELETE /necesidad-reserva/{id}?usuario_id=1
+     * Quitar una necesidad de una reserva
      */
-    public function cancel(Request $req, Response $res): void
+    public function destroy(Request $req, Response $res): void
     {
         try {
-            $usuarioId = $_GET['usuario_id'] ?? null;
-            $id = $req->param('id');
+            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
+            $idNecesidad = (int)$req->param('id_necesidad');
 
-            if (!$usuarioId) {
-                $res->status(422)->json(['errors' => ['usuario_id' => 'Campo requerido']], "Falta usuario_id");
+            $this->service->delete($idReservaEspacio, $idNecesidad);
+
+            $res->status(200)->json([], "Necesidad eliminada correctamente");
+
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Reemplazar todas las necesidades de una reserva
+     */
+    public function sync(Request $req, Response $res): void
+    {
+        try {
+            $data = $req->json();
+            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
+
+            if (!isset($data['necesidades']) || !is_array($data['necesidades'])) {
+                $res->status(422)->json(['errors' => ['necesidades' => 'Debe ser un array']]);
                 return;
             }
 
-            $this->service->delete((int)$usuarioId, (int)$id);
+            $this->service->sync($idReservaEspacio, $data['necesidades']);
 
-            $res->status(200)->json([], "Necesidad de reserva cancelada correctamente");
+            $res->status(200)->json([], "Necesidades sincronizadas");
 
         } catch (Throwable $e) {
-            $code = ($e->getCode() >= 400 && $e->getCode() < 600) ? $e->getCode() : 500;
-            $res->errorJson($e->getMessage(), $code);
+            $res->errorJson($e->getMessage(), 500);
         }
     }
 }

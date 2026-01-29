@@ -15,87 +15,95 @@ class NecesidadReservaModel
     }
 
     /**
-     * Crear una nueva necesidad de reserva
+     * Crear relación reserva-espacio ↔ necesidad
      */
-    public function create(array $data): int
+    public function create(array $data): bool
     {
         $this->db
-            ->query("INSERT INTO NecesidadReserva (usuario_id, fecha, hora, cantidad_personas, tipo_servicio, notas)
-                     VALUES (:usuario_id, :fecha, :hora, :cantidad_personas, :tipo_servicio, :notas)")
-            ->bind(':usuario_id', $data['usuario_id'])
-            ->bind(':fecha', $data['fecha'])
-            ->bind(':hora', $data['hora'])
-            ->bind(':cantidad_personas', $data['cantidad_personas'])
-            ->bind(':tipo_servicio', $data['tipo_servicio'])
-            ->bind(':notas', $data['notas'] ?? null)
+            ->query("INSERT INTO necesidad_r_espacio (id_reserva_espacio, id_necesidad)
+                     VALUES (:id_reserva_espacio, :id_necesidad)")
+            ->bind(':id_reserva_espacio', $data['id_reserva_espacio'])
+            ->bind(':id_necesidad', $data['id_necesidad'])
             ->execute();
 
-        return (int)$this->db->lastId();
+        return $this->db->rowCount() > 0;
     }
 
     /**
-     * Obtener necesidad de reserva por ID
+     * Obtener una relación específica
      */
-    public function findById(int $id): array|false
+    public function findOne(int $idReservaEspacio, int $idNecesidad): array|false
     {
         return $this->db
-            ->query("SELECT * FROM NecesidadReserva WHERE id = :id")
-            ->bind(':id', $id)
+            ->query("SELECT *
+                     FROM necesidad_r_espacio
+                     WHERE id_reserva_espacio = :id_reserva_espacio
+                       AND id_necesidad = :id_necesidad")
+            ->bind(':id_reserva_espacio', $idReservaEspacio)
+            ->bind(':id_necesidad', $idNecesidad)
             ->fetch();
     }
 
     /**
-     * Obtener todas las necesidades de un usuario
+     * Obtener necesidades de una reserva
      */
-    public function findByUsuario(int $usuarioId): array
+    public function findByReserva(int $idReserva): array
     {
         return $this->db
-            ->query("SELECT * FROM NecesidadReserva WHERE usuario_id = :usuario_id ORDER BY fecha, hora")
-            ->bind(':usuario_id', $usuarioId)
+            ->query("SELECT n.id_necesidad, n.nombre
+                     FROM necesidad_r_espacio nr
+                     JOIN necesidad n ON n.id_necesidad = nr.id_necesidad
+                     JOIN reserva_espacio re ON re.id_reserva_espacio = nr.id_reserva_espacio
+                     WHERE re.id_reserva = :id_reserva")
+            ->bind(':id_reserva', $idReserva)
             ->fetchAll();
     }
 
     /**
-     * Eliminar necesidad de reserva de un usuario
+     * Actualizar una necesidad por otra
      */
-    public function deleteByUsuario(int $usuarioId, int $id): bool
+    public function update(int $idReservaEspacio, int $idNecesidadActual, int $idNecesidadNueva): bool
     {
         $this->db
-            ->query("DELETE FROM NecesidadReserva WHERE id = :id AND usuario_id = :usuario_id")
-            ->bind(':id', $id)
-            ->bind(':usuario_id', $usuarioId)
+            ->query("UPDATE necesidad_r_espacio
+                     SET id_necesidad = :id_necesidad_nueva
+                     WHERE id_reserva_espacio = :id_reserva_espacio
+                       AND id_necesidad = :id_necesidad_actual")
+            ->bind(':id_necesidad_nueva', $idNecesidadNueva)
+            ->bind(':id_reserva_espacio', $idReservaEspacio)
+            ->bind(':id_necesidad_actual', $idNecesidadActual)
             ->execute();
 
         return $this->db->rowCount() > 0;
     }
 
     /**
-     * Actualizar necesidad de reserva
+     * Eliminar una necesidad de una reserva
      */
-    public function update(int $id, array $data): bool
+    public function delete(int $idReservaEspacio, int $idNecesidad): bool
     {
         $this->db
-            ->query("UPDATE NecesidadReserva
-                     SET fecha = :fecha,
-                         hora = :hora,
-                         cantidad_personas = :cantidad_personas,
-                         tipo_servicio = :tipo_servicio,
-                         notas = :notas
-                     WHERE id = :id")
-            ->bind(':fecha', $data['fecha'])
-            ->bind(':hora', $data['hora'])
-            ->bind(':cantidad_personas', $data['cantidad_personas'])
-            ->bind(':tipo_servicio', $data['tipo_servicio'])
-            ->bind(':notas', $data['notas'] ?? null)
-            ->bind(':id', $id)
+            ->query("DELETE FROM necesidad_r_espacio
+                     WHERE id_reserva_espacio = :id_reserva_espacio
+                       AND id_necesidad = :id_necesidad")
+            ->bind(':id_reserva_espacio', $idReservaEspacio)
+            ->bind(':id_necesidad', $idNecesidad)
             ->execute();
 
         return $this->db->rowCount() > 0;
     }
 
-    public function findAll(): array
+    /**
+     * Eliminar todas las necesidades de una reserva-espacio
+     */
+    public function deleteAllByReservaEspacio(int $idReservaEspacio): bool
     {
-        return $this->db->query("SELECT * FROM NecesidadReserva ORDER BY fecha, hora")->fetchAll();
-    }
+        $this->db
+            ->query("DELETE FROM necesidad_r_espacio
+                     WHERE id_reserva_espacio = :id_reserva_espacio")
+            ->bind(':id_reserva_espacio', $idReservaEspacio)
+            ->execute();
 
+        return $this->db->rowCount() > 0;
+    }
 }
