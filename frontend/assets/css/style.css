@@ -391,6 +391,11 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 /*ESTILOS TABLAS*/
+table{
+    border: 1px solid #d9efe7 !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
 
 .tabla-cabecera thead {
     background-color: #274C9C;
