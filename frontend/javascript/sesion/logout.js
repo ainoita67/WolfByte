@@ -14,9 +14,12 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
         console.log('Logout OK:', data);
 
         // Redirige al login
-        window.location.href = '/public/views/login.php';
+        window.location.href = '/frontend/auth/login.html';
 
     } catch (error) {
         alert(error.message);
     }
 });
+
+
+

@@ -28,26 +28,25 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 // $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por id
 
 // USUARIOS
-$router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios para listarlos
-$router->get('/user/{id}',          'Controllers\\UsuarioController@show'); // Se reciben los datos del usuario con el id que se mande
-$router->get('/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el id
-$router->get('/user/{id}/correo',   'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el id
-$router->get('/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el id
-$router->get('/user/{$id}/token',   'Controllers\\UsuarioController@showToken'); // Se recibe el token  y su fecha de expiración del usuario del que se pase el id
-$router->post('/user',              'Controllers\\UsuarioController@store'); // Se envían los datos del usuario desde un formulario para añadirlo a la DDBB
-$router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
-$router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
-$router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
-//$router->dpatch('/user/{id}',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive del usuario del que se pase el id
-
+$router->protected( 'GET', '/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios para listarlos
+$router->protected( 'GET', '/user/{id}',          'Controllers\\UsuarioController@show'); // Se reciben los datos del usuario con el id que se mande
+$router->protected( 'GET', '/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el id
+$router->protected( 'GET', '/user/{id}/correo',   'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el id
+$router->protected( 'GET', '/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el id
+$router->protected( 'GET', '/user/{id}/token',   'Controllers\\UsuarioController@showToken'); // Se recibe el token  y su fecha de expiración del usuario del que se pase el id
+$router->protected( 'POST', '/user',              'Controllers\\UsuarioController@store'); // Se envían los datos del usuario desde un formulario para añadirlo a la DDBB
+$router->protected( 'PUT', '/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
+$router->protected( 'PATCH', '/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
+$router->protected( 'PATCH', '/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
+//$router->protected( 'PATCH', '/user/{id}',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive del usuario del que se pase el id
 
 // EDIFICIOS
-$router->get('/edificios', 'Controllers\\EdificioController@index');
-$router->get('/edificios/{id}', 'Controllers\\EdificioController@show');
-$router->post('/edificios', 'Controllers\\EdificioController@store');
-$router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
-$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
-
+$router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
+$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
+$router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
+$router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
+$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
+ 
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
@@ -59,4 +58,9 @@ $router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@sho
 $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store');
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
+
+//Reservas de portatiles
+$router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
+$router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
+$router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
 
