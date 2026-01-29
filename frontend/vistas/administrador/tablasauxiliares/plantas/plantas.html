@@ -15,8 +15,10 @@
                 };
                 document.head.appendChild(script2);
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
 
         <title>Plantas - IES Bajo Aragón</title>
     </head>
@@ -29,11 +31,117 @@
                     <i class="bi bi-plus-circle"></i> Crear material
                 </button>
             </div>
+        </div>
 
             <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
                 <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
-        </main>
-        <footer id="footer"></footer>
-    </body>
+        </div>
+
+    </div>
+
+    <div class="mt-5 container-fluid text-end">
+        <a href="../tablasauxiliares.html" class="volver p-2 px-4 text-dark">
+            Volver al menú de tablas auxiliares
+        </a>
+    </div>
+
+</main>
+
+<!-- MODAL CREAR -->
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Crear planta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Edificio</label>
+                    <select class="form-select">
+                        <option>Loscos</option>
+                        <option>Ram</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Planta</label>
+                    <input type="text" class="form-control" placeholder="Ej: Planta 0, Planta 1">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de aulas</label>
+                    <input type="number" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Espacios especiales</label>
+                    <textarea class="form-control" rows="3"
+                        placeholder="Ej: Laboratorio de Física, Secretaría"></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success">Crear</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar planta</h5>
+                <button type="button" class="btn btn-close-white btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Edificio</label>
+                    <select class="form-select">
+                        <option selected>Edificio A</option>
+                        <option>Edificio B</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Planta</label>
+                    <input type="text" class="form-control" value="Planta 0">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de aulas</label>
+                    <input type="number" class="form-control" value="6">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Espacios especiales</label>
+                    <textarea class="form-control" rows="3">Conserjería, Secretaría, Sala de profesores</textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar cambios</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer id="footer"></footer>
+
+</body>
 </html>

@@ -1,8 +1,8 @@
 body{
-    background-color: #E6F5F0 !important;
     margin: 0 !important;
     padding: 0 !important;
     display: grid;
+    background-color: #E6F5F0 !important;
     grid-template-columns: 1fr;
     grid-template-rows: 5.75em 1fr auto;
     min-height: 100vh;
@@ -238,10 +238,13 @@ nav ul li a img{
 main.menu, div.menu{
     padding-left: 5% !important;
     padding-right: 1% !important;
-    background-color: #E6F5F0;
     justify-content: center !important;
     align-content: center !important;
     vertical-align: middle;
+}
+
+main.menu, div.menu, #mainmenu {
+    background-color: rgba(0,0,0,0) !important;
 }
 
 a.menu, button.menu{
@@ -384,8 +387,12 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     display: none;
 }
 
+#accesibilidad:hover button:first-child, #accesibilidad:active button:first-child{
+    display: none !important;
+}
+
 /* Al pasar el mouse por el contenedor, mostrar los botones */
-#accesibilidad:hover button, #accesibilidad:active button{
+#accesibilidad:hover button:not(:first-child), #accesibilidad:active button:not(:first-child){
     display: block !important;
 }
 
@@ -410,6 +417,10 @@ table{
     border-spacing: 0 !important;
 }
 
+table tbody tr:hover{
+    background-color: rgba(0, 81, 255, 0.5) !important;
+}
+
 .tabla-cabecera thead{
     background-color: #274C9C;
     color: #ffffff;
@@ -423,7 +434,7 @@ table{
 
 .tabla-cabecera{
     width: 100%;
-    background-color: var(white);
+    background-color: white;
     border-radius: 15px;
     overflow: hidden;
 }
@@ -457,7 +468,7 @@ table{
 
 #tabla-reservas{
     width: 100%;
-    background-color: var(white);
+    background-color: white;
     border-radius: 15px;
     overflow: hidden;
 }
@@ -474,7 +485,7 @@ table{
 }
 
 #tabla-reservas tbody tr{
-    background-color: var(#7A8A06);
+    background-color: #7A8A06;
     transition: background-color 0.3s ease;
 }
 
@@ -483,13 +494,13 @@ table{
 }
 
 #tabla-reservas tbody tr:hover{
-    background-color: var(#90a300);
+    background-color: #90a300;
 }
 
 #tabla-reservas td{
     padding: 12px;
     vertical-align: middle;
-    border-color: var(#d0d0d0);
+    border-color: #d0d0d0;
 }
 
 #tabla-reservas .badge{
@@ -577,7 +588,7 @@ form.login{
 
 .tabla-cabecera{
     width: 100%;
-    background-color: var(white);
+    background-color: white;
     border-radius: 15px;
     overflow: hidden;
 }
@@ -625,7 +636,7 @@ form.login{
 
 #tabla-reservas{
     width: 100%;
-    background-color: var(white);
+    background-color: white;
     border-radius: 15px;
     overflow: hidden;
 }
@@ -642,7 +653,7 @@ form.login{
 }
 
 #tabla-reservas tbody tr{
-    background-color: var(#7A8A06);
+    background-color: #7A8A06;
     transition: background-color 0.3s ease;
 }
 
@@ -651,13 +662,13 @@ form.login{
 }
 
 #tabla-reservas tbody tr:hover{
-    background-color: var(#90a300);
+    background-color: #90a300;
 }
 
 #tabla-reservas td{
     padding: 12px;
     vertical-align: middle;
-    border-color: var(#d0d0d0);
+    border-color: #d0d0d0;
 }
 
 #tabla-reservas .badge{

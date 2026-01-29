@@ -122,31 +122,39 @@
                         <h5 class="modal-title">Crear material</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
+                    <form>
+                        <div class="modal-body p-3 px-4">
                             <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control">
+                                <label for="carro">Carro</label>
+                                <input type="text" class="form-control" id="crearCarro" name="crearCarro" required>
                             </div>
                             <div class="mb-3">
-                                <label>Categoría</label>
-                                <input type="text" class="form-control">
+                                <label for="edificio">Edificio</label>
+                                <input type="text" class="form-control" id="crearEdificio" name="crearEdificio" required>
                             </div>
                             <div class="mb-3">
-                                <label>Unidades</label>
-                                <input type="number" class="form-control">
+                                <label for="planta">Planta</label>
+                                <input type="text" class="form-control" id="crearPlanta" name="crearPlanta" required>
                             </div>
                             <div class="mb-3">
-                                <label>Estado</label>
-                                <select class="form-control">
+                                <label for="unidades">Unidades</label>
+                                <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado">Estado</label>
+                                <select class="form-control" id="crearEstado" name="crearEstado" required>
+                                    <option selected disabled>Seleccionar estado</option>
                                     <option>Disponible</option>
                                     <option>En uso</option>
                                     <option>Averiado</option>
                                 </select>
                             </div>
-                            <button class="btn btn-success w-100">Guardar</button>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar cambios</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -159,39 +167,38 @@
                         <h5 class="modal-title">Editar material</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                        <form>
-                            <div class="modal-body p-3 px-4">
-                                <div class="mb-3">
-                                    <label for="carro">Carro</label>
-                                    <input type="text" class="form-control" id="editCarro" name="carro">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edificio">Edificio</label>
-                                    <input type="text" class="form-control" id="editEdificio" name="edificio">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="planta">Planta</label>
-                                    <input type="text" class="form-control" id="editPlanta" name="planta">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="unidades">Unidades</label>
-                                    <input type="number" class="form-control" id="editUnidades">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="estado">Estado</label>
-                                    <select class="form-control" id="editEstado">
-                                        <option>Disponible</option>
-                                        <option>En uso</option>
-                                        <option>Averiado</option>
-                                    </select>
-                                </div>
+                    <form>
+                        <div class="modal-body p-3 px-4">
+                            <div class="mb-3">
+                                <label for="carro">Carro</label>
+                                <input type="text" class="form-control" id="editCarro" name="editCarro" required>
                             </div>
-                            <div class="modal-footer d-flex justify-content-between">
-                                <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar cambios</button>
-                                <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            <div class="mb-3">
+                                <label for="edificio">Edificio</label>
+                                <input type="text" class="form-control" id="editEdificio" name="editEdificio" required>
                             </div>
-                        </form>
-                    </div>
+                            <div class="mb-3">
+                                <label for="planta">Planta</label>
+                                <input type="text" class="form-control" id="editPlanta" name="editPlanta" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="unidades">Unidades</label>
+                                <input type="number" class="form-control" id="editUnidades" name="editUnidades" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado">Estado</label>
+                                <select class="form-control" id="editEstado" name="editEstado" required>
+                                    <option>Disponible</option>
+                                    <option>En uso</option>
+                                    <option>Averiado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar cambios</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
