@@ -713,3 +713,14 @@ form.login{
 .proceso {
     background-color: #cea141;
 }
+
+/* MENU ADMINISTRADOR */
+.aside {
+    background-color: #2a457e;
+    height: 50vh;
+    border-bottom-right-radius: .375rem;
+}
+.aside h5, .aside ul li a {
+    color: white;
+    font-weight: 700;
+}

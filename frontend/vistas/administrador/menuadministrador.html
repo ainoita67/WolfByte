@@ -30,18 +30,289 @@
     <body>
 
         <div id="header"></div>
-        <main class="container-fluid menu row text-center">
-            <a href="usuarios/usuarios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Usuarios</a>
-            <a href="logacciones/logacciones.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Log de acciones</a>
-            <a href="aulasyespacios/aulasyespacios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Aulas y espacios</a>
-            <a href="reservaspermanentes/reservaspermanentes.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 mb-lg-0">Reservas permanentes</a>
-            <a href="materiales/materiales.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 mb-lg-0">Materiales</a>
-            <a href="tablasauxiliares/tablasauxiliares.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5 mb-lg-0">Tablas auxiliares</a>
-            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-            <a href="../menu.html" class="menu bg-lightgrey col-3 mt-5 mb-0 text-center d-none d-lg-block p-5 p-menu fs-5 text-dark">Volver al menú principal</a>
-            <a href="../menu.html" class="menu bg-lightgrey d-lg-none p-5 fs-5 text-dark">Volver al menú principal</a>
-        </main>
+<main class="d-flex">
+
+    <!-- Menu lateral opcional -->
+    <div class="aside col-2 p-4">
+        <h5>Menú Admin</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link" href="#">Usuarios</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Aulas y Espacios</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Portatiles</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Reservas Permanentes</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Log de Acciones</a></li>
+            <ul class="nav flex-column ps-4">
+                <li class="nav-item"><a class="nav-link" href="#">Edificios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Plantas</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Características de Espacios</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Necesidades de Reservas</a></li>
+            </ul>
+        </ul>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container-fluid col-10">
+        <div class="row g-3">
+
+            <!-- INCIDENCIAS -->
+            <div class="col-md-4 p-5">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h5 class="ms-3">Incidencias</h5>
+                    <button class="btn btn-primary">filtrar</button>
+                </div>
+
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta"></div>
+                    </div>
+                </div>
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta resuelta"></div>
+                    </div>
+                </div>
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta proceso"></div>
+                    </div>
+                </div>
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta proceso"></div>
+                    </div>
+                </div>
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta resuelta"></div>
+                    </div>
+                </div>
+                <!--TARJETA-->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta resuelta"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AUTORIZAR -->
+            <div class="col-md-4 p-5">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h5 class="ms-3">Reservas Pendientes de Autorizar</h5>
+                    <button class="btn btn-primary">filtrar</button>
+                </div>
+
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROXIMAS -->
+            <div class="col-md-4 p-5">
+                <div class="mb-4 d-flex justify-content-between">
+                    <h5 class="ms-3">Próximas Reservas</h5>
+                    <button class="btn btn-primary">filtrar</button>
+                </div>
+
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div><!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="mb-4">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalReserva"
+                        data-id="01">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Reserva #02</h6>
+                            <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
+                            <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
+                            <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
+                            <p class="mb-1"><strong>Unidades:</strong> - </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</main>
         <footer id="footer"></footer>
-    </body>
+</body>
 </html>
+
+// añadir modal incidencia y modal reserva al final del body
