@@ -43,6 +43,14 @@
                     </div>
                     <div class="card-body">
                         <p class="fs-5 card-title">Grande</p>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,6 +62,14 @@
                     </div>
                     <div class="card-body">
                         <p class="fs-5 card-title">Pizarra digital</p>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,6 +81,14 @@
                     </div>
                     <div class="card-body">
                         <p class="fs-5 card-title">Impresora</p>
+                        <div class="card-footer text-end">
+                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,10 +132,48 @@
         </div>
     </main>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+<div class="modal fade" id="modalEditar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Editar planta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-        </main>
+
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Edificio</label>
+                    <select class="form-select">
+                        <option selected>Loscos</option>
+                        <option>Ram</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Planta</label>
+                    <input type="text" class="form-control" value="Planta 0">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de aulas</label>
+                    <input type="number" class="form-control" value="6">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Espacios especiales</label>
+                    <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary">Guardar cambios</button>
+            </div>
+
+        </div>
+    </div>
+</div>
         <footer id="footer"></footer>
     </body>
 </html>
