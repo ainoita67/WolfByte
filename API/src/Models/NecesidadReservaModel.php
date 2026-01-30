@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Models;
 
 use Core\DB;
+use PDOException;
 
 class NecesidadReservaModel
 {
@@ -15,95 +16,89 @@ class NecesidadReservaModel
     }
 
     /**
-     * Crear relación reserva-espacio ↔ necesidad
+     * Obtener todas las necesidades de reserva
      */
-    public function create(array $data): bool
+    public function getAll(): array
     {
-        $this->db
-            ->query("INSERT INTO necesidad_r_espacio (id_reserva_espacio, id_necesidad)
-                     VALUES (:id_reserva_espacio, :id_necesidad)")
-            ->bind(':id_reserva_espacio', $data['id_reserva_espacio'])
-            ->bind(':id_necesidad', $data['id_necesidad'])
-            ->execute();
-
-        return $this->db->rowCount() > 0;
+        try {
+            return $this->db
+                ->query("SELECT * FROM Necesidad_R_espacio")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener necesidades de reserva");
+        }
     }
 
     /**
-     * Obtener una relación específica
+     * Obtener necesidad de reserva por ID
      */
-    public function findOne(int $idReservaEspacio, int $idNecesidad): array|false
+    public function findById(int $id): array|false
     {
-        return $this->db
-            ->query("SELECT *
-                     FROM necesidad_r_espacio
-                     WHERE id_reserva_espacio = :id_reserva_espacio
-                       AND id_necesidad = :id_necesidad")
-            ->bind(':id_reserva_espacio', $idReservaEspacio)
-            ->bind(':id_necesidad', $idNecesidad)
-            ->fetch();
+        try {
+            return $this->db
+                ->query("SELECT * FROM Necesidad_R_espacio WHERE id_reserva_espacio = :id")
+                ->bind(':id', $id)
+                ->fetch();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al buscar la necesidad de reserva");
+        }
     }
 
     /**
-     * Obtener necesidades de una reserva
+     * Crear necesidad de reserva
      */
-    public function findByReserva(int $idReserva): array
+    public function create(array $data): array
     {
-        return $this->db
-            ->query("SELECT n.id_necesidad, n.nombre
-                     FROM necesidad_r_espacio nr
-                     JOIN necesidad n ON n.id_necesidad = nr.id_necesidad
-                     JOIN reserva_espacio re ON re.id_reserva_espacio = nr.id_reserva_espacio
-                     WHERE re.id_reserva = :id_reserva")
-            ->bind(':id_reserva', $idReserva)
-            ->fetchAll();
+        try {
+            $this->db
+                ->query("
+                    INSERT INTO Necesidad_R_espacio (id_reserva_espacio, id_necesidad)
+                    VALUES (:reserva, :necesidad)
+                ")
+                ->bind(':reserva', $data['id_reserva_espacio'])
+                ->bind(':necesidad', $data['id_necesidad'])
+                ->execute();
+
+            return $this->findById((int)$this->db->lastId());
+        } catch (PDOException $e) {
+            throw new \Exception("Error al crear la necesidad de reserva");
+        }
     }
 
     /**
-     * Actualizar una necesidad por otra
+     * Actualizar necesidad de reserva
      */
-    public function update(int $idReservaEspacio, int $idNecesidadActual, int $idNecesidadNueva): bool
+    public function update(int $id, array $data): array
     {
-        $this->db
-            ->query("UPDATE necesidad_r_espacio
-                     SET id_necesidad = :id_necesidad_nueva
-                     WHERE id_reserva_espacio = :id_reserva_espacio
-                       AND id_necesidad = :id_necesidad_actual")
-            ->bind(':id_necesidad_nueva', $idNecesidadNueva)
-            ->bind(':id_reserva_espacio', $idReservaEspacio)
-            ->bind(':id_necesidad_actual', $idNecesidadActual)
-            ->execute();
+        try {
+            $this->db
+                ->query("
+                    UPDATE Necesidad_R_espacio
+                    SET id_necesidad = :necesidad
+                    WHERE id_reserva_espacio = :id
+                ")
+                ->bind(':necesidad', $data['id_necesidad'])
+                ->bind(':id', $id)
+                ->execute();
 
-        return $this->db->rowCount() > 0;
+            return $this->findById($id);
+        } catch (PDOException $e) {
+            throw new \Exception("Error al actualizar la necesidad de reserva");
+        }
     }
 
     /**
-     * Eliminar una necesidad de una reserva
+     * Eliminar necesidad de reserva
      */
-    public function delete(int $idReservaEspacio, int $idNecesidad): bool
+    public function delete(int $id): void
     {
-        $this->db
-            ->query("DELETE FROM necesidad_r_espacio
-                     WHERE id_reserva_espacio = :id_reserva_espacio
-                       AND id_necesidad = :id_necesidad")
-            ->bind(':id_reserva_espacio', $idReservaEspacio)
-            ->bind(':id_necesidad', $idNecesidad)
-            ->execute();
-
-        return $this->db->rowCount() > 0;
-    }
-
-    /**
-     * Eliminar todas las necesidades de una reserva-espacio
-     */
-    public function deleteAllByReservaEspacio(int $idReservaEspacio): bool
-    {
-        $this->db
-            ->query("DELETE FROM necesidad_r_espacio
-                     WHERE id_reserva_espacio = :id_reserva_espacio")
-            ->bind(':id_reserva_espacio', $idReservaEspacio)
-            ->execute();
-
-        return $this->db->rowCount() > 0;
+        try {
+            $this->db
+                ->query("DELETE FROM Necesidad_R_espacio WHERE id_reserva_espacio = :id")
+                ->bind(':id', $id)
+                ->execute();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al eliminar la necesidad de reserva");
+        }
     }
 }

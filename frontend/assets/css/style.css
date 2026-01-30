@@ -781,3 +781,71 @@ form.login{
 .estado-rojo{
     background: #dc3545;
 }
+
+
+/*ESTILOS MIS RESERVAS*/
+
+.reserva-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.reserva-body {
+    padding: 16px;
+}
+
+.reserva-estado {
+    height: 15px;
+    width: 100%;
+}
+
+.estado-verde {
+    background: #28a745;
+}
+
+.estado-rojo {
+    background: #dc3545;
+}
+
+.aceptado-rechazado {
+    height: 45px;
+    border-radius: 0 0 .375rem .375rem;
+    background-color: gray;
+}
+.aceptado {
+    background-color: #7a8f00;
+}
+.rechazado {
+    background-color: #ea6b6b;
+}
+
+.estado-incidencia-abierta {
+    height: 45px;
+    border-radius: 0 0 .375rem .375rem;
+    background-color: #ea6b6b;
+}
+.resuelta {
+    background-color: #7a8f00;
+}
+.proceso {
+    background-color: #cea141;
+}
+
+/* MENU ADMINISTRADOR */
+.aside {
+    background-color: #2a457e;
+    height: 50vh;
+    border-bottom-right-radius: .375rem;
+}
+.aside h5, .aside ul li a {
+    color: white;
+    font-weight: 700;
+}
+
+.aside h6 {
+    color: #d1d1d1;
+    margin-top: 1em;
+    margin-bottom: .5em;
+    font-weight: 900;
+}

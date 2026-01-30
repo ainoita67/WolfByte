@@ -5,9 +5,9 @@ namespace Controllers;
 
 use Core\Request;
 use Core\Response;
-use Services\NecesidadReservaService;
-use Throwable;
 use Validation\ValidationException;
+use Throwable;
+use Services\NecesidadReservaService;
 
 class NecesidadReservaController
 {
@@ -18,132 +18,62 @@ class NecesidadReservaController
         $this->service = new NecesidadReservaService();
     }
 
-    /**
-     * Asignar una necesidad a una reserva-espacio
-     */
-    public function store(Request $req, Response $res): void
-    {
-        try {
-            $data = $req->json();
-            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
-
-            if (!isset($data['id_necesidad'])) {
-                $res->status(422)->json(['errors' => ['id_necesidad' => 'Campo requerido']]);
-                return;
-            }
-
-            $relacion = $this->service->create($idReservaEspacio, (int)$data['id_necesidad']);
-
-            $res->status(201)->json(['data' => $relacion], "Necesidad asignada correctamente");
-
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-
-    /**
-     * Listar necesidades de una reserva
-     */
     public function index(Request $req, Response $res): void
     {
         try {
-            $idReserva = (int)$req->param('id_reserva');
-            $data = $this->service->getByReserva($idReserva);
-
-            $res->status(200)->json(['data' => $data], "Necesidades de la reserva");
+            $necesidades = $this->service->getAllNecesidades();
+            $res->status(200)->json($necesidades);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
-    /**
-     * Ver una necesidad asignada específica
-     */
-    public function show(Request $req, Response $res): void
-    {
-        $idReservaEspacio = (int)$req->param('id_reserva_espacio');
-        $idNecesidad = (int)$req->param('id_necesidad');
-
-        $data = $this->service->getOne($idReservaEspacio, $idNecesidad);
-
-        if (!$data) {
-            $res->status(404)->json([], "Relación no encontrada");
-            return;
-        }
-
-        $res->status(200)->json(['data' => $data], "Relación encontrada");
-    }
-
-    /**
-     * Cambiar una necesidad por otra
-     */
-    public function update(Request $req, Response $res): void
+    public function show(Request $req, Response $res, array $args): void
     {
         try {
-            $data = $req->json();
-            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
-            $idNecesidad = (int)$req->param('id_necesidad');
-
-            if (!isset($data['id_necesidad_nueva'])) {
-                $res->status(422)->json(['errors' => ['id_necesidad_nueva' => 'Campo requerido']]);
-                return;
-            }
-
-            $updated = $this->service->update(
-                $idReservaEspacio,
-                $idNecesidad,
-                (int)$data['id_necesidad_nueva']
-            );
-
-            $res->status(200)->json(['data' => $updated], "Necesidad actualizada");
-
+            $necesidad = $this->service->getNecesidadById((int)$args['id']);
+            $res->status(200)->json($necesidad);
         } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
+            $res->errorJson($e->getMessage(), 404);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
-    /**
-     * Quitar una necesidad de una reserva
-     */
-    public function destroy(Request $req, Response $res): void
+    public function store(Request $req, Response $res): void
     {
         try {
-            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
-            $idNecesidad = (int)$req->param('id_necesidad');
-
-            $this->service->delete($idReservaEspacio, $idNecesidad);
-
-            $res->status(200)->json([], "Necesidad eliminada correctamente");
-
+            $data = $req->getBody();
+            $necesidad = $this->service->createNecesidad($data);
+            $res->status(201)->json($necesidad);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
-    /**
-     * Reemplazar todas las necesidades de una reserva
-     */
-    public function sync(Request $req, Response $res): void
+    public function update(Request $req, Response $res, $args): void
     {
         try {
-            $data = $req->json();
-            $idReservaEspacio = (int)$req->param('id_reserva_espacio');
-
-            if (!isset($data['necesidades']) || !is_array($data['necesidades'])) {
-                $res->status(422)->json(['errors' => ['necesidades' => 'Debe ser un array']]);
-                return;
-            }
-
-            $this->service->sync($idReservaEspacio, $data['necesidades']);
-
-            $res->status(200)->json([], "Necesidades sincronizadas");
-
+            $id = is_array($args) ? (int)$args['id'] : (int)$args;
+            $data = $req->getBody();
+            $necesidad = $this->service->updateNecesidad($id, $data);
+            $res->status(200)->json($necesidad);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+    public function destroy(Request $req, Response $res, $id): Response
+    {
+        try {
+            $this->service->deleteNecesidad((int)$id);
+            return $res->status(204)->json([]);
+        } catch (Throwable $e) {
+            return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
         }
     }
 }
