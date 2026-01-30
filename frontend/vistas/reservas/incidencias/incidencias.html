@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const rol="admin"
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("incidencias", rol);
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+        <title>Incidencias - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Incidencias</h2>
+                <a href="verincidencias.html" id="btn-verincidencias"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-eye"></i> Ver incidencias
+                </button></a>
+            </div>
+            <div class="pt-4 row">
+                <div class="col-lg-6">
+                    <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
+
+                    <div class="mb-3 espacio">
+                        <input type="radio" name="tipo" id="espacio" checked>
+                        <label for="espacio" class="me-3">Espacio</label>
+                        <input type="radio" name="tipo" id="portatiles">
+                        <label for="portatiles">Portátiles</label>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-5 ubicacion">
+                            <label class="form-label" for="ubicacion">Ubicación</label>
+                            <select class="form-select" name="ubicacion" id="ubicacion">
+                                <option value="" selected disabled>Seleccionar ubicación</option>
+                                <option value="RAM">Edificio Ram</option>
+                                <option value="Loscos">Edificio Loscos</option>
+                                <option value="Redondo">Edificio Redondo</option>
+                                <option value="Roja">Pista Roja</option>
+                                <option value="Azul">Pista Azul</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 mt-4 mt-md-0 planta d-none">
+                            <label class="form-label" for="planta">Planta</label>
+                            <select class="form-select" name="planta" id="planta">
+                                <option value="" selected disabled>Seleccionar planta</option>
+                                <option value="Baja">Planta baja</option>
+                                <option value="Primera">Primera planta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-3 mt-md-0">
+                    <table class="rounded-1 overflow-hidden table-striped col-12" id="tablaincidencias">
+                        <tr>
+                            <td class="p-2 text-black">R1</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R2</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R3</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R4</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R5</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R6</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R7</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R8</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R9</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R10</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R11</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R12</td>
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-black">R13</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+        <footer id="footer"></footer>
+        <script>
+            const btnverincidencias = document.getElementById("btn-verincidencias");
+            if(rol!=="admin"){
+                btnverincidencias.classList.add("d-none");
+            }
+
+            const espacio = document.getElementById("espacio");
+            const ubicacion = document.getElementsByClassName("ubicacion")[0];
+            const selectubicacion = document.getElementById("ubicacion");
+            const planta = document.getElementsByClassName("planta")[0];
+            const selectplanta = document.getElementById("planta");
+
+            // Cuando se cambia cualquier radio
+            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+                radio.addEventListener("change", () => {
+                if (espacio.checked) {
+                    ubicacion.classList.remove("d-none");
+                    actualizarPlanta()
+                } else {
+                    ubicacion.classList.add("d-none");
+                    planta.classList.add("d-none");
+                    selectubicacion.value = "";
+                    selectplanta.value = "";
+                }
+                });
+            });
+
+            // Cuando cambia el primer select
+            function actualizarPlanta() {
+                if (selectubicacion.value === "RAM" || selectubicacion.value === "Loscos" || selectubicacion.value === "Redondo") {
+                    planta.classList.remove("d-none");
+                } else {
+                    planta.classList.add("d-none");
+                }
+            }
+
+            selectubicacion.addEventListener("change", actualizarPlanta);
+        </script>
+    </body>
+</html>
