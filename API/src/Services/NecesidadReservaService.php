@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Services;
 
-use Validation\Validator;
-use Validation\ValidationException;
 use Models\NecesidadReservaModel;
-use PDOException;
+use Validation\ValidationException;
 
 class NecesidadReservaService
 {
@@ -17,79 +15,42 @@ class NecesidadReservaService
         $this->model = new NecesidadReservaModel();
     }
 
-    /**
-     * Crear una nueva necesidad de reserva
-     */
-    public function create(array $data): array
+    public function getAllNecesidades(): array
     {
-        // Validar datos requeridos para la reserva
-        Validator::validate($data, [
-            'usuario_id'      => 'required|integer',
-            'fecha'           => 'required|date',
-            'hora'            => 'required|string', // Formato HH:MM
-            'cantidad_personas'=> 'required|integer|min:1',
-            'tipo_servicio'   => 'required|string|max:100'
-        ]);
-
-        try {
-            $id = $this->model->create([
-                'usuario_id'      => $data['usuario_id'],
-                'fecha'           => $data['fecha'],
-                'hora'            => $data['hora'],
-                'cantidad_personas'=> $data['cantidad_personas'],
-                'tipo_servicio'   => $data['tipo_servicio'],
-                'notas'           => $data['notas'] ?? null
-            ]);
-        } catch (PDOException $e) {
-            throw new \Exception("No se pudo crear la necesidad de reserva", 500);
-        }
-
-        return $this->model->findById((int)$id);
+        return $this->model->getAll();
     }
 
-    /**
-     * Obtener todas las necesidades de un usuario
-     */
-    public function getByUsuario(int $usuarioId): array
+    public function getNecesidadById(int $id): array
     {
-        try {
-            return $this->model->findByUsuario($usuarioId);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener necesidades de reserva", 500);
-        }
-    }
+        $necesidad = $this->model->findById($id);
 
-    /**
-     * Cancelar o eliminar una necesidad de reserva
-     */
-    public function delete(int $usuarioId, int $id): bool
-    {
-        try {
-            return $this->model->deleteByUsuario($usuarioId, $id);
-        } catch (PDOException $e) {
-            throw new \Exception("No se pudo eliminar la necesidad de reserva", 500);
-        }
-    }
-
-    public function update(int $id, array $data): array
-    {
-        Validator::validate($data, [
-            'fecha'           => 'required|date',       
-            'hora'            => 'required|string',
-            'cantidad_personas'=> 'required|integer|min:1',
-            'tipo_servicio'   => 'required|string|max:100',
-        ]);
-
-        try {
-            $updated = $this->model->update($id, $data);
-            if (!$updated) {
-                throw new \Exception("No se pudo actualizar la necesidad de reserva", 400);
-            }
-        } catch (PDOException $e) {
-            throw new \Exception("Error al actualizar la necesidad de reserva", 500);
+        if (!$necesidad) {
+            throw new ValidationException("Necesidad de reserva no encontrada");
         }
 
-        return $this->model->findById($id);
+        return $necesidad;
     }
 
+    public function createNecesidad(array $data): array
+    {
+        if (empty($data['id_reserva_espacio']) || empty($data['id_necesidad'])) {
+            throw new ValidationException("id_reserva_espacio y id_necesidad son obligatorios");
+        }
+
+        return $this->model->create($data);
+    }
+
+    public function updateNecesidad(int $id, array $data): array
+    {
+        if (empty($data['id_necesidad'])) {
+            throw new ValidationException("id_necesidad es obligatorio");
+        }
+
+        return $this->model->update($id, $data);
+    }
+
+    public function deleteNecesidad(int $id): void
+    {
+        $this->model->delete($id);
+    }
 }

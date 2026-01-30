@@ -41,7 +41,7 @@ class CaracteristicaService
         }
 
         if (!$caracteristica) {
-            throw new \Exception("Profesor no encontrado", 404);
+            throw new \Exception("Caracteristica no encontrada", 404);
         }
 
         return $caracteristica;
