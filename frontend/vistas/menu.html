@@ -2,49 +2,52 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
-        <!--
-        AÑADE:
-            <script src="/ALEX/frontend/javascript/includes.js"></script>
-            <script src="/ALEX/frontend/javascript/menu.js"></script>
-        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-        -->
         <script>
+            const rol="admin"
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("menu", "admin");
+                generarPagina("menu", rol);
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
         </script>
 
-
-        <title>Reservas - IES Bajo Aragón</title>
+        <title>Menú principal - IES Bajo Aragón</title>
     </head>
     <body>
-
         <div id="header"></div>
-
-        <main class="container-fluid menu row text-center">
-            <a href="reservas/aulas/aulas.html  " class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar aulas</a>
+        <main class="container-fluid menu row text-center mt-lg-5" id="mainmenu">
+            <a href="reservas/aulas/aulas.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar aulas</a>
             <a href="reservas/salondeactos/salondeactos.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar salón de actos</a>
             <a href="reservas/portatiles/portatiles.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar portátiles</a>
-            <a href="reservas/espacios/espacios.html" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Reservar otros espacios</a>
-            <a href="reservas/incidencias/incidencias.html" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Incidencias</a>
-            <a href="reservas/liberar/liberar.html" class="menu col-lg-3 mx-lg-5 mb-lg-0 p-5 fs-5">Liberar aula</a>
-
+            <a href="reservas/espacios/espacios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar otros espacios</a>
+            <a href="incidencias/verincidencias.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5" id="incidencias">Incidencias</a>
+            <a href="liberar/liberar.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Liberar aula</a>
             <!--Superadministrador-->
             <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
             <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-            <a href="administrador/menuadministrador.html" class="menuadministrador col-3 mt-5 mb-0 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
+            <a href="administrador/menuadministrador.html" class="menuadministrador col-3 mt-1 mb-5 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
             <a href="administrador/menuadministrador.html" class="menuadministrador d-lg-none p-5 fs-5 mb-3">Ir al menú de administrador</a>
         </main>
         <footer id="footer"></footer>
+        <script>
+            const incidencias = document.getElementById("incidencias");
+            const menuadministrador = document.getElementsByClassName("menuadministrador");
+            const main = document.getElementsByTagName("main")[0];
+            if(rol!=="admin"){
+                main.classList.add("mt-lg-5", "pt-lg-2");
+                incidencias.href="incidencias/incidencias.html";
+                for(let i = 0; i < menuadministrador.length; i++) {
+                    menuadministrador[i].classList.remove("d-lg-block");
+                    menuadministrador[i].classList.add("d-none");
+                }
+            }
+        </script>
     </body>
 </html>

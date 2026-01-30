@@ -1,132 +1,248 @@
-<?php
-    include_once "../../templates/header.php";
-?>
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Reservas - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main class="container mt-5">
+            <h2 class="text-center mb-4">Mis incidencias</h2>
+            <div class="row g-4">
+
+                <!-- Tarjeta -->
+                <div class="col-lg-3 col-6">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta resuelta"></div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta -->
+                <div class="col-lg-3 col-6">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta proceso"></div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="col-lg-3 col-6">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta proceso"></div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="col-lg-3 col-6">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta resuelta"></div>
+                    </div>
+                </div>
+                <!-- Tarjeta -->
+                <div class="col-lg-3 col-6">
+                    <div class="card h-100 reserva-card"
+                        role="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalincidencia"
+                        data-id="02">
+
+                        <div class="card-body bg-secondary-subtle">
+                            <h6 class="fw-bold">Incidencia #02</h6>
+                            <h6 class="fw-bold">Proyector no funciona</h6>
+                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
+                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
+                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
+                        </div>
+                        <div class="estado-incidencia-abierta"></div>
+                    </div>
+                </div>
+
+            </div>
+
+ <!-- MODAL incidencia -->
+<div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <form id="formincidencia" method="post" action="#">
+        <div class="modal-body">
+          <div class="row g-3">
+
+            <!-- ID -->
+            <div class="col-md-4">
+              <label class="form-label">ID</label>
+              <input type="number" class="form-control" id="incidencia_id" name="id" readonly>
+            </div>
+
+            <!-- Fecha -->
+            <div class="col-md-8">
+              <label class="form-label">Fecha</label>
+              <input type="datetime-local" class="form-control" id="incidencia_fecha" name="fecha">
+            </div>
+
+            <!-- Titulo -->
+            <div class="col-12">
+              <label class="form-label">Título</label>
+              <input type="text" class="form-control" id="incidencia_titulo" name="titulo">
+            </div>
+
+            <!-- Descripcion -->
+            <div class="col-12">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <!-- Usuario -->
+            <div class="col-md-6">
+              <label class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="incidencia_usuario" name="usuario">
+            </div>
+
+            <!-- Recurso -->
+            <div class="col-md-6">
+              <label class="form-label">Recurso</label>
+              <select class="form-select" id="incidencia_recurso" name="recurso">
+                <option value="">-- Selecciona --</option>
+                <option value="proyector">Proyector</option>
+                <option value="portatil">Portátil</option>
+                <option value="pantalla">Pantalla</option>
+                <option value="altavoces">Altavoces</option>
+                <option value="aula">Aula</option>
+              </select>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-md-6">
+              <label class="form-label">Estado</label>
+              <select class="form-select" id="incidencia_estado" name="estado">
+                <option value="abierta">Abierta</option>
+                <option value="en_proceso">En proceso</option>
+                <option value="resuelta">Resuelta</option>
+              </select>
+            </div>
+
+            <!-- Prioridad -->
+            <div class="col-md-6">
+              <label class="form-label">Prioridad</label>
+              <select class="form-select" id="incidencia_prioridad" name="prioridad">
+                <option value="baja">Baja</option>
+                <option value="media">Media</option>
+                <option value="alta">Alta</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- RELLENAR MODAL -->
 
 <script>
-    const menu = "menu";
-    const rol = "5";
-    generateHeaderNav(menu, rol);
+  const modalincidencia = document.getElementById('modalincidencia');
+
+  modalincidencia.addEventListener('show.bs.modal', function (event) {
+    const card = event.relatedTarget; // la tarjeta clicada
+
+    // leer data attributes
+    const id = card.getAttribute('data-id');
+    // rellenar formulario
+    document.getElementById('incidencia_id').value = id;
+  });
 </script>
 
-<main class="container mt-5">
-    <h2 class="text-center mb-4">Mis incidencias</h2>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center align-middle tabla-cabecera" id="tabla-incidencias">
 
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Espacio</th>
-                    <th>Fecha</th>
-                    <th class="d-none d-md-table-cell">Hora</th>
-                    <th class="d-none d-md-table-cell">Profesor</th>
-                    <th class="d-none d-md-table-cell">Grupo</th>
-                    <th class="d-none d-md-table-cell">Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
+        </main>
+        <footer id="footer"></footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    </body>
+    <!-- Bootstrap JS -->
 
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td class="espacio">R13</td>
-                    <td class="fecha">12/02/2026 08:30 - 12/02/2026 09:25</td>
-                    <td class="estado d-none d-md-table-cell">
-                        <span class="badge estadobadge">Confirmada</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-primary btn-ver"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalReserva">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
+</html>
 
-                <tr>
-                    <td>2</td>
-                    <td class="espacio">Salón de actos</td>
-                    <td class="fecha">13/02/2026</td>
-                    <td class="hora d-none d-md-table-cell">10:20 - 11:15</td>
-                    <td class="profesor d-none d-md-table-cell">María López</td>
-                    <td class="grupo d-none d-md-table-cell">1º Bachillerato</td>
-                    <td class="estado d-none d-md-table-cell">
-                        <span class="badge estadobadge">Pendiente</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-primary btn-ver"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalReserva">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>3</td>
-                    <td class="espacio">Salón de actos</td>
-                    <td class="fecha">13/02/2026</td>
-                    <td class="hora d-none d-md-table-cell">10:20 - 11:15</td>
-                    <td class="profesor d-none d-md-table-cell">María López</td>
-                    <td class="grupo d-none d-md-table-cell">1º Bachillerato</td>
-                    <td class="estado d-none d-md-table-cell">
-                        <span class="badge estadobadge">Cancelada</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-primary btn-ver"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalReserva">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- MODAL -->
-    <div class="modal fade" id="modalReserva" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detalle de la reserva</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <ul class="list-group">
-                        <li class="list-group-item"><strong>Espacio:</strong> <span id="mEspacio"></span></li>
-                        <li class="list-group-item"><strong>Fecha:</strong> <span id="mFecha"></span></li>
-                        <li class="list-group-item"><strong>Hora:</strong> <span id="mHora"></span></li>
-                        <li class="list-group-item"><strong>Profesor:</strong> <span id="mProfesor"></span></li>
-                        <li class="list-group-item"><strong>Grupo:</strong> <span id="mGrupo"></span></li>
-                        <li class="list-group-item"><strong>Estado:</strong> <span id="mEstado"></span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="mt-5 container-fluid text-end">
-        <a href="../menu.php" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
-    </div>
-</main>
-
-<?php
-    include '../../templates/footer.php';
-?>

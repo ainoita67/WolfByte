@@ -127,7 +127,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
+                    <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
                     <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
@@ -226,7 +226,7 @@ document.addEventListener('click', async (e) => {
     if (e.target && e.target.id === 'logoutBtn') {
         e.preventDefault();
         try {
-            const response = await fetch('http://192.168.13.202/API/ALEX/frontend/logout', {
+            const response = await fetch('http://192.168.13.202/API/frontend/logout', {
                 method: 'POST',           // tu API acepta POST
                 credentials: 'include',   // 🔑 permite enviar cookies de sesión
                 headers: {
