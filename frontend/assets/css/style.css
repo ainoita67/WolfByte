@@ -724,3 +724,10 @@ form.login{
     color: white;
     font-weight: 700;
 }
+
+.aside h6 {
+    color: #d1d1d1;
+    margin-top: 1em;
+    margin-bottom: .5em;
+    font-weight: 900;
+}
