@@ -58,9 +58,25 @@ $router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // ac
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
  
 
-// RESERVAS
-$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
+// Caracteristicas
 
+$router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
+$router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');
+$router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store');
+$router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
+$router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
+
+// Espacios
+
+$router->get('/espacios', 'Controllers\\EspacioController@index');
+$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
+$router->post('/espacios', 'Controllers\\EspacioController@store');
+
+// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
+// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
+// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
+// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
+// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
@@ -71,7 +87,6 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Espacios
 //Reservas de portatiles
 $router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
 $router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
