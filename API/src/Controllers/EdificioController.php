@@ -92,6 +92,23 @@ class EdificioController
      * DELETE /edificios/{id}
      * Elimina un edificio
      */
+<<<<<<< HEAD
+    public function destroy(Request $req, Response $res, $id): Response
+    {
+        try {
+            $this->service->deleteEdificio((int)$id);
+            return $res->status(204)->json([]);
+        } catch (Throwable $e) {
+            return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    /**
+     * PATCH
+     * 
+     */
+}
+=======
 public function destroy(Request $req, Response $res, $id): Response
 {
     try {
@@ -108,3 +125,4 @@ public function destroy(Request $req, Response $res, $id): Response
 
 
 }
+>>>>>>> origin/API
