@@ -25,7 +25,7 @@ class AuthController
         $userModel = new UsuarioModel();
         $user = $userModel->findByEmail($email);
 
-        if (!$user || $password !== $user['contrasena']) {
+        if (!$user || $password !== $user['password']) {
             $response->status(401)->json([], 'Credenciales incorrectas');
             return;
         }
