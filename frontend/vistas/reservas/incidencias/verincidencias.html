@@ -17,12 +17,17 @@
             document.head.appendChild(script1);
         </script>
 
-        <title>Incidencias - IES Bajo Aragón</title>
+        <title>Ver incidencias - IES Bajo Aragón</title>
     </head>
     <body>
         <div id="header"></div>
         <main class="container mt-5">
-            <h2 class="text-center mb-4">Incidencias</h2>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-center mb-4">Incidencias</h2>
+                <a href="incidencias.html"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-plus-circle"></i> Crear incidencia
+                </button></a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
                     <thead>
@@ -61,11 +66,12 @@
                     </tbody>
                 </table>
             </div>
-            <div class="divvolver container p-0 mt-5 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../../menu.html" class="volver rounded-pill p-2 px-3 ms-5 text-dark"><i class="bi bi-caret-left-fill"></i> Volver</a>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
-
+        <footer id="footer" class="m-5"></footer>
         <script>
             const espacio = document.getElementById("espacio");
             const ubicacion = document.getElementsByClassName("ubicacion")[0];
@@ -98,7 +104,6 @@
             }
 
             selectubicacion.addEventListener("change", actualizarPlanta);
-            </script>
-        <footer id="footer" class="m-5"></footer>
+        </script>
     </body>
 </html>

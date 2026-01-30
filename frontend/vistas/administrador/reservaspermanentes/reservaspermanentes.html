@@ -2,6 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>
             const script1 = document.createElement("script");
@@ -10,22 +11,16 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("admin", "admin");
+                    generarPagina("admin", "admin");
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
         </script>
 
-        <title>Portátiles - IES Bajo Aragón</title>
+        <title>Reservas permanentes - IES Bajo Aragón</title>
     </head>
     <body>
-        <div id="header"></div>
-        <script>
-            const menu = "admin";
-            const rol = "admin";
-            generarPagina(menu, rol);
-        </script>
         <div id="header"></div>
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -81,9 +76,9 @@
                 </table>
             </div>
 
-            <div class="mt-5 container-fluid text-end">
-				<a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
-			</div>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
         </main>
         <footer id="footer"></footer>
     </body>
