@@ -606,18 +606,16 @@ form.login{
     border-color: #2a457e;
     width: 260px; 
     min-height: 80vh;
-    border:#2a457eb6 solid 2px;
-    border-top-right-radius: 10px;
+    border-bottom:#2a457eb6 solid 2px;
+    border-right:#2a457eb6 solid 2px;
     border-bottom-right-radius: 10px;
 }
-#aside-admin ul li a {
+#aside-admin ul li a , #adminOffcanvas ul li a{
     color: #2a457e;
-    font-weight: 700;
+    font-weight: 600;
 }
 
-#aside-admin h6 {
-    color: #d1d1d1;
-    margin-top: 1em;
-    margin-bottom: .5em;
-    font-weight: 900;
+#aside-admin ul li a:hover , #adminOffcanvas ul li a:hover{
+    color: #0051ff;
+    font-weight: 700;
 }
