@@ -70,24 +70,6 @@ class EdificioController
      * Actualiza un edificio existente
      */
     public function update(Request $req, Response $res, $args): void
-<<<<<<< HEAD
-    {
-        try {
-            // El router pasa el ID como string
-            $id = is_array($args) ? (int)$args['id'] : (int)$args;
-
-            $data = $req->getBody();
-
-            $edificio = $this->service->updateEdificio($id, $data);
-
-            $res->status(200)->json($edificio);
-        } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-=======
 {
     try {
         // El router pasa el ID como string
@@ -105,7 +87,6 @@ class EdificioController
     }
 }
 
->>>>>>> origin/API
 
     /**
      * DELETE /edificios/{id}
@@ -132,11 +113,15 @@ public function destroy(Request $req, Response $res, $id): Response
 {
     try {
         $this->service->deleteEdificio((int)$id);
-        return $res->status(204)->json([]);
+        return $res->status(204); // 👈 sin JSON
     } catch (Throwable $e) {
-        return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        return $res->errorJson(
+            $e->getMessage(),
+            $e->getCode() ?: 500
+        );
     }
 }
+
 
 
 }
