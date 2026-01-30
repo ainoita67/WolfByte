@@ -1,179 +1,231 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
 
-        <script>const BASE = window.location.origin + "/frontend";</script>
-        <script>
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
-                    generarPagina("admin", "admin");
-                };
-                document.head.appendChild(script2);
+<head>
+    <meta charset="utf-8">
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+    <script>
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
+                generarPagina("menu", "admin");
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
+    <title>Reservas - IES Bajo Aragón</title>
+</head>
 
-        <title>Aulas y espacios - IES Bajo Aragón</title>
-    </head>
-    <body>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Gestión de Aulas y Espacios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear aula
-                </button>
-            </div>
+<body>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tipo</th>
-                            <th>Capacidad</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Aula 101</td>
-                            <td>Aula</td>
-                            <td>30</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
+    <div id="header"></div>
 
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Salón de actos</td>
-                            <td>Espacio</td>
-                            <td>200</td>
-                            <td>Ocupado</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
+    <main class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestión de Aulas y Espacios</h2>
+            <!-- Botón para abrir modal de Crear -->
+            <button type="button" class="btn btn-success text-white" data-bs-toggle="modal"
+                data-bs-target="#modalCrear">
+                <i class="bi bi-plus-circle"></i> Crear Aula
+            </button>
+        </div>
 
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Especial</th>
+                        <th>Edificio</th>
+                        <th>Nº Planta</th>
+                        <th>Acciones</th>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
-            </div>
-        </main>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>L-15</td>
+                        <td>Aula Loscos</td>
+                        <td>Aula</td>
+                        <td>No</td>
+                        <td>Loscos</td>
+                        <td>1º</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
+                                data-bs-target="#modalMostrar">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning text-white" data-bs-toggle="modal"
+                                data-bs-target="#modalEditar">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalEliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="modal fade" id="modalCrear" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="mt-5 container-fluid text-end">
+            <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
+        </div>
+        <!-- MODALES -->
+
+        <!-- Modal para Crear Aula/Espacio -->
+        <div class="modal fade" id="modalCrear" tabindex="-1" aria-labelledby="modalCrearLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crear aula/espacio</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="modalCrearLabel">
+                            <i class="bi bi-plus-circle me-2"></i>Crear Nuevo Aula/Espacio
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form id="formCrear">
                             <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control">
+                                <label for="nombre" class="form-label">Id</label>
+                                <input type="text" class="form-control" id="id" placeholder="Ej: R-20" required>
                             </div>
                             <div class="mb-3">
-                                <label>Tipo</label>
-                                <select class="form-control">
-                                <option>Aula</option>
-                                <option>Espacio</option>
-                                </select>
+                                <label for="nombre" class="form-label">Nombre/Descripcion</label>
+                                <input type="text" class="form-control" id="nombre" required>
                             </div>
+
                             <div class="mb-3">
-                                <label>Capacidad</label>
-                                <input type="number" class="form-control">
+                                <label for="capacidad" class="form-label">Nº Planta</label>
+                                <input type="number" class="form-control" id="numero_planta" min="1" max="500" required>
+                                <div class="form-text">Numero de planta</div>
                             </div>
+
                             <div class="mb-3">
-                                <label>Estado</label>
-                                <select class="form-control">
-                                <option>Disponible</option>
-                                <option>Ocupado</option>
-                                </select>
+                                <label for="nombre" class="form-label">Edificio</label>
+                                <input type="text" class="form-control" id="edificio" required>
                             </div>
-                            <button class="btn btn-success w-100">Guardar</button>
+
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción (opcional)</label>
+                                <textarea class="form-control" id="descripcion" rows="2"
+                                    placeholder="Breve descripción del espacio..."></textarea>
+                            </div>
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" onclick="crearAula()">
+                            <i class="bi bi-save me-1"></i>Guardar
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="modalEditar" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal para Editar Aula/Espacio -->
+        <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Editar aula/espacio</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title" id="modalEditarLabel">
+                            <i class="bi bi-pencil-square me-2"></i>Editar Aula/Espacio
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form id="formEditar">
                             <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" id="editNombre">
+                                <label for="editNombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="editNombre" placeholder="Ej: Aula 101"
+                                    required>
                             </div>
+
                             <div class="mb-3">
-                                <label>Tipo</label>
-                                <select class="form-control" id="editTipo">
-                                <option>Aula</option>
-                                <option>Espacio</option>
+                                <label for="editTipo" class="form-label">Tipo</label>
+                                <select class="form-select" id="editTipo" required>
+                                    <option value="aula">Aula</option>
+                                    <option value="laboratorio">Laboratorio</option>
+                                    <option value="sala">Sala de Conferencias</option>
+                                    <option value="gimnasio">Gimnasio</option>
+                                    <option value="auditorio">Auditorio</option>
                                 </select>
                             </div>
+
                             <div class="mb-3">
-                                <label>Capacidad</label>
-                                <input type="number" class="form-control" id="editCapacidad">
+                                <label for="editCapacidad" class="form-label">Capacidad</label>
+                                <input type="number" class="form-control" id="editCapacidad" min="1" max="500" required>
                             </div>
+
                             <div class="mb-3">
-                                <label>Estado</label>
-                                <select class="form-control" id="editEstado">
-                                <option>Disponible</option>
-                                <option>Ocupado</option>
+                                <label for="editEstado" class="form-label">Estado</label>
+                                <select class="form-select" id="editEstado" required>
+                                    <option value="disponible">Disponible</option>
+                                    <option value="ocupado">Ocupado</option>
+                                    <option value="mantenimiento">En Mantenimiento</option>
                                 </select>
                             </div>
-                            <button class="btn btn-primary w-100">Guardar cambios</button>
+
+                            <div class="mb-3">
+                                <label for="editDescripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="editDescripcion" rows="2"></textarea>
+                            </div>
                         </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-warning text-white" onclick="guardarEdicion()">
+                            <i class="bi bi-save me-1"></i>Guardar Cambios
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+        <!-- Modal para Eliminar Aula/Espacio -->
+        <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="modalEliminarLabel">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-trash text-danger fs-1"></i>
+                        </div>
+                        <p class="mb-0">¿Está seguro de eliminar este aula/espacio?</p>
+                        <p class="text-muted small">Esta acción no se puede deshacer.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" onclick="eliminarAula()">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+</body>
 
-        <script>
-            document.querySelectorAll(".btn-editar").forEach(boton => {
-                boton.addEventListener("click", function () {
-                    const fila = this.closest("tr");
-                    const celdas = fila.querySelectorAll("td");
-
-                    document.getElementById("editNombre").value = celdas[0].textContent.trim();
-                    document.getElementById("editTipo").value = celdas[1].textContent.trim();
-                    document.getElementById("editCapacidad").value = celdas[2].textContent.trim();
-                    document.getElementById("editEstado").value = celdas[3].textContent.trim();
-                });
-            });
-        </script>
-        <footer id="footer"></footer>
-    </body>
 </html>

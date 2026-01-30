@@ -16,7 +16,7 @@ body{
     top: 0 !important;
     position: fixed !important;
     width: 100%;
-    z-index: 1030 !important; /* Bootstrap modal default es 1050 */
+    z-index: 1030;
 }
 
 header{
@@ -559,12 +559,6 @@ form.login{
     border-radius: 25px !important;
     box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
-
-
-
-
-
-/*ESTILOS MIS RESERVAS*/
 
 .reserva-card {
     border-radius: 12px;
