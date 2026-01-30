@@ -30,7 +30,7 @@
 
     <!-- CABECERA -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 id="reservaTitulo">Reserva de aula</h2>
+        <h2 id="reservaTitulo">Reserva de salon de actos</h2>
     </div>
 
     <!-- FORMULARIO -->
@@ -41,16 +41,22 @@
 
                 <div class="row g-3">
 
-                    <!-- Aula -->
+                    <!-- Inicio -->
                     <div class="col-md-6">
-                        <label class="form-label">Aula</label>
-                        <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
+                        <label class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
                     </div>
 
-                    <!-- Asignatura -->
+                    <!-- Fin -->
                     <div class="col-md-6">
-                        <label class="form-label">Asignatura</label>
-                        <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
+                        <label class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+                    </div>
+
+                    <!-- Actividad -->
+                    <div class="col-md-6">
+                        <label class="form-label">Actividad</label>
+                        <input type="text" class="form-control" id="reserva_asignatura" name="actividad">
                     </div>
 
                     <!-- Grupo -->
@@ -65,16 +71,16 @@
                         <input type="text" class="form-control" id="reserva_profesor" name="profesor">
                     </div>
 
-                    <!-- Inicio -->
+                    <!-- Necesidades -->
                     <div class="col-md-6">
-                        <label class="form-label">Inicio</label>
-                        <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
-                    </div>
-
-                    <!-- Fin -->
-                    <div class="col-md-6">
-                        <label class="form-label">Fin</label>
-                        <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+                        <label class="form-label">Necesidades</label>
+                        <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="2">
+                        <option value="proyector">Proyector</option>
+                        <option value="altavoces">Altavoces</option>
+                        <option value="microfono">Micrófono</option>
+                        <option value="pizarra_digital">Pizarra digital</option>
+                        </select>
+                        <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
                     </div>
 
                     <!-- Observaciones -->
@@ -87,19 +93,14 @@
             </div>
 
             <!-- FOOTER -->
-            <div class="card-footer text-end">
+            <div class="card-footer d-flex justify-content-end gap-3 pt-3">
                 <button type="submit" class="btn btn-primary">
                     Guardar cambios
                 </button>
             </div>
-        </div>
+
 
     </form>
-        <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-            <a href="vistasemanal.html" class="bg-azul rounded-pill p-2 px-3 text-light">
-                <i class="bi bi-caret-left-fill"></i> Volver
-            </a>
-        </div>
 </main>
 
 <footer id="footer"></footer>
