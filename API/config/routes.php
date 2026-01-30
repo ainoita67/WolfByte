@@ -62,15 +62,13 @@ $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); /
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
 // Caracteristicas
-<<<<<<< HEAD
 // RESERVAS
-$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
-
-$router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
-$router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');
-$router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store');
-$router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
-$router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
+$router->get('/mis-reservas','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
+$router->get('/reservas','Controllers\\ReservaController@index'); // Devuelve todas las reservas (para admin o listado general)
+$router->get('/reservas/{id}','Controllers\\ReservaController@show'); // Devuelve los detalles de una reserva específica por ID
+$router->post('/reservas','Controllers\\ReservaController@store'); // Crea una nueva reserva
+$router->put('/reservas/{id}','Controllers\\ReservaController@update'); // Actualiza una reserva existente por ID
+$router->delete('/reservas/{id}','Controllers\\ReservaController@destroy'); // Elimina una reserva por ID
 
 // Espacios
 //Reservas de portatiles
@@ -105,6 +103,3 @@ $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaControlle
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
-=======
-// AULAS
->>>>>>> origin/API
