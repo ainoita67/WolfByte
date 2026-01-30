@@ -25,7 +25,7 @@ class AuthController
         $userModel = new UsuarioModel();
         $user = $userModel->findByEmail($email);
 
-        if (!$user || $password !== $user['contrasena']) {
+        if (!$user || $password !== $user['password']) {
             $response->status(401)->json([], 'Credenciales incorrectas');
             return;
         }
@@ -34,7 +34,9 @@ class AuthController
             'iat' => time(),
             'exp' => time() + JWT_EXPIRE,
             'sub' => $user['id_usuario'],
-            'rol' => $user['id_rol']
+            'rol' => $user['id_rol'],
+            'nombre' => $user['nombre'],
+            'email' => $user['correo']
         ];
 
         $token = JWT::encode($payload, JWT_SECRET, 'HS256');

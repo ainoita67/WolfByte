@@ -51,18 +51,19 @@ $router->put('/reservas-necesidades/{id_reserva_espacio}/necesidades', 'Controll
 $router->delete('/reservas-necesidades/{id_reserva_espacio}/necesidades/{id_necesidad}', 'Controllers\\NecesidadReservaController@destroy');
 
 // EDIFICIOS
-$router->get('/edificios', 'Controllers\\EdificioController@index');
-$router->get('/edificios/{id}', 'Controllers\\EdificioController@show');
-$router->post('/edificios', 'Controllers\\EdificioController@store');
-$router->put('/edificios/{id}', 'Controllers\\EdificioController@update');
-$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy');
+$router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
+$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
+$router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
+$router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
+$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
+ 
 
-
-// AULAS
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
-// Caracteristicas
+
+// RESERVAS
+$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
 $router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
 $router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');
@@ -71,6 +72,10 @@ $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@upd
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
 // Espacios
+//Reservas de portatiles
+$router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
+$router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
+$router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
 
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
@@ -81,3 +86,22 @@ $router->post('/espacios', 'Controllers\\EspacioController@store');
 // $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
 // $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 // $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
+
+
+// RESERVAS PERMANENTES
+$router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
+$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
+$router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@updateActivar'); //activar o desactivar una reserva permanente
+$router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
+$router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
+$router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
+
+
+// NECESIDAD RESERVA
+$router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');
+$router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
+$router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
+$router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
+$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+

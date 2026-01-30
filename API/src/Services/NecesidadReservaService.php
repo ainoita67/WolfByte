@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Services;
 
-use Validation\Validator;
-use Validation\ValidationException;
 use Models\NecesidadReservaModel;
-use PDOException;
+use Validation\ValidationException;
 
 class NecesidadReservaService
 {
@@ -17,97 +15,42 @@ class NecesidadReservaService
         $this->model = new NecesidadReservaModel();
     }
 
-    /**
-     * Asignar una necesidad a una reserva-espacio
-     */
-    public function create(int $idReservaEspacio, int $idNecesidad): array
+    public function getAllNecesidades(): array
     {
-        try {
-            $this->model->create([
-                'id_reserva_espacio' => $idReservaEspacio,
-                'id_necesidad'       => $idNecesidad
-            ]);
-        } catch (PDOException $e) {
-            throw new \Exception("No se pudo asignar la necesidad", 500);
-        }
-
-        return $this->model->findOne($idReservaEspacio, $idNecesidad);
+        return $this->model->getAll();
     }
 
-    /**
-     * Obtener necesidades de una reserva
-     */
-    public function getByReserva(int $idReserva): array
+    public function getNecesidadById(int $id): array
     {
-        try {
-            return $this->model->findByReserva($idReserva);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener necesidades de la reserva", 500);
+        $necesidad = $this->model->findById($id);
+
+        if (!$necesidad) {
+            throw new ValidationException("Necesidad de reserva no encontrada");
         }
+
+        return $necesidad;
     }
 
-    /**
-     * Obtener una relación específica
-     */
-    public function getOne(int $idReservaEspacio, int $idNecesidad): ?array
+    public function createNecesidad(array $data): array
     {
-        try {
-            return $this->model->findOne($idReservaEspacio, $idNecesidad);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener la relación", 500);
+        if (empty($data['id_reserva_espacio']) || empty($data['id_necesidad'])) {
+            throw new ValidationException("id_reserva_espacio y id_necesidad son obligatorios");
         }
+
+        return $this->model->create($data);
     }
 
-    /**
-     * Cambiar una necesidad por otra
-     */
-    public function update(int $idReservaEspacio, int $idNecesidadActual, int $idNecesidadNueva): array
+    public function updateNecesidad(int $id, array $data): array
     {
-        try {
-            $ok = $this->model->update(
-                $idReservaEspacio,
-                $idNecesidadActual,
-                $idNecesidadNueva
-            );
-
-            if (!$ok) {
-                throw new \Exception("No se pudo actualizar la necesidad", 400);
-            }
-        } catch (PDOException $e) {
-            throw new \Exception("Error al actualizar la necesidad", 500);
+        if (empty($data['id_necesidad'])) {
+            throw new ValidationException("id_necesidad es obligatorio");
         }
 
-        return $this->model->findOne($idReservaEspacio, $idNecesidadNueva);
+        return $this->model->update($id, $data);
     }
 
-    /**
-     * Quitar una necesidad de una reserva
-     */
-    public function delete(int $idReservaEspacio, int $idNecesidad): bool
+    public function deleteNecesidad(int $id): void
     {
-        try {
-            return $this->model->delete($idReservaEspacio, $idNecesidad);
-        } catch (PDOException $e) {
-            throw new \Exception("No se pudo eliminar la necesidad", 500);
-        }
-    }
-
-    /**
-     * Reemplazar todas las necesidades de una reserva
-     */
-    public function sync(int $idReservaEspacio, array $necesidades): void
-    {
-        try {
-            $this->model->deleteAllByReservaEspacio($idReservaEspacio);
-
-            foreach ($necesidades as $idNecesidad) {
-                $this->model->create([
-                    'id_reserva_espacio' => $idReservaEspacio,
-                    'id_necesidad'       => (int)$idNecesidad
-                ]);
-            }
-        } catch (PDOException $e) {
-            throw new \Exception("No se pudieron sincronizar las necesidades", 500);
-        }
+        $this->model->delete($id);
     }
 }
