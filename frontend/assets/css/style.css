@@ -461,100 +461,6 @@ table tbody tr:hover{
 }
 
 
-
-
-
-/*ESTILOS PERFIL*/
-
-#tabla-reservas{
-    width: 100%;
-    background-color: white;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-#tabla-reservas thead{
-    background-color: #274C9C !important;
-    color: #ffffff !important;
-}
-
-#tabla-reservas thead th{
-    background-color: #274C9C;
-    color: #ffffff;
-    border: none;
-}
-
-#tabla-reservas tbody tr{
-    background-color: #7A8A06;
-    transition: background-color 0.3s ease;
-}
-
-#tabla-reservas tbody tr:nth-child(even){
-    background-color: #d9efe7;
-}
-
-#tabla-reservas tbody tr:hover{
-    background-color: #90a300;
-}
-
-#tabla-reservas td{
-    padding: 12px;
-    vertical-align: middle;
-    border-color: #d0d0d0;
-}
-
-#tabla-reservas .badge{
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-weight: 500;
-}   
-
-#tabla-reservas .btn{
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-}
-
-#tabla-reservas .btn:hover{
-    opacity: 0.85;
-}
-
-div.card{
-    border: 1px solid white !important;
-    border-radius: 25px !important;
-    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
-}
-
-.estadobadge{
-    font-size: 0.85em !important;
-    padding: 4% 5.75%;
-    display: inline-block;
-}
-
-.estadobadge.confirmada{
-    background-color: #007E33;
-    color: white;
-    border: 1px solid #007E33 !important;
-}
-
-.estadobadge.pendiente{
-    background-color: #FFBB33;
-    color: black;
-    border: 1px solid #FFBB33 !important;
-}
-
-.estadobadge.cancelada{
-    font-weight: 700 !important;
-    background-color: #CC0000;
-    color: white;
-    border: 1px solid #CC0000 !important;
-}
-
-
-
-
-
 /*LOGIN*/
 
 main.login{
@@ -569,9 +475,6 @@ form.login{
     border-radius: 25px !important;
     box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
 }
-
-
-
 
 
 /* USUARIO */
@@ -631,98 +534,6 @@ form.login{
 
 
 
-
-/*ESTILOS PERFIL*/
-
-#tabla-reservas{
-    width: 100%;
-    background-color: white;
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-#tabla-reservas thead{
-    background-color: #274C9C !important;
-    color: #ffffff !important;
-}
-
-#tabla-reservas thead th{
-    background-color: #274C9C;
-    color: #ffffff;
-    border: none;
-}
-
-#tabla-reservas tbody tr{
-    background-color: #7A8A06;
-    transition: background-color 0.3s ease;
-}
-
-#tabla-reservas tbody tr:nth-child(even){
-    background-color: #d9efe7;
-}
-
-#tabla-reservas tbody tr:hover{
-    background-color: #90a300;
-}
-
-#tabla-reservas td{
-    padding: 12px;
-    vertical-align: middle;
-    border-color: #d0d0d0;
-}
-
-#tabla-reservas .badge{
-    padding: 8px 12px;
-    border-radius: 20px;
-    font-weight: 500;
-}   
-
-#tabla-reservas .btn{
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-}
-
-#tabla-reservas .btn:hover{
-    opacity: 0.85;
-}
-
-div.card{
-    border: 1px solid white !important;
-    border-radius: 25px !important;
-    box-shadow: 3.5px 3.5px 15px 3.5px rgba(0, 0, 0, 0.25);
-}
-
-.estadobadge{
-    font-size: 0.85em !important;
-    padding: 4% 5.75%;
-    display: inline-block;
-}
-
-.estadobadge.confirmada{
-    background-color: #007E33;
-    color: white;
-    border: 1px solid #007E33 !important;
-}
-
-.estadobadge.pendiente{
-    background-color: #FFBB33;
-    color: black;
-    border: 1px solid #FFBB33 !important;
-}
-
-.estadobadge.cancelada{
-    font-weight: 700 !important;
-    background-color: #CC0000;
-    color: white;
-    border: 1px solid #CC0000 !important;
-}
-
-
-
-
-
 /*LOGIN*/
 
 main.login{
@@ -739,48 +550,6 @@ form.login{
 }
 
 
-
-
-
-/*MODAL*/
-/* Animación de entrada */
-@keyframes slideDown{
-  from{ transform: translateY(-50px); opacity: 0; }
-  to{ transform: translateY(0); opacity: 1; }
-}
-
-/* Responsive */
-@media (max-width: 768px){
-  .modal-dialog{
-    max-width: 95%;
-  }
-  .modal-header h2{
-    font-size: 1.25rem;
-  }
-}
-
-.reserva-card{
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-}
-
-.reserva-body{
-    padding: 16px;
-}
-
-.reserva-estado{
-    height: 15px;
-    width: 100%;
-}
-
-.estado-verde{
-    background: #28a745;
-}
-
-.estado-rojo{
-    background: #dc3545;
-}
 
 
 /*ESTILOS MIS RESERVAS*/
@@ -833,17 +602,20 @@ form.login{
 }
 
 /* MENU ADMINISTRADOR */
-.aside {
-    background-color: #2a457e;
-    height: 50vh;
-    border-bottom-right-radius: .375rem;
+#aside-admin {
+    border-color: #2a457e;
+    width: 260px; 
+    min-height: 80vh;
+    border:#2a457eb6 solid 2px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
-.aside h5, .aside ul li a {
-    color: white;
+#aside-admin ul li a {
+    color: #2a457e;
     font-weight: 700;
 }
 
-.aside h6 {
+#aside-admin h6 {
     color: #d1d1d1;
     margin-top: 1em;
     margin-bottom: .5em;
