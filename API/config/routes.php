@@ -27,6 +27,10 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 // $router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por id
 // $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por id
 
+// ROL
+$router->get('/rol',               'Controllers\\RolController@index'); // Se reciben los datos de los usuarios activos para listarlos
+
+
 // USUARIOS
 $router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios activos para listarlos
 $router->get('/user/inactivos',     'Controllers\\UsuarioController@indexin'); // Se reciben los datos de los usuarios inactivos para listarlos

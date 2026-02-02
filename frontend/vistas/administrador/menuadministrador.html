@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
-        <script>const BASE = window.location.origin + "/frontend";</script>
-        <!--
-        AÑADE:
-            <script src="/ALEX/frontend/javascript/includes.js"></script>
-            <script src="/ALEX/frontend/javascript/menu.js"></script>
-        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-        -->
-        <script>
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
-                generarPagina("menu", "admin");
-                };
-                document.head.appendChild(script2);
+<head>
+    <meta charset="utf-8">
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <!--
+    AÑADE:
+        <script src="/ALEX/frontend/javascript/includes.js"></script>
+        <script src="/ALEX/frontend/javascript/menu.js"></script>
+    QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+    -->
+    <script>
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
+            generarPagina("menu", "admin");
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
 
 
-        <title>Reservas - IES Bajo Aragón</title>
-    </head>
-    <body>
+    <title>Reservas - IES Bajo Aragón</title>
+</head>
+<body>
 
-        <div id="header"></div>
+    <div id="header"></div>
 <main class="container-fluid p-0">
     <div class="d-flex">
 <!-- ASIDE (desktop fijo) -->
