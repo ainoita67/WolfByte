@@ -86,6 +86,13 @@ $router->post('/espacios', 'Controllers\\EspacioController@store');
 // $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 // $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
+// RESERVAS ESPACIOS
+$router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); // Devuelve todas las reservas de tipo “espacio”
+$router->get('/mis-reservas-espacio','Controllers\\ReservaEspacioController@misReservas'); // Devuelve todas las reservas de espacio de un usuario autenticado
+$router->post('/reservaEspacio','Controllers\\ReservaEspacioController@store'); // Añade una nueva reserva de un espacio
+$router->get('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@show'); // Devuelve las reservas de un espacio específico por ID de espacio
+$router->put('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@update'); // Cambia los datos de una reserva de espacio (comprobar disponibilidad)
+$router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cambiarFechas'); // Cambia el rango de fechas de una reserva de espacio (comprobar disponibilidad)
 
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
