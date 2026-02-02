@@ -1,13 +1,10 @@
-// URL de tu API
-const API_URL = "http://192.168.13.202/IKER";
-
 
 // USUARIOS
 //$router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios para listarlos
 
 async function getUsuarios() {
     try {
-        const response = await fetch(`${API_URL}/user`);
+        const response = await fetch(`${API}/user`);
         if (!response.ok) throw new Error('Error al obtener usuarios');
 
         const json = await response.json();
@@ -28,7 +25,6 @@ async function getUsuarios() {
             rol: obtenerNombreRol(u.id_rol)
         }));
 
-        console.log("usuarios filtrados y mapeados", usuarios);
         return usuarios;
     } catch (error) {
         console.error(error);
@@ -38,9 +34,10 @@ async function getUsuarios() {
 
 function obtenerNombreRol(idRol) {
     switch (idRol) {
-        case 1: return "Comun";
-        case 2: return "Administrador";
-        case 3: return "Superadministrador";
+        case 10: return "Extraescolar";
+        case 20: return "Común";
+        case 30: return "Admin";
+        case 40: return "Superadmin";
         default: return "Desconocido";
     }
 }

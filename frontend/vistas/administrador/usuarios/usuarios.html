@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
   <script>const BASE = window.location.origin + "/frontend";</script>
+  <script>const API = window.location.origin + "/API";</script>
   <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
@@ -24,7 +25,7 @@
     };
     document.head.appendChild(script1);
   </script>
-
+  <script src="/frontend/javascript/gestion_usuarios/get.js"></script>
 
   <title>Reservas - IES Bajo Aragón</title>
 </head>
@@ -256,36 +257,66 @@
 
 
   function imprimirUsuariosEnTabla(usuarios) {
-    const tbody = document.getElementById("usuariosTableBody");
-    tbody.innerHTML = ""; // Limpiar tabla
+  const tbody = document.getElementById("usuariosTableBody");
 
-    if (!Array.isArray(usuarios)) {
-      console.error("Usuarios no es un array", usuarios);
-      return;
-    }
+  // Limpiar tabla
+  tbody.innerHTML = "";
 
-    usuarios.forEach(usuario => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-            <td>${usuario.id_usuario}</td>
-            <td>${usuario.nombre}</td>
-            <td>
-                <span class="badge estado border rounded-pill ${usuario.rol}">
-                    ${usuario.rol}
-                </span>
-            </td>
-            <td>${usuario.correo}</td>
-            <td>
-                <button type="button" class="open-modal btn btn-primary bg-verde text-white" data-open="modalEditar">
-                    <i class="bi bi-pencil-square"></i> Editar
-                </button>
-            </td>
-        `;
-
-      tbody.appendChild(tr);
-    });
+  // Validación básica
+  if (!Array.isArray(usuarios)) {
+    console.error("imprimirUsuariosEnTabla: usuarios no es un array", usuarios);
+    return;
   }
+
+  // Si no hay usuarios
+  if (usuarios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-muted py-4">
+          No hay usuarios activos para mostrar
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  // Pintar filas
+  usuarios.forEach(usuario => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${usuario.id_usuario}</td>
+      <td>${usuario.nombre}</td>
+      <td>${usuario.rol}</td>
+      <td>${usuario.correo}</td>
+      <td class="text-center">
+        <div class="d-flex gap-1 justify-content-center">
+          <button
+            type="button"
+            class="open-modal btn btn-sm btn-success text-white btn-editar-usuario"
+            data-open="modalEditar"
+            data-id="${usuario.id_usuario}"
+            title="Editar"
+          >
+            <i class="bi bi-pencil-square"></i>
+          </button>
+
+          <button
+            type="button"
+            class="open-modal btn btn-sm btn-danger text-white btn-eliminar-usuario"
+            data-open="modalEliminar"
+            data-id="${usuario.id_usuario}"
+            title="Eliminar"
+          >
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+}
 
 
   const openEls = document.querySelectorAll("[data-open]");
