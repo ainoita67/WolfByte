@@ -334,41 +334,40 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
-        document.querySelectorAll(".btn-editar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                const fila = this.closest("tr");
-                const celdas = fila.querySelectorAll("td");
+            document.querySelectorAll(".btn-editar").forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const fila = this.closest("tr");
+                    const celdas = fila.querySelectorAll("td");
 
-                document.getElementById("editId").value = this.dataset.id;
-                document.getElementById("editCarro").value = this.dataset.carro;
-                document.getElementById("editEdificio").value = this.dataset.edificio;
-                document.getElementById("editPlanta").value = this.dataset.planta;
-                document.getElementById("editUnidades").value = this.dataset.unidades;
+                    document.getElementById("editId").value = this.dataset.id;
+                    document.getElementById("editCarro").value = this.dataset.carro;
+                    document.getElementById("editEdificio").value = this.dataset.edificio;
+                    document.getElementById("editPlanta").value = this.dataset.planta;
+                    document.getElementById("editUnidades").value = this.dataset.unidades;
+                });
             });
-        });
-        document.querySelectorAll(".btn-eliminar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                const fila = this.closest("tr");
-                const celdas = fila.querySelectorAll("td");
+            document.querySelectorAll(".btn-eliminar").forEach(boton => {
+                boton.addEventListener("click", function () {
+                    const fila = this.closest("tr");
+                    const celdas = fila.querySelectorAll("td");
 
-                document.getElementById("deleteId").value = this.dataset.id;
-                document.getElementById("deleteCarro").value = this.dataset.carro;
-                document.getElementById("deleteEdificio").value = this.dataset.edificio;
-                document.getElementById("deletePlanta").value = this.dataset.planta;
-                document.getElementById("deleteUnidades").value = this.dataset.unidades;
+                    document.getElementById("deleteId").value = this.dataset.id;
+                    document.getElementById("deleteCarro").value = this.dataset.carro;
+                    document.getElementById("deleteEdificio").value = this.dataset.edificio;
+                    document.getElementById("deletePlanta").value = this.dataset.planta;
+                    document.getElementById("deleteUnidades").value = this.dataset.unidades;
+                });
             });
-        });
-        document.querySelectorAll(".btn-mostrar").forEach(boton => {
-            boton.addEventListener("click", function () {
-                document.getElementById("mostrarCarro").textContent = this.dataset.carro;
-                document.getElementById("mostrarEdificio").textContent = this.dataset.edificio;
-                document.getElementById("mostrarPlanta").textContent = this.dataset.planta;
-                document.getElementById("mostrarUnidades").textContent = this.dataset.unidades;
-                document.getElementById("mostrarEstado").textContent = this.dataset.estado;
+            document.querySelectorAll(".btn-mostrar").forEach(boton => {
+                boton.addEventListener("click", function () {
+                    document.getElementById("mostrarCarro").textContent = this.dataset.carro;
+                    document.getElementById("mostrarEdificio").textContent = this.dataset.edificio;
+                    document.getElementById("mostrarPlanta").textContent = this.dataset.planta;
+                    document.getElementById("mostrarUnidades").textContent = this.dataset.unidades;
+                    document.getElementById("mostrarEstado").textContent = this.dataset.estado;
+                });
             });
-        });
         </script>
-
         <footer id="footer"></footer>
     </body>
 </html>

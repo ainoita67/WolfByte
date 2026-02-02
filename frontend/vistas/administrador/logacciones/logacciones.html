@@ -2,7 +2,6 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>
             const script1 = document.createElement("script");
@@ -25,51 +24,58 @@
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Log de acciones</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear material
+                <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+                    <i class="bi bi-filter"></i> Filtrar
                 </button>
             </div>
-<!-- Textos completos
-	id_log 	fecha 	id_tipo_log 	id_usuario 	id_incidencia 	id_reserva 	id_recurso 	id_reserva_permanente 	id_liberacion_puntual 	id_usuario_actor 	 -->
             <div class="table-responsive">
                 <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Unidades</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th class="d-none d-md-table-cell">ID</th>
+                            <th class="d-none d-md-table-cell">Fecha</th>
+                            <th>Tipo de log</th>
+                            <th>Acción realizada</th>
+                            <th>Usuario actor</th>
+                            <th class="d-md-none">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Proyector Epson</td>
-                            <td>Proyectores</td>
-                            <td>5</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
+                            <td class="d-none d-md-table-cell">1</td>
+                            <td class="d-none d-md-table-cell">2024-05-15 10:30:00</td>
+                            <td>Creación</td>
+                            <td>Incidencia 1</td>
+                            <td>Usuario 1</td>
+                            <td class="d-md-none">
+                                <button class="btn btn-primary btn-sm btn-mostrar d-md-none"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalMostrar"
+                                    data-id="1"
+                                    data-fecha="2024-05-15 10:30:00"
+                                    data-tipolog="Creación"
+                                    data-accionrealizada="Incidencia 1"
+                                    data-usuarioactor="Usuario 1">
+                                    <i class="bi bi-eye"></i>
                                 </button>
                             </td>
                         </tr>
                         <tr>
-                            <td>Portátil HP</td>
-                            <td>Ordenadores</td>
-                            <td>10</td>
-                            <td>En uso</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
+                            <td class="d-none d-md-table-cell">2</td>
+                            <td class="d-none d-md-table-cell">2024-05-15 11:00:00</td>
+                            <td>Edición</td>
+                            <td>Recurso 2</td>
+                            <td>Usuario 2</td>
+                            <td class="d-md-none">
+                                <button class="btn btn-primary btn-sm btn-mostrar d-md-none"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalMostrar"
+                                    data-id="2"
+                                    data-fecha="2024-05-15 11:00:00"
+                                    data-tipolog="Edición"
+                                    data-accionrealizada="Recurso 2"
+                                    data-usuarioactor="Usuario 2">
+                                    <i class="bi bi-eye"></i>
                                 </button>
                             </td>
                         </tr>
@@ -82,95 +88,85 @@
             </div>
         </main>
 
-        <!-- Modal Crear -->
-        <div class="modal fade" id="modalCrear" tabindex="-1">
-            <div class="modal-dialog">
+        <!--Modal filtrar-->
+        <div class="modal fade" id="modalFiltrar" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Crear material</h5>
+                        <h5 class="modal-title"><i class="bi bi-filter me-2"></i>Filtrar acciones</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control">
+                    <form id="formFiltrarAcciones" class="px-3">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label" for="f_fecha">Fecha</label>
+                                    <input type="datetime-local" class="form-control" id="f_fecha">
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label class="form-label" for="f_tipolog">Tipo de log</label>
+                                    <select class="form-select" id="f_tipolog">
+                                        <option value="">Todos</option>
+                                        <option value="creacion">Creación</option>
+                                        <option value="edicion">Edición</option>
+                                        <option value="eliminacion">Eliminación</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label class="form-label" for="f_usuarioactor">Usuario actor</label>
+                                    <select class="form-select" id="f_usuarioactor">
+                                        <option value="">Todos</option>
+                                        <option value="usuario1">Usuario 1</option>
+                                        <option value="usuario2">Usuario 2</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label>Categoría</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Unidades</label>
-                                <input type="number" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label>Estado</label>
-                                <select class="form-control">
-                                    <option>Disponible</option>
-                                    <option>En uso</option>
-                                    <option>Averiado</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-success w-100">Guardar</button>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                            <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
+                            <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Editar -->
-        <div class="modal fade" id="modalEditar" tabindex="-1">
-            <div class="modal-dialog">
+        <!-- Modal Mostrar -->
+        <div class="modal fade" id="modalMostrar" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Editar material</h5>
+                        <h5 class="modal-title">Mostrar acción</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" id="editNombre">
+                    <form>
+                        <div class="modal-body p-3 px-4">
+                                <p class="fw-bold">ID: <span class="fw-light" id="mostrarId"></span></p>
+                                <p class="fw-bold">Fecha: <span class="fw-light" id="mostrarFecha"></span></p>
+                                <p class="fw-bold">Tipo de log: <span class="fw-light" id="mostrarTipoLog"></span></p>
+                                <p class="fw-bold">Acción realizada: <span class="fw-light" id="mostrarAccionRealizada"></span></p>
+                                <p class="fw-bold">Usuario actor: <span class="fw-light" id="mostrarUsuarioActor"></span></p>
                             </div>
-                            <div class="mb-3">
-                                <label>Categoría</label>
-                                <input type="text" class="form-control" id="editCategoria">
-                            </div>
-                            <div class="mb-3">
-                                <label>Unidades</label>
-                                <input type="number" class="form-control" id="editUnidades">
-                            </div>
-                            <div class="mb-3">
-                                <label>Estado</label>
-                                <select class="form-control" id="editEstado">
-                                    <option>Disponible</option>
-                                    <option>En uso</option>
-                                    <option>Averiado</option>
-                                </select>
-                            </div>
-                            <button class="btn btn-primary w-100">Guardar cambios</button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-            <script>
-            document.querySelectorAll(".btn-editar").forEach(boton => {
+        <script>
+            document.querySelectorAll(".btn-mostrar").forEach(boton => {
                 boton.addEventListener("click", function () {
-                    const fila = this.closest("tr");
-                    const celdas = fila.querySelectorAll("td");
-
-                    document.getElementById("editNombre").value = celdas[0].textContent.trim();
-                    document.getElementById("editCategoria").value = celdas[1].textContent.trim();
-                    document.getElementById("editUnidades").value = celdas[2].textContent.trim();
-                    document.getElementById("editEstado").value = celdas[3].textContent.trim();
+                    document.getElementById("mostrarId").textContent = this.dataset.id;
+                    document.getElementById("mostrarFecha").textContent = this.dataset.fecha;
+                    document.getElementById("mostrarTipoLog").textContent = this.dataset.tipolog;
+                    document.getElementById("mostrarAccionRealizada").textContent = this.dataset.accionrealizada;
+                    document.getElementById("mostrarUsuarioActor").textContent = this.dataset.usuarioactor;
                 });
             });
-            </script>
+        </script>
         <footer id="footer"></footer>
     </body>
 </html>
