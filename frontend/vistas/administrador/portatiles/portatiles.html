@@ -59,7 +59,7 @@
                                         <i class="bi bi-pencil"></i>
                                     </button>
 
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -79,7 +79,7 @@
                                         <i class="bi bi-pencil"></i>
                                     </button>
 
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -99,7 +99,7 @@
                                         <i class="bi bi-pencil"></i>
                                     </button>
 
-                                    <button class="btn btn-danger btn-sm">
+                                    <button class="btn btn-danger btn-sm btn-eliminar" data-bs-toggle="modal" data-bs-target="#modalEliminar">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </td>
@@ -119,7 +119,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Crear material</h5>
+                        <h5 class="modal-title">Crear carro</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <form>
@@ -164,7 +164,7 @@
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Editar material</h5>
+                        <h5 class="modal-title">Editar carro</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <form>
@@ -203,6 +203,51 @@
             </div>
         </div>
 
+        <!-- Modal Eliminar -->
+        <div class="modal fade" id="modalEliminar" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Eliminar carro</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form>
+                        <div class="modal-body p-3 px-4">
+                            <p class="fs-5 fw-bold">¿Seguro que desea eliminar este carro?</p>
+                            <div class="mb-3">
+                                <label for="carro">Carro</label>
+                                <input type="text" class="form-control" id="deleteCarro" name="deleteCarro" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edificio">Edificio</label>
+                                <input type="text" class="form-control" id="deleteEdificio" name="deleteEdificio" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="planta">Planta</label>
+                                <input type="text" class="form-control" id="deletePlanta" name="deletePlanta" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="unidades">Unidades</label>
+                                <input type="number" class="form-control" id="deleteUnidades" name="deleteUnidades" readonly required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado">Estado</label>
+                                <select class="form-control" id="deleteEstado" name="deleteEstado" readonly required>
+                                    <option>Disponible</option>
+                                    <option>En uso</option>
+                                    <option>Averiado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Eliminar permanentemente</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
@@ -216,6 +261,18 @@
                 document.getElementById("editPlanta").value = celdas[2].textContent.trim();
                 document.getElementById("editUnidades").value = celdas[3].textContent.trim();
                 document.getElementById("editEstado").value = celdas[4].textContent.trim();
+            });
+        });
+        document.querySelectorAll(".btn-eliminar").forEach(boton => {
+            boton.addEventListener("click", function () {
+                const fila = this.closest("tr");
+                const celdas = fila.querySelectorAll("td");
+
+                document.getElementById("deleteCarro").value = celdas[0].textContent.trim();
+                document.getElementById("deleteEdificio").value = celdas[1].textContent.trim();
+                document.getElementById("deletePlanta").value = celdas[2].textContent.trim();
+                document.getElementById("deleteUnidades").value = celdas[3].textContent.trim();
+                document.getElementById("deleteEstado").value = celdas[4].textContent.trim();
             });
         });
         </script>
