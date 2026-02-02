@@ -49,7 +49,7 @@
                                 <td>RAM</td>
                                 <td class="d-none d-md-table-cell">Planta baja</td>
                                 <td>25</td>
-                                <td class="d-none d-md-table-cell">Disponible</td>
+                                <td class="d-none d-md-table-cell">Activo</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm btn-mostrar d-md-none" data-bs-toggle="modal" data-bs-target="#modalMostrar">
                                         <i class="bi bi-eye"></i>
@@ -69,7 +69,7 @@
                                 <td>RAM</td>
                                 <td class="d-none d-md-table-cell">Primera planta</td>
                                 <td>25</td>
-                                <td class="d-none d-md-table-cell">Disponible</td>
+                                <td class="d-none d-md-table-cell">Inactivo</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm btn-mostrar d-md-none" data-bs-toggle="modal" data-bs-target="#modalMostrar">
                                         <i class="bi bi-eye"></i>
@@ -89,7 +89,7 @@
                                 <td>Loscos</td>
                                 <td class="d-none d-md-table-cell">Planta baja</td>
                                 <td>25</td>
-                                <td class="d-none d-md-table-cell">Disponible</td>
+                                <td class="d-none d-md-table-cell">Activo</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm btn-mostrar d-md-none" data-bs-toggle="modal" data-bs-target="#modalMostrar">
                                         <i class="bi bi-eye"></i>
@@ -144,9 +144,8 @@
                                 <label for="estado">Estado</label>
                                 <select class="form-control" id="crearEstado" name="crearEstado" required>
                                     <option selected disabled value="">Seleccionar estado</option>
-                                    <option value="Disponible">Disponible</option>
-                                    <option value="En uso">En uso</option>
-                                    <option value="Averiado">Averiado</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
                                 </select>
                             </div>
                         </div>
@@ -188,9 +187,8 @@
                             <div class="mb-3">
                                 <label for="estado">Estado</label>
                                 <select class="form-control" id="editEstado" name="editEstado" required>
-                                    <option>Disponible</option>
-                                    <option>En uso</option>
-                                    <option>Averiado</option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
                                 </select>
                             </div>
                         </div>
@@ -232,11 +230,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="estado">Estado</label>
-                                <select class="form-control" id="deleteEstado" name="deleteEstado" readonly required>
-                                    <option>Disponible</option>
-                                    <option>En uso</option>
-                                    <option>Averiado</option>
-                                </select>
+                                <input type="text" class="form-control" id="deleteEstado" name="deleteEstado" readonly required>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
