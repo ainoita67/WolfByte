@@ -43,12 +43,12 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.php", key: "salonactos" },
-            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.php", key: "portatiles" },
-            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.php", key: "espacios" },
-            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.php", key: "liberar" }
+            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.html", key: "aulas" },
+            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
+            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
+            { texto: "Incidencias", href: role=="admin"?BASE + "/vistas/incidencias/verincidencias.html":BASE + "/vistas/incidencias/incidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: BASE + "/vistas/liberar/liberar.html", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -100,7 +100,7 @@ function generateHeaderNav(menuactivo, role) {
             liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             const aa = document.createElement('a');
-            aa.href = "/frontend/vistas/administrador/menuadministrador.html";
+            aa.href = BASE + "/vistas/administrador/menuadministrador.html";
             aa.textContent = "Administrador";
 
             if(menuactivo === "admin"){
