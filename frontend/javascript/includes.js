@@ -56,15 +56,6 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
-<<<<<<< HEAD
-    document.addEventListener("DOMContentLoaded", () => {
-        cargarHeadHTML("/frontend/includes/head.html", () => {
-            cargarHTML("/frontend/includes/header.html", "#header", () => {
-                generateHeaderNav(menu, rol);
-            });
-
-            cargarHTML("/frontend/includes/footer.html", "#footer");
-=======
     cargarHeadHTML(BASE + "/includes/head.html", () => {
         const linkCSS = document.createElement('link');
         linkCSS.rel = 'stylesheet';
