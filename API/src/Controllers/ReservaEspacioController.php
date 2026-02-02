@@ -5,29 +5,20 @@ namespace Controllers;
 
 use Core\Request;
 use Core\Response;
-use Services\ReservaService;
+use Services\ReservaEspacioService;
 use Throwable;
 use Validation\ValidationException;
 
-class ReservaController
+class ReservaEspacioController
 {
-    private ReservaService $service;
+    private ReservaEspacioService $service;
 
     public function __construct()
     {
-        $this->service = new ReservaService();
+        $this->service = new ReservaEspacioService();
     }
 
-    public function misReservas(Request $req, Response $res): void
-    {
-        try {
-            $reservas = $this->service->getAllReservas(); // Para pruebas sin sesión
-            $res->status(200)->json($reservas);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-
+    // Devuelve todas las reservas de espacios
     public function index(Request $req, Response $res): void
     {
         try {
@@ -38,6 +29,18 @@ class ReservaController
         }
     }
 
+    // Devuelve todas las reservas de un espacio específico
+    public function showByEspacio(Request $req, Response $res, $idEspacio): void
+    {
+        try {
+            $reservas = $this->service->getReservasByEspacio($idEspacio);
+            $res->status(200)->json($reservas);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+    // Devuelve una reserva específica por su ID
     public function show(Request $req, Response $res, int $id): void
     {
         try {
@@ -50,40 +53,43 @@ class ReservaController
         }
     }
 
+    // Crea una nueva reserva
     public function store(Request $req, Response $res): void
     {
         try {
             $data = $req->getBody();
-            $data['id_usuario'] = 3; // Usuario de prueba
             $reserva = $this->service->createReserva($data);
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
-        } catch (Throwable $e) {
+        }
+        catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
+    // Actualiza una reserva existente
     public function update(Request $req, Response $res, int $id): void
     {
         try {
             $data = $req->getBody();
-            $updated = $this->service->updateReserva($id, $data);
-            $res->status(200)->json($updated);
+            $reserva = $this->service->updateReserva($id, $data);
+            $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
     }
 
+    // Elimina una reserva
     public function destroy(Request $req, Response $res, int $id): void
     {
         try {
             $this->service->deleteReserva($id);
             $res->status(200)->json(['message' => 'Reserva eliminada correctamente']);
         } catch (ValidationException $e) {
-            $res->status(404)->json(['error' => $e->getMessage()]);
+            $res->status(404)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
