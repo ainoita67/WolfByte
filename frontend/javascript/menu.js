@@ -47,8 +47,8 @@ function generateHeaderNav(menuactivo, role) {
             { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
             { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
             { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.html", key: "liberar" }
+            { texto: "Incidencias", href: role=="admin"?BASE + "/vistas/incidencias/verincidencias.html":BASE + "/vistas/incidencias/incidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: BASE + "/vistas/liberar/liberar.html", key: "liberar" }
         ];
 
         //MENU DESKTOP
