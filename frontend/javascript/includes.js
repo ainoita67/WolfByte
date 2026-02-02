@@ -56,6 +56,15 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
+<<<<<<< HEAD
+    document.addEventListener("DOMContentLoaded", () => {
+        cargarHeadHTML("/frontend/includes/head.html", () => {
+            cargarHTML("/frontend/includes/header.html", "#header", () => {
+                generateHeaderNav(menu, rol);
+            });
+
+            cargarHTML("/frontend/includes/footer.html", "#footer");
+=======
     cargarHeadHTML(BASE + "/includes/head.html", () => {
         const linkCSS = document.createElement('link');
         linkCSS.rel = 'stylesheet';
@@ -78,8 +87,7 @@ function botonesAccesibilidad() {
     const main = document.querySelector("main");
 
     // Cargar estado guardado al iniciar
-    const savedFontSize = localStorage.getItem("fontSize");
-    if(savedFontSize) body.style.fontSize = savedFontSize;
+    const savedFontSize = localStorage.getItem("fontSizeMain");
     if(savedFontSize) main.style.fontSize = savedFontSize;
 
     const highContrast = localStorage.getItem("highContrast") === "true";

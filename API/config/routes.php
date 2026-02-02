@@ -128,7 +128,7 @@ $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cam
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
 $router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
 $router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
-$router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@updateActivar'); //activar o desactivar una reserva permanente
+$router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@activate'); //activar o desactivar una reserva permanente
 $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
 $router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
 $router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
@@ -142,3 +142,6 @@ $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaControlle
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
 
+// RECURSO
+$router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
+$router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
