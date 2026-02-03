@@ -1,17 +1,13 @@
 <?php
-declare(strict_types=1);
-
 namespace Validation;
 
-use Exception;
-
-class ValidationException extends Exception
+class ValidationException extends \Exception
 {
     private array $errors;
 
-    public function __construct(array $errors = [], string $message = "Validation failed", int $code = 422)
+    public function __construct(array $errors)
     {
-        parent::__construct($message, $code);
+        parent::__construct("Validation failed"); // mensaje general
         $this->errors = $errors;
     }
 

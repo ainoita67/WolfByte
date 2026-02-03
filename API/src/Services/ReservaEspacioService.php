@@ -3,57 +3,56 @@ declare(strict_types=1);
 
 namespace Services;
 
-use Models\ReservaEspacioModel;
-use Models\ReservaModel;
+use Models\ReservaEspacio;
 use Validation\ValidationException;
 
 class ReservaEspacioService
 {
-    private ReservaEspacioModel $model;
-    private ReservaModel $reservaModel;
+    private ReservaEspacio $model;
 
     public function __construct()
     {
-        $this->model = new ReservaEspacioModel();
-        $this->reservaModel = new ReservaModel();
+        $this->model = new ReservaEspacio();
     }
 
-    /**
-     * Crear nueva reserva de espacio (flujo completo)
-     */
     public function createReservaEspacio(array $data): array
     {
-        $errors = [];
-
-        // Validar campos obligatorios para reserva de espacio
-        if (empty($data['id_reserva_espacio'])) $errors['id_reserva_espacio'] = 'ID de reserva obligatorio';
-        if (empty($data['actividad'])) $errors['actividad'] = 'Actividad obligatoria';
-        if (empty($data['id_espacio'])) $errors['id_espacio'] = 'ID de espacio obligatorio';
-
-        if (!empty($errors)) {
-            throw new ValidationException($errors);
-        }
-
-        // Crear reserva de espacio usando la FK
-        return $this->model->create([
-            'id_reserva_espacio' => $reserva['id_reserva'],
-            'actividad' => $data['actividad'],
-            'id_espacio' => $data['id_espacio']
-        ]);
+        $this->validate($data);
+        return $this->model->create($data); // Devuelve el array correctamente
     }
-    /**
-     * Obtener todas las reservas de espacios
-     */
+
+
     public function getAllReservas(): array
     {
         return $this->model->getAll();
     }
 
-    /**
-     * Obtener reservas de un espacio específico
-     */
-    public function getReservasByEspacio(int $idEspacio): array
+    public function getReservasByEspacio(string $idEspacio): array
     {
         return $this->model->getByEspacio($idEspacio);
-    } 
+    }
+
+    private function validate(array $data): void
+    {
+        $required = ['asignatura', 'grupo', 'profesor', 'inicio', 'fin', 'id_usuario', 'id_espacio'];
+
+        $errors = [];
+
+        foreach ($required as $field) {
+            if (empty($data[$field])) {
+                $errors[] = "El campo $field es obligatorio.";
+            }
+        }
+
+        if (!empty($data['inicio']) && !empty($data['fin'])) {
+            if (strtotime($data['inicio']) >= strtotime($data['fin'])) {
+                $errors[] = "La fecha de inicio debe ser menor que la fecha de fin.";
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new ValidationException($errors);
+        }
+    }
+
 }

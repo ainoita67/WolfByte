@@ -3,112 +3,102 @@ declare(strict_types=1);
 
 namespace Models;
 
-use Core\DB;
+use Core\Database;
+use PDO;
 use PDOException;
 
 class ReservaEspacioModel
 {
-    private DB $db;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->db = new DB();
+        $this->db = Database::getConnection(); // Tu clase DB singleton
     }
 
     /**
-     * Crear registro de reserva de espacio
+     * Crea una reserva junto con la reserva de espacio
      */
     public function create(array $data): array
     {
         try {
-            $this->db->query("
-                INSERT INTO Reserva_espacio (
-                    id_reserva_espacio,
-                    actividad,
-                    id_espacio
-                ) VALUES (
-                    :id_reserva_espacio,
-                    :actividad,
-                    :id_espacio
-                )
-            ")
-            
-            ->bind(':id_reserva_espacio', $id['id_reserva_espacio'])
-            ->bind(':actividad', $data['actividad'])
-            ->bind(':id_espacio', $data['id_espacio'])
-            ->execute();
+            $this->db->beginTransaction();
 
-            return $this->findById((int)$data['id_reserva_espacio']);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al crear la reserva de espacio: " . $e->getMessage());
+            // Inserta en tabla Reserva
+            $stmt = $this->db->prepare("
+                INSERT INTO Reserva 
+                (asignatura, autorizada, observaciones, grupo, profesor, f_creacion, inicio, fin, id_usuario, tipo) 
+                VALUES (:asignatura, :autorizada, :observaciones, :grupo, :profesor, :f_creacion, :inicio, :fin, :id_usuario, 'Reserva_espacio')
+            ");
+
+            $stmt->execute([
+                ':asignatura' => $data['asignatura'],
+                ':autorizada' => $data['autorizada'] ?? false,
+                ':observaciones' => $data['observaciones'] ?? null,
+                ':grupo' => $data['grupo'],
+                ':profesor' => $data['profesor'],
+                ':f_creacion' => date('Y-m-d H:i:s'),
+                ':inicio' => $data['inicio'],
+                ':fin' => $data['fin'],
+                ':id_usuario' => $data['id_usuario']
+            ]);
+
+            $idReserva = (int)$this->db->lastInsertId();
+
+            // Inserta en tabla Reserva_espacio
+            $stmtEsp = $this->db->prepare("
+                INSERT INTO Reserva_espacio (id_reserva_espacio, actividad, id_espacio)
+                VALUES (:id_reserva, :actividad, :id_espacio)
+            ");
+            $stmtEsp->execute([
+                ':id_reserva' => $idReserva,
+                ':actividad' => $data['actividad'] ?? null,
+                ':id_espacio' => $data['id_espacio']
+            ]);
+
+            $this->db->commit();
+
+            return [
+                'id_reserva_espacio' => $idReserva, // Devuelve el ID de la reserva
+                'actividad' => $data['actividad'],
+                'id_espacio' => $data['id_espacio']
+            ];
+
+        } catch (\PDOException $e) {
+            $this->db->rollBack();
+            throw $e;
         }
     }
 
-    /**
-     * Obtener reserva de espacio por ID de reserva
-     */
-    public function findById(int $id): array|false
-    {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio WHERE id_reserva_espacio = :id")
-            ->bind(':id', $id)
-            ->fetch();
-    }
 
     /**
-     * Obtener todas las reservas de espacios
+     * Obtiene todas las reservas de espacio
      */
     public function getAll(): array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio ORDER BY id_reserva_espacio DESC")
-            ->fetchAll();
+        $stmt = $this->db->query("
+            SELECT r.*, re.actividad, re.id_espacio
+            FROM Reserva r
+            JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva_espacio
+            WHERE r.tipo = 'Reserva_espacio'
+            ORDER BY r.inicio DESC
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Obtener reservas por ID de espacio
+     * Obtiene reservas de un espacio específico
      */
-    public function getByEspacio($idEspacio): array
+    public function getByEspacio(string $idEspacio): array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio WHERE id_espacio = :id_espacio ORDER BY id_reserva_espacio DESC")
-            ->bind(':id_espacio', $idEspacio)
-            ->fetchAll();
-    }
-    /**
-     * Actualizar reserva de espacio
-     */
-    public function update(int $id, array $data): array
-    {
-        try {
-            $this->db->query("
-                UPDATE Reserva_espacio SET
-                    actividad = :actividad,
-                    id_espacio = :id_espacio
-                WHERE id_reserva_espacio = :id_reserva_espacio
-            ")
-            ->bind(':actividad', $data['actividad'])
-            ->bind(':id_espacio', $data['id_espacio'])
-            ->bind(':id_reserva_espacio', $id)
-            ->execute();
-
-            return $this->findById($id);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al actualizar la reserva de espacio: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Eliminar reserva de espacio
-     */
-    public function delete(int $id): void
-    {
-        try {
-            $this->db->query("DELETE FROM Reserva_espacio WHERE id_reserva_espacio = :id")
-                ->bind(':id', $id)
-                ->execute();
-        } catch (PDOException $e) {
-            throw new \Exception("Error al eliminar la reserva de espacio: " . $e->getMessage());
-        }
+        $stmt = $this->db->prepare("
+            SELECT r.*, re.actividad, re.id_espacio
+            FROM Reserva r
+            JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva_espacio
+            WHERE r.tipo = 'Reserva_espacio' AND re.id_espacio = :id_espacio
+            ORDER BY r.inicio DESC
+        ");
+        $stmt->execute([':id_espacio' => $idEspacio]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
