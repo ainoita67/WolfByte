@@ -100,9 +100,7 @@ class Router
             $user = \Core\Session::getUser();
         }
 
-        if ($user !== null) {
-            $request->setUser($user);
-        }
+        $request->setUser($user);
 
 
         // ===============================

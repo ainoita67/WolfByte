@@ -43,12 +43,12 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: role=="admin"?BASE + "/vistas/incidencias/verincidencias.html":BASE + "/vistas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/liberar/liberar.html", key: "liberar" }
+            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.php", key: "aulas" },
+            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.php", key: "portatiles" },
+            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.php", key: "espacios" },
+            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -59,7 +59,7 @@ function generateHeaderNav(menuactivo, role) {
             if(role=="admin"){
                 uld.innerHTML = 
                 `<li class="col-12">
-                    <a href="${BASE}/vistas/menu.html">
+                    <a href="${BASE}/vistas/menu.php">
                         <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
                     </a>
                 </li>
@@ -67,7 +67,7 @@ function generateHeaderNav(menuactivo, role) {
             }else{
                 uld.innerHTML = 
                 `<li class="col-12">
-                    <a href="${BASE}/vistas/menu.html">
+                    <a href="${BASE}/vistas/menu.php">
                         <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
                     </a>
                 </li>
@@ -100,7 +100,7 @@ function generateHeaderNav(menuactivo, role) {
             liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             const aa = document.createElement('a');
-            aa.href = BASE + "/vistas/administrador/menuadministrador.html";
+            aa.href = "/frontend/vistas/administrador/menuadministrador.html";
             aa.textContent = "Administrador";
 
             if(menuactivo === "admin"){
@@ -124,7 +124,7 @@ function generateHeaderNav(menuactivo, role) {
             </a>
             <ul class="dropdown-menu" data-target="#perfildesktop" id="ulpd">
                 <li>
-                    <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
+                    <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
                     <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
@@ -133,7 +133,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
                 </li>
                 <li>
-                    <a href="${BASE}/auth/logout.html" class="dropdown-item">Cerrar sesión</a>
+                    <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
                 </li>
             </ul>
             `;
@@ -145,7 +145,7 @@ function generateHeaderNav(menuactivo, role) {
         // logo
         ulm.innerHTML = 
             `<li class="col-2">
-                <a href="${BASE}/vistas/menu.html">
+                <a href="${BASE}/vistas/menu.php">
                     <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
                 </a>
             </li>
@@ -184,7 +184,7 @@ function generateHeaderNav(menuactivo, role) {
                 if (role == "admin"){
                     const liad = document.createElement('li');
                         const aad = document.createElement('a');
-                            aad.href = BASE + "/vistas/administrador/menuadministrador.html";
+                            aad.href = BASE + "/vistas/administrador/menuadministrador.php";
                             aad.textContent = "Administrador";
                             aad.classList.add("dropdown-item");
                             liad.appendChild(aad);
@@ -205,7 +205,7 @@ function generateHeaderNav(menuactivo, role) {
         </a>
         <ul class="dropdown-menu" data-target="#perfilmovil">
             <li>
-                <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
+                <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
             </li>
             <li>
                 <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
@@ -214,7 +214,7 @@ function generateHeaderNav(menuactivo, role) {
                 <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
             </li>
             <li>
-                <a href="${BASE}/auth/logout.html" class="dropdown-item">Cerrar sesión</a>
+                <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
             </li>
         </ul>
         `;

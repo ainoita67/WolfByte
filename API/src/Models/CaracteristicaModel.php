@@ -15,7 +15,7 @@ class CaracteristicaModel
     }
 
     /**
-     * Obtener todos las Caracteristicas
+     * Obtener todos los edificios
      */
     public function getAll(): array
     {
@@ -23,9 +23,9 @@ class CaracteristicaModel
             ->query("SELECT * FROM Caracteristica")
             ->fetchAll();
     }
-
-    // Obtener Caracteristica por ID
-
+    /**
+     * Obtener edificio por ID
+     */
     public function findById(int $id): ?array
     {
         $result = $this->db
@@ -36,9 +36,9 @@ class CaracteristicaModel
         return $result ?: null;
     }
 
-
-    // Crear Caracteristica
-
+    /**
+     * Crear edificio
+     */
     public function create(array $data): int|false
     {
         $this->db
@@ -52,8 +52,10 @@ class CaracteristicaModel
         return (int) $this->db->lastId();
     }
 
-    // Actualizar Caracteristica
-    public function update(int $id, array $data): int
+    /**
+     * Actualizar edificio
+     */
+    public function update(int $id, array $data): array
     {
         $this->db
             ->query("
@@ -69,7 +71,7 @@ class CaracteristicaModel
     }
 
     /**
-     * Eliminar Caracteristica
+     * Eliminar edificio
      */
     public function delete(int $id): int
     {
@@ -77,7 +79,7 @@ class CaracteristicaModel
             ->query("DELETE FROM Caracteristica WHERE id_caracteristica = :id")
             ->bind(':id', $id)
             ->execute();
-
+            
         return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
     }
 }

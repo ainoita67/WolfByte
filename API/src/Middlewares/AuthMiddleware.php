@@ -3,27 +3,21 @@ declare(strict_types=1);
 
 namespace Middlewares;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 use Core\Request;
+use Core\JWT;
 
 class AuthMiddleware
 {
-    public static function verify(Request $request): ?array
+    public static function verify(Request $req): ?array
     {
-        $authHeader = $request->getHeader('Authorization');
-
+        $authHeader = $req->getHeader('Authorization');
+        
         if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
             return null;
         }
 
-        $token = trim(str_replace('Bearer ', '', $authHeader));
+        $token = trim(substr($authHeader, 7));
 
-        try {
-            $decoded = JWT::decode($token, new Key(JWT_SECRET, 'HS256'));
-            return (array) $decoded;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return JWT::decode($token);
     }
 }
