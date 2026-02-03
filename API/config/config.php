@@ -1,10 +1,6 @@
 <?php
 declare(strict_types=1);
 
-define('JWT_SECRET', '4f8a2c9d3e5b6f7a1c0d2e4f6a8b9c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6'); // Clave secreta para firmar los JWT
-define('JWT_EXPIRE', 3600); // 1 hora
-
-
 /**
  * config/config.php
  * Configuración global del proyecto.

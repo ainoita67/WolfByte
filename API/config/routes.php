@@ -129,6 +129,10 @@ $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteContro
 $router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
 $router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
 
+// NECESIDAD
+$router ->get('/necesidades', 'Controllers\\NecesidadController@index'); // Devuelve las necesidades que tenemos en la base de datos
+$router ->post('/necesidades', 'Controllers\\NecesidadController@store'); // Añade una nueva necesidad
+$router ->put('/necesidades/{id}', 'Controllers\\NecesidadController@update'); // Modifica los datos de una necesidad
 
 // NECESIDAD RESERVA
 $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');

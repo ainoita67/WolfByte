@@ -78,7 +78,7 @@ function botonesAccesibilidad() {
     const main = document.querySelector("main");
 
     // Cargar estado guardado al iniciar
-    const savedFontSize = localStorage.getItem("fontSizeMain");
+    const savedFontSize = localStorage.getItem("fontSize");
     if(savedFontSize) main.style.fontSize = savedFontSize;
 
     const highContrast = localStorage.getItem("highContrast") === "true";

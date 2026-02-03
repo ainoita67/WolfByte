@@ -50,11 +50,7 @@ class EdificioService
     }
 
     public function deleteEdificio(int $id): void
-{
-    $stmt = $this->model->deleteById($id);
-
-    if ($stmt->rowCount() === 0) {
-        throw new \Exception('El edificio no existe', 404);
+    {
+        $this->model->delete($id);
     }
-}
 }
