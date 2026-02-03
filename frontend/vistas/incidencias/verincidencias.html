@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("incidencias", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+        <title>Ver incidencias - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-center mb-4">Incidencias</h2>
+                <a href="incidencias.html"><button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-plus-circle"></i> Crear incidencia
+                </button></a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
+                    <thead>
+                        <tr>
+                            <th>Recurso</th>
+                            <th class="d-none d-md-table-cell">Fecha</th>
+                            <th>Título</th>
+                            <th class="d-none d-md-table-cell">Descripción</th>
+                            <th class="d-none d-md-table-cell">Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td class="d-none d-md-table-cell"></td>
+                            <td></td>
+                            <td class="d-none d-md-table-cell"></td>
+                            <td class="d-none d-md-table-cell"></td>
+                            <td></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm btn-mostrar" data-bs-toggle="modal" data-bs-target="#modalMostrar">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+
+                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+        <footer id="footer" class="m-5"></footer>
+        <script>
+            const espacio = document.getElementById("espacio");
+            const ubicacion = document.getElementsByClassName("ubicacion")[0];
+            const selectubicacion = document.getElementById("ubicacion");
+            const planta = document.getElementsByClassName("planta")[0];
+            const selectplanta = document.getElementById("planta");
+
+            // Cuando se cambia cualquier radio
+            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+                radio.addEventListener("change", () => {
+                if (espacio.checked) {
+                    ubicacion.classList.remove("d-none");
+                    actualizarPlanta()
+                } else {
+                    ubicacion.classList.add("d-none");
+                    planta.classList.add("d-none");
+                    selectubicacion.value = "";
+                    selectplanta.value = "";
+                }
+                });
+            });
+
+            // Cuando cambia el primer select
+            function actualizarPlanta() {
+                if (selectubicacion.value === "RAM" || selectubicacion.value === "Loscos" || selectubicacion.value === "Redondo") {
+                    planta.classList.remove("d-none");
+                } else {
+                    planta.classList.add("d-none");
+                }
+            }
+
+            selectubicacion.addEventListener("change", actualizarPlanta);
+        </script>
+    </body>
+</html>
