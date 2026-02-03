@@ -49,17 +49,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // EVENTOS botones
             document.querySelectorAll('.btnEditar').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const id = e.target.dataset.id;
-                    const nombre = e.target.dataset.nombre;
+    btn.addEventListener('click', (e) => {
+        const boton = e.currentTarget; // <-- CORRECTO
+        const id = boton.dataset.id;
+        const nombre = boton.dataset.nombre;
 
-                    document.getElementById('editId').value = id;
-                    document.getElementById('editNombre').value = nombre;
+        document.getElementById('editId').value = id;
+        document.getElementById('editNombre').value = nombre;
 
-                    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
-                    modal.show();
-                });
-            });
+        const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+        modal.show();
+    });
+});
+
 
             document.querySelectorAll('.btnBorrar').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
@@ -83,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         alert(data.message);
                         return;
                     }
-
                 });
             });
 

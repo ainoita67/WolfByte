@@ -42,4 +42,8 @@ class ReservaController
             $res->errorJson($e->getMessage(), 500);
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

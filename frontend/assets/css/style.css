@@ -46,21 +46,16 @@ a{
 }
 
 .bg-verde{
-    background-color: #7A8A06 !important;
-}
-
-.bg-verde:hover{
-    background-color: #90a300 !important;
+    background-color: #578047 !important;
 }
 
 .bg-azul{
     background-color: #274C9C !important;
 }
 
-.bg-azul:hover{
-    background-color: #0051ff !important;
+.bg-azul{
+    background-color: #274C9C !important;
 }
-
 
 
 /*MENÚ NAV*/
@@ -90,17 +85,10 @@ nav:nth-child(1) ul li:not(:last-child){
 
 nav:nth-child(1) ul li:not(:last-child) a{
     padding: 1.5em 0 !important;
-    margin: 0 !important;
 }
 
-nav:nth-child(1) ul li:last-child{
-    padding: 2em 2em 1.3em 2em !important;
-    margin-left: -1em !important;
-}
-
-nav:nth-child(1) ul li:last-child a i{
+nav:nth-child(1) ul li:last-child i{
     padding: 1.5em 0 !important;
-    margin-top: 1.7em !important;
 }
 
 nav:nth-child(1) ul li:nth-child(1){
@@ -302,12 +290,12 @@ a.bg-lightgrey:hover, a.bg-lightgray:hover, button.bg-lightgrey:hover, button.bg
 }
 
 a.bg-verde, button.bg-verde{
-    border: 1px solid #7A8A06 !important;
+    border: 1px solid #578047 !important;
 }
 
 a.bg-verde:hover, button.bg-verde:hover{
-    background-color: #90a300 !important;
-    border: 1px solid #90a300 !important;
+    background-color: #486b3a !important;
+    border: 1px solid #578047 !important;
 }
 
 main.menu a.bg-verde, main.menu a.bg-lightgrey{
@@ -338,7 +326,7 @@ a.enviar:hover, button.enviar:hover{
     border: 1px solid #0051ff !important;
 }
 
-input{
+input, select, textarea{
     border: 1px solid #274C9C !important;
 }
 
@@ -357,47 +345,50 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 /* ACCESIBILIDAD */
-#accesibilidad{
-    top: 44%;
+#accesibilidad {
+    position: fixed;
+    top: 50%;
     left: 0;
     transform: translateY(-50%);
+    z-index: 200;
     display: flex;
     flex-direction: column;
-    background-color: #274C9C;
+    background-color: #0066CC;
     border-radius: 0 0.5em 0.5em 0;
-    z-index: 9999999999999999999999;
-    margin-left: -2.25% !important;
-    position: fixed;
 }
 
-#accesibilidad button{
-    border-radius: 25px;
+#accesibilidad button {
+    display: none;
+    width: 3em;       /* tamaño pequeño */
+    height: 3em;
+    border-radius: 50%;
     border: none;
     color: white;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: #274C9C;
+    font-size: 1.2em;
+    background-color: #0066CC;
+}
+
+#accesibilidad button i {
+    font-size: 1.5em;
 }
 
 /* Siempre mostrar el primer botón */
-#accesibilidad button:not(:first-child){
-    display: none;
+#accesibilidad button:first-child {
+    display: block;
 }
 
 /* Al pasar el mouse por el contenedor, mostrar los botones */
-#accesibilidad:hover button, #accesibilidad:active button{
-    display: block !important;
-}
-
-#accesibilidad:hover, #accesibilidad:active{
-    background-color: #274C9C !important;
-    border-radius: 25px;
+#accesibilidad:hover button {
+    display: block;
 }
 
 /* Efecto de hover individual */
-#accesibilidad button:hover{
-    background-color: #0051ff;
+#accesibilidad button:hover {
+    background-color: #274C9C;
 }
+
 
 
 
@@ -684,19 +675,19 @@ div.card{
     display: inline-block;
 }
 
-.estadobadge.confirmada{
+.estadobadge.confirmada {
     background-color: #007E33;
     color: white;
     border: 1px solid #007E33 !important;
 }
 
-.estadobadge.pendiente{
+.estadobadge.pendiente {
     background-color: #FFBB33;
     color: black;
     border: 1px solid #FFBB33 !important;
 }
 
-.estadobadge.cancelada{
+.estadobadge.cancelada {
     font-weight: 700 !important;
     background-color: #CC0000;
     color: white;
@@ -726,46 +717,107 @@ form.login{
 
 
 
-/*MODAL*/
-/* Animación de entrada */
-.modal{
-    z-index: 1040 !important;
+
+/* Fondo y animación */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
 }
 
-@keyframes slideDown{
-  from{ transform: translateY(-50px); opacity: 0; }
-  to{ transform: translateY(0); opacity: 1; }
+.modal.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal container */
+.modal-dialog {
+  width: 100%;
+  max-width: 900px;
+  margin: 1rem;
+  animation: slideDown 0.35s ease-out;
+}
+
+/* Contenido blanco */
+.modal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Body */
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Animación de entrada */
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive */
-@media (max-width: 768px){
-  .modal-dialog{
+@media (max-width: 768px) {
+  .modal-dialog {
     max-width: 95%;
   }
-  .modal-header h2{
+  .modal-header h2 {
     font-size: 1.25rem;
   }
 }
 
-.reserva-card{
+
+.reserva-card {
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
 }
 
-.reserva-body{
+.reserva-body {
     padding: 16px;
 }
 
-.reserva-estado{
+.reserva-estado {
     height: 15px;
     width: 100%;
 }
 
-.estado-verde{
+.estado-verde {
     background: #28a745;
 }
 
-.estado-rojo{
+.estado-rojo {
     background: #dc3545;
 }
