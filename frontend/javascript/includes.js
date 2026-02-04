@@ -56,15 +56,6 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
-<<<<<<< HEAD
-    document.addEventListener("DOMContentLoaded", () => {
-        cargarHeadHTML("/frontend/includes/head.html", () => {
-            cargarHTML("/frontend/includes/header.html", "#header", () => {
-                generateHeaderNav(menu, rol);
-            });
-
-            cargarHTML("/frontend/includes/footer.html", "#footer");
-=======
     cargarHeadHTML(BASE + "/includes/head.html", () => {
         const linkCSS = document.createElement('link');
         linkCSS.rel = 'stylesheet';
@@ -87,7 +78,7 @@ function botonesAccesibilidad() {
     const main = document.querySelector("main");
 
     // Cargar estado guardado al iniciar
-    const savedFontSize = localStorage.getItem("fontSizeMain");
+    const savedFontSize = localStorage.getItem("fontSize");
     if(savedFontSize) main.style.fontSize = savedFontSize;
 
     const highContrast = localStorage.getItem("highContrast") === "true";
@@ -219,6 +210,7 @@ function botonesAccesibilidad() {
 function aplicarAltoContraste(aplicar = false) {
     const body = document.body;
     const main = document.querySelector("main");
+    const botones = document.querySelectorAll(".btn");
     let highContrast = localStorage.getItem("highContrast") === "true";
 
     if(aplicar){
@@ -226,9 +218,17 @@ function aplicarAltoContraste(aplicar = false) {
         if(highContrast){
             body.classList.add("bg-dark", "text-white");
             main.classList.add("bg-dark", "text-white");
+            botones.forEach(btn => {
+                btn.classList.remove("btn-outline-secondary");
+                btn.classList.add("btn-outline-light");
+            });
         } else {
             body.classList.remove("bg-dark", "text-white");
             main.classList.remove("bg-dark", "text-white");
+            botones.forEach(btn => {
+                btn.classList.remove("btn-outline-light");
+                btn.classList.add("btn-outline-secondary");
+            });
         }
         return;
     }
@@ -236,10 +236,18 @@ function aplicarAltoContraste(aplicar = false) {
     if(highContrast){
         body.classList.remove("bg-dark", "text-white");
         main.classList.remove("bg-dark", "text-white");
+        botones.forEach(btn => {
+            btn.classList.remove("btn-outline-light");
+            btn.classList.add("btn-outline-secondary");
+        });
         localStorage.setItem("highContrast", "false");
     } else {
         body.classList.add("bg-dark", "text-white");
         main.classList.add("bg-dark", "text-white");
+        botones.forEach(btn => {
+            btn.classList.remove("btn-outline-secondary");
+            btn.classList.add("btn-outline-light");
+        });
         localStorage.setItem("highContrast", "true");
     }
 }
