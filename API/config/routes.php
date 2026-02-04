@@ -144,4 +144,5 @@ $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaContro
 
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
+$router->get('/recurso/activos', 'Controllers\\RecursoController@activos'); //Nos devuelve id y descripción de todos los recursos que estén activos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa

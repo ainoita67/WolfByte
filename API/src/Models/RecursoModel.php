@@ -16,9 +16,23 @@ class RecursoModel
     }
 
     /**
-     * Obtener todos los recursos activos
+     * Obtener todos los recursos
      */
     public function getAll(): array
+    {
+        try {
+            return $this->db
+                ->query("SELECT * FROM Recurso")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener recursos");
+        }
+    }
+
+    /**
+     * Obtener todos los recursos activos
+     */
+    public function getAllActivos(): array
     {
         try {
             return $this->db
