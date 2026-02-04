@@ -21,7 +21,7 @@
             document.head.appendChild(script1);
         </script>
 
-        <title>Necesidades - IES Bajo Aragón</title>
+        <title>Necesidades de reserva - IES Bajo Aragón</title>
     </head>
 
     <body>
@@ -29,103 +29,14 @@
 
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Necesidades</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearNecesidad">
+                <h2>Necesidades de reserva</h2>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
                     <i class="bi bi-plus-circle"></i> Crear necesidad
                 </button>
             </div>
 
-
             <!-- Tarjetas -->
-            <div class="row g-4">
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card text-center shadow-sm overflow-hidden h-100">
-                        <div class="bg-azul card-head rounded-top">
-                            <p class="fs-6 text-light m-0 py-2">ID: 1</p>
-                        </div>
-                        <div class="card-body">
-                            <p class="fs-5 card-title">Proyector</p>
-                            <div class="card-footer text-end">
-                                <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card text-center shadow-sm overflow-hidden h-100">
-                        <div class="bg-azul card-head rounded-top">
-                            <p class="fs-6 text-light m-0 py-2">ID: 2</p>
-                        </div>
-                        <div class="card-body">
-                            <p class="fs-5 card-title">Ordenador</p>
-                            <div class="card-footer text-end">
-                                <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card text-center shadow-sm overflow-hidden h-100">
-                        <div class="bg-azul card-head rounded-top">
-                            <p class="fs-6 text-light m-0 py-2">ID: 3</p>
-                        </div>
-                        <div class="card-body">
-                            <p class="fs-5 card-title">Impresora</p>
-                            <div class="card-footer text-end">
-                                <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="modalCrearNecesidad" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        
-                        <div class="modal-header">
-                            <h5 class="modal-title">Crear nueva necesidad</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form id="formCrearNecesidad">
-                                <div class="mb-3">
-                                    <label class="form-label">Nombre de la necesidad</label>
-                                    <input type="text" class="form-control" placeholder="Ej. Proyector" required>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
-                            <button type="submit" form="formCrearNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
-                                <i class="bi bi-check2"></i> Crear
-                            </button>
-                            <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
-                                <i class="bi bi-x-lg"></i> Cancelar
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            <div class="row mx-0 g-4 container-fluid" id="necesidadesReservaContainer"></div>
 
             <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
                 <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
@@ -134,49 +45,86 @@
             </div>
         </main>
 
+        <!-- MODAL CREAR -->
+        <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crear nueva necesidad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form id="formCrear">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de la necesidad</label>
+                                <input type="text" class="form-control" id="crearNecesidad" name="crearNecesidad" placeholder="Ej: Proyector" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
+                            <button type="submit" form="formCrear" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                                <i class="bi bi-check2"></i> Crear
+                            </button>
+                            <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- MODAL EDITAR -->
         <div class="modal fade" id="modalEditar" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">Editar planta</h5>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar necesidad</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Edificio</label>
-                            <select class="form-select">
-                                <option selected>Loscos</option>
-                                <option>Ram</option>
-                            </select>
+                    <form id="formEditarNecesidad">
+                        <div class="modal-body p-4 pb-1">
+                            <div class="mb-3">
+                                <input type="hidden" id="editId" name="editId" readonly required>
+                                <label class="form-label">Nombre de la necesidad</label>
+                                <input type="text" class="form-control" id="editNombre" name="editNombre" required>
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Planta</label>
-                            <input type="text" class="form-control" value="Planta 0">
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
+                            <button type="submit" form="formEditarNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                                <i class="bi bi-check2"></i> Aplicar cambios
+                            </button>
+                            <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg"></i> Cancelar
+                            </button>
                         </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Número de aulas</label>
-                            <input type="number" class="form-control" value="6">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Espacios especiales</label>
-                            <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-primary">Guardar cambios</button>
-                    </div>
-
+                    </form>
                 </div>
             </div>
         </div>
         <footer id="footer"></footer>
+        <script>
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/necesidades/get.js";
+            document.head.appendChild(scriptget);
+
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/necesidades/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerNecesidades();
+            };
+
+            let necesidadSeleccionadaId = null;
+
+            function editarNecesidad(id, nombre) {
+                necesidadSeleccionadaId = id;
+                document.getElementById("editNombre").value = nombre;
+            }
+        </script>
     </body>
 </html>
