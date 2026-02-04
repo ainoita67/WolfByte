@@ -210,7 +210,8 @@ function botonesAccesibilidad() {
 function aplicarAltoContraste(aplicar = false) {
     const body = document.body;
     const main = document.querySelector("main");
-    const botones = document.querySelectorAll(".btn");
+    const botones = document.querySelectorAll(".btn-outline-secondary");
+    const botoneslight = document.querySelectorAll(".btn-outline-light");
     let highContrast = localStorage.getItem("highContrast") === "true";
 
     if(aplicar){
@@ -225,7 +226,7 @@ function aplicarAltoContraste(aplicar = false) {
         } else {
             body.classList.remove("bg-dark", "text-white");
             main.classList.remove("bg-dark", "text-white");
-            botones.forEach(btn => {
+            botoneslight.forEach(btn => {
                 btn.classList.remove("btn-outline-light");
                 btn.classList.add("btn-outline-secondary");
             });
@@ -236,7 +237,7 @@ function aplicarAltoContraste(aplicar = false) {
     if(highContrast){
         body.classList.remove("bg-dark", "text-white");
         main.classList.remove("bg-dark", "text-white");
-        botones.forEach(btn => {
+        botoneslight.forEach(btn => {
             btn.classList.remove("btn-outline-light");
             btn.classList.add("btn-outline-secondary");
         });
