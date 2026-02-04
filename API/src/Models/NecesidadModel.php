@@ -61,7 +61,7 @@ class NecesidadModel
                     ->bind(':necesidad', $data['nombre'])
                     ->execute();
 
-                return $this->findById((int)$this->db->lastId());
+                return $this->findByNombre($data['nombre']);
             }
         } catch (PDOException $e) {
             throw new \Exception("Error al crear la necesidad");
