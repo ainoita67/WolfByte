@@ -83,16 +83,3 @@ document.getElementById("formCrear").addEventListener("submit", function (e) {
     })
     .catch(err => console.error("Error al crear la necesidad:", err));
 });
-
-
-
-
-
-obtenerNecesidades();
-
-let necesidadSeleccionadaId = null;
-
-function editarNecesidad(id, nombre) {
-    necesidadSeleccionadaId = id;
-    document.getElementById("editNombre").value = nombre;
-}

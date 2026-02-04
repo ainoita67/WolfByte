@@ -63,7 +63,7 @@
                             </div>
                         </div>
 
-                        <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
                             <button type="submit" form="formCrear" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
                                 <i class="bi bi-check2"></i> Crear
                             </button>
@@ -93,7 +93,7 @@
                             </div>
                         </div>
 
-                        <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
                             <button type="submit" form="formEditarNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
                                 <i class="bi bi-check2"></i> Aplicar cambios
                             </button>
@@ -106,18 +106,18 @@
             </div>
         </div>
         <footer id="footer"></footer>
-        <script src="../../../../javascript/necesidades/get.js"></script>
-        <script src="../../../../javascript/necesidades/post.js"></script>
         <script>
             const scriptget = document.createElement("script");
             scriptget.src = BASE + "/javascript/necesidades/get.js";
-            document.appendChild(scriptget);
+            document.head.appendChild(scriptget);
 
             const scriptpost = document.createElement("script");
             scriptpost.src = BASE + "/javascript/necesidades/post.js";
-            document.appendChild(scriptpost);
+            document.head.appendChild(scriptpost);
             
-            obtenerNecesidades();
+            scriptget.onload = () => {
+                obtenerNecesidades();
+            };
 
             let necesidadSeleccionadaId = null;
 
