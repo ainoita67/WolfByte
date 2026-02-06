@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 namespace Models;
 
-use Core\DB;
+use Core\Database;
+use PDO;
 use PDOException;
 
 class ReservaEspacioModel
 {
-    private DB $db;
+    private PDO $db;
 
     public function __construct()
     {
-        $this->db = new DB();
+        $this->db = Database::getConnection();
     }
 
     /**
@@ -88,16 +89,14 @@ class ReservaEspacioModel
     /**
      * Crea una nueva reserva de espacio
      */
-    public function create(array $data): array|false
+    public function create(array $data): array
     {
         try {
             // $this->db->beginTransaction();
             
             // 1. Validar que el espacio existe
-            $espacioStmt=$this->db
-                ->query("SELECT id_espacio FROM Espacio WHERE id_espacio = :id_espacio")
-                ->bind(':id_espacio', $data['id_espacio'])
-                ->execute();
+            $espacioStmt = $this->db->prepare("SELECT id_espacio FROM Espacio WHERE id_espacio = :id_espacio");
+            $espacioStmt->execute([':id_espacio' => $data['id_espacio']]);
             if (!$espacioStmt->fetch()) {
                 throw new \Exception("El espacio no existe");
             }
@@ -108,8 +107,8 @@ class ReservaEspacioModel
             }
             
             // 3. Insertar en tabla Reserva (PRIMERO)
-            $this->db
-                ->query("INSERT INTO Reserva (
+            $stmtReserva = $this->db->prepare("
+                INSERT INTO Reserva (
                     asignatura,
                     autorizada,
                     observaciones,
@@ -132,23 +131,25 @@ class ReservaEspacioModel
                     :id_usuario,
                     'Reserva_espacio'
                 )
-            ")
-            ->bind('asignatura',       $data['asignatura'])
-            ->bind('autorizada',       $data['autorizada'] ?? 0)
-            ->bind('observaciones',    $data['observaciones'] ?? null)
-            ->bind('grupo',            $data['grupo'])
-            ->bind('profesor',         $data['profesor'])
-            ->bind('inicio',           $data['inicio'])
-            ->bind('fin',              $data['fin'])
-            ->bind('id_usuario',       $data['id_usuario'])
-            ->execute();
+            ");
             
+            $stmtReserva->execute([
+                ':asignatura' => $data['asignatura'],
+                ':autorizada' => $data['autorizada'] ?? 0,
+                ':observaciones' => $data['observaciones'] ?? null,
+                ':grupo' => $data['grupo'],
+                ':profesor' => $data['profesor'],
+                ':inicio' => $data['inicio'],
+                ':fin' => $data['fin'],
+                ':id_usuario' => $data['id_usuario']
+            ]);
             
             // Obtener el ID generado
-            $idReserva = (int)$this->db->lastId();
+            $idReserva = (int)$this->db->lastInsertId();
             
             // 4. Insertar en tabla Reserva_espacio (SEGUNDO)
-            $this->db->query("INSERT INTO Reserva_espacio (
+            $stmtEspacio = $this->db->prepare("
+                INSERT INTO Reserva_espacio (
                     id_reserva,
                     actividad,
                     id_espacio
@@ -157,17 +158,23 @@ class ReservaEspacioModel
                     :actividad,
                     :id_espacio
                 )
-            ")
-            ->bind('id_reserva', $idReserva)
-            ->bind('actividad', $data['actividad'] ?? null)
-            ->bind('id_espacio', $data['id_espacio'])
-            ->execute();
+            ");
+            
+            $stmtEspacio->execute([
+                ':id_reserva' => $idReserva,
+                ':actividad' => $data['actividad'] ?? null,
+                ':id_espacio' => $data['id_espacio']
+            ]);
+            
+            // $this->db->commit();
             
             return $this->findById($idReserva);
-        } catch (PDOException $e) {
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
-            }
+            return $data;
+            
+        } catch (\Exception $e) {
+            // if ($this->db->inTransaction()) {
+            //     $this->db->rollBack();
+            // }
             throw new \Exception("Error al crear la reserva: " . $e->getMessage());
         }
     }
@@ -216,7 +223,7 @@ class ReservaEspacioModel
                 UPDATE Reserva_espacio SET
                     actividad = :actividad,
                     id_espacio = :id_espacio
-                WHERE id_reserva = :id  // ← CORREGIDO
+                WHERE id_reserva = :id
             ");
             $stmtEsp->execute([
                 ':id' => $id,
@@ -224,12 +231,12 @@ class ReservaEspacioModel
                 ':id_espacio' => $data['id_espacio']
             ]);
 
-            $this->db->commit();
+            // $this->db->commit();
 
             return $this->findById($id);
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            // $this->db->rollBack();
             throw $e;
         }
     }
@@ -267,13 +274,13 @@ class ReservaEspacioModel
                 ':fin' => $data['fin']
             ]);
 
-            $this->db->commit();
+            // $this->db->commit();
 
             return $this->findById($id);
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+            // $this->db->rollBack();
+            // throw $e;
         }
     }
 
@@ -282,13 +289,11 @@ class ReservaEspacioModel
      */
     public function delete(int $id): bool
     {
-        // $this->db->beginTransaction();
-
         try {
-            // Eliminar de Reserva_espacio primero - USANDO id_reserva
+            // Eliminar de Reserva_espacio primero
             $stmtEsp = $this->db->prepare("
                 DELETE FROM Reserva_espacio 
-                WHERE id_reserva = :id  // ← CORREGIDO
+                WHERE id_reserva = :id
             ");
             $stmtEsp->execute([':id' => $id]);
 
@@ -298,12 +303,11 @@ class ReservaEspacioModel
                 WHERE id_reserva = :id
             ");
             $stmtRes->execute([':id' => $id]);
-
-            $this->db->commit();
-            return true;
+            
+            return true;  // ← RETORNAR true explícitamente
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            // No hay rollback porque no hay transacción
             throw $e;
         }
     }
@@ -311,19 +315,18 @@ class ReservaEspacioModel
     /**
      * Verifica la disponibilidad de un espacio
      */
-    public function checkDisponibilidad(string $idEspacio, string $inicio, string $fin, ?int $excludeReservaId = null): bool
+    private function checkDisponibilidad(string $idEspacio, string $inicio, string $fin, ?int $excludeReservaId = null): bool
     {
-        $sql = "SELECT COUNT(*) as count FROM Reserva r
+        $sql = "
+            SELECT COUNT(*) as count
+            FROM Reserva r
+            INNER JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
             WHERE r.tipo = 'Reserva_espacio'
             AND r.autorizada = 1
-            AND EXISTS (
-                SELECT 1 FROM Reserva_espacio re 
-                WHERE re.id_reserva = r.id_reserva 
-                AND re.id_espacio = :id_espacio
-            )
+            AND re.id_espacio = :id_espacio
             AND (
+                -- Fórmula correcta para detectar solapamiento
                 (r.inicio < :fin AND r.fin > :inicio)
-                OR (r.inicio = :inicio AND r.fin = :fin)
             )
         ";
         

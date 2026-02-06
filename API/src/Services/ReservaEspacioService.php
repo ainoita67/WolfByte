@@ -51,7 +51,7 @@ class ReservaEspacioService
     public function createReservaEspacio(array $data): array
     {
         // Validar datos de entrada
-        if($data['autorizada'] == "true" ||$data['autorizada'] == true || $data['autorizada'] == "1" || $data['autorizada'] == 1) {
+        if($data['autorizada'] == "true" || $data['autorizada'] =="1" || $data['autorizada'] ==1) {
             $data['autorizada'] = 1;
         } else{
             $data['autorizada'] = 0;
@@ -104,6 +104,7 @@ class ReservaEspacioService
             throw new ValidationException($errors);
         }
 
+        
         return $this->model->create($validatedData);
     }
 

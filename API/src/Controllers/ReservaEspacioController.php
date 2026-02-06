@@ -9,7 +9,6 @@ use Core\Session;
 use Services\ReservaEspacioService;
 use Throwable;
 use Validation\ValidationException;
-use Validation\Validation;
 
 class ReservaEspacioController
 {
@@ -51,7 +50,7 @@ class ReservaEspacioController
             $reservas = $this->service->getMisReservas((int)$usuario['id_usuario']);
             $res->status(200)->json($reservas);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -67,7 +66,7 @@ class ReservaEspacioController
             $reserva = $this->service->getReservaById((int)$id);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 404);
+            $res->errorJson($e->getErrors(), 404);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -83,7 +82,7 @@ class ReservaEspacioController
             $reservas = $this->service->getReservasByEspacio($id);
             $res->status(200)->json($reservas);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -99,6 +98,7 @@ class ReservaEspacioController
             $data = $req->json();
             error_log("Datos recibidos en controller: " . print_r($data, true));
             
+            // print_r($data); 
             // Si no viene id_usuario en la request, usar el usuario autenticado
             if (!isset($data['id_usuario'])) {
                 $usuario = Session::getUser();
@@ -110,7 +110,7 @@ class ReservaEspacioController
             $reserva = $this->service->createReservaEspacio($data);
             $res->status(201)->json($reserva, "Reserva creada exitosamente");
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -127,7 +127,7 @@ class ReservaEspacioController
             $reserva = $this->service->updateReservaEspacio((int)$id, $data);
             $res->status(200)->json($reserva, "Reserva actualizada exitosamente");
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -144,7 +144,7 @@ class ReservaEspacioController
             $reserva = $this->service->cambiarFechasReserva((int)$id, $data);
             $res->status(200)->json($reserva, "Fechas de reserva actualizadas exitosamente");
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -160,7 +160,7 @@ class ReservaEspacioController
             $this->service->deleteReservaEspacio((int)$id);
             $res->status(200)->json([], "Reserva eliminada exitosamente");
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
