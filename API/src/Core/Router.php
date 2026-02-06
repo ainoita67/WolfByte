@@ -74,7 +74,7 @@ class Router
 
 
     private function handle($handler, array $params = [], array $routeInfo = []): void
-    {
+    {   
         $request = new \Core\Request();
         $response = new \Core\Response();
 
