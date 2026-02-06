@@ -39,7 +39,7 @@ class EdificioController
     public function show(Request $req, Response $res, array $args): void
     {
         try {
-            $edificio = $this->service->getEdificioById((int)$args['id']);
+            $edificio = $this->service->getEdificioById((int) $args['id']);
             $res->status(200)->json($edificio);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 404);
@@ -70,37 +70,38 @@ class EdificioController
      * Actualiza un edificio existente
      */
     public function update(Request $req, Response $res, $args): void
-{
-    try {
-        // El router pasa el ID como string
-        $id = is_array($args) ? (int)$args['id'] : (int)$args;
+    {
+        try {
+            // El router pasa el ID como string
+            $id = is_array($args) ? (int) $args['id'] : (int) $args;
 
-        $data = $req->getBody();
+            $data = $req->getBody();
 
-        $edificio = $this->service->updateEdificio($id, $data);
+            $edificio = $this->service->updateEdificio($id, $data);
 
-        $res->status(200)->json($edificio);
-    } catch (ValidationException $e) {
-        $res->errorJson($e->getMessage(), 422);
-    } catch (Throwable $e) {
-        $res->errorJson($e->getMessage(), 500);
+            $res->status(200)->json($edificio);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
     }
-}
 
 
     /**
      * DELETE /edificios/{id}
      * Elimina un edificio
      */
-public function destroy(Request $req, Response $res, $id): Response
-{
-    try {
-        $this->service->deleteEdificio((int)$id);
-        return $res->status(204)->json([]);
-    } catch (Throwable $e) {
-        return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+    public function destroy(Request $req, Response $res, $id): Response
+    {
+        try {
+            $this->service->deleteEdificio((int) $id);
+            return $res->status(204); // 👈 sin JSON
+        } catch (Throwable $e) {
+            return $res->errorJson(
+                $e->getMessage(),
+                $e->getCode() ?: 500
+            );
+        }
     }
-}
-
-
 }

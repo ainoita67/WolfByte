@@ -25,7 +25,7 @@
         </script>
 
 
-        <title>Reservas - IES Bajo Aragón</title>
+        <title>Mis reservas - IES Bajo Aragón</title>
     </head>
     <body>
 
@@ -39,7 +39,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #01</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -52,9 +52,14 @@
 
         <!-- Tarjeta -->
         <div class="col-lg-3 col-6">
-            <div class="card h-100">
+            <div class="card h-100 reserva-card"
+                role="button"
+                data-bs-toggle="modal"
+                data-bs-target="#modalReserva"
+                data-id="01">
+
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #02</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -68,7 +73,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #03</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -82,7 +87,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #04</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -96,7 +101,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #05</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -110,7 +115,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #06</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -124,7 +129,7 @@
         <div class="col-lg-3 col-6">
             <div class="card h-100">
                 <div class="card-body bg-secondary-subtle">
-                    <h6 class="fw-bold">Reserva #XX</h6>
+                    <h6 class="fw-bold">Reserva #07</h6>
                     <p class="mb-1"><strong>Espacio / Material:</strong>R14</p>
                     <p class="mb-1"><strong>Fecha inicio:</strong>2026-02-06 11:30:00</p>
                     <p class="mb-1"><strong>Fecha fin:</strong> 2026-02-06 12:30:00</p>
@@ -136,7 +141,150 @@
         </div>
 
     </div>
+
+    <!-- MODAL RESERVA -->
+<div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalReservaTitulo">Reserva</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <form id="formReserva" method="post" action="#">
+        <div class="modal-body row g-3">
+
+            <!-- ID reserva -->
+            <div class="col-md-4">
+                <label class="form-label">ID Reserva</label>
+                <input type="number" class="form-control" id="reserva_id" name="reserva_id" readonly>
+            </div>
+
+            <!-- Autorizada -->
+            <div class="col-md-8">
+                <label class="form-label">Autorizada</label>
+                <select class="form-select" id="reserva_autorizada" name="autorizada">
+                <option value="pendiente">Pendiente</option>
+                <option value="autorizada">Autorizada</option>
+                <option value="denegada">Denegada</option>
+                </select>
+            </div>
+
+            <!-- Inicio -->
+            <div class="col-md-6">
+                <label class="form-label">Inicio</label>
+                <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
+            </div>
+
+            <!-- Fin -->
+            <div class="col-md-6">
+                <label class="form-label">Fin</label>
+                <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+            </div>
+
+            <!-- Espacio/Portátil -->
+            <div class="col-md-6">
+                <label class="form-label">Espacio / Portátil</label>
+                <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
+            </div>
+
+            <!-- Unidades -->
+            <div class="col-md-6">
+                <label class="form-label">Unidades</label>
+                <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
+            </div>
+
+            <!-- Asignatura -->
+            <div class="col-md-6">
+                <label class="form-label">Asignatura</label>
+                <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
+            </div>
+
+            <!-- Grupo -->
+            <div class="col-md-6">
+                <label class="form-label">Grupo</label>
+                <input type="text" class="form-control" id="reserva_grupo" name="grupo">
+            </div>
+
+            <!-- Profesor -->
+            <div class="col-md-6">
+                <label class="form-label">Profesor</label>
+                <input type="text" class="form-control" id="reserva_profesor" name="profesor">
+            </div>
+
+            <!-- Fecha creación -->
+            <div class="col-md-6">
+                <label class="form-label">F. creación</label>
+                <input type="datetime-local" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
+            </div>
+
+            <!-- Actividad -->
+            <div class="col-md-6">
+                <label class="form-label">Actividad</label>
+                <input type="text" class="form-control" id="reserva_actividad" name="actividad">
+            </div>
+
+            <!-- Espacio en el que se usa -->
+            <div class="col-md-6">
+                <label class="form-label">Espacio en el que se usa</label>
+                <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
+            </div>
+
+            <!-- Necesidades -->
+            <div class="col-12">
+                <label class="form-label">Necesidades</label>
+                <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="4">
+                <option value="proyector">Proyector</option>
+                <option value="altavoces">Altavoces</option>
+                <option value="microfono">Micrófono</option>
+                <option value="pizarra_digital">Pizarra digital</option>
+                </select>
+                <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="col-12">
+                <label class="form-label">Observaciones</label>
+                <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
+            </div>
+
+            </div>
+
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- RELLENAR MODAL -->
+
+<script>
+  const modalReserva = document.getElementById('modalReserva');
+
+  modalReserva.addEventListener('show.bs.modal', function (event) {
+    const card = event.relatedTarget; // la tarjeta clicada
+
+    // leer data attributes
+    const id = card.getAttribute('data-id');
+    // rellenar formulario
+    document.getElementById('reserva_id').value = id;
+  });
+</script>
+
+
         </main>
         <footer id="footer"></footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
     </body>
+    <!-- Bootstrap JS -->
+
 </html>
+

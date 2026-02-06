@@ -40,34 +40,191 @@
             </div>
 
 
-            <script>
-                  const dp = new DayPilot.Calendar("dp", {
-                    viewType: "Week",
-                    theme: "calendar_green"
-                });
-                dp.events.list = [
-                    {
-                    "start": "2026-01-26T10:30:00",
-                    "end": "2026-01-26T13:30:00",
-                    "id": "225eb40f-5f78-b53b-0447-a885c8e92233",
-                    "text": "Calendar Event 1"
-                    },
-                    {
-                    "start": "2026-01-27T12:30:00",
-                    "end": "2026-01-27T15:00:00",
-                    "id": "1f67def5-e1dd-57fc-2d39-eb7a5f8e789a",
-                    "text": "Calendar Event 2"
-                    },
-                    {
-                    "start": "2026-01-28T10:30:00",
-                    "end": "2026-01-28T16:00:00",
-                    "id": "aba78fd9-09d0-642e-612d-0e7e002c29f5",
-                    "text": "Calendar Event 3"
-                    }
-                ];
+            
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
 
-                dp.init();
-            </script>
+    // 1️⃣ Crear calendario
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "Week",
+        theme: "calendar_green",
+        startDate: DayPilot.Date.today()
+    });
+
+    // 2️⃣ Drag & drop
+    dp.onEventMoved = async args => {
+        await actualizarReserva(args);
+    };
+
+    dp.init();
+
+    // 3️⃣ Cargar reservas
+    async function cargarReservasSalon() {
+        try {
+            const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            });
+
+            const text = await res.text(); // 🔹 primero leemos como texto
+            let json;
+            try {
+                json = JSON.parse(text); // 🔹 parseamos JSON
+            } catch {
+                console.error("Respuesta no es JSON:", text);
+                return;
+            }
+
+            if (json.status !== "success") {
+                console.error("Error API:", json);
+                return;
+            }
+
+            const eventos = json.data.data.map(r => ({
+                id: r.id_reserva,
+                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
+                start: r.inicio.replace(" ", "T"),
+                end: r.fin.replace(" ", "T")
+            }));
+
+            dp.events.list = eventos;
+            dp.update();
+
+        } catch (error) {
+            console.error("Error cargando reservas:", error);
+        }
+    }
+
+    cargarReservasSalon();
+
+});
+
+// 4️⃣ Función para actualizar fechas
+// Modificar la función actualizarReserva para mostrar mejor los errores
+async function actualizarReserva(args) {
+    const idReserva = args.e.id();
+    const inicio = args.newStart.toString();
+    const fin = args.newEnd.toString();
+
+    try {
+        const res = await fetch(
+            `http://192.168.13.202/API/reservas/${idReserva}/fechas`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                },
+                body: JSON.stringify({ inicio, fin })
+            }
+        );
+
+        const text = await res.text();
+        let json;
+        
+        try {
+            json = JSON.parse(text);
+        } catch {
+            console.error("Respuesta no es JSON:", text);
+            alert("Error del servidor (respuesta inválida)");
+            args.preventDefault();
+            return;
+        }
+
+        if (json.status !== "success") {
+            // Mostrar mensaje específico si existe
+            const mensaje = json.message || json.data?.message || "No se pudo guardar el cambio";
+            alert(`❌ Error: ${mensaje}`);
+            args.preventDefault();
+            return;
+        }
+        
+        // Éxito
+        console.log("Reserva actualizada correctamente");
+        
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión con el servidor");
+        args.preventDefault();
+    }
+}
+
+// Añade esta función para verificar solapamientos
+async function verificarSolapamiento(inicio, fin, idExcluir = null) {
+    try {
+        const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
+        });
+        
+        const data = await res.json();
+        
+        if (data.status !== "success") return true; // Por precaución
+        
+        const nuevasInicio = new Date(inicio);
+        const nuevasFin = new Date(fin);
+        
+        // Verificar solapamiento con otras reservas
+        const haySolapamiento = data.data.data.some(r => {
+            // Excluir la reserva actual que estamos moviendo
+            if (idExcluir && r.id_reserva == idExcluir) return false;
+            
+            const existenteInicio = new Date(r.inicio.replace(" ", "T"));
+            const existenteFin = new Date(r.fin.replace(" ", "T"));
+            
+            // Comprobar si se solapan
+            return (
+                (nuevasInicio < existenteFin && nuevasFin > existenteInicio) ||
+                (nuevasInicio.getTime() === existenteInicio.getTime() && 
+                 nuevasFin.getTime() === existenteFin.getTime())
+            );
+        });
+        
+        return haySolapamiento;
+        
+    } catch (error) {
+        console.error("Error verificando solapamiento:", error);
+        return true; // Por precaución
+    }
+}
+
+// Modificar el onEventMoved para incluir validación
+dp.onEventMoved = async args => {
+    // Verificar solapamiento antes de mover
+    const haySolapamiento = await verificarSolapamiento(
+        args.newStart.toString(),
+        args.newEnd.toString(),
+        args.e.id() // ID de la reserva que estamos moviendo
+    );
+    
+    if (haySolapamiento) {
+        alert("⚠️ No se puede mover la reserva. El horario se solapa con otra reserva existente.");
+        args.preventDefault(); // Cancelar el movimiento
+        return;
+    }
+    
+    // Si no hay solapamiento, proceder
+    await actualizarReserva(args);
+};
+
+// Función para resaltar horas ocupadas
+function resaltarHorasOcupadas(calendario, reservas) {
+    // Puedes usar esta función para colorear de diferente manera
+    // las horas que ya están reservadas
+    const eventos = calendario.events.list;
+    
+    eventos.forEach(evento => {
+        // Añadir clase CSS si quieres resaltarlos
+        evento.backColor = evento.backColor || "#3788d8";
+    });
+    
+    calendario.update();
+}
+</script>
+
+
 
         </main>
         <footer id="footer"></footer>
