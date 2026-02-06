@@ -104,6 +104,7 @@ class ReservaEspacioService
             throw new ValidationException($errors);
         }
 
+        
         return $this->model->create($validatedData);
     }
 

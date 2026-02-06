@@ -98,6 +98,7 @@ class ReservaEspacioController
             $data = $req->json();
             error_log("Datos recibidos en controller: " . print_r($data, true));
             
+            // print_r($data); 
             // Si no viene id_usuario en la request, usar el usuario autenticado
             if (!isset($data['id_usuario'])) {
                 $usuario = Session::getUser();

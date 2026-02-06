@@ -92,7 +92,7 @@ class ReservaEspacioModel
     public function create(array $data): array
     {
         try {
-            $this->db->beginTransaction();
+            // $this->db->beginTransaction();
             
             // 1. Validar que el espacio existe
             $espacioStmt = $this->db->prepare("SELECT id_espacio FROM Espacio WHERE id_espacio = :id_espacio");
@@ -166,14 +166,15 @@ class ReservaEspacioModel
                 ':id_espacio' => $data['id_espacio']
             ]);
             
-            $this->db->commit();
+            // $this->db->commit();
             
             return $this->findById($idReserva);
+            return $data;
             
         } catch (\Exception $e) {
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
-            }
+            // if ($this->db->inTransaction()) {
+            //     $this->db->rollBack();
+            // }
             throw new \Exception("Error al crear la reserva: " . $e->getMessage());
         }
     }
@@ -184,7 +185,7 @@ class ReservaEspacioModel
     public function update(int $id, array $data): array
     {
         try {
-            $this->db->beginTransaction();
+            // $this->db->beginTransaction();
 
             // Verificar disponibilidad excluyendo la reserva actual
             if (!$this->checkDisponibilidad($data['id_espacio'], $data['inicio'], $data['fin'], $id)) {
@@ -222,7 +223,7 @@ class ReservaEspacioModel
                 UPDATE Reserva_espacio SET
                     actividad = :actividad,
                     id_espacio = :id_espacio
-                WHERE id_reserva = :id  // ← CORREGIDO
+                WHERE id_reserva = :id
             ");
             $stmtEsp->execute([
                 ':id' => $id,
@@ -230,12 +231,12 @@ class ReservaEspacioModel
                 ':id_espacio' => $data['id_espacio']
             ]);
 
-            $this->db->commit();
+            // $this->db->commit();
 
             return $this->findById($id);
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            // $this->db->rollBack();
             throw $e;
         }
     }
@@ -246,7 +247,7 @@ class ReservaEspacioModel
     public function cambiarFechas(int $id, array $data): array
     {
         try {
-            $this->db->beginTransaction();
+            // $this->db->beginTransaction();
 
             // Obtener la reserva actual para el espacio
             $reservaActual = $this->findById($id);
@@ -273,13 +274,13 @@ class ReservaEspacioModel
                 ':fin' => $data['fin']
             ]);
 
-            $this->db->commit();
+            // $this->db->commit();
 
             return $this->findById($id);
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+            // $this->db->rollBack();
+            // throw $e;
         }
     }
 
@@ -288,13 +289,11 @@ class ReservaEspacioModel
      */
     public function delete(int $id): bool
     {
-        $this->db->beginTransaction();
-
         try {
-            // Eliminar de Reserva_espacio primero - USANDO id_reserva
+            // Eliminar de Reserva_espacio primero
             $stmtEsp = $this->db->prepare("
                 DELETE FROM Reserva_espacio 
-                WHERE id_reserva = :id  // ← CORREGIDO
+                WHERE id_reserva = :id
             ");
             $stmtEsp->execute([':id' => $id]);
 
@@ -304,12 +303,11 @@ class ReservaEspacioModel
                 WHERE id_reserva = :id
             ");
             $stmtRes->execute([':id' => $id]);
-
-            $this->db->commit();
-            return true;
+            
+            return true;  // ← RETORNAR true explícitamente
 
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            // No hay rollback porque no hay transacción
             throw $e;
         }
     }
@@ -322,16 +320,13 @@ class ReservaEspacioModel
         $sql = "
             SELECT COUNT(*) as count
             FROM Reserva r
+            INNER JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
             WHERE r.tipo = 'Reserva_espacio'
             AND r.autorizada = 1
-            AND EXISTS (
-                SELECT 1 FROM Reserva_espacio re 
-                WHERE re.id_reserva = r.id_reserva 
-                AND re.id_espacio = :id_espacio
-            )
+            AND re.id_espacio = :id_espacio
             AND (
+                -- Fórmula correcta para detectar solapamiento
                 (r.inicio < :fin AND r.fin > :inicio)
-                OR (r.inicio = :inicio AND r.fin = :fin)
             )
         ";
         
