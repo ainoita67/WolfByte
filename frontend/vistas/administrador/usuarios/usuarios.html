@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8">
   <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
   <script>const BASE = window.location.origin + "/frontend";</script>
+  <script>const API = window.location.origin + "/API";</script>
   <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
@@ -25,7 +25,6 @@
     document.head.appendChild(script1);
   </script>
 
-
   <title>Reservas - IES Bajo Aragón</title>
 </head>
 
@@ -34,7 +33,17 @@
   <div id="header"></div>
 
   <main class="container mt-5">
-    <h2 class="text-center mb-4">Listado de usuarios</h2>
+    <div class="mt-5 container-fluid justify-content-between d-flex">
+      <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver</a>
+      <div>
+        <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCrear">
+          <i class="bi bi-plus-circle"></i> Crear
+        </button>
+        <a href="usuariosinactivos.html" class="btn btn-outline-warning">Usuarios inactivos</a>
+      </div>
+    </div>
+
+    <h2 class="text-center my-4">Listado de usuarios</h2>
     <div class="table-responsive">
       <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
         <thead>
@@ -43,281 +52,402 @@
             <th>Usuario</th>
             <th>Rol</th>
             <th>Email</th>
-            <th class="text-center" style="width: 1%; white-space: nowrap;">Acciones</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="usuariosTableBody">
-          <tr>
-            <td>5</td>
-            <td>Prueba</td>
-            <td>Administrador</td>
-            <td>PruebaPrueba@gmail.com</td>
-            <td class="text-center" style="white-space: nowrap; padding: 0.5rem;">
-              <div class="d-flex gap-1 justify-content-center">
-                <button type="button" class="open-modal btn btn-sm btn-success text-white" data-open="modalEditar"
-                  title="Editar">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                <button type="button" class="open-modal btn btn-sm btn-danger text-white" data-open="modalEliminar"
-                  title="Eliminar">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
+          <!-- Filas de usuarios se insertan aquí dinámicamente -->
         </tbody>
       </table>
     </div>
-    <div class="mt-5 container-fluid text-end">
-      <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú de administrador</a>
-    </div>
 
-    <button type="button" class="open-modal btn btn-success text-white" data-open="modalCrear">
-      <i class="bi bi-plus-circle"></i> Crear
-    </button>
+<!-- Modal crear Usuario -->
+    <div class="modal fade" id="modalCrear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h2 class="modal-title">Crear usuario</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-    <!-- Modal Editar Usuario -->
-    <div class="modal" id="modalEditar">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Header -->
-          <div class="modal-header">
-            <h2 class="modal-title">Editar usuario</h2>
-            <button class="close-modal" aria-label="Cerrar modal" data-close="modalEditar">✕</button>
+      <!-- Body / Formulario -->
+      <div class="modal-body">
+        <form class="row g-4" id="formCrearUsuario">
+
+          <div class="col-md-6">
+            <label class="form-label">Nombre *</label>
+            <input type="text" class="form-control" id="nombreCrear" required>
           </div>
 
-          <!-- Body / Formulario -->
-          <div class="modal-body">
-            <form class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label">Nombre</label>
-                <input type="text" class="form-control" placeholder="Nombre">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" placeholder="Correo Electrónico">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Rol *</label>
-                <select class="form-select" required>
-                  <option value="" selected disabled>Seleccionar Rol</option>
-                  <option value="1">Comun</option>
-                  <option value="2">Administrador</option>
-                  <option value="3">Superadministrador</option>
-                </select>
-              </div>
-
-              <div class="col-md-6"></div>
-
-              <div class="col-md-6">
-                <label class="form-label">Nueva Contraseña (opcional)</label>
-                <input type="password" class="form-control" placeholder="Nueva Contraseña">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Confirmar Contraseña</label>
-                <input type="password" class="form-control" placeholder="Confirmar Contraseña">
-              </div>
-
-              <div class="col-md-6">
-                <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
-              </div>
-            </form>
+          <div class="col-md-6">
+            <label class="form-label">Correo Electrónico *</label>
+            <input type="email" class="form-control" id="correoCrear" required>
           </div>
-        </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Rol *</label>
+            <select class="form-select" id="selectRolCrear" required></select>
+          </div>
+
+          <div class="col-md-6"></div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nueva Contraseña *</label>
+            <input type="password" class="form-control" id="passCrear" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Confirmar Contraseña *</label>
+            <input type="password" class="form-control" id="pass2Crear" required>
+          </div>
+
+          <div class="col-md-6"></div>
+
+          <div class="col-md-6">
+            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <div id="crearUserErrors" class="alert alert-danger d-none"></div>
       </div>
     </div>
+    </div>
+    </div>
+<!-- Modal editar Usuario -->
+    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h2 class="modal-title">Editar usuario</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-    <!-- Modal crear Usuario -->
-    <div class="modal" id="modalCrear">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Header -->
-          <div class="modal-header">
-            <h2 class="modal-title">Crear usuario</h2>
-            <button class="close-modal" aria-label="Cerrar modal" data-close="modalCrear">✕</button>
+      <!-- Body / Formulario -->
+      <div class="modal-body">
+        <form class="row g-4" id="formEditarUsuario">
+
+          <div class="col-md-6">
+            <label class="form-label">ID</label>
+            <input type="text" class="form-control" id="idEditar" required readonly>
           </div>
 
-          <!-- Body / Formulario -->
-          <div class="modal-body">
-            <form class="row g-4">
-              <div class="col-md-6">
-                <label class="form-label">Nombre</label>
-                <input type="text" class="form-control" placeholder="Nombre">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" placeholder="Correo Electrónico">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Rol *</label>
-                <select class="form-select" required>
-                  <option value="" selected disabled>Seleccionar Rol</option>
-                  <option value="1">Comun</option>
-                  <option value="2">Administrador</option>
-                  <option value="3">Superadministrador</option>
-                </select>
-              </div>
-
-              <div class="col-md-6"></div>
-
-              <div class="col-md-6">
-                <label class="form-label">Nueva Contraseña (opcional)</label>
-                <input type="password" class="form-control" placeholder="Nueva Contraseña">
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label">Confirmar Contraseña</label>
-                <input type="password" class="form-control" placeholder="Confirmar Contraseña">
-              </div>
-
-              <div class="col-md-6">
-                <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
-              </div>
-            </form>
+          <div class="col-md-6">
+            <label class="form-label">Nombre *</label>
+            <input type="text" class="form-control" id="nombreEditar" required>
           </div>
-        </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Correo Electrónico *</label>
+            <input type="email" class="form-control" id="correoEditar" required>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Rol *</label>
+            <select class="form-select" id="selectRolEditar" required></select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nueva Contraseña</label>
+            <input type="password" class="form-control" id="passEditar">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="pass2Editar">
+          </div>
+
+          <div class="col-md-6"></div>
+
+          <div class="col-md-6">
+            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <div id="editarUserErrors" class="alert alert-danger d-none"></div>
       </div>
     </div>
-    <!-- Modal Eliminar Usuario -->
-    <div class="modal" id="modalEliminar">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- Header -->
-          <div class="modal-header bg-danger text-white">
-            <h2 class="modal-title">
-              <i class="bi bi-exclamation-triangle me-2"></i> Eliminar usuario
-            </h2>
-            <button class="close-modal text-white" aria-label="Cerrar modal" data-close="modalEliminar">✕</button>
-          </div>
-
-          <!-- Body / Confirmación -->
-          <div class="modal-body">
-            <!-- Mensaje de advertencia -->
-            <div class="alert alert-danger">
-              <i class="bi bi-exclamation-octagon me-2"></i>
-              <strong>¡Advertencia!</strong> Esta acción no se puede deshacer.
-            </div>
-
-            <!-- Información del usuario a eliminar -->
-            <div class="card mb-4">
-              <div class="card-body">
-                <h5 class="card-title mb-3">Usuario a eliminar:</h5>
-                <div class="row">
-                  <div class="col-md-6 mb-2">
-                    <strong>Nombre:</strong>
-                    <p class="mb-0" id="nombreUsuarioEliminar">[Nombre del usuario]</p>
-                  </div>
-                  <div class="col-md-6 mb-2">
-                    <strong>Correo Electrónico:</strong>
-                    <p class="mb-0" id="emailUsuarioEliminar">[correo@ejemplo.com]</p>
-                  </div>
-                  <div class="col-md-6">
-                    <strong>Rol:</strong>
-                    <p class="mb-0" id="rolUsuarioEliminar">[Rol del usuario]</p>
-                  </div>
-                  <div class="col-md-6">
-                    <strong>ID:</strong>
-                    <p class="mb-0" id="idUsuarioEliminar">[ID del usuario]</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Botones de acción -->
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" data-close="modalEliminar">
-                Cancelar
-              </button>
-              <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                <i class="bi bi-trash me-1"></i> Eliminar permanentemente
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </main>
-  <footer id="footer"></footer>
+    </div>
+
 </body>
 
 </html>
 
 
+<script type="module">
+import { getUsuarios, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
+import { insertUser } from "/frontend/javascript/gestion_usuarios/post.js";
+import { updateUser, updateUserPassword, desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js";
+import { Usuario } from "/frontend/javascript/clases/Usuario.js";
 
-<script>
-  (async () => {
-    const response = await getUsuarios();
-    imprimirUsuariosEnTabla(response);
-  })();
+let usuarios;
 
+// Función para imprimir usuarios en la tabla
+function imprimirUsuariosEnTabla(usuarios) {
+  const tbody = document.getElementById("usuariosTableBody");
+  tbody.innerHTML = "";
 
-  function imprimirUsuariosEnTabla(usuarios) {
-    const tbody = document.getElementById("usuariosTableBody");
-    tbody.innerHTML = ""; // Limpiar tabla
-
-    if (!Array.isArray(usuarios)) {
-      console.error("Usuarios no es un array", usuarios);
-      return;
-    }
-
-    usuarios.forEach(usuario => {
-      const tr = document.createElement("tr");
-
-      tr.innerHTML = `
-            <td>${usuario.id_usuario}</td>
-            <td>${usuario.nombre}</td>
-            <td>
-                <span class="badge estado border rounded-pill ${usuario.rol}">
-                    ${usuario.rol}
-                </span>
-            </td>
-            <td>${usuario.correo}</td>
-            <td>
-                <button type="button" class="open-modal btn btn-primary bg-verde text-white" data-open="modalEditar">
-                    <i class="bi bi-pencil-square"></i> Editar
-                </button>
-            </td>
-        `;
-
-      tbody.appendChild(tr);
-    });
+  if (!Array.isArray(usuarios) || usuarios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-muted py-4">
+          No hay usuarios activos para mostrar
+        </td>
+      </tr>
+    `;
+    return;
   }
 
+  usuarios.forEach(usuario => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${usuario.id_usuario}</td>
+      <td>${usuario.nombre}</td>
+      <td>${capitalizarRol(usuario.rol.rol)}</td>
+      <td>${usuario.correo}</td>
+      <td class="text-center">
+        <div class="d-flex gap-1 justify-content-center">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-success text-white" 
+            data-bs-toggle="modal" 
+            data-bs-target="#modalEditar" 
+            data-id="${usuario.id_usuario}" 
+            title="Editar">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-sm btn-danger text-white btn-eliminar" 
+            data-id="${usuario.id_usuario}" 
+            title="Eliminar">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-  const openEls = document.querySelectorAll("[data-open]");
-  const isVisible = "is-visible";
+// Capitalizar nombres de roles
+function capitalizarRol(rol) {
+  return rol.replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase());
+}
 
-  for (const el of openEls) {
-    el.addEventListener("click", function () {
-      const modalId = this.dataset.open;
-      document.getElementById(modalId).classList.add(isVisible);
-    });
-  }
+// Cargar roles en un select
+async function cargarSelectRoles(selectId, selectedIdRol = null) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
 
-  const closeEls = document.querySelectorAll("[data-close]");
+  const rolesMap = await getRoles();
+  select.innerHTML = `<option value="" disabled ${selectedIdRol ? "" : "selected"}>Seleccionar Rol</option>`;
 
-  for (const el of closeEls) {
-    el.addEventListener("click", function () {
-      this.parentElement.parentElement.parentElement.parentElement.classList.remove(isVisible);
-    });
-  }
+  Object.entries(rolesMap).forEach(([idRol, nombreRol]) => {
+    const option = document.createElement("option");
+    option.value = idRol;
+    option.textContent = capitalizarRol(nombreRol);
+    if (selectedIdRol !== null && Number(idRol) === Number(selectedIdRol)) option.selected = true;
+    select.appendChild(option);
+  });
+}
 
-  document.addEventListener("click", e => {
-    if (e.target == document.querySelector(".modal.is-visible")) {
-      document.querySelector(".modal.is-visible").classList.remove(isVisible);
-    }
+
+// Función para refrescar tabla
+async function refrescarTabla() {
+  usuarios = await getUsuarios();
+  imprimirUsuariosEnTabla(usuarios);
+}
+function showFormError(boxId, msg) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = msg;
+  box.classList.remove("d-none");
+}
+
+function clearFormError(boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = "";
+  box.classList.add("d-none");
+}
+
+// Manejo del formulario de creación de usuario
+document.getElementById("formCrearUsuario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFormError("crearUserErrors");
+  
+  const nombre = document.getElementById("nombreCrear").value.trim();
+  const correo = document.getElementById("correoCrear").value.trim();
+  const id_rol = Number(document.getElementById("selectRolCrear").value);
+  const pass1 = document.getElementById("passCrear").value;
+  const pass2 = document.getElementById("pass2Crear").value;
+
+  if (!nombre || !correo || !id_rol || !pass1 || !pass2) return alert("Rellena todos los campos obligatorios.");
+  if (pass1 !== pass2) return alert("Las contraseñas no coinciden.");
+
+  const usuario = new Usuario({
+    nombre,
+    correo,
+    contrasena: pass1,
+    usuario_activo: true,
+    rol: { id_rol }
   });
 
+  try {
+    await insertUser(usuario);
 
-  document.addEventListener("keyup", e => {
-    if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
-      document.querySelector(".modal.is-visible").classList.remove(isVisible);
-    }
+    // Cerrar modal
+    const modalEl = document.getElementById("modalCrear");
+    bootstrap.Modal.getInstance(modalEl)?.hide();
+
+    // Reset formulario
+    e.target.reset();
+
+    // Refrescar tabla
+    await refrescarTabla();
+
+    alert("Usuario creado correctamente.");
+  } catch (err) {
+    showFormError("crearUserErrors", err?.message ?? "Error inesperado");
+  }
+});
+
+async function cargarModalEditar(e) {
+  // Botón que abrió el modal
+  const btn = e.relatedTarget;
+  if (!btn) return;
+
+  clearFormError("editarUserErrors");
+
+  // Leer data-id del botón
+  const id = Number(btn.getAttribute("data-id")); 
+  if (!id) return;
+
+  // Buscar usuario en el array global "usuarios"
+  const user = usuarios.find(u => Number(u.id_usuario) === id);
+
+  if (!user) {
+    showFormError("editarUserErrors", "No se encontró el usuario seleccionado.");
+    return;
+  }
+
+  // Rellenar inputs
+  document.getElementById("idEditar").value = user.id_usuario;
+  document.getElementById("nombreEditar").value = user.nombre ?? "";
+  document.getElementById("correoEditar").value = user.correo ?? "";
+
+  // Cargar roles (y seleccionar el rol actual)
+  await cargarSelectRoles("selectRolEditar", user.rol?.id_rol);
+
+  // Vaciar contraseñas
+  document.getElementById("passEditar").value = "";
+  document.getElementById("pass2Editar").value = "";
+
+};
+
+// Manejo del formulario de editar usuario
+document.getElementById("formEditarUsuario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFormError("editarUserErrors");
+  
+  const id_usuario = Number(document.getElementById("idEditar").value);
+  const nombre = document.getElementById("nombreEditar").value.trim();
+  const correo = document.getElementById("correoEditar").value.trim();
+  const id_rol = Number(document.getElementById("selectRolEditar").value);
+  const pass1 = document.getElementById("passEditar").value;
+  const pass2 = document.getElementById("pass2Editar").value;
+
+  if (!nombre || !correo || !id_rol) return alert("Rellena todos los campos obligatorios.");
+  if (pass1 !== pass2) return alert("Las contraseñas no coinciden.");
+
+  const usuario = new Usuario({
+    id_usuario,
+    nombre,
+    correo,
+    contrasena: pass1 || null,
+    usuario_activo: true,
+    rol: { id_rol }
   });
 
+  try {
+    const res = await updateUser(usuario);
+    let resPass = null;
 
+    // Si hay contraseña, actualizarla aparte
+    if (usuario.contrasena) {
+      resPass = await updateUserPassword(usuario);
+    }
+
+    const modalEl = document.getElementById("modalEditar");
+    bootstrap.Modal.getInstance(modalEl)?.hide();
+
+    e.target.reset();
+    await refrescarTabla();
+
+    const mensajes = [];
+    if (res?.message) {
+      mensajes.push(res.message);
+    }
+    if (resPass?.message) {
+      mensajes.push(resPass.message);
+    }
+
+    alert(mensajes.join("\n"));
+    return;
+  } catch (err) {
+    showFormError(err?.message ?? "Error inesperado");
+  }
+});
+
+
+// Inicialización al cargar página
+document.addEventListener("DOMContentLoaded", async () => {
+  await refrescarTabla();
+
+  document.getElementById("modalCrear").addEventListener("show.bs.modal", async () => {
+    await cargarSelectRoles("selectRolCrear");
+  });
+  document.getElementById("modalEditar").addEventListener("show.bs.modal", async (e) => {
+    await cargarModalEditar(e);
+  });
+});
+// Delegación de eventos para botones de eliminar
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-eliminar");
+  if (!btn) return;
+
+  const id = Number(btn.dataset.id);
+  if (!id) return;
+
+  const user = usuarios.find(u => Number(u.id_usuario) === id);
+  if (!user) {
+    alert("Usuario no encontrado.");
+    return;
+  }
+
+  const ok = confirm(
+    `¿Seguro que deseas desactivar al usuario:\n\n` +
+    `${user.nombre} (${user.correo})?\n\n` +
+    `Esta acción se puede revertir.`
+  );
+
+  if (!ok) return;
+
+  try {
+    await desactiveUser(user);
+    await refrescarTabla();
+    alert("Usuario desactivado correctamente.");
+  } catch (err) {
+    alert(err?.message ?? "Error al desactivar el usuario.");
+  }
+});
 </script>

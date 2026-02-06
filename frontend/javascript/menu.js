@@ -43,12 +43,12 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: "/frontend/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: "/frontend/vistas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: "/frontend/vistas/liberar/liberar.html", key: "liberar" }
+            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.php", key: "aulas" },
+            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.php", key: "salonactos" },
+            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.php", key: "portatiles" },
+            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.php", key: "espacios" },
+            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.php", key: "incidencias" },
+            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.php", key: "liberar" }
         ];
 
         //MENU DESKTOP
