@@ -13,34 +13,34 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 
 // //aqui se redirigen las peticiones hechas con el protocolo que sea (get, post ...) a la direccion (primer parametro)  y ejecuta la funcion (segundo parametro). La funcion es carpeta\\directorio@funcion.
 // $router->get('/profesores', 'Controllers\\ProfesorController@index'); //seleccionar todos los profesores
-// $router->get('/profesores/{id}', 'Controllers\\ProfesorController@show'); // ver info de un profesor por id
+// $router->get('/profesores/{id}', 'Controllers\\ProfesorController@show'); // ver info de un profesor por ID
 
 // $router->post('/profesores', 'Controllers\\ProfesorController@store'); // insertar nuevo profesor
-// $router->put('/profesores/{id}', 'Controllers\\ProfesorController@update'); // actualizar profesor por id
-// $router->delete('/profesores/{id}', 'Controllers\\ProfesorController@destroy'); // eliminar profesor por id
+// $router->put('/profesores/{id}', 'Controllers\\ProfesorController@update'); // actualizar profesor por ID
+// $router->delete('/profesores/{id}', 'Controllers\\ProfesorController@destroy'); // eliminar profesor por ID
 // $router->patch('/profesores/{id}/email','Controllers\\ProfesorController@updateEmail'); // actualizar email de profesor
 
 
 // // INCIDENCIAS
 // $router->get('/incidencias', 'Controllers\\IncidenciaController@index'); //seleccionar todos los Incidenciaes
 // $router->post('/incidencias', 'Controllers\\IncidenciaController@store'); // insertar nuevo Incidencia
-// $router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por id
-// $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por id
+// $router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por ID
+// $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por ID
 
 // USUARIOS
 $router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios activos para listarlos
 $router->get('/user/inactivos',     'Controllers\\UsuarioController@indexin'); // Se reciben los datos de los usuarios inactivos para listarlos
-$router->get('/user/{id}',          'Controllers\\UsuarioController@show'); // Se reciben los datos del usuario con el id que se mande
-$router->get('/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el id
-$router->get('/user/{id}/correo',  'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el id
-$router->get('/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el id
+$router->get('/user/{id}',          'Controllers\\UsuarioController@show'); // Se reciben los datos del usuario con el ID que se mande
+$router->get('/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el ID
+$router->get('/user/{id}/correo',  'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el ID
+$router->get('/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el ID
 $router->post('/user',              'Controllers\\UsuarioController@store'); // Se envían los datos del usuario desde un formulario para añadirlo a la DDBB
-$router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
-$router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
-$router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
-$router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id menos la contraseña
+$router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el ID
+$router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el ID
+$router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el ID
+$router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el ID menos la contraseña
 $router->patch('/user/{id}', 'Controllers\\UsuarioController@patch');
- // Actualizar la contraseña de un usuario o modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id 
+ // Actualizar la contraseña de un usuario o modifica el campo de active a incactive o de inactive a active del usuario del que se pase el ID 
 
 // Necesidad Reservas
 $router->post('/reservas-necesidades/{id_reserva_espacio}/necesidades', 'Controllers\\NecesidadReservaController@store');
@@ -52,10 +52,10 @@ $router->delete('/reservas-necesidades/{id_reserva_espacio}/necesidades/{id_nece
 
 // EDIFICIOS
 $router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
-$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
+$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por ID
 $router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
-$router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
-$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
+$router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por ID 
+$router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por ID
  
 
 // Caracteristicas
@@ -122,13 +122,17 @@ $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cam
 
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
-$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
 $router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
 $router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@activate'); //activar o desactivar una reserva permanente
 $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
-$router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
+$router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por ID
 $router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
 
+// NECESIDAD
+$router ->get('/necesidades', 'Controllers\\NecesidadController@index'); // Devuelve las necesidades que tenemos en la base de datos
+$router ->post('/necesidades', 'Controllers\\NecesidadController@store'); // Añade una nueva necesidad
+$router ->put('/necesidades/{id}', 'Controllers\\NecesidadController@update'); // Modifica los datos de una necesidad
 
 // NECESIDAD RESERVA
 $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');
@@ -137,7 +141,16 @@ $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@st
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
-
 // RECURSO
-$router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
+$router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve ID y descripción de todos los recursos que estén en la base de datos
+$router->get('/recurso/activos', 'Controllers\\RecursoController@activos'); //Nos devuelve ID y descripción de todos los recursos que estén activos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
+
+// LIBERACIÓN PUNTUAL
+$router->get('/liberaciones', 'Controllers\\LiberacionPuntualController@index'); //Consultar todas las liberaciones puntuales
+$router->get('/liberaciones/recurso/{id_recurso}', 'Controllers\\LiberacionPuntualController@showByRecurso'); //Consultar todas las liberaciones puntuales de un recurso
+$router->get('/liberaciones/usuario/{id_usuario}', 'Controllers\\LiberacionPuntualController@showByUsuario'); //Consultar las liberaciones puntuales de un usuario
+$router->post('/liberaciones', 'Controllers\\LiberacionPuntualController@store'); //Añadir una liberación puntual
+$router->post('/liberaciones/reserva/{id_reserva}', 'Controllers\\LiberacionPuntualController@storeByReserva'); //Añadir una liberación puntual ligada a una reserva
+$router->put('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@update'); //Editar una liberación puntual
+$router->delete('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@destroy'); //Eliminar una liberación puntual

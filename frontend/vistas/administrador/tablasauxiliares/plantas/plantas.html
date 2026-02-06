@@ -1,115 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-    <title>Plantas - IES Bajo Aragón</title>
-    <script>const BASE = window.location.origin + "/frontend";</script>
-
-    <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-                generarPagina("admin", "admin");
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
             };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
+            document.head.appendChild(script1);
     </script>
-</head>
 
-<body>
-
-<div id="header"></div>
-
-<main class="container mt-5">
-
-    <!-- CABECERA -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Plantas</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear planta
-        </button>
-    </div>
-
-    <!-- TARJETAS -->
-    <div class="row g-4">
-
-        <!-- PLANTA 1 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-azul text-white">
-                    <h5 class="mb-0">Edificio Loscos</h5>
-                </div>
-
-                <div class="card-body">
-                    <p><strong>Planta:</strong> Planta 0</p>
-                    <p><strong>Nº de aulas:</strong> 6</p>
-
-                    <p class="mb-1"><strong>Espacios especiales:</strong></p>
-                    <ul>
-                        <li>Secretaría</li>
-                        <li>Conserjería</li>
-                        <li>Sala de profesores</li>
-                    </ul>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                </div>
+        <title>Plantas - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Plantas</h2>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-plus-circle"></i> Crear material
+                </button>
             </div>
         </div>
 
-        <!-- PLANTA 2 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-azul text-white">
-                    <h5 class="mb-0">Edificio Ram</h5>
-                </div>
-
-                <div class="card-body">
-                    <p><strong>Planta:</strong> Planta 1</p>
-                    <p><strong>Nº de aulas:</strong> 8</p>
-
-                    <p class="mb-1"><strong>Espacios especiales:</strong></p>
-                    <ul>
-                        <li>Laboratorio de Física</li>
-                        <li>Aula de Informática</li>
-                    </ul>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                </div>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </div>
 
     </div>
 
-    <!-- VOLVER -->
-        <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
-                <i class="bi bi-caret-left-fill"></i> Volver
-            </a>
-        </div>
+    <div class="mt-5 container-fluid text-end">
+        <a href="../tablasauxiliares.html" class="volver p-2 px-4 text-dark">
+            Volver al menú de tablas auxiliares
+        </a>
+    </div>
 
 </main>
 
 <!-- MODAL CREAR -->
-<div class="modal fade" id="modalCrear" tabindex="-1">
+<div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
 
@@ -119,6 +57,7 @@
             </div>
 
             <div class="modal-body">
+
                 <div class="mb-3">
                     <label class="form-label">Edificio</label>
                     <select class="form-select">
@@ -129,7 +68,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Planta</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" placeholder="Ej: Planta 0, Planta 1">
                 </div>
 
                 <div class="mb-3">
@@ -139,13 +78,15 @@
 
                 <div class="mb-3">
                     <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3"
+                        placeholder="Ej: Laboratorio de Física, Secretaría"></textarea>
                 </div>
+
             </div>
 
             <div class="modal-footer">
-                <button class="btn bg-azul text-light">Crear</button>82
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-success">Crear</button>
             </div>
 
         </div>
@@ -153,21 +94,22 @@
 </div>
 
 <!-- MODAL EDITAR -->
-<div class="modal fade" id="modalEditar" tabindex="-1">
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
 
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Editar planta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn btn-close-white btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
+
                 <div class="mb-3">
                     <label class="form-label">Edificio</label>
                     <select class="form-select">
-                        <option selected>Loscos</option>
-                        <option>Ram</option>
+                        <option selected>Edificio A</option>
+                        <option>Edificio B</option>
                     </select>
                 </div>
 
@@ -183,8 +125,9 @@
 
                 <div class="mb-3">
                     <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
+                    <textarea class="form-control" rows="3">Conserjería, Secretaría, Sala de profesores</textarea>
                 </div>
+
             </div>
 
             <div class="modal-footer">

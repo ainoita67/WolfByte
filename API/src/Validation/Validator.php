@@ -137,4 +137,16 @@ class Validator
         return $value;
     }
 
+
+    public static function capitalizar(?string $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $value = strtolower($value);
+        $value = ucfirst($value);
+
+        return $value;
+    }
 }

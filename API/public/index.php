@@ -11,8 +11,6 @@ session_start();
 // Cargar config y defines
 // ---------------------------
 require_once __DIR__ . '/../config/config.php';
-require __DIR__ . '/../vendor/autoload.php';
-
 
 
 
