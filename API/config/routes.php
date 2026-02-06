@@ -124,6 +124,16 @@ $router->get('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@show'
 $router->put('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@update'); // Cambia los datos de una reserva de espacio (comprobar disponibilidad)
 $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cambiarFechas'); // Cambia el rango de fechas de una reserva de espacio (comprobar disponibilidad)
 
+// RESERVAS ESPACIOS (completas) - RUTAS UNIFICADAS 
+$router->get('/reserva-espacio', 'Controllers\\ReservaEspacioController@index'); // Todas las reservas 
+$router->get('/mis-reservas-espacio', 'Controllers\\ReservaEspacioController@misReservas'); // Mis reservas 
+$router->get('/reserva-espacio/{id}', 'Controllers\\ReservaEspacioController@show'); // Reserva específica 
+$router->get('/reserva-espacio/espacio/{id}', 'Controllers\\ReservaEspacioController@showByEspacio'); // Reservas por espacio 
+$router->post('/reserva-espacio', 'Controllers\\ReservaEspacioController@store'); // Crear reserva 
+$router->put('/reserva-espacio/{id}', 'Controllers\\ReservaEspacioController@update'); // Actualizar reserva completa 
+$router->patch('/reserva-espacio/{id}/fechas', 'Controllers\\ReservaEspacioController@cambiarFechas'); // Cambiar solo fechas 
+$router->delete('/reserva-espacio/{id}', 'Controllers\\ReservaEspacioController@destroy'); // Eliminar reserva 
+
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
 $router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
