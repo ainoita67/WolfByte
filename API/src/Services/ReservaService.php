@@ -15,9 +15,11 @@ class ReservaService
         $this->model = new ReservaModel();
     }
 
-    /**
-     * Reservas del usuario
-     */
+    public function getAllReservas(): array
+    {
+        return $this->model->getAll();
+    }
+
     public function getReservasUsuario(int $idUsuario): array
     {
         if ($idUsuario <= 0) {
@@ -27,17 +29,12 @@ class ReservaService
         return $this->model->getByUsuario($idUsuario);
     }
 
-    /**
-     * Reserva por ID
-     */
     public function getReservaById(int $id): array
     {
         $reserva = $this->model->findById($id);
-
         if (!$reserva) {
             throw new ValidationException("Reserva no encontrada");
         }
-
         return $reserva;
     }
 

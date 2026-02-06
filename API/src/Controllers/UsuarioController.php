@@ -53,58 +53,6 @@ class UsuarioController
         }
     }
 
-    // Mostrar nombre por ID
-    public function showName(Request $req, Response $res, string $id): void
-    {
-        try {
-            $nombre = $this->service->getNombreById((int)$id);
-            $res->status(200)->json(['nombre' => $nombre]);
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
-        }
-    }
-
-    // Mostrar correo por ID
-    public function showEmail(Request $req, Response $res, string $id): void
-    {
-        try {
-            $correo = $this->service->getEmailById((int)$id);
-            $res->status(200)->json(['correo' => $correo]);
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
-        }
-    }
-
-    // Mostrar rol por ID
-    public function showRol(Request $req, Response $res, string $id): void
-    {
-        try {
-            $rol = $this->service->getRolById((int)$id);
-            $res->status(200)->json($rol);
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
-        }
-    }
-
-    // Mostrar token por ID
-    public function showToken(Request $req, Response $res, string $id): void
-    {
-        try {
-            $tokenData = $this->service->getTokenById((int)$id);
-            $res->status(200)->json(['token' => $tokenData]);
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors]);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
-        }
-    }
-
     // Crear usuario
     public function store(Request $req, Response $res): void
     {

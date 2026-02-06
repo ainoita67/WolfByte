@@ -64,73 +64,6 @@ class UsuarioService
     }
 
     /**
-     * Obtener nombre de usuario por ID
-     */
-    public function getNombreById(int $id): string
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $nombre = $this->model->findNameById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($nombre === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $nombre;
-    }
-
-    /**
-     * Obtener correo de usuario por ID
-     */
-    public function getEmailById(int $id): string
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $correo = $this->model->findEmailById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($correo === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $correo;
-    }
-
-    /**
-     * Obtener rol de usuario por ID
-     */
-    public function getRolById(int $id): array
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $rol = $this->model->findRolById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($rol === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $rol;
-    }
-
-
-    /**
      * Crear nuevo usuario
      */
     public function createUsuario(array $input): array
@@ -143,6 +76,10 @@ class UsuarioService
         ]);
 
         try {
+            $existe = $this->model->emailExists($data['correo']);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $id = $this->model->create($data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
@@ -172,6 +109,10 @@ class UsuarioService
         ]);
 
         try {
+            $existe = $this->model->emailExistsForOtherUser($data['correo'], $id);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $result = $this->model->update($id, $data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
