@@ -161,14 +161,14 @@ class LiberacionPuntualModel
             $liberacion = $this->findById($id);
             if (!$liberacion) {
                 throw new \Exception("Liberación puntual no encontrada");
+            }else{
+                $this->db
+                    ->query("DELETE FROM Liberacion_puntual WHERE id_liberacion_puntual = :id")
+                    ->bind(':id', $id)
+                    ->execute();
+
+                return ["mensaje" => "Liberación puntual eliminada correctamente"];
             }
-
-            $this->db
-                ->query("DELETE FROM Liberacion_puntual WHERE id_liberacion_puntual = :id")
-                ->bind(':id', $id)
-                ->execute();
-
-            return ["mensaje" => "Liberación puntual eliminada correctamente"];
         } catch (PDOException $e) {
             throw new \Exception("Error al eliminar la liberación puntual");
         }
