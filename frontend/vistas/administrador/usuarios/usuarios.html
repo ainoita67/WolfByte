@@ -39,7 +39,7 @@
         <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCrear">
           <i class="bi bi-plus-circle"></i> Crear
         </button>
-        <a href="usuariosinactivos.html" class="btn btn-outline-warning">Usuarios inactivos</a>
+        <a href="usuariosinactivos.html" class="btn btn-outline-secondary">Usuarios inactivos</a>
       </div>
     </div>
 
@@ -189,6 +189,7 @@ import { updateUser, updateUserPassword, desactiveUser } from "/frontend/javascr
 import { Usuario } from "/frontend/javascript/clases/Usuario.js";
 
 let usuarios;
+let roles;
 
 // Función para imprimir usuarios en la tabla
 function imprimirUsuariosEnTabla(usuarios) {
@@ -248,10 +249,12 @@ async function cargarSelectRoles(selectId, selectedIdRol = null) {
   const select = document.getElementById(selectId);
   if (!select) return;
 
-  const rolesMap = await getRoles();
+  if (!roles) {
+    roles = await getRoles();
+  }
   select.innerHTML = `<option value="" disabled ${selectedIdRol ? "" : "selected"}>Seleccionar Rol</option>`;
 
-  Object.entries(rolesMap).forEach(([idRol, nombreRol]) => {
+  Object.entries(roles).forEach(([idRol, nombreRol]) => {
     const option = document.createElement("option");
     option.value = idRol;
     option.textContent = capitalizarRol(nombreRol);
@@ -404,7 +407,7 @@ document.getElementById("formEditarUsuario").addEventListener("submit", async (e
     alert(mensajes.join("\n"));
     return;
   } catch (err) {
-    showFormError(err?.message ?? "Error inesperado");
+    showFormError("editarUserErrors", err?.message ?? "Error inesperado");
   }
 });
 
