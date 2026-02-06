@@ -77,15 +77,16 @@ $router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@ind
 $router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
 $router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
 
+//Espacios
+
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
 $router->post('/espacios', 'Controllers\\EspacioController@store');
-
-// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
-// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
-// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
-// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
+$router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
+$router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
+$router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
+$router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
+$router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
 
 // RESERVAS PERMANENTES
@@ -104,4 +105,15 @@ $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaControlle
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+
+//RESERVA DE ESPACIO
+$router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');
+$router->put('/reservas/{id}/fechas', 'Controllers\\ReservaController@updateFechas');
+$router->post('/reservas/verificar-disponibilidad', 'Controllers\\ReservaController@verificarDisponibilidad');
+
+
+
+
+
+
 

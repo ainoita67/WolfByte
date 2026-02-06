@@ -45,4 +45,36 @@ class ReservaModel
             ->bind(':id', $id)
             ->fetch();
     }
+
+   public function updateFechas(
+    int $idReserva,
+    string $inicio,
+    string $fin
+): void {
+    $this->db
+        ->query("
+            UPDATE Reserva
+            SET inicio = :inicio,
+                fin = :fin
+            WHERE id_reserva = :id
+        ")
+        ->bind(':inicio', $inicio)
+        ->bind(':fin', $fin)
+        ->bind(':id', $idReserva)
+        ->execute();
+}
+
+public function getReservasSalonActos(): array
+{
+    return $this->db
+        ->query("
+            SELECT r.*, u.nombre, u.apellidos 
+            FROM Reserva r
+            JOIN Usuario u ON r.id_usuario = u.id_usuario
+            WHERE r.id_aula = 1  -- Ajusta el ID del salón de actos
+            ORDER BY r.inicio
+        ")
+        ->fetchAll();
+}
+
 }
