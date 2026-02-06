@@ -50,88 +50,9 @@ class UsuarioService
         return $usuario;
     }
 
-// $router->get('/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el id
-
-    public function getNombreById(int $id): string|false
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-        try {
-            $nombre = $this->model->findNameById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($nombre === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $nombre;
-    }
-
-// $router->get('/user/{id}/correo',   'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el id
-
-    public function getEmailById(int $id): string|false
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-        try {
-            $correo = $this->model->findEmailById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($correo === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $correo;
-    }
-
-// $router->get('/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el id
-
-    public function getRolById(int $id): string|false
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-        try {
-            $rol = $this->model->findRolById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($rol === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $rol;
-    }
-
-// $router->get('/user/{$id}/token',   'Controllers\\UsuarioController@showToken'); // Se recibe el token  y su fecha de expiración del usuario del que se pase el id
-
-    public function getTokenById(int $id): array|false
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-        try {
-            $tokenData = $this->model->findTokenById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($tokenData === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $tokenData;
-    }
-
-// $router->post('/user',              'Controllers\\UsuarioController@store'); // Se envían los datos del usuario desde un formulario para añadirlo a la DDBB
-
+    /**
+     * Crear nuevo usuario
+     */
     public function createUsuario(array $input): array
     {
         $data = Validator::validate($input, [
@@ -142,6 +63,10 @@ class UsuarioService
         ]);
 
         try {
+            $existe = $this->model->emailExists($data['correo']);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $id = $this->model->create($data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
@@ -171,6 +96,10 @@ class UsuarioService
         ]);
 
         try {
+            $existe = $this->model->emailExistsForOtherUser($data['correo'], $id);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $result = $this->model->update($id, $data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);

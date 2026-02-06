@@ -47,10 +47,16 @@
             </div>
     	</main>
 
-    	<!-- MODAL EDITAR USUARIO -->
-		<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-lg">
-				<div class="modal-content">
+  <main class="container mt-5">
+    <div class="mt-5 container-fluid justify-content-between d-flex">
+      <a href="../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver</a>
+      <div>
+        <button type="button" class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCrear">
+          <i class="bi bi-plus-circle"></i> Crear
+        </button>
+        <a href="usuariosinactivos.html" class="btn btn-outline-secondary">Usuarios inactivos</a>
+      </div>
+    </div>
 
 					<div class="modal-header bg-primary text-white">
 						<h5 class="modal-title">Editar Usuario</h5>
@@ -112,3 +118,277 @@
 		<footer id="footer"></footer>
 	</body>
 </html>
+
+
+<script type="module">
+import { getUsuarios, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
+import { insertUser } from "/frontend/javascript/gestion_usuarios/post.js";
+import { updateUser, updateUserPassword, desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js";
+import { Usuario } from "/frontend/javascript/clases/Usuario.js";
+
+let usuarios;
+let roles;
+
+// Función para imprimir usuarios en la tabla
+function imprimirUsuariosEnTabla(usuarios) {
+  const tbody = document.getElementById("usuariosTableBody");
+  tbody.innerHTML = "";
+
+  if (!Array.isArray(usuarios) || usuarios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-muted py-4">
+          No hay usuarios activos para mostrar
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  usuarios.forEach(usuario => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${usuario.id_usuario}</td>
+      <td>${usuario.nombre}</td>
+      <td>${capitalizarRol(usuario.rol.rol)}</td>
+      <td>${usuario.correo}</td>
+      <td class="text-center">
+        <div class="d-flex gap-1 justify-content-center">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-success text-white" 
+            data-bs-toggle="modal" 
+            data-bs-target="#modalEditar" 
+            data-id="${usuario.id_usuario}" 
+            title="Editar">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-sm btn-danger text-white btn-eliminar" 
+            data-id="${usuario.id_usuario}" 
+            title="Eliminar">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Capitalizar nombres de roles
+function capitalizarRol(rol) {
+  return rol.replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// Cargar roles en un select
+async function cargarSelectRoles(selectId, selectedIdRol = null) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+
+  if (!roles) {
+    roles = await getRoles();
+  }
+  select.innerHTML = `<option value="" disabled ${selectedIdRol ? "" : "selected"}>Seleccionar Rol</option>`;
+
+  Object.entries(roles).forEach(([idRol, nombreRol]) => {
+    const option = document.createElement("option");
+    option.value = idRol;
+    option.textContent = capitalizarRol(nombreRol);
+    if (selectedIdRol !== null && Number(idRol) === Number(selectedIdRol)) option.selected = true;
+    select.appendChild(option);
+  });
+}
+
+
+// Función para refrescar tabla
+async function refrescarTabla() {
+  usuarios = await getUsuarios();
+  imprimirUsuariosEnTabla(usuarios);
+}
+function showFormError(boxId, msg) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = msg;
+  box.classList.remove("d-none");
+}
+
+function clearFormError(boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = "";
+  box.classList.add("d-none");
+}
+
+// Manejo del formulario de creación de usuario
+document.getElementById("formCrearUsuario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFormError("crearUserErrors");
+  
+  const nombre = document.getElementById("nombreCrear").value.trim();
+  const correo = document.getElementById("correoCrear").value.trim();
+  const id_rol = Number(document.getElementById("selectRolCrear").value);
+  const pass1 = document.getElementById("passCrear").value;
+  const pass2 = document.getElementById("pass2Crear").value;
+
+  if (!nombre || !correo || !id_rol || !pass1 || !pass2) return alert("Rellena todos los campos obligatorios.");
+  if (pass1 !== pass2) return alert("Las contraseñas no coinciden.");
+
+  const usuario = new Usuario({
+    nombre,
+    correo,
+    contrasena: pass1,
+    usuario_activo: true,
+    rol: { id_rol }
+  });
+
+  try {
+    await insertUser(usuario);
+
+    // Cerrar modal
+    const modalEl = document.getElementById("modalCrear");
+    bootstrap.Modal.getInstance(modalEl)?.hide();
+
+    // Reset formulario
+    e.target.reset();
+
+    // Refrescar tabla
+    await refrescarTabla();
+
+    alert("Usuario creado correctamente.");
+  } catch (err) {
+    showFormError("crearUserErrors", err?.message ?? "Error inesperado");
+  }
+});
+
+async function cargarModalEditar(e) {
+  // Botón que abrió el modal
+  const btn = e.relatedTarget;
+  if (!btn) return;
+
+  clearFormError("editarUserErrors");
+
+  // Leer data-id del botón
+  const id = Number(btn.getAttribute("data-id")); 
+  if (!id) return;
+
+  // Buscar usuario en el array global "usuarios"
+  const user = usuarios.find(u => Number(u.id_usuario) === id);
+
+  if (!user) {
+    showFormError("editarUserErrors", "No se encontró el usuario seleccionado.");
+    return;
+  }
+
+  // Rellenar inputs
+  document.getElementById("idEditar").value = user.id_usuario;
+  document.getElementById("nombreEditar").value = user.nombre ?? "";
+  document.getElementById("correoEditar").value = user.correo ?? "";
+
+  // Cargar roles (y seleccionar el rol actual)
+  await cargarSelectRoles("selectRolEditar", user.rol?.id_rol);
+
+  // Vaciar contraseñas
+  document.getElementById("passEditar").value = "";
+  document.getElementById("pass2Editar").value = "";
+
+};
+
+// Manejo del formulario de editar usuario
+document.getElementById("formEditarUsuario").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  clearFormError("editarUserErrors");
+  
+  const id_usuario = Number(document.getElementById("idEditar").value);
+  const nombre = document.getElementById("nombreEditar").value.trim();
+  const correo = document.getElementById("correoEditar").value.trim();
+  const id_rol = Number(document.getElementById("selectRolEditar").value);
+  const pass1 = document.getElementById("passEditar").value;
+  const pass2 = document.getElementById("pass2Editar").value;
+
+  if (!nombre || !correo || !id_rol) return alert("Rellena todos los campos obligatorios.");
+  if (pass1 !== pass2) return alert("Las contraseñas no coinciden.");
+
+  const usuario = new Usuario({
+    id_usuario,
+    nombre,
+    correo,
+    contrasena: pass1 || null,
+    usuario_activo: true,
+    rol: { id_rol }
+  });
+
+  try {
+    const res = await updateUser(usuario);
+    let resPass = null;
+
+    // Si hay contraseña, actualizarla aparte
+    if (usuario.contrasena) {
+      resPass = await updateUserPassword(usuario);
+    }
+
+    const modalEl = document.getElementById("modalEditar");
+    bootstrap.Modal.getInstance(modalEl)?.hide();
+
+    e.target.reset();
+    await refrescarTabla();
+
+    const mensajes = [];
+    if (res?.message) {
+      mensajes.push(res.message);
+    }
+    if (resPass?.message) {
+      mensajes.push(resPass.message);
+    }
+
+    alert(mensajes.join("\n"));
+    return;
+  } catch (err) {
+    showFormError("editarUserErrors", err?.message ?? "Error inesperado");
+  }
+});
+
+
+// Inicialización al cargar página
+document.addEventListener("DOMContentLoaded", async () => {
+  await refrescarTabla();
+
+  document.getElementById("modalCrear").addEventListener("show.bs.modal", async () => {
+    await cargarSelectRoles("selectRolCrear");
+  });
+  document.getElementById("modalEditar").addEventListener("show.bs.modal", async (e) => {
+    await cargarModalEditar(e);
+  });
+});
+// Delegación de eventos para botones de eliminar
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-eliminar");
+  if (!btn) return;
+
+  const id = Number(btn.dataset.id);
+  if (!id) return;
+
+  const user = usuarios.find(u => Number(u.id_usuario) === id);
+  if (!user) {
+    alert("Usuario no encontrado.");
+    return;
+  }
+
+  const ok = confirm(
+    `¿Seguro que deseas desactivar al usuario:\n\n` +
+    `${user.nombre} (${user.correo})?\n\n` +
+    `Esta acción se puede revertir.`
+  );
+
+  if (!ok) return;
+
+  try {
+    await desactiveUser(user);
+    await refrescarTabla();
+    alert("Usuario desactivado correctamente.");
+  } catch (err) {
+    alert(err?.message ?? "Error al desactivar el usuario.");
+  }
+});
+</script>

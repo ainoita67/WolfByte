@@ -45,63 +45,42 @@ class UsuarioModel
             ->fetch();
     }
 
-// $router->get('/user/{id}/nombre',   'Controllers\\UsuarioController@showName'); // Se recibe el nombre del usuario del que se pase el id
+    /**
+     * existe un usuario con el correo dado
+     */
+    public function emailExists(string $email): bool
+        {
+            $result = $this->db
+                ->query("SELECT 1 FROM Usuario WHERE correo = :correo LIMIT 1")
+                ->bind(':correo', $email)
+                ->fetch();
 
-    public function findNameById(int $id): string|false
+            return $result !== false;
+        }
+
+    /**
+     * Comprobar si existe otro usuario con el mismo correo (excluyendo un ID)
+     */
+    public function emailExistsForOtherUser(string $email, int $excludeId): bool
     {
         $result = $this->db
-            ->query("SELECT nombre FROM Usuario WHERE id_usuario = :id")
-            ->bind(':id', $id)
+            ->query(
+                "SELECT 1 
+                FROM Usuario 
+                WHERE correo = :correo 
+                AND id_usuario != :id
+                LIMIT 1"
+            )
+            ->bind(':correo', $email)
+            ->bind(':id', $excludeId)
             ->fetch();
 
-        return $result ? $result['nombre'] : false;
+        return $result !== false;
     }
 
-// $router->get('/user/{id}/correo',   'Controllers\\UsuarioController@showEmail'); // Se recibe el correo del usuario del que se pase el id
-
-    public function findEmailById(int $id): string|false
-    {
-        $result = $this->db
-            ->query("SELECT correo FROM Usuario WHERE id_usuario = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ? $result['correo'] : false;
-    }
-
-// $router->get('/user/{id}/rol',      'Controllers\\UsuarioController@showRol'); // Se recibe el rol del usuario del que se pase el id
-
-    public function findRolById(int $id): string|false
-    {
-        $result = $this->db
-            ->query("SELECT
-                    r.rol,
-                    r.id_rol
-                FROM
-                    Usuario u
-                JOIN Rol r ON u.`id_rol` = r.id_rol
-                WHERE
-                    id_usuario = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ? $result['rol'] : false;
-    }
-
-// $router->get('/user/{$id}/token',   'Controllers\\UsuarioController@showToken'); // Se recibe el token  y su fecha de expiración del usuario del que se pase el id
-
-    public function findTokenById(int $id): array|false
-    {
-        $result = $this->db
-            ->query("SELECT token, expira_token FROM Usuario WHERE id_usuario = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ? $result : false;
-    }
-
-// $router->post('/user',              'Controllers\\UsuarioController@store'); // Se envían los datos del usuario desde un formulario para añadirlo a la DDBB
-
+    /**
+     * Crear nuevo usuario
+     */
     public function create(array $data): int
     {
         $this->db
