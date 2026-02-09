@@ -21,11 +21,11 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 // $router->patch('/profesores/{id}/email','Controllers\\ProfesorController@updateEmail'); // actualizar email de profesor
 
 
-// // INCIDENCIAS
-// $router->get('/incidencias', 'Controllers\\IncidenciaController@index'); //seleccionar todos los Incidenciaes
-// $router->post('/incidencias', 'Controllers\\IncidenciaController@store'); // insertar nuevo Incidencia
-// $router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por ID
-// $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por ID
+// INCIDENCIAS
+$router->get('/incidencias', 'Controllers\\IncidenciaController@index'); //seleccionar todas las Incidenciaes
+$router->post('/incidencias', 'Controllers\\IncidenciaController@store'); // insertar nueva Incidencia
+$router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por ID
+$router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por ID
 
 // ROL
 $router->get('/rol',               'Controllers\\RolController@index'); // Se reciben los datos de los usuarios activos para listarlos
