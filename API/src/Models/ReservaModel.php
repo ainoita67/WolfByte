@@ -15,21 +15,29 @@ class ReservaModel
         $this->db = new DB();
     }
 
-    public function getAll(): array
-    {
-        return $this->db
-            ->query("SELECT * FROM Reserva ORDER BY inicio DESC")
-            ->fetchAll();
-    }
-
+    /**
+     * Obtener reservas por usuario
+     */
     public function getByUsuario(int $idUsuario): array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva WHERE id_usuario = :id_usuario ORDER BY inicio DESC")
-            ->bind(':id_usuario', $idUsuario)
-            ->fetchAll();
+        try {
+            return $this->db
+                ->query("
+                    SELECT *
+                    FROM Reserva
+                    WHERE id_usuario = :id_usuario
+                    ORDER BY inicio DESC
+                ")
+                ->bind(':id_usuario', $idUsuario)
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas del usuario");
+        }
     }
 
+    /**
+     * Obtener una reserva por ID
+     */
     public function findById(int $id): array|false
     {
         return $this->db
@@ -54,104 +62,33 @@ class ReservaModel
         ->bind(':fin', $fin)
         ->bind(':id', $idReserva)
         ->execute();
-
-    public function create(array $data): array
-    {
-        $this->db->query("
-            INSERT INTO Reserva (
-                asignatura,
-                autorizada,
-                observaciones,
-                grupo,
-                profesor,
-                f_creacion,
-                inicio,
-                fin,
-                id_usuario,
-                id_usuario_autoriza,
-                tipo
-            ) VALUES (
-                :asignatura,
-                :autorizada,
-                :observaciones,
-                :grupo,
-                :profesor,
-                :f_creacion,
-                :inicio,
-                :fin,
-                :id_usuario,
-                :id_usuario_autoriza,
-                :tipo
-            )
-        ")
-        ->bind(':asignatura', $data['asignatura'] ?? null)
-        ->bind(':autorizada', $data['autorizada'] ?? 0)
-        ->bind(':observaciones', $data['observaciones'] ?? null)
-        ->bind(':grupo', $data['grupo'] ?? null)
-        ->bind(':profesor', $data['profesor'] ?? null)
-        ->bind(':f_creacion', $data['f_creacion'] ?? date('Y-m-d H:i:s'))
-        ->bind(':inicio', $data['inicio'])
-        ->bind(':fin', $data['fin'])
-        ->bind(':id_usuario', $data['id_usuario'])
-        ->bind(':id_usuario_autoriza', $data['id_usuario_autoriza'] ?? null)
-        ->bind(':tipo', $data['tipo'] ?? 'Reserva_espacio')
-        ->execute();
-
-        return $this->findById((int)$this->db->lastId());
-    }
-
-    public function update(int $id, array $data): array
-    {
-        $this->db->query("
-            UPDATE Reserva
-            SET asignatura = :asignatura,
-                autorizada = :autorizada,
-                observaciones = :observaciones,
-                grupo = :grupo,
-                profesor = :profesor,
-                f_creacion = :f_creacion,
-                inicio = :inicio,
-                fin = :fin,
-                id_usuario = :id_usuario,
-                id_usuario_autoriza = :id_usuario_autoriza,
-                tipo = :tipo
-            WHERE id_reserva = :id
-        ")
-        ->bind(':asignatura', $data['asignatura'] ?? null)
-        ->bind(':autorizada', $data['autorizada'] ?? 0)
-        ->bind(':observaciones', $data['observaciones'] ?? null)
-        ->bind(':grupo', $data['grupo'] ?? null)
-        ->bind(':profesor', $data['profesor'] ?? null)
-        ->bind(':f_creacion', $data['f_creacion'] ?? date('Y-m-d H:i:s'))
-        ->bind(':inicio', $data['inicio'])
-        ->bind(':fin', $data['fin'])
-        ->bind(':id_usuario', $data['id_usuario'])
-        ->bind(':id_usuario_autoriza', $data['id_usuario_autoriza'] ?? null)
-        ->bind(':tipo', $data['tipo'] ?? 'Reserva_espacio')
-        ->bind(':id', $id)
-        ->execute();
-
-        return $this->findById($id);
-    }
-
-
-    public function delete(int $id): void
-    {
-        $this->db
-            ->query("DELETE FROM Reserva WHERE id_reserva = :id")
-            ->bind(':id', $id)
-            ->execute();
-    }
 }
 
 public function getReservasSalonActos(): array
 {
     return $this->db
         ->query("
-            SELECT r.*, u.nombre, u.apellidos 
+            SELECT 
+                r.id_reserva,
+                r.asignatura,
+                r.autorizada,
+                r.observaciones,
+                r.grupo,
+                r.profesor,
+                r.f_creacion,
+                r.inicio,
+                r.fin,
+                r.id_usuario,
+                r.id_usuario_autoriza,
+                r.tipo,
+                u.nombre,
+                u.apellidos,
+                re.actividad,
+                re.id_espacio
             FROM Reserva r
             JOIN Usuario u ON r.id_usuario = u.id_usuario
-            WHERE r.id_aula = 1  -- Ajusta el ID del salón de actos
+            JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+            WHERE re.id_espacio = 'salon'
             ORDER BY r.inicio
         ")
         ->fetchAll();
