@@ -23,7 +23,7 @@ class IncidenciaModel
     public function all(): array
     {
         return $this->db
-            ->query("SELECT * FROM man_incidencias")
+            ->query("SELECT * FROM Incidencia")
             ->fetchAll();
     }
 
@@ -32,7 +32,7 @@ class IncidenciaModel
     public function create(array $data): int|false
     {
         $this->db->query("
-            INSERT INTO man_incidencias
+            INSERT INTO Incidencia
             (titulo, descripcion, id_ubicacion, id_estado, id_prioridad, id_profesor) 
             VALUES (:titulo, :descripcion, :id_ubicacion, :id_estado, :id_prioridad, :id_profesor)
         ")
@@ -50,7 +50,7 @@ class IncidenciaModel
     public function update(int $id, array $data): int
     {
         $this->db->query("
-            UPDATE man_incidencias SET
+            UPDATE Incidencia SET
                 titulo = :titulo,
                 descripcion = :descripcion,
                 id_ubicacion = :id_ubicacion,
@@ -76,7 +76,7 @@ class IncidenciaModel
     public function delete(int $id): int
     //elimina con parametros y devuelve el numero de filas eliminadas
     {
-        $this->db->query("DELETE FROM man_incidencias WHERE id_incidencia = :id")
+        $this->db->query("DELETE FROM Incidencia WHERE id_incidencia = :id")
                  ->bind(":id", $id)
                  ->execute();
 

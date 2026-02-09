@@ -63,98 +63,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 mt-3 mt-md-0">
-                    <table class="rounded-1 overflow-hidden table-striped col-12" id="tablaincidencias">
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="01">
-                            <td class="p-2 text-black">R1</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="02">
-                            <td class="p-2 text-black">R2</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="03">
-                            <td class="p-2 text-black">R3</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="04">
-                            <td class="p-2 text-black">R4</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="05">
-                            <td class="p-2 text-black">R5</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="06">
-                            <td class="p-2 text-black">R6</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="07">
-                            <td class="p-2 text-black">R7</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="08">
-                            <td class="p-2 text-black">R8</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="09">
-                            <td class="p-2 text-black">R9</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="10">
-                            <td class="p-2 text-black">R10</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="11">
-                            <td class="p-2 text-black">R11</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="12">
-                            <td class="p-2 text-black">R12</td>
-                        </tr>
-                        <tr class="card h-100 reserva-card border-0 rounded-0"
-                                role="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalincidencia"
-                                data-id="13">
-                            <td class="p-2 text-black">R13</td>
-                        </tr>
+                    <table class="rounded-1 overflow-hidden table-striped col-12 pb-5 mb-5" id="tablaincidencias">
                     </table>
                 </div>
             </div>
@@ -185,7 +94,7 @@
                                 <!-- ID -->
                                 <div class="col-md-4">
                                     <label class="form-label">ID del recurso</label>
-                                    <input type="number" class="form-control" id="recurso_id" name="id" readonly required>
+                                    <input type="text" class="form-control" id="recurso_id" name="id" readonly required>
                                 </div>
 
                                 <!-- Recurso -->
@@ -220,6 +129,18 @@
         <!-- RELLENAR MODAL -->
 
         <script>
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/incidencias/get.js";
+            document.head.appendChild(scriptget);
+
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/incidencias/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerRecursos();
+            };
+
             const modalincidencia = document.getElementById('modalincidencia');
 
             modalincidencia.addEventListener('show.bs.modal', function (event) {
@@ -227,7 +148,7 @@
 
                 // leer data attributes
                 const id = card.getAttribute('data-id');
-                const recurso = card.querySelector('td').textContent.trim();
+                const recurso = card.getAttribute('data-nombre');
 
                 // rellenar formulario
                 document.getElementById('recurso_id').value = id;
@@ -260,15 +181,17 @@
             // Cuando se cambia cualquier radio
             document.querySelectorAll('input[name="tipo"]').forEach(radio => {
                 radio.addEventListener("change", () => {
-                if (espacio.checked) {
-                    ubicacion.classList.remove("d-none");
-                    actualizarPlanta()
-                } else {
-                    ubicacion.classList.add("d-none");
-                    planta.classList.add("d-none");
-                    selectubicacion.value = "";
-                    selectplanta.value = "";
-                }
+                    if (espacio.checked) {
+                        ubicacion.classList.remove("d-none");
+                        actualizarPlanta()
+                        obtenerEspacios();
+                    } else {
+                        ubicacion.classList.add("d-none");
+                        planta.classList.add("d-none");
+                        selectubicacion.value = "";
+                        selectplanta.value = "";
+                        obtenerPortatiles();
+                    }
                 });
             });
 
