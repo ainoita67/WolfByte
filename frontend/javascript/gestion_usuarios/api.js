@@ -17,11 +17,8 @@ async function getUsuarios() {
             return [];
         }
 
-        // eliminar inactivos(usuario_activo = 0)
-        const usuariosActivos = json.data.filter(usuario => usuario.usuario_activo === 1);
-
         // mapear y eliminar campos innecesarios
-        const usuarios = usuariosActivos.map(u => ({
+        const usuarios = json.data.map(u => ({
             id_usuario: u.id_usuario,
             nombre: u.nombre,
             correo: u.correo,
