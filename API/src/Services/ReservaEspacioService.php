@@ -22,15 +22,9 @@ class ReservaEspacioService
     }
 
     // Devuelve todas las reservas de un espacio específico
-    public function getReservasByEspacio($idEspacio): array
+    public function getReservasPorEspacio($idEspacio): array
     {
-        if (!is_numeric($idEspacio)) {
-            throw new ValidationException([
-                "id_espacio" => "El ID del espacio debe ser numérico"
-            ]);
-        }
-
-        return $this->model->getByEspacio((int)$idEspacio);
+        return $this->model->getByEspacio($idEspacio);
     }
 
     // Devuelve una reserva por su ID

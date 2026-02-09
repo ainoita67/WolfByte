@@ -18,7 +18,7 @@ class ReservaEspacioModel
     /**
      * Obtener reservas de un espacio concreto
      */
-    public function getReservasPorEspacio(String $idEspacio): array
+    public function getByEspacio(String $idEspacio): array
     {
         try {
             // Selecciona los datos de reserva y actividad asociada al espacio
