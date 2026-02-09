@@ -177,3 +177,10 @@ $router->post('/reserva-espacio', 'Controllers\\ReservaEspacioController@store')
 $router->put('/reserva-espacio/{id}', 'Controllers\\ReservaEspacioController@update'); // Actualizar reserva completa
 $router->patch('/reserva-espacio/{id}/fechas', 'Controllers\\ReservaEspacioController@cambiarFechas'); // Cambiar solo fechas
 $router->delete('/reserva-espacio/{id}', 'Controllers\\ReservaEspacioController@destroy'); // Eliminar reserva
+
+// MATERIALES
+$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características
+$router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id
+$router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID
+$router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material 
+$router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
