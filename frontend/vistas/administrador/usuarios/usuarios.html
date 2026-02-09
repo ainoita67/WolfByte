@@ -1,36 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8">
-  <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
-  <script>const BASE = window.location.origin + "/frontend";</script>
-  <script>const API = window.location.origin + "/API";</script>
-  <!--
-        AÑADE:
-            <script src="/ALEX/frontend/javascript/includes.js"></script>
-            <script src="/ALEX/frontend/javascript/menu.js"></script>
-        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-        -->
-  <script>
-    const script1 = document.createElement("script");
-    script1.src = BASE + "/javascript/includes.js";
-    script1.onload = () => {
-      const script2 = document.createElement("script");
-      script2.src = BASE + "/javascript/menu.js";
-      script2.onload = () => {
-        generarPagina("menu", "admin");
-      };
-      document.head.appendChild(script2);
-    };
-    document.head.appendChild(script1);
-  </script>
+    <head>
+        <meta charset="utf-8">
 
-  <title>Reservas - IES Bajo Aragón</title>
-</head>
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
+			};
+			document.head.appendChild(script1);
+		</script>
+        <title>Usuarios - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+		<main class="container mt-5">
+			<h2 class="text-center mb-4">Listado de usuarios</h2>
 
-<body>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Rol</th>
+                        <th>Email</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usuariosTableBody">
+                    <!-- Los usuarios se generarán desde JavaScript -->
+                </tbody>
+            </table>
+        </div>
 
-  <div id="header"></div>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+    	</main>
 
   <main class="container mt-5">
     <div class="mt-5 container-fluid justify-content-between d-flex">
@@ -43,142 +58,65 @@
       </div>
     </div>
 
-    <h2 class="text-center my-4">Listado de usuarios</h2>
-    <div class="table-responsive">
-      <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Usuario</th>
-            <th>Rol</th>
-            <th>Email</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="usuariosTableBody">
-          <!-- Filas de usuarios se insertan aquí dinámicamente -->
-        </tbody>
-      </table>
-    </div>
+					<div class="modal-header bg-primary text-white">
+						<h5 class="modal-title">Editar Usuario</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+					</div>
 
-<!-- Modal crear Usuario -->
-    <div class="modal fade" id="modalCrear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Header -->
-      <div class="modal-header">
-        <h2 class="modal-title">Crear usuario</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+					<div class="modal-body">
+						<form id="formEditarUsuario" class="row g-4">
+							<input type="hidden" id="editId">
 
-      <!-- Body / Formulario -->
-      <div class="modal-body">
-        <form class="row g-4" id="formCrearUsuario">
+							<div class="col-md-6">
+								<label class="form-label">Nombre</label>
+								<input type="text" class="form-control" id="editNombre" required>
+							</div>
 
-          <div class="col-md-6">
-            <label class="form-label">Nombre *</label>
-            <input type="text" class="form-control" id="nombreCrear" required>
-          </div>
+							<div class="col-md-6">
+								<label class="form-label">Correo Electrónico</label>
+								<input type="email" class="form-control" id="editEmail" required>
+							</div>
 
-          <div class="col-md-6">
-            <label class="form-label">Correo Electrónico *</label>
-            <input type="email" class="form-control" id="correoCrear" required>
-          </div>
+							<div class="col-md-6">
+								<label class="form-label">Rol</label>
+								<select class="form-select" id="editRol" required>
+									<option value="" disabled>Seleccionar Rol</option>
+									<option value="Comun">Comun</option>
+									<option value="Administrador">Administrador</option>
+									<option value="Superadministrador">Superadministrador</option>
+								</select>
+							</div>
 
-          <div class="col-md-6">
-            <label class="form-label">Rol *</label>
-            <select class="form-select" id="selectRolCrear" required></select>
-          </div>
+							<div class="col-md-6">
+								<label class="form-label">Estado</label>
+								<select class="form-select" id="editEstado" required>
+									<option value="Activo">Activo</option>
+									<option value="Inactivo">Inactivo</option>
+								</select>
+							</div>
 
-          <div class="col-md-6"></div>
+							<div class="col-md-6">
+								<label class="form-label">Nueva Contraseña (opcional)</label>
+								<input type="password" class="form-control" id="editPassword" placeholder="Nueva Contraseña">
+							</div>
 
-          <div class="col-md-6">
-            <label class="form-label">Nueva Contraseña *</label>
-            <input type="password" class="form-control" id="passCrear" required>
-          </div>
+							<div class="col-md-6">
+								<label class="form-label">Confirmar Contraseña</label>
+								<input type="password" class="form-control" id="editConfirmPassword" placeholder="Confirmar Contraseña">
+							</div>
 
-          <div class="col-md-6">
-            <label class="form-label">Confirmar Contraseña *</label>
-            <input type="password" class="form-control" id="pass2Crear" required>
-          </div>
+							<div class="col-12 d-flex justify-content-end gap-2">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-primary">Guardar cambios</button>
+							</div>
+						</form>
+					</div>
 
-          <div class="col-md-6"></div>
-
-          <div class="col-md-6">
-            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
-          </div>
-
-        </form>
-
-      </div>
-      <div class="modal-footer">
-        <div id="crearUserErrors" class="alert alert-danger d-none"></div>
-      </div>
-    </div>
-    </div>
-    </div>
-<!-- Modal editar Usuario -->
-    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Header -->
-      <div class="modal-header">
-        <h2 class="modal-title">Editar usuario</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <!-- Body / Formulario -->
-      <div class="modal-body">
-        <form class="row g-4" id="formEditarUsuario">
-
-          <div class="col-md-6">
-            <label class="form-label">ID</label>
-            <input type="text" class="form-control" id="idEditar" required readonly>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Nombre *</label>
-            <input type="text" class="form-control" id="nombreEditar" required>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Correo Electrónico *</label>
-            <input type="email" class="form-control" id="correoEditar" required>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Rol *</label>
-            <select class="form-select" id="selectRolEditar" required></select>
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Nueva Contraseña</label>
-            <input type="password" class="form-control" id="passEditar">
-          </div>
-
-          <div class="col-md-6">
-            <label class="form-label">Confirmar Contraseña</label>
-            <input type="password" class="form-control" id="pass2Editar">
-          </div>
-
-          <div class="col-md-6"></div>
-
-          <div class="col-md-6">
-            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
-          </div>
-
-        </form>
-
-      </div>
-      <div class="modal-footer">
-        <div id="editarUserErrors" class="alert alert-danger d-none"></div>
-      </div>
-    </div>
-    </div>
-    </div>
-
-</body>
-
+				</div>
+			</div>
+		</div>
+		<footer id="footer"></footer>
+	</body>
 </html>
 
 

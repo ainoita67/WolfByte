@@ -70,7 +70,7 @@ class ReservaPermanenteService
      */
     public function createReservaPermanente(array $input): array
     {
-        if($input['activo']=="true"||$input['activo']=="1"||$input['activo']==1){
+        if($input['activo']=="true"||$input['activo']==true||$input['activo']=="1"||$input['activo']==1){
             $input['activo']=1;
         }else{
             $input['activo']=0;
