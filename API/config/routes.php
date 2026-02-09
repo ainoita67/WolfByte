@@ -86,3 +86,9 @@ $router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos 
 $router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID
 $router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material 
 $router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
+
+// PLANTAS
+$router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen
+$router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio
+$router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos
+$router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio
