@@ -15,76 +15,133 @@
                 };
                 document.head.appendChild(script2);
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
 
-        <title>Características de espacio - IES Bajo Aragón</title>
-    </head>
-    <body>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Características de espacios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear espacio
-                </button>
+    <title>Características - IES Bajo Aragón</title>
+</head>
+
+<body>
+
+    <div id="header"></div>
+
+    <main class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Característica</h2>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearCaracteristica">
+                <i class="bi bi-plus-circle"></i> Crear Característica
+            </button>
+        </div>
+
+
+        <!-- Tarjetas -->
+
+        <div class="row g-4" id="contenedorTarjetas">
+
+            <!-- Datos  -->
+
+        </div>
+        <!-- Modal Crear -->
+        <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crear nueva caracteristica</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="formCrearCaracteristica">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de la caracteristica</label>
+                                <input type="text" id="nombreCaracteristica" class="form-control"
+                                    placeholder="Ej. Proyector" required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
+                        <button type="submit" form="formCrearCaracteristica"
+                            class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                            <i class="bi bi-check2"></i> Crear
+                        </button>
+                        <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3"
+                            data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </button>
+                    </div>
+
+                </div>
             </div>
+        </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Necesidad</th>
-                            <th>Descripción</th>
-                            <th>Fecha</th>
-                            <th>Horario</th>
-                            <th>Prioridad</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Clase Matemáticas</td>
-                            <td>Aula con proyector para clase teórica</td>
-                            <td>15/02/2026</td>
-                            <td>08:00 - 10:00</td>
-                            <td><span class="badge bg-danger">Alta</span></td>
-                            <td><span class="badge bg-success">Aprobada</span></td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Práctica Informática</td>
-                            <td>Sala con 20 ordenadores</td>
-                            <td>18/02/2026</td>
-                            <td>10:00 - 12:00</td>
-                            <td><span class="badge bg-warning text-dark">Media</span></td>
-                            <td><span class="badge bg-secondary">Pendiente</span></td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
+            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+                <i class="bi bi-caret-left-fill"></i> Volver
+            </a>
+        </div>
+    </main>
+    <!-- Modal Editar -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Editar característica</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarCaracteristica">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la característica</label>
+                            <input type="text" class="form-control" id="editNombre" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary">Guardar
+                        cambios</button>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
+                        <p class="fs-5" id="mensajeEliminacion">
+                            ¿Estás seguro de eliminar la característica "<span
+                                id="nombreCaracteristicaEliminar"></span>"?
+                        </p>
+                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+                    </div>
+                    <input type="hidden" id="idCaracteristicaEliminar">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="bi bi-trash"></i> Sí, Eliminar
+                    </button>
+                </div>
             </div>
-        </main>
-        <footer id="footer"></footer>
-    </body>
+        </div>
+    </div>
+    <footer id="footer"></footer>
+</body>
+<script type="module" src="../../../../javascript/caracteristicas.js"></script>
+
 </html>
