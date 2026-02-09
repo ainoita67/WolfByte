@@ -79,3 +79,10 @@ $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaControlle
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+
+// MATERIALES
+$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características
+$router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id
+$router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID
+$router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material 
+$router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
