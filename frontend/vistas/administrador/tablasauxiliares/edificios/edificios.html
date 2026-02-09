@@ -6,6 +6,12 @@
         
 
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
         <script>
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -13,26 +19,20 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                    generarPagina("admin", "admin");
+                generarPagina("menu", "admin");
                 };
                 document.head.appendChild(script2);
             };
-        document.head.appendChild(script1);
-    </script>
+            document.head.appendChild(script1);
+        </script>
+        
 
 
         <title>Edificios - IES Bajo Aragón</title>
     </head>
     <body>
+
         <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edificios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear edificio
-                </button>
-            </div>
-        </div>
 
         <div class="row g-4" id="contenedorTarjetas"></div>
 
@@ -42,9 +42,6 @@
         </div>
 
     </div>
-
-
-</main>
 
 <!-- MODAL CREAR -->
 <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
@@ -70,9 +67,12 @@
 
         </div>
     </div>
+  </div>
 </div>
 
 
+<!-- MODAL EDITAR -->
+<!-- MODAL EDITAR (CARD POPUP) -->
 <!-- MODAL EDITAR -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -99,9 +99,11 @@
 
         </div>
     </div>
+  </div>
 </div>
+</body>   
+</main>
 
-<footer id="footer"></footer>
 
 </body>
 <script src="/frontend/javascript/sesion/api.js"></script>
@@ -109,3 +111,6 @@
 <script src="/frontend/javascript/edificios/edificios.js" defer></script>
 
 </html>
+
+
+

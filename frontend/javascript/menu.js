@@ -43,12 +43,12 @@ function generateHeaderNav(menuactivo, role) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: "/frontend/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: "/frontend/vistas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: "/frontend/vistas/liberar/liberar.html", key: "liberar" }
+            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.html", key: "aulas" },
+            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
+            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
+            { texto: "Incidencias", href: BASE + "/vistas/incidencias/incidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: BASE + "/vistas/liberar/liberar.html", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -127,7 +127,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
+                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
                     <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
