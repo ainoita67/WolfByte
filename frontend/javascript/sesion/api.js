@@ -6,9 +6,9 @@ async function apiFetch(endpoint, options = {}) {
     const response = await fetch(API_BASE + endpoint, {
         ...options,
         headers: {
+            ...(options.headers || {}),
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            ...(options.headers || {})
+            'Authorization': `Bearer ${token}`
         }
     });
 
@@ -16,8 +16,8 @@ async function apiFetch(endpoint, options = {}) {
     if (response.status === 401) {
         localStorage.removeItem('token');
         window.location.href = '/public/views/login.php';
-        return;
+        return null;
     }
 
-    return response.json();
+    return response;
 }

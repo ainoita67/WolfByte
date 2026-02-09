@@ -79,7 +79,6 @@ function botonesAccesibilidad() {
 
     // Cargar estado guardado al iniciar
     const savedFontSize = localStorage.getItem("fontSize");
-    if(savedFontSize) body.style.fontSize = savedFontSize;
     if(savedFontSize) main.style.fontSize = savedFontSize;
 
     const highContrast = localStorage.getItem("highContrast") === "true";
@@ -211,6 +210,8 @@ function botonesAccesibilidad() {
 function aplicarAltoContraste(aplicar = false) {
     const body = document.body;
     const main = document.querySelector("main");
+    const botones = document.querySelectorAll(".btn-outline-secondary");
+    const botoneslight = document.querySelectorAll(".btn-outline-light");
     let highContrast = localStorage.getItem("highContrast") === "true";
 
     if(aplicar){
@@ -218,9 +219,17 @@ function aplicarAltoContraste(aplicar = false) {
         if(highContrast){
             body.classList.add("bg-dark", "text-white");
             main.classList.add("bg-dark", "text-white");
+            botones.forEach(btn => {
+                btn.classList.remove("btn-outline-secondary");
+                btn.classList.add("btn-outline-light");
+            });
         } else {
             body.classList.remove("bg-dark", "text-white");
             main.classList.remove("bg-dark", "text-white");
+            botoneslight.forEach(btn => {
+                btn.classList.remove("btn-outline-light");
+                btn.classList.add("btn-outline-secondary");
+            });
         }
         return;
     }
@@ -228,10 +237,18 @@ function aplicarAltoContraste(aplicar = false) {
     if(highContrast){
         body.classList.remove("bg-dark", "text-white");
         main.classList.remove("bg-dark", "text-white");
+        botoneslight.forEach(btn => {
+            btn.classList.remove("btn-outline-light");
+            btn.classList.add("btn-outline-secondary");
+        });
         localStorage.setItem("highContrast", "false");
     } else {
         body.classList.add("bg-dark", "text-white");
         main.classList.add("bg-dark", "text-white");
+        botones.forEach(btn => {
+            btn.classList.remove("btn-outline-secondary");
+            btn.classList.add("btn-outline-light");
+        });
         localStorage.setItem("highContrast", "true");
     }
 }

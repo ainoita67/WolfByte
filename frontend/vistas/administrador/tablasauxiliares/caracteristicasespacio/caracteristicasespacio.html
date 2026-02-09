@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
-    <script>const BASE = window.location.origin + "/frontend";</script>
 
+    <script>const BASE = window.location.origin + "/frontend";</script>
     <script>
         const script1 = document.createElement("script");
         script1.src = BASE + "/javascript/includes.js";
@@ -15,7 +16,7 @@
             };
             document.head.appendChild(script2);
         };
-        document.head.appendChild(script1);
+        document.head.appendChild(script1);        
     </script>
 
     <title>Características - IES Bajo Aragón</title>
@@ -27,96 +28,47 @@
 
     <main class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Caracteristicas</h2>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearNecesidad">
+            <h2>Característica</h2>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearCaracteristica">
                 <i class="bi bi-plus-circle"></i> Crear Característica
             </button>
         </div>
 
 
         <!-- Tarjetas -->
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 1</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Grande</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 2</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Pizarra digital</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="row g-4" id="contenedorTarjetas">
 
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 3</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Impresora</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Datos  -->
+
         </div>
-
-        <div class="modal fade" id="modalCrearNecesidad" tabindex="-1" aria-hidden="true">
+        <!-- Modal Crear -->
+        <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    
+
                     <div class="modal-header">
                         <h5 class="modal-title">Crear nueva caracteristica</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <div class="modal-body">
-                        <form id="formCrearNecesidad">
+                        <form id="formCrearCaracteristica">
                             <div class="mb-3">
                                 <label class="form-label">Nombre de la caracteristica</label>
-                                <input type="text" class="form-control" placeholder="Ej. Proyector" required>
+                                <input type="text" id="nombreCaracteristica" class="form-control"
+                                    placeholder="Ej. Proyector" required>
                             </div>
                         </form>
                     </div>
 
                     <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
-                        <button type="submit" form="formCrearNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                        <button type="submit" form="formCrearCaracteristica"
+                            class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
                             <i class="bi bi-check2"></i> Crear
                         </button>
-                        <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
+                        <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3"
+                            data-bs-dismiss="modal">
                             <i class="bi bi-x-lg"></i> Cancelar
                         </button>
                     </div>
@@ -126,54 +78,69 @@
         </div>
 
         <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-            <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
                 <i class="bi bi-caret-left-fill"></i> Volver
             </a>
         </div>
     </main>
-
-<div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Editar planta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Edificio</label>
-                    <select class="form-select">
-                        <option selected>Loscos</option>
-                        <option>Ram</option>
-                    </select>
+    <!-- Modal Editar -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Editar característica</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Planta</label>
-                    <input type="text" class="form-control" value="Planta 0">
+                <div class="modal-body">
+                    <form id="formEditarCaracteristica">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la característica</label>
+                            <input type="text" class="form-control" id="editNombre" required>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Número de aulas</label>
-                    <input type="number" class="form-control" value="6">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary">Guardar
+                        cambios</button>
                 </div>
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar cambios</button>
-            </div>
-
         </div>
     </div>
-</div>
-        <footer id="footer"></footer>
-    </body>
+
+    <!-- Modal Eliminar -->
+    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center">
+                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
+                        <p class="fs-5" id="mensajeEliminacion">
+                            ¿Estás seguro de eliminar la característica "<span
+                                id="nombreCaracteristicaEliminar"></span>"?
+                        </p>
+                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+                    </div>
+                    <input type="hidden" id="idCaracteristicaEliminar">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="bi bi-trash"></i> Sí, Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer id="footer"></footer>
+</body>
+<script type="module" src="../../../../javascript/caracteristicas.js"></script>
+
 </html>

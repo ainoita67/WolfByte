@@ -25,6 +25,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         window.location.href = '/frontend/vistas/menu.html';
 
     } catch (error) {
-        mostrarError(error.message);
+        alert(error.message);
     }
 });

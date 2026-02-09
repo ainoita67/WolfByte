@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+// Services/UsuarioService.php
+
 namespace Services;
 
 use Models\UsuarioModel;
@@ -17,39 +19,24 @@ class UsuarioService
         $this->model = new UsuarioModel();
     }
 
-    /**
-     * Obtener todos los usuarios activos
-     */
+// $router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios para listarlos
+
     public function getAllUsuarios(): array
     {
         try {
-            return $this->model->findActive();
+            return $this->model->findAll();
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
     }
 
-    /**
-     * Obtener todos los usuarios inactivos
-     */
-    public function getInactiveUsuarios(): array
-    {
-        try {
-            return $this->model->findInactive();
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-    }
+// $router->get('/user/{id}',          'Controllers\\UsuarioController@show'); // Se reciben los datos del usuario con el id que se mande
 
-    /**
-     * Obtener usuario por ID
-     */
     public function getUsuarioById(int $id): array
-    {
+    {   
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
-
         try {
             $usuario = $this->model->findById($id);
         } catch (Throwable $e) {
@@ -64,73 +51,6 @@ class UsuarioService
     }
 
     /**
-     * Obtener nombre de usuario por ID
-     */
-    public function getNombreById(int $id): string
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $nombre = $this->model->findNameById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($nombre === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $nombre;
-    }
-
-    /**
-     * Obtener correo de usuario por ID
-     */
-    public function getEmailById(int $id): string
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $correo = $this->model->findEmailById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($correo === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $correo;
-    }
-
-    /**
-     * Obtener rol de usuario por ID
-     */
-    public function getRolById(int $id): array
-    {
-        Validator::validate(['id' => $id], [
-            'id' => 'required|int|min:1'
-        ]);
-
-        try {
-            $rol = $this->model->findRolById($id);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if ($rol === false) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-
-        return $rol;
-    }
-
-
-    /**
      * Crear nuevo usuario
      */
     public function createUsuario(array $input): array
@@ -143,6 +63,10 @@ class UsuarioService
         ]);
 
         try {
+            $existe = $this->model->emailExists($data['correo']);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $id = $this->model->create($data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
@@ -155,9 +79,8 @@ class UsuarioService
         return ['id' => $id];
     }
 
-    /**
-     * Actualizar usuario por ID (sin tocar la contraseña)
-     */
+// $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); // Se modifica por completo todos los campos del usuario del que se pase el id
+
     public function updateUsuario(int $id, array $input): array
     {
         Validator::validate(['id' => $id], [
@@ -165,35 +88,44 @@ class UsuarioService
         ]);
 
         $data = Validator::validate($input, [
-            'nombre'         => 'required|string|min:3|max:100',
-            'correo'         => 'required|email|max:150',
-            'id_rol'         => 'required|int|min:1',
-            'usuario_activo' => 'required|bool'
+            'nombre'        => 'required|string|min:3|max:100',
+            'correo'        => 'required|email|max:150',
+            'contrasena'    => 'required|string|min:6|max:255',
+            'id_rol'        => 'required|int|min:1',
+            'usuario_activo'=> 'required|bool'
         ]);
 
         try {
+            $existe = $this->model->emailExistsForOtherUser($data['correo'], $id);
+            if ($existe) {
+                throw new \Exception("Ya existe un usuario con ese correo", 422);
+            }
             $result = $this->model->update($id, $data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        if (!$result) {
-            $this->ensureUserExists($id);
+        if ($result === 0) {
+            $exists = $this->model->findById($id);
+
+            if (!$exists) {
+                throw new \Exception("Usuario no encontrado", 404);
+            }
+
             return [
-                'status'  => 'no_changes',
+                'status' => 'no_changes',
                 'message' => 'No hubo cambios en los datos del usuario'
             ];
         }
 
         return [
-            'status'  => 'updated',
+            'status' => 'updated',
             'message' => 'Usuario actualizado correctamente'
         ];
     }
 
-    /**
-     * Cambiar estado activo/inactivo de un usuario
-     */
+// $router->patch('/user/{id}/active',       'Controllers\\UsuarioController@inactive'); // Se modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id
+
     public function toggleActiveStatus(int $id): array
     {
         Validator::validate(['id' => $id], [
@@ -211,60 +143,56 @@ class UsuarioService
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        if (!$result) {
-            $this->ensureUserExists($id);
+        if ($result === 0) {
+            $exists = $this->model->findById($id);
+
+            if (!$exists) {
+                throw new \Exception("Usuario no encontrado", 404);
+            }
+
             return [
-                'status'  => 'no_changes',
+                'status' => 'no_changes',
                 'message' => 'No hubo cambios en el estado del usuario'
             ];
         }
 
         return [
-            'status'  => 'updated',
+            'status' => 'updated',
             'message' => 'Estado del usuario actualizado correctamente'
         ];
     }
 
-    /**
-     * Actualizar contraseña de un usuario
-     */
-    public function updatePassword(int $id, string $password): array
+// $router->patch('/user/{id}/token',       'Controllers\\UsuarioController@setToken'); // Se guarda un token y su fecha de expiración del usuario del que se pase el id
+
+    public function setToken(int $id, string $token, string $expiration): array
     {
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
-        Validator::validate(['password' => $password], [
-            'password' => 'required|string|min:6|max:255'
-        ]);
-
         try {
-            $result = $this->model->updatePassword($id, $password);
+            $result = $this->model->setToken($id, $token, $expiration);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        if (!$result) {
-            $this->ensureUserExists($id);
+        if ($result === 0) {
+            $exists = $this->model->findById($id);
+
+            if (!$exists) {
+                throw new \Exception("Usuario no encontrado", 404);
+            }
+
             return [
-                'status'  => 'no_changes',
-                'message' => 'No hubo cambios en la contraseña del usuario'
+                'status' => 'no_changes',
+                'message' => 'No hubo cambios en el token del usuario'
             ];
         }
 
         return [
-            'status'  => 'updated',
-            'message' => 'Contraseña del usuario actualizada correctamente'
+            'status' => 'updated',
+            'message' => 'Token del usuario actualizado correctamente'
         ];
     }
-
-    /**
-     * Verificar si el usuario existe
-     */
-    private function ensureUserExists(int $id): void
-    {
-        if (!$this->model->findById($id)) {
-            throw new \Exception("Usuario no encontrado", 404);
-        }
-    }
+    
 }
