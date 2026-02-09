@@ -7,12 +7,12 @@ const DOMAIN = "http://192.168.13.202:84/API";
 const MENSAJE_INSERCION_CORRECTA = "Característica insertada correctamente.";
 const MENSAJE_INSERCION_INCORRECTA = "Error al insertar la característica.";
 const MENSAJE_ERROR_ENCONTRAR_FORMULARIO = "Error de formularios característica";
-const MENSAJE_VALIDACION_DATOS = "Completa todos los campos";
-const ERROR_ENVIAR_DATOS_CARACTERISTICA = "Error al enviar datos de característica";
 const MENSAJE_EDICION_CORRECTA = "Característica editada correctamente.";
 const MENSAJE_EDICION_INCORRECTA = "Error al editar la característica.";
 const MENSAJE_ELIMINACION_CORRECTA = "Característica eliminada correctamente.";
 const MENSAJE_ELIMINACION_INCORRECTA = "Error al eliminar la característica.";
+const REGEX_LETRAS_NUM_ESPACIOS = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-]+$/;
+
 
 // Variables globales para almacenar datos de eliminación
 let caracteristicaAEliminar = {
@@ -38,8 +38,7 @@ function validarNombreCaracteristica(nombre) {
     }
     
     // Validar solo letras, números y espacios
-    const regex = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-]+$/;
-    if (!regex.test(nombre)) {
+    if (!REGEX_LETRAS_NUM_ESPACIOS.test(nombre)) {
         validator.setisValid(false);
         validator.setmessageError("El nombre solo puede contener letras, números, espacios y guiones");
         return validator;
@@ -409,6 +408,7 @@ function mostrarAlerta(mensaje, tipo = "info") {
 
     // Crear alerta
     const alertDiv = document.createElement('div');
+
     alertDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
     alertDiv.role = 'alert';
     alertDiv.innerHTML = `
@@ -424,5 +424,5 @@ function mostrarAlerta(mensaje, tipo = "info") {
             alertDiv.classList.remove('show');
             setTimeout(() => alertDiv.remove(), 150);
         }
-    }, 5000);
+    }, 3000);
 }
