@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
 
-            const text = await res.text(); // 🔹 primero leemos como texto
+            const text = await res.text(); // primero leemos como texto
             let json;
             try {
-                json = JSON.parse(text); // 🔹 parseamos JSON
+                json = JSON.parse(text); // luego intentamos parsear a JSON
             } catch {
                 console.error("Respuesta no es JSON:", text);
                 return;
@@ -124,7 +124,7 @@ async function actualizarReserva(args) {
         if (json.status !== "success") {
             // Mostrar mensaje específico si existe
             const mensaje = json.message || json.data?.message || "No se pudo guardar el cambio";
-            alert(`❌ Error: ${mensaje}`);
+            alert(`Error: ${mensaje}`);
             args.preventDefault();
             return;
         }
@@ -189,7 +189,7 @@ dp.onEventMoved = async args => {
     );
     
     if (haySolapamiento) {
-        alert("⚠️ No se puede mover la reserva. El horario se solapa con otra reserva existente.");
+        alert("No se puede mover la reserva. El horario se solapa con otra reserva existente.");
         args.preventDefault(); // Cancelar el movimiento
         return;
     }

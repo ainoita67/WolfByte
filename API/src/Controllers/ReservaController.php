@@ -88,41 +88,54 @@ public function updateFechas($request, $response, $id)
     ]);
 }
 
-public function verificarDisponibilidad(Request $req, Response $res): void
+public function verificarDisponibilidad(string $inicio, string $fin, ?int $idExcluir = null): bool
 {
     try {
-        $body = $req->body();
+        // Formato de fechas de entrada (debug)
+        error_log("Verificando: {$inicio} -> {$fin}, Excluir: " . ($idExcluir ?? 'ninguno'));
         
-        $inicio = $body['inicio'] ?? null;
-        $fin = $body['fin'] ?? null;
-        $idExcluir = $body['id_excluir'] ?? null;
+        // Consulta SQL simplificada pero efectiva
+        $sql = "SELECT id_reserva, inicio, fin FROM Reserva";
+        $params = [];
         
-        if (!$inicio || !$fin) {
-            $res->status(400)->json([
-                'status' => 'error',
-                'message' => 'Fechas requeridas'
-            ]);
-            return;
+        if ($idExcluir) {
+            $sql .= " WHERE id_reserva != ?";
+            $params[] = $idExcluir;
         }
         
-        $disponible = $this->service->verificarDisponibilidad(
-            $inicio, 
-            $fin, 
-            $idExcluir ? (int)$idExcluir : null
-        );
+        $reservas = $this->db->query($sql, $params)->fetchAll();
         
-        $res->json([
-            'status' => 'success',
-            'disponible' => $disponible,
-            'message' => $disponible 
-                ? 'Horario disponible' 
-                : 'Horario no disponible (se solapa con otra reserva)'
-        ]);
+        // Convertir fechas de la nueva reserva
+        $nuevoStart = strtotime($inicio);
+        $nuevoEnd = strtotime($fin);
         
-    } catch (ValidationException $e) {
-        $res->errorJson($e->getMessage(), 400);
-    } catch (\Throwable $e) {
-        $res->errorJson($e->getMessage(), 500);
+        foreach ($reservas as $reserva) {
+            $existenteStart = strtotime($reserva['inicio']);
+            $existenteEnd = strtotime($reserva['fin']);
+            
+            // Lógica de solapamiento
+            $haySolapamiento = 
+                // Caso A: Nueva empieza dentro de existente
+                ($nuevoStart >= $existenteStart && $nuevoStart < $existenteEnd) ||
+                // Caso B: Nueva termina dentro de existente
+                ($nuevoEnd > $existenteStart && $nuevoEnd <= $existenteEnd) ||
+                // Caso C: Nueva contiene completamente existente
+                ($nuevoStart <= $existenteStart && $nuevoEnd >= $existenteEnd);
+            
+            if ($haySolapamiento) {
+                error_log("SOLAPAMIENTO detectado con reserva ID: " . $reserva['id_reserva']);
+                error_log("Existente: " . date('Y-m-d H:i:s', $existenteStart) . " - " . date('Y-m-d H:i:s', $existenteEnd));
+                error_log("Nueva: " . date('Y-m-d H:i:s', $nuevoStart) . " - " . date('Y-m-d H:i:s', $nuevoEnd));
+                return false;
+            }
+        }
+        
+        return true;
+        
+    } catch (\Exception $e) {
+        error_log("Exception en verificarDisponibilidad: " . $e->getMessage());
+        // Por seguridad, si hay error no permitir el cambio
+        return false;
     }
 }
 
