@@ -74,7 +74,7 @@ class Router
 
 
     private function handle($handler, array $params = [], array $routeInfo = []): void
-    {
+    {   
         $request = new \Core\Request();
         $response = new \Core\Response();
 
@@ -100,9 +100,7 @@ class Router
             $user = \Core\Session::getUser();
         }
 
-        if ($user !== null) {
-            $request->setUser($user);
-        }
+        $request->setUser($user);
 
 
         // ===============================

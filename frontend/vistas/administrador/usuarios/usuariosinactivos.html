@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+  <script>const BASE = window.location.origin + "/frontend";</script>
+  <script>const API = window.location.origin + "/API";</script>
+  <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+  <script>
+    const script1 = document.createElement("script");
+    script1.src = BASE + "/javascript/includes.js";
+    script1.onload = () => {
+      const script2 = document.createElement("script");
+      script2.src = BASE + "/javascript/menu.js";
+      script2.onload = () => {
+        generarPagina("menu", "admin");
+      };
+      document.head.appendChild(script2);
+    };
+    document.head.appendChild(script1);
+  </script>
+
+  <title>Reservas - IES Bajo Aragón</title>
+</head>
+
+<body>
+
+  <div id="header"></div>
+
+  <main class="container mt-5">
+    <div class="mt-5 container-fluid justify-content-start d-flex">
+      <a href="usuarios.html" class="volver p-2 px-4 text-dark">Volver</a>
+    </div>
+
+    <h2 class="text-center my-4">Usuarios inactivos</h2>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Email</th>
+            <th>Restaurar</th>
+          </tr>
+        </thead>
+        <tbody id="usuariosTableBody">
+          <!-- Filas de usuarios se insertan aquí dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+
+</body>
+
+</html>
+
+
+<script type="module">
+import { getInactivos, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
+import { desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js";
+import { Usuario } from "/frontend/javascript/clases/Usuario.js";
+
+let usuarios;
+
+// Función para imprimir usuarios en la tabla
+function imprimirUsuariosEnTabla(usuarios) {
+  const tbody = document.getElementById("usuariosTableBody");
+  tbody.innerHTML = "";
+
+  if (!Array.isArray(usuarios) || usuarios.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-muted py-4">
+          No hay usuarios activos para mostrar
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  usuarios.forEach(usuario => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${usuario.id_usuario}</td>
+      <td>${usuario.nombre}</td>
+      <td>${capitalizarRol(usuario.rol.rol)}</td>
+      <td>${usuario.correo}</td>
+      <td class="text-center">
+        <div class="d-flex gap-1 justify-content-center">
+          <button 
+            type="button" 
+            class="btn btn-sm btn-success text-white btn-eliminar" 
+            data-id="${usuario.id_usuario}" 
+            title="Restaurar">
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Capitalizar nombres de roles
+function capitalizarRol(rol) {
+  return rol.replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// Función para refrescar tabla
+async function refrescarTabla() {
+  usuarios = await getInactivos();
+  imprimirUsuariosEnTabla(usuarios);
+}
+function showFormError(boxId, msg) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = msg;
+  box.classList.remove("d-none");
+}
+
+function clearFormError(boxId) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  box.textContent = "";
+  box.classList.add("d-none");
+}
+
+// Inicialización al cargar página
+document.addEventListener("DOMContentLoaded", async () => {
+  await refrescarTabla();
+
+});
+// Delegación de eventos para botones de eliminar
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-eliminar");
+  if (!btn) return;
+
+  const id = Number(btn.dataset.id);
+  if (!id) return;
+
+  const user = usuarios.find(u => Number(u.id_usuario) === id);
+  if (!user) {
+    alert("Usuario no encontrado.");
+    return;
+  }
+
+  const ok = confirm(
+    `¿Seguro que deseas activar al usuario:\n\n` +
+    `${user.nombre} (${user.correo})?\n\n` +
+    `Esta acción se puede revertir.`
+  );
+
+  if (!ok) return;
+
+  try {
+    await desactiveUser(user);
+    await refrescarTabla();
+    alert("Usuario activado correctamente.");
+  } catch (err) {
+    alert(err?.message ?? "Error al activar el usuario.");
+  }
+});
+</script>
