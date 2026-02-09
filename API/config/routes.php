@@ -22,14 +22,16 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 
 
 // INCIDENCIAS
-$router->get('/incidencias', 'Controllers\\IncidenciaController@index'); //seleccionar todas las Incidenciaes
-$router->post('/incidencias', 'Controllers\\IncidenciaController@store'); // insertar nueva Incidencia
-$router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por ID
-$router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por ID
+$router->get('/incidencias', 'Controllers\\IncidenciaController@index'); // Nos devuelven todas la incidencias de la base de datos
+$router->get('/incidencias/recurso/{id_recurso}', 'Controllers\\IncidenciaController@showByRecurso'); //Nos devuelven todas la incidencias de la base de datos del recurso que  pasemos por parámetro (no implementar)
+$router->get('/incidencias/usuario/{id_usuario}', 'Controllers\\IncidenciaController@showByUsuario'); // Nos devuelven todas la incidencias de la base de datos que haya creado el usuario del que se pase el id
+$router ->post('/incidencias', 'Controllers\\IncidenciaController@store'); // Se envían los datos de una incidencia para añadirla a nuestra base de datos
+$router ->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // Se enviaran los datos de una incidencia para modificarla
+$router ->patch ('/incidencias/{id}/prioridad', 'Controllers\\IncidenciaController@updatePrioridad'); // Se enviará la información de la prioridad para una incidencia y se modificara
+$router ->patch ('/incidencias/{id}/estado', 'Controllers\\IncidenciaController@updateEstado'); // Se enviará la información del estado de una incidencia y se modificara
 
 // ROL
 $router->get('/rol',               'Controllers\\RolController@index'); // Se reciben los datos de los usuarios activos para listarlos
-
 
 // USUARIOS
 $router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios activos para listarlos
@@ -81,6 +83,13 @@ $router->post('/espacios', 'Controllers\\EspacioController@store');
 // $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
 // $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 // $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
+
+// MATERIALES 
+$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
+$router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
+$router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID 
+$router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material  
+$router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');

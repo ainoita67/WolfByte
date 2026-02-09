@@ -42,7 +42,7 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="incidenciasTableBody">
+                    <tbody id="verIncidenciasTableBody">
                     </tbody>
                 </table>
             </div>
@@ -123,7 +123,7 @@
             document.head.appendChild(scriptpost);
             
             scriptget.onload = () => {
-                obtenerIncidencias();
+                obtenerVerIncidencias();
             };
 
             let incidenciaSeleccionadaId = null;
