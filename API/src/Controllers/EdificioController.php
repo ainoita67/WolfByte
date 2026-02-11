@@ -39,7 +39,7 @@ class EdificioController
     public function show(Request $req, Response $res, array $args): void
     {
         try {
-            $edificio = $this->service->getEdificioById((int)$args['id']);
+            $edificio = $this->service->getEdificioById((int) $args['id']);
             $res->status(200)->json($edificio);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 404);
@@ -73,7 +73,7 @@ class EdificioController
     {
         try {
             // El router pasa el ID como string
-            $id = is_array($args) ? (int)$args['id'] : (int)$args;
+            $id = is_array($args) ? (int) $args['id'] : (int) $args;
 
             $data = $req->getBody();
 
@@ -87,6 +87,7 @@ class EdificioController
         }
     }
 
+
     /**
      * DELETE /edificios/{id}
      * Elimina un edificio
@@ -94,15 +95,13 @@ class EdificioController
     public function destroy(Request $req, Response $res, $id): Response
     {
         try {
-            $this->service->deleteEdificio((int)$id);
-            return $res->status(204)->json([]);
+            $this->service->deleteEdificio((int) $id);
+            return $res->status(204); // 👈 sin JSON
         } catch (Throwable $e) {
-            return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+            return $res->errorJson(
+                $e->getMessage(),
+                $e->getCode() ?: 500
+            );
         }
     }
-
-    /**
-     * PATCH
-     * 
-     */
 }

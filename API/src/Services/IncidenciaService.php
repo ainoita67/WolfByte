@@ -21,26 +21,26 @@ class IncidenciaService
 
 
     /**
-     * Obtiene todos las incidencias desde la base de datos.
+     * Recupera todas las incidencias registradas.
      *
-     * Llama al modelo para recuperar la lista completa de incidencias y,
-     * en caso de error durante el acceso a la base de datos, lanza una
-     * excepción con un mensaje genérico y código HTTP 500.
+     * Se encarga de solicitar al modelo la lista completa y, si ocurre
+     * cualquier fallo en el acceso a la base de datos, convierte el error
+     * en una excepción con un mensaje genérico.
      */
     public function getAllIncidencias(): array
     {
         try {
-            // Solicita al modelo todos los registros de incidencias
+            // Pide al modelo que devuelva todas las incidencias
             return $this->model->all();
         } catch (Throwable $e) {
-            // Captura cualquier error de base de datos y lo transforma en un error interno controlado
+            // Si algo falla, lo encapsula en una excepción controlada
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
     }
 
 
 
-    //valida los datos, hashea la contraseña y envia los datos al modelo
+    // Valida los datos, y tras ello los manda al modelo para crear la incidencia
     public function createIncidencia(array $input): array
     {
         $data = Validator::validate($input, [
@@ -71,7 +71,8 @@ class IncidenciaService
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
-        //valida input y id
+
+        // Valida tanto el ID como los datos a actualizar
         $data = Validator::validate($input, [
             'titulo'        => 'required|string|min:3|max:250',
             'descripcion'   => 'string',
@@ -83,13 +84,13 @@ class IncidenciaService
         ]);
 
         try {
-            //llama al modelo
+            // Llama al modelo para actualizar la incidencia
             $result = $this->model->update($id, $data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        //usa lo recibido del modelo para dar los mensajes de success o de error
+        // Interpreta el resultado devuelto por el modelo
         if ($result === 0) {
             $exists = $this->model->findById($id);
 
@@ -117,21 +118,21 @@ class IncidenciaService
 
     public function deleteIncidencia(int $id): void
     {
-        // Validar ID
+        // Comprueba que el ID sea válido
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
         try {
-            //ejecuta el delete en el modelo
+            // Ejecuta la eliminación desde el modelo
             $result = $this->model->delete($id);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        // devuelve los resultados
+        // Gestiona las posibles respuestas del modelo
         if ($result === 0) {
-            // No existe el registro
+            // No existe la incidencia
             throw new \Exception("Incidencia no encontrado", 404);
         }
 
@@ -140,10 +141,6 @@ class IncidenciaService
             throw new \Exception("No se puede eliminar la Incidencia: el registro está en uso", 409);
         }
 
-        // Eliminación exitosa → no retorna nada
+        // Si llega aquí, la eliminación fue correcta
     }
-
-    
-
-    
 }
