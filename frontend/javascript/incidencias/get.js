@@ -82,7 +82,7 @@ function obtenerRecursos(){
                 tr.className = "card h-100 reserva-card border-0 rounded-0";
                 tr.setAttribute("role", "button");
                 tr.setAttribute("data-bs-toggle", "modal");
-                tr.setAttribute("data-bs-target", "#modalincidencia");
+                tr.setAttribute("data-bs-target", "#modalIncidencia");
                 tr.setAttribute("data-id", recurso.id_recurso);
                 tr.setAttribute("data-nombre", recurso.descripcion);
 
@@ -121,7 +121,7 @@ function obtenerPortatiles(){
                 tr.className = "card h-100 reserva-card border-0 rounded-0";
                 tr.setAttribute("role", "button");
                 tr.setAttribute("data-bs-toggle", "modal");
-                tr.setAttribute("data-bs-target", "#modalincidencia");
+                tr.setAttribute("data-bs-target", "#modalIncidencia");
                 tr.setAttribute("data-id", portatil.id_recurso);
                 tr.setAttribute("data-nombre", portatil.descripcion);
 
@@ -160,7 +160,7 @@ function obtenerEspacios(){
                 tr.className = "card h-100 reserva-card border-0 rounded-0";
                 tr.setAttribute("role", "button");
                 tr.setAttribute("data-bs-toggle", "modal");
-                tr.setAttribute("data-bs-target", "#modalincidencia");
+                tr.setAttribute("data-bs-target", "#modalIncidencia");
                 tr.setAttribute("data-id", espacio.id_recurso);
                 tr.setAttribute("data-nombre", espacio.descripcion);
 
