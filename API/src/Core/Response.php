@@ -92,22 +92,11 @@ class Response
 
 
 
-    public function errorJson($message, int $status) {
-        if (is_array($message)) {
-            $msg = $message; // deja el array tal cual
-        } else {
-            $msg = [$message]; // si es string, lo convierte en array
-        }
-
-        http_response_code($status);
-        echo json_encode([
-            'status' => 'error',
-            'message' => $msg,
-            'data' => [],
-            'timestamp' => date('c')
-        ]);
+    public function errorJson(string $message, int $code = 400): void
+    {
+        $this->status($code)
+             ->json([], $message);
     }
-
 
 
 
