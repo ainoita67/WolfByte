@@ -143,6 +143,11 @@ $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaContro
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');
 $router->put('/reservas/{id}/fechas', 'Controllers\\ReservaController@updateFechas');
 $router->post('/reservas/verificar-disponibilidad', 'Controllers\\ReservaController@verificarDisponibilidad');
+// PLANTAS 
+$router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen 
+$router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio 
+$router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos 
+$router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio 
 
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
