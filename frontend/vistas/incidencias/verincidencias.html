@@ -59,13 +59,13 @@
                         <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                     </div>
-                    <form id="formincidencia" method="post" action="#">
+                    <form id="formEditarIncidencia">
                         <div class="modal-body">
                             <div class="row g-3">
                                 <!-- Fecha -->
                                 <div class="col-md-4">
                                     <label class="form-label" for="editFecha">Fecha</label>
-                                    <input type="datetime-local" class="form-control" id="editFecha" name="editFecha" readonly required>
+                                    <input type="datetime-local" step="1" class="form-control" id="editFecha" name="editFecha" readonly required>
                                 </div>
 
                                 <!-- ID -->
@@ -93,20 +93,20 @@
                                 </div>
 
                                 <!-- Prioridad -->
-                                <div class="col-md-4">
+                                <div class="col-md-6 pe-3">
                                     <label class="form-label" for="editPrioridad">Prioridad</label>
                                     <input type="text" class="form-control" id="editPrioridad" name="editPrioridad" readonly required>
                                 </div>
 
                                 <!-- Estado -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label" for="editEstado">Estado</label>
                                     <input type="text" class="form-control" id="editEstado" name="editEstado" readonly required>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Reportar incidencia</button>
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Actualizar incidencia</button>
                             <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </form>
@@ -126,51 +126,23 @@
                 obtenerVerIncidencias();
             };
 
+            scriptpost.onload = () => {
+                activarEditarIncidencia(scriptget);
+            };
+
             let incidenciaSeleccionadaId = null;
 
             function editarIncidencia(id, titulo, descripcion, prioridad, estado, fecha, id_recurso) {
                 incidenciaSeleccionadaId = id;
+                let fechaFormateada = fecha.replace(" ", "T");
+                document.getElementById("editId").value = id;
                 document.getElementById("editRecurso").value = id_recurso;
-                document.getElementById("editFecha").value = fecha;
+                document.getElementById("editFecha").value = fechaFormateada;
                 document.getElementById("editTitulo").value = titulo;
                 document.getElementById("editDescripcion").value = descripcion;
                 document.getElementById("editPrioridad").value = prioridad;
                 document.getElementById("editEstado").value = estado;
             }
-            const modalincidencia = document.getElementById('modalEditar');
-
-            modalincidencia.addEventListener('show.bs.modal', function (event) {
-                const card = event.relatedTarget; // la tarjeta clicada
-
-                // leer data attributes
-                const id = card.getAttribute('data-id');
-                const recurso = card.querySelector('td').textContent.trim();
-
-                // rellenar formulario
-                document.getElementById('recurso_id').value = id;
-                document.getElementById('incidencia_recurso').value = recurso;
-
-                const ahora = new Date();
-
-                const yyyy = ahora.getFullYear();
-                const mm = String(ahora.getMonth() + 1).padStart(2, '0');
-                const dd = String(ahora.getDate()).padStart(2, '0');
-                const hh = String(ahora.getHours()).padStart(2, '0');
-                const min = String(ahora.getMinutes()).padStart(2, '0');
-
-                const fechaFormateada = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
-
-                document.getElementById('incidencia_fecha').value = fechaFormateada;
-            });
-        
-            const btnverincidencias = document.getElementById("btn-verincidencias");
-
-            document.getElementById("editRecurso").value = recurso;
-            document.getElementById("editFecha").value = fecha;
-            document.getElementById("editTitulo").value = titulo;
-            document.getElementById("editDescripcion").value = descripcion;
-            document.getElementById("editPrioridad").value = prioridad;
-            document.getElementById("editEstado").value = estado;
         </script>
     </body>
 </html>

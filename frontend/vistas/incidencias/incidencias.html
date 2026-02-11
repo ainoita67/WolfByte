@@ -88,7 +88,7 @@
                                 <!-- Fecha -->
                                 <div class="col-md-4">
                                     <label class="form-label">Fecha</label>
-                                    <input type="datetime-local" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+                                    <input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
                                 </div>
 
                                 <!-- ID -->
@@ -161,8 +161,9 @@
                 const dd = String(ahora.getDate()).padStart(2, '0');
                 const hh = String(ahora.getHours()).padStart(2, '0');
                 const min = String(ahora.getMinutes()).padStart(2, '0');
+                const ss = String(ahora.getSeconds()).padStart(2, '0');
 
-                const fechaFormateada = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+                const fechaFormateada = `${yyyy}-${mm}-${dd}T${hh}:${min}:${ss}`;
 
                 document.getElementById('incidencia_fecha').value = fechaFormateada;
             });
