@@ -124,7 +124,7 @@ $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cam
 
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
-$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivasRecurso'); //consultar todas las reservas permanentes activas de un recurso
 $router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
 $router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@activate'); //activar o desactivar una reserva permanente
 $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
