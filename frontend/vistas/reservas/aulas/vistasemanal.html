@@ -59,7 +59,15 @@
             </div>
 
 
-<script>
+<script type="module">
+import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
+
+const horario = generarHorarioPermanentes(await getPermanentesRecurso("salon"));
+console.log(horario);
+
+
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
         viewType: "Week",
@@ -95,38 +103,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
+            const text = await res.text(); // primero leemos como texto
+            let json;
+            try {
+                json = JSON.parse(text); // luego intentamos parsear a JSON
+            } catch {
+                console.error("Respuesta no es JSON:", text);
+                return;
+            }
 
-    // crear las "plantillas" de casillas en las que poder reservar
-    function crearSlots() {
-        const slots = [
-            { start: "08:50", end: "09:40" },
-            { start: "09:45", end: "10:35" },
-            { start: "10:40", end: "11:30" },
-            { start: "12:00", end: "12:50" },
-            { start: "12:55", end: "13:45" },
-            { start: "13:50", end: "14:40" }
-        ];
+            if (json.status !== "success") {
+                console.error("Error API:", json);
+                return;
+            }
 
-        // Añadir franjas cada 30 min a partir de las 14:00 hasta 20:00
-        for (let h = 15; h < 22; h++) {
-            slots.push({ start: `${h.toString().padStart(2,'0')}:00`, end: `${h.toString().padStart(2,'0')}:30` });
-            slots.push({ start: `${h.toString().padStart(2,'0')}:30`, end: `${(h+1).toString().padStart(2,'0')}:00` });
-        }
-
-        // Convertir a eventos de DayPilot para un día concreto (ejemplo: lunes 6 febrero 2026)
-        const day = "2026-02-06";
-        const events = slots.map((s,i) => ({
-            start: `${day}T${s.start}:00`,
-            end: `${day}T${s.end}:00`,
-            id: `slot-${i}`,
-            text: "Disponible",
-            backColor: "#dcdcdc",
-            borderColor: "#c3c3c3",
-            fontColor: "#212529",
-            barHidden: true
-        }));
-        return events;
-    }
+            const eventos = json.data.data.map(r => ({
+                id: r.id_reserva,
+                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
+                start: r.inicio.replace(" ", "T"),
+                end: r.fin.replace(" ", "T")
+            }));
 
     // Cargar reservas
     async function cargarReservasSalon() {

@@ -2,14 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
     <script>const BASE = window.location.origin + "/frontend";</script>
-    <!--
-    AÑADE:
-        <script src="/ALEX/frontend/javascript/includes.js"></script>
-        <script src="/ALEX/frontend/javascript/menu.js"></script>
-    QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-    -->
     <script>
         const script1 = document.createElement("script");
         script1.src = BASE + "/javascript/includes.js";
@@ -17,7 +10,7 @@
             const script2 = document.createElement("script");
             script2.src = BASE + "/javascript/menu.js";
             script2.onload = () => {
-            generarPagina("menu", "admin");
+            generarPagina("admin", "admin");
             };
             document.head.appendChild(script2);
         };
@@ -37,18 +30,18 @@
       <h5 class="mb-3">Menú Admin</h5>
 
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="portatiles/portatiles.html">Portátiles</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="logacciones/logacciones.html">Log de Acciones</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="usuarios/usuarios.html">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="logacciones/logacciones.html">Log de Acciones</a></li>
                     <hr class="my-3">
-                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <h6 class="text-primary">Tablas auxiliares</h6>
                     <ul class="nav flex-column ps-3">
-                        <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
+                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
                     </ul>
                 </ul>
             </aside>
@@ -190,6 +183,9 @@
 
                 </section>
             </div>
+            <div class="divvolver container offset-7 offset-md-8 p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
 
             <!--MODAL INCIDENCIA-->
             <div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
@@ -282,7 +278,6 @@
             </div>
 
 
-            <!-- RELLENAR MODAL INCIDENCIA-->
 
             <script>
             const modalincidencia = document.getElementById('modalincidencia');

@@ -21,15 +21,17 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 // $router->patch('/profesores/{id}/email','Controllers\\ProfesorController@updateEmail'); // actualizar email de profesor
 
 
-// // INCIDENCIAS
-// $router->get('/incidencias', 'Controllers\\IncidenciaController@index'); //seleccionar todos los Incidenciaes
-// $router->post('/incidencias', 'Controllers\\IncidenciaController@store'); // insertar nuevo Incidencia
-// $router->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // actualizar Incidencia por id
-// $router->delete('/incidencias/{id}', 'Controllers\\IncidenciaController@destroy'); // eliminar Incidencia por id
+// INCIDENCIAS
+$router->get('/incidencias', 'Controllers\\IncidenciaController@index'); // Nos devuelven todas la incidencias de la base de datos
+$router->get('/incidencias/recurso/{id_recurso}', 'Controllers\\IncidenciaController@showByRecurso'); //Nos devuelven todas la incidencias de la base de datos del recurso que  pasemos por parámetro (no implementar)
+$router->get('/incidencias/usuario/{id_usuario}', 'Controllers\\IncidenciaController@showByUsuario'); // Nos devuelven todas la incidencias de la base de datos que haya creado el usuario del que se pase el id
+$router ->post('/incidencias', 'Controllers\\IncidenciaController@store'); // Se envían los datos de una incidencia para añadirla a nuestra base de datos
+$router ->put('/incidencias/{id}', 'Controllers\\IncidenciaController@update'); // Se enviaran los datos de una incidencia para modificarla
+$router ->patch ('/incidencias/{id}/prioridad', 'Controllers\\IncidenciaController@updatePrioridad'); // Se enviará la información de la prioridad para una incidencia y se modificara
+$router ->patch ('/incidencias/{id}/estado', 'Controllers\\IncidenciaController@updateEstado'); // Se enviará la información del estado de una incidencia y se modificara
 
 // ROL
 $router->get('/rol',               'Controllers\\RolController@index'); // Se reciben los datos de los usuarios activos para listarlos
-
 
 // USUARIOS
 $router->get('/user',               'Controllers\\UsuarioController@index'); // Se reciben los datos de los usuarios activos para listarlos
@@ -78,6 +80,13 @@ $router->post('/espacios', 'Controllers\\EspacioController@store');
 // $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 // $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
+// MATERIALES 
+$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
+$router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
+$router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID 
+$router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material  
+$router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
+
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
 
@@ -124,7 +133,7 @@ $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cam
 
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
-$router->get('/reservas_permanentes/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivas'); //consultar todas las reservas permanentes activas de un recurso
+$router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivasRecurso'); //consultar todas las reservas permanentes activas de un recurso
 $router->post('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@store'); //crear una reserva permanente
 $router ->patch ('/reservas_permanentes/{id}/activar', 'Controllers\\ReservaPermanenteController@activate'); //activar o desactivar una reserva permanente
 $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@update'); //editar una reserva permanente
@@ -143,7 +152,21 @@ $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaContro
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');
 $router->put('/reservas/{id}/fechas', 'Controllers\\ReservaController@updateFechas');
 $router->post('/reservas/verificar-disponibilidad', 'Controllers\\ReservaController@verificarDisponibilidad');
+// PLANTAS 
+$router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen 
+$router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio 
+$router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos 
+$router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio 
 
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
+
+// LIBERACIÓN PUNTUAL
+$router->get('/liberaciones', 'Controllers\\LiberacionPuntualController@index'); //Consultar todas las liberaciones puntuales
+$router->get('/liberaciones/recurso/{id_recurso}', 'Controllers\\LiberacionPuntualController@showByRecurso'); //Consultar todas las liberaciones puntuales de un recurso
+$router->get('/liberaciones/usuario/{id_usuario}', 'Controllers\\LiberacionPuntualController@showByUsuario'); //Consultar las liberaciones puntuales de un usuario
+$router->post('/liberaciones', 'Controllers\\LiberacionPuntualController@store'); //Añadir una liberación puntual
+$router->post('/liberaciones/reserva/{id_reserva}', 'Controllers\\LiberacionPuntualController@storeByReserva'); //Añadir una liberación puntual ligada a una reserva
+$router->put('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@update'); //Editar una liberación puntual
+$router->delete('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@destroy'); //Eliminar una liberación puntual
