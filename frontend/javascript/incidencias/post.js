@@ -4,44 +4,46 @@ function activarCrearIncidencia() {
     if(!formcrear) return;
     formcrear.addEventListener("submit", function (e) {
         e.preventDefault();
-
-        let titulo = document.getElementById("crearIncidencia").value.trim();
+        let fecha = document.getElementById("incidencia_fecha").value;
+        let id_recurso = document.getElementById("recurso_id").value;
+        let titulo = document.getElementById("incidencia_titulo").value;
+        let descripcion = document.getElementById("incidencia_descripcion").value;
+        let prioridad = 'Media';
+        let estado = 'Abierta';
         if (!titulo) return;
         titulo = capitalizar(titulo);
-        fetch(window.location.origin+"/API/incidencias", {
+        fetch(window.location.origin+"/API/incidencias/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                titulo: titulo
-            })
+            body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: 2, id_recurso: id_recurso })
         })
         .then(res => res.json())
         .then(response => {
             if (response.status === "success") {
                 // Cerrar modal
-                let modal = bootstrap.Modal.getInstance(
-                    document.getElementById("modalCrear")
+                const modal = bootstrap.Modal.getInstance(
+                    document.getElementById("modalIncidencia")
                 );
                 modal.hide();
 
                 // Limpiar input
                 document.getElementById("formCrearIncidencia").reset();
 
-                alert("Incidencia creada correctamente");
+                alert("Incidencia actualizada correctamente");
                 // Recargar
                 window.location.reload();
             } else {
                 if(response.message){
                     alert(response.message.trim());
                 }else{
-                    alert("Error al crear la incidencia");
+                    alert("Error al actualizar la incidencia");
                 }
             }
         })
-        .catch(err => console.error("Error al crear la incidencia:", err));
-    });
+        .catch(err => console.error("Error al actualizar la incidencia:", err));
+    })
 };
 
 

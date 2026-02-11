@@ -95,13 +95,21 @@
                                 <!-- Prioridad -->
                                 <div class="col-md-6 pe-3">
                                     <label class="form-label" for="editPrioridad">Prioridad</label>
-                                    <input type="text" class="form-control" id="editPrioridad" name="editPrioridad" readonly required>
+                                    <select class="form-control" id="editPrioridad" name="editPrioridad" required>
+                                        <option value="Alta">Alta</option>
+                                        <option value="Media">Media</option>
+                                        <option value="Baja">Baja</option>
+                                    </select>
                                 </div>
 
                                 <!-- Estado -->
                                 <div class="col-md-6">
                                     <label class="form-label" for="editEstado">Estado</label>
-                                    <input type="text" class="form-control" id="editEstado" name="editEstado" readonly required>
+                                    <select class="form-control" id="editEstado" name="editEstado" required>
+                                        <option value="Abierta">Abierta</option>
+                                        <option value="En proceso">En proceso</option>
+                                        <option value="Resuelta">Resuelta</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
