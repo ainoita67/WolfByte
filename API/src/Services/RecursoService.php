@@ -28,14 +28,6 @@ class RecursoService
     }
 
     /**
-     * Obtener todos recursos activos
-     */
-    public function getAllRecursosActivos(): array
-    {
-        return $this->model->getAllActivos();
-    }
-
-    /**
      * Cambiar estado de activo de un recurso
      */
     public function activoRecurso(string $id): array
