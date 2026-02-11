@@ -1,18 +1,18 @@
 /**
- * Genera el header y nav dinámicamente según el JWT
+ * Genera el header y nav dinámicamente según el rol y la página actual
  * @param {string} menuactivo - Nombre de la página actual (ej: 'aulas', 'salonactos')
+ * @param {string} role - Rol del usuario (ej: 'admin', 'usuario')
  */
-function generateHeaderNav(menuactivo) {
+function generateHeaderNav(menuactivo, role) {
     const header = document.getElementById('header');
-
-    // Crear navs para escritorio y móvil
+    
+    //crear los 2 navs vacios ordenador y movil
     const navd = document.createElement('nav');
-    navd.classList.add("row");
-    navd.id = "menuordenador";
-
+        navd.classList.add("row");
+        navd.id = "menuordenador";
     const navm = document.createElement('nav');
-    navm.classList.add("row");
-    navm.id = "menumovil";
+        navm.classList.add("row");
+        navm.id = "menumovil";
 
     header.appendChild(navd);
     header.appendChild(navm);
@@ -43,12 +43,12 @@ function generateHeaderNav(menuactivo) {
 
         //apartados del menu, para reutilizarlos y bucles
         const menus = [
-            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: BASE + "/vistas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/liberar/liberar.html", key: "liberar" }
+            { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
+            { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
+            { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            { texto: "Otros espacios", href: "/frontend/vistas/reservas/espacios/espacios.html", key: "espacios" },
+            { texto: "Incidencias", href: "/frontend/vistas/incidencias/incidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/frontend/vistas/liberar/liberar.html", key: "liberar" }
         ];
 
         //MENU DESKTOP
@@ -81,32 +81,18 @@ function generateHeaderNav(menuactivo) {
             const li = document.createElement('li');
             li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
 
-    // ----------------- DESKTOP -----------------
-    const uld = document.createElement('ul');
-    uld.id = "menudesktop";
-    uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
+            const a = document.createElement('a');
+            a.href = menu.href;
+            a.textContent = menu.texto;
 
-    uld.innerHTML = `
-    <li class="col-12">
-        <a href="${BASE}/vistas/menu.php">
-            <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
-        </a>
-    </li>`;
+            if(menuactivo === menu.key){
+                a.classList.add("fw-bold", "text-lightgrey");
+                a.style.color = "grey";
+            }
 
-    // Añadir links
-    menus.forEach(menu => {
-        const li = document.createElement('li');
-        li.classList.add("pt-5", "pb-5", "d-none", "d-xl-block", "ms-5");
-        const a = document.createElement('a');
-        a.href = menu.href;
-        a.textContent = menu.texto;
-        if(menuactivo === menu.key){
-            a.classList.add("fw-bold", "text-lightgrey");
-            a.style.color = "grey";
-        }
-        li.appendChild(a);
-        uld.appendChild(li);
-    });
+            li.appendChild(a);
+            uld.appendChild(li);
+        });
 
         // administrador
         if (role == "admin"){
@@ -125,9 +111,7 @@ function generateHeaderNav(menuactivo) {
             liadmin.appendChild(aa);
             uld.appendChild(liadmin);
         }
-        liadmin.appendChild(aa);
-        uld.appendChild(liadmin);
-    }
+        
 
         // apartado perfil
         const lipd = document.createElement('li');
@@ -143,7 +127,7 @@ function generateHeaderNav(menuactivo) {
                     <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
+                    <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
                     <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
@@ -174,27 +158,38 @@ function generateHeaderNav(menuactivo) {
             liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-lg-none", "ms-5");
             liMenu.id = "perfil";
 
-    const aMenu = document.createElement('a');
-    aMenu.href = "#";
-    aMenu.id = "menudesplegable";
-    aMenu.setAttribute("data-bs-toggle", "dropdown");
-    aMenu.setAttribute("aria-expanded", "false");
-    aMenu.innerHTML = `<i class="bi bi-list fs-1"></i>`;
-    liMenu.appendChild(aMenu);
+            const aMenu = document.createElement('a');
+                aMenu.href = "#";
+                aMenu.id = "menudesplegable";
+                aMenu.setAttribute("data-bs-toggle", "dropdown");
+                aMenu.setAttribute("aria-expanded", "false");
+                aMenu.innerHTML = `<i class="bi bi-list fs-1"></i>`;
+            liMenu.appendChild(aMenu);
 
-    const dropdown = document.createElement('ul');
-    dropdown.classList.add("dropdown-menu");
-    dropdown.setAttribute("aria-labelledby", "menudesplegable");
+            // Crear UL del dropdown
+            const dropdown = document.createElement('ul');
+                dropdown.classList.add("dropdown-menu");
+                dropdown.setAttribute("aria-labelledby", "menudesplegable");
 
-    menus.forEach(menu => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = menu.href;
-        a.textContent = menu.texto;
-        a.classList.add("dropdown-item");
-        li.appendChild(a);
-        dropdown.appendChild(li);
-    });
+                menus.forEach(menu => {
+                    const li = document.createElement('li');
+                        const a = document.createElement('a');
+                            a.href = menu.href;
+                            a.textContent = menu.texto;
+                            a.classList.add("dropdown-item");
+                            li.appendChild(a);
+                    dropdown.appendChild(li);
+                });
+                //administrador
+                if (role == "admin"){
+                    const liad = document.createElement('li');
+                        const aad = document.createElement('a');
+                            aad.href = BASE + "/vistas/administrador/menuadministrador.html";
+                            aad.textContent = "Administrador";
+                            aad.classList.add("dropdown-item");
+                            liad.appendChild(aad);
+                    dropdown.appendChild(liad);
+                }
 
         liMenu.appendChild(dropdown);
         ulm.appendChild(liMenu);
@@ -224,44 +219,32 @@ function generateHeaderNav(menuactivo) {
         </ul>
         `;
     }
-
-    liMenu.appendChild(dropdown);
-    ulm.appendChild(liMenu);
-
-    // Perfil móvil
-    const lipm = document.createElement('li');
-    lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-xl-none");
-    lipm.id = "perfil";
-    lipm.innerHTML = `
-    <a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-person-circle fs-1"></i>
-        <span class="ms-2">${userName}</span>
-    </a>
-    <ul class="dropdown-menu" data-target="#perfilmovil">
-        <li><a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">${userName}</a></li>
-        <li><a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a></li>
-        <li><a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a></li>
-        <li><a href="#" id="logoutBtnMobile" class="dropdown-item">Cerrar sesión</a></li>
-    </ul>`;
-    ulm.appendChild(lipm);
-
-    // Agregar nav móvil al DOM
-    navm.appendChild(ulm);
-
-    // --- Setup logout ---
-    setupLogout();
 }
 
-// Logout genérico para desktop y móvil
-function setupLogout() {
-    ['logoutBtnDesktop', 'logoutBtnMobile'].forEach(id => {
-        const btn = document.getElementById(id);
-        if(btn){
-            btn.addEventListener('click', async (e)=>{
-                e.preventDefault();
-                localStorage.removeItem('token');
-                window.location.href = '/frontend/auth/login.html';
+// Logout
+document.addEventListener('click', async (e) => {
+    if (e.target && e.target.id === 'logoutBtn') {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://192.168.13.202/API/frontend/logout', {
+                method: 'POST',           // tu API acepta POST
+                credentials: 'include',   // 🔑 permite enviar cookies de sesión
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al cerrar sesión');
+            }
+
+            console.log('Sesión cerrada:', data);
+            window.location.href = '/auth/login.html';  // Redirige al login
+
+        } catch (err) {
+            alert('Error al cerrar sesión: ' + err.message);
         }
-    });
-}
+    }
+});

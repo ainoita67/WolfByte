@@ -1,7 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /IKER/API/
 
-    # --- Redirecciones a /public ---
-    RewriteRule ^$ public/ [L]
-    RewriteRule (.*) public/$1 [L] 
+    # Redirigir TODO a public/
+    RewriteCond %{REQUEST_URI} !^/IKER/API/public/
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>

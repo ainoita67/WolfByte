@@ -2,8 +2,10 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
         <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
         <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
@@ -35,39 +37,139 @@
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
             <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
             
-            <div class="container my-5">
-                <div id="dp"></div>
+            <div class="container my-4 d-flex flex-column" style="height: 50vh;">
+                <div class="row d-flex justify-content-between align-items-center mb-3">
+                    <button id="prevWeek"
+                            type="button"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                            style="width: 2.5rem; height: 2.5rem;">
+                    <i class="bi bi-arrow-left-circle fs-2"></i>
+                    </button>
+                    <button id="nextWeek"
+                            type="button"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                            style="width: 2.5rem; height: 2.5rem;">
+                    <i class="bi bi-arrow-right-circle fs-2"></i>
+                    </button>
+
+
+                </div>
+
+                <div id="dp" class="flex-grow-1"></div>
             </div>
 
 
-            <script>
-                  const dp = new DayPilot.Calendar("dp", {
-                    viewType: "Week",
-                    theme: "calendar_green"
-                });
-                dp.events.list = [
-                    {
-                    "start": "2026-01-26T10:30:00",
-                    "end": "2026-01-26T13:30:00",
-                    "id": "225eb40f-5f78-b53b-0447-a885c8e92233",
-                    "text": "Calendar Event 1"
-                    },
-                    {
-                    "start": "2026-01-27T12:30:00",
-                    "end": "2026-01-27T15:00:00",
-                    "id": "1f67def5-e1dd-57fc-2d39-eb7a5f8e789a",
-                    "text": "Calendar Event 2"
-                    },
-                    {
-                    "start": "2026-01-28T10:30:00",
-                    "end": "2026-01-28T16:00:00",
-                    "id": "aba78fd9-09d0-642e-612d-0e7e002c29f5",
-                    "text": "Calendar Event 3"
-                    }
-                ];
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "Week",
+        theme: "calendar_green",
+        startDate: DayPilot.Date.today(),
 
-                dp.init();
-            </script>
+        locale: "es-es",            // formato europeo
+        headerDateFormat: "dd/MM/yyyy",
+        weekStarts: 1,
+
+        cellDuration: 5,
+        cellHeight: 8, 
+        businessBeginsHour: 8,
+        businessEndsHour: 22,
+        eventDeleteHandling: "Disabled",
+        heightSpec: "BusinessHoursNoScroll"
+
+    });
+
+    dp.events.list = crearSlots();
+    cargarReservasSalon();
+    dp.init();
+
+
+    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    document.getElementById("prevWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(-7);
+        dp.update();
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(7);
+        dp.update();
+    });
+
+
+    // crear las "plantillas" de casillas en las que poder reservar
+    function crearSlots() {
+        const slots = [
+            { start: "08:50", end: "09:40" },
+            { start: "09:45", end: "10:35" },
+            { start: "10:40", end: "11:30" },
+            { start: "12:00", end: "12:50" },
+            { start: "12:55", end: "13:45" },
+            { start: "13:50", end: "14:40" }
+        ];
+
+        // Añadir franjas cada 30 min a partir de las 14:00 hasta 20:00
+        for (let h = 15; h < 22; h++) {
+            slots.push({ start: `${h.toString().padStart(2,'0')}:00`, end: `${h.toString().padStart(2,'0')}:30` });
+            slots.push({ start: `${h.toString().padStart(2,'0')}:30`, end: `${(h+1).toString().padStart(2,'0')}:00` });
+        }
+
+        // Convertir a eventos de DayPilot para un día concreto (ejemplo: lunes 6 febrero 2026)
+        const day = "2026-02-06";
+        const events = slots.map((s,i) => ({
+            start: `${day}T${s.start}:00`,
+            end: `${day}T${s.end}:00`,
+            id: `slot-${i}`,
+            text: "Disponible",
+            backColor: "#dcdcdc",
+            borderColor: "#c3c3c3",
+            fontColor: "#212529",
+            barHidden: true
+        }));
+        return events;
+    }
+
+    // Cargar reservas
+    async function cargarReservasSalon() {
+        try {
+            const res = await fetch(`${API}/reservas-salon-actos`, {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            });
+
+            const text = await res.text(); // primero leemos como texto
+            let json;
+            try {
+                json = JSON.parse(text); // luego intentamos parsear a JSON
+            } catch {
+                console.error("Respuesta no es JSON:", text);
+                return;
+            }
+
+            if (json.status !== "success") {
+                console.error("Error API:", json);
+                return;
+            }
+
+            const eventos = json.data.data.map(r => ({
+                id: r.id_reserva,
+                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
+                start: r.inicio.replace(" ", "T"),
+                end: r.fin.replace(" ", "T")
+            }));
+
+            dp.events.list = dp.events.list.concat(eventos);
+            dp.update();
+
+        } catch (error) {
+            console.error("Error cargando reservas:", error);
+        }
+    }
+});
+
+
+
+</script>
 
         </main>
         <footer id="footer"></footer>

@@ -2,7 +2,14 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
         <script>
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -10,22 +17,26 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("salonactos", "admin");
+                generarPagina("menu", "admin");
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
         </script>
 
-        <title>Salón de actos - IES Bajo Aragón</title>
+
+        <title>Salón de Actos - IES Bajo Aragón</title>
     </head>
     <body>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <h2 class="text-left mb-4">Salón de actos</h2>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+        <div id="header"></div>
+
+        <main>
+            <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
+            
+            <div class="container my-5">
+                <div id="dp"></div>
             </div>
 
 
@@ -56,10 +67,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
 
-            const text = await res.text(); // 🔹 primero leemos como texto
+            const text = await res.text(); // primero leemos como texto
             let json;
             try {
-                json = JSON.parse(text); // 🔹 parseamos JSON
+                json = JSON.parse(text); // luego intentamos parsear a JSON
             } catch {
                 console.error("Respuesta no es JSON:", text);
                 return;
@@ -124,7 +135,7 @@ async function actualizarReserva(args) {
         if (json.status !== "success") {
             // Mostrar mensaje específico si existe
             const mensaje = json.message || json.data?.message || "No se pudo guardar el cambio";
-            alert(`❌ Error: ${mensaje}`);
+            alert(`Error: ${mensaje}`);
             args.preventDefault();
             return;
         }
@@ -189,7 +200,7 @@ dp.onEventMoved = async args => {
     );
     
     if (haySolapamiento) {
-        alert("⚠️ No se puede mover la reserva. El horario se solapa con otra reserva existente.");
+        alert("No se puede mover la reserva. El horario se solapa con otra reserva existente.");
         args.preventDefault(); // Cancelar el movimiento
         return;
     }
@@ -211,6 +222,47 @@ function resaltarHorasOcupadas(calendario, reservas) {
     
     calendario.update();
 }
+
+dp.onEventClick = async args => {
+
+    const e = args.e;
+
+    const form = [
+        { name: "Asignatura", id: "asignatura", disabled: true },
+        { name: "Grupo", id: "grupo", disabled: true },
+        { name: "Profesor", id: "profesor", disabled: true },
+        { name: "Actividad", id: "actividad", disabled: true },
+        { name: "Inicio", id: "start", type: "datetime" },
+        { name: "Fin", id: "end", type: "datetime" }
+    ];
+
+    const data = {
+        asignatura: e.data.asignatura,
+        grupo: e.data.grupo,
+        profesor: e.data.profesor,
+        actividad: e.data.actividad,
+        start: e.start(),
+        end: e.end()
+    };
+
+    const modal = await DayPilot.Modal.form(form, data);
+
+    if (modal.canceled) return;
+
+    // Actualizar visualmente
+    e.start(modal.result.start);
+    e.end(modal.result.end);
+    dp.update();
+
+    // Guardar en API
+    await actualizarReserva({
+        e: e,
+        newStart: modal.result.start,
+        newEnd: modal.result.end,
+        preventDefault: () => {}
+    });
+};
+
 </script>
 
 
