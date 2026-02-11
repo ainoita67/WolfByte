@@ -32,6 +32,7 @@
                 <table class="table table-striped table-bordered align-middle text-center tabla-cabecera">
                     <thead>
                         <tr>
+                            <th class="d-none">ID</th>
                             <th>Recurso</th>
                             <th class="d-none d-md-table-cell">Fecha</th>
                             <th>Título</th>
@@ -41,28 +42,7 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td class="d-none d-md-table-cell"></td>
-                            <td></td>
-                            <td class="d-none d-md-table-cell"></td>
-                            <td class="d-none d-md-table-cell"></td>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm btn-mostrar" data-bs-toggle="modal" data-bs-target="#modalMostrar">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+                    <tbody id="verIncidenciasTableBody">
                     </tbody>
                 </table>
             </div>
@@ -72,38 +52,105 @@
             </div>
         </main>
         <footer id="footer" class="m-5"></footer>
+        <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <form id="formEditarIncidencia">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <!-- Fecha -->
+                                <div class="col-md-4">
+                                    <label class="form-label" for="editFecha">Fecha</label>
+                                    <input type="datetime-local" step="1" class="form-control" id="editFecha" name="editFecha" readonly required>
+                                </div>
+
+                                <!-- ID -->
+                                <div class="col-md-4">
+                                    <label class="form-label" for="editId">ID de la incidencia</label>
+                                    <input type="number" class="form-control" id="editId" name="editId" readonly required>
+                                </div>
+
+                                <!-- Recurso -->
+                                <div class="col-md-4">
+                                    <label class="form-label" for="editRecurso">ID del recurso</label>
+                                    <input type="text" class="form-control" id="editRecurso" name="editRecurso" readonly required>
+                                </div>
+
+                                <!-- Titulo -->
+                                <div class="col-12">
+                                    <label class="form-label">Título</label>
+                                    <input type="text" class="form-control" id="editTitulo" name="titulo" required>
+                                </div>
+
+                                <!-- Descripcion -->
+                                <div class="col-12">
+                                    <label class="form-label" for="editDescripcion">Descripción</label>
+                                    <textarea class="form-control" id="editDescripcion" name="editDescripcion" rows="3"></textarea>
+                                </div>
+
+                                <!-- Prioridad -->
+                                <div class="col-md-6 pe-3">
+                                    <label class="form-label" for="editPrioridad">Prioridad</label>
+                                    <select class="form-control" id="editPrioridad" name="editPrioridad" required>
+                                        <option value="Alta">Alta</option>
+                                        <option value="Media">Media</option>
+                                        <option value="Baja">Baja</option>
+                                    </select>
+                                </div>
+
+                                <!-- Estado -->
+                                <div class="col-md-6">
+                                    <label class="form-label" for="editEstado">Estado</label>
+                                    <select class="form-control" id="editEstado" name="editEstado" required>
+                                        <option value="Abierta">Abierta</option>
+                                        <option value="En proceso">En proceso</option>
+                                        <option value="Resuelta">Resuelta</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Actualizar incidencia</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script>
-            const espacio = document.getElementById("espacio");
-            const ubicacion = document.getElementsByClassName("ubicacion")[0];
-            const selectubicacion = document.getElementById("ubicacion");
-            const planta = document.getElementsByClassName("planta")[0];
-            const selectplanta = document.getElementById("planta");
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/incidencias/get.js";
+            document.head.appendChild(scriptget);
 
-            // Cuando se cambia cualquier radio
-            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
-                radio.addEventListener("change", () => {
-                if (espacio.checked) {
-                    ubicacion.classList.remove("d-none");
-                    actualizarPlanta()
-                } else {
-                    ubicacion.classList.add("d-none");
-                    planta.classList.add("d-none");
-                    selectubicacion.value = "";
-                    selectplanta.value = "";
-                }
-                });
-            });
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/incidencias/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerVerIncidencias();
+            };
 
-            // Cuando cambia el primer select
-            function actualizarPlanta() {
-                if (selectubicacion.value === "RAM" || selectubicacion.value === "Loscos" || selectubicacion.value === "Redondo") {
-                    planta.classList.remove("d-none");
-                } else {
-                    planta.classList.add("d-none");
-                }
+            scriptpost.onload = () => {
+                activarEditarIncidencia(scriptget);
+            };
+
+            let incidenciaSeleccionadaId = null;
+
+            function editarIncidencia(id, titulo, descripcion, prioridad, estado, fecha, id_recurso) {
+                incidenciaSeleccionadaId = id;
+                let fechaFormateada = fecha.replace(" ", "T");
+                document.getElementById("editId").value = id;
+                document.getElementById("editRecurso").value = id_recurso;
+                document.getElementById("editFecha").value = fechaFormateada;
+                document.getElementById("editTitulo").value = titulo;
+                document.getElementById("editDescripcion").value = descripcion;
+                document.getElementById("editPrioridad").value = prioridad;
+                document.getElementById("editEstado").value = estado;
             }
-
-            selectubicacion.addEventListener("change", actualizarPlanta);
         </script>
     </body>
 </html>
