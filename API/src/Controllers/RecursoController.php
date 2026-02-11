@@ -21,26 +21,12 @@ class RecursoController
 
     /**
      * GET /recurso
-     * Devuelve todos los recursos
+     * Devuelve todos los recursos activos
      */
     public function index(Request $req, Response $res): void
     {
         try {
             $recursos = $this->service->getAllRecursos();
-            $res->status(200)->json($recursos);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-
-    /**
-     * GET /recurso/activos
-     * Devuelve todos los recursos activos
-     */
-    public function activos(Request $req, Response $res): void
-    {
-        try {
-            $recursos = $this->service->getAllRecursosActivos();
             $res->status(200)->json($recursos);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);

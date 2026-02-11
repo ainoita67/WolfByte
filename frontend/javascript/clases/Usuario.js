@@ -5,10 +5,16 @@ export class Usuario {
     correo = '',
     contrasena = null,
     usuario_activo = true,
-    rol = 10
+    rol = 20
   } = {}) {
 
-    rol = rol ?? {};
+    // Normalizar rol: puede venir como number o como objeto
+    if (typeof rol === "number") {
+      rol = { id_rol: rol };
+    }
+    if (!rol || typeof rol !== "object") {
+      rol = {};
+    }
 
     this._id_usuario = id_usuario;
     this._nombre = nombre;
@@ -16,8 +22,8 @@ export class Usuario {
     this._contrasena = contrasena;
     this._usuario_activo = Boolean(usuario_activo);
     this._rol = {
-      id_rol: rol.id_rol ?? null,
-      rol: rol.rol ?? ''
+      id_rol: rol.id_rol ?? 20,
+      rol: rol.rol ?? "Común"
     };
   }
 
@@ -28,17 +34,33 @@ export class Usuario {
       nombre: this._nombre,
       correo: this._correo,
       usuario_activo: this._usuario_activo ? 1 : 0,
-      id_rol: this._rol.id_rol
+      id_rol: this._rol.id_rol,
     };
+    return data;
+  }
 
-    if (this._contrasena) data.contrasena = this._contrasena;
-
+// ====JSON PARA CREAR USUARIO====
+  toJSONcreate() {
+    const data = {
+      nombre: this._nombre,
+      correo: this._correo,
+      contrasena: this._contrasena,
+      id_rol: this._rol.id_rol,
+    };
     return data;
   }
 
   // ======================
   // GETTERS Y SETTERS
   // ======================
+
+  get contrasena() {
+    return this._contrasena;
+  }
+  
+  set contrasena(valor) {
+    this._contrasena = valor;
+  }
 
   get id_usuario() {
     return this._id_usuario;
