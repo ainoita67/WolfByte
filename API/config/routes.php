@@ -105,3 +105,8 @@ $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@st
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
 $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
+// PLANTAS 
+$router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen 
+$router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio 
+$router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos 
+$router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio 
