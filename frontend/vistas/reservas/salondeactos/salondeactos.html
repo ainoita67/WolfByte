@@ -39,66 +39,285 @@
                 <div id="dp"></div>
             </div>
 
+            <!-- Modal editar reserva -->
+<div class="modal fade" id="modalEditarReserva" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Reserva</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formEditarReserva" class="px-3">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="asignatura">Asignatura</label>
+                            <input type="text" class="form-control" id="asignatura" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="grupo">Grupo</label>
+                            <input type="text" class="form-control" id="grupo" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="profesor">Profesor</label>
+                            <input type="text" class="form-control" id="profesor" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="actividad">Actividad</label>
+                            <input type="text" class="form-control" id="actividad" disabled>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="start">Inicio</label>
+                            <input type="datetime-local" class="form-control" id="start">
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label" for="end">Fin</label>
+                            <input type="datetime-local" class="form-control" id="end">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar</button>
+                    <button type="button" class="col-3 btn bg-danger border rounded-pill text-light" id="btnEliminarReserva"><i class="bi bi-trash"></i> Eliminar</button>
+                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+ 
+
 
             
 <script>
+
+let dp;
+
 document.addEventListener("DOMContentLoaded", async () => {
 
-    // 1️⃣ Crear calendario
-    const dp = new DayPilot.Calendar("dp", {
+     dp = new DayPilot.Calendar("dp", {
         viewType: "Week",
         theme: "calendar_green",
-        startDate: DayPilot.Date.today()
+        startDate: DayPilot.Date.today(),
+
+        locale: "es-es",            // formato europeo
+        headerDateFormat: "dd/MM/yyyy",
+        weekStarts: 1,
+
+        cellDuration: 5,
+        cellHeight: 8, 
+        businessBeginsHour: 8,
+        businessEndsHour: 22,
+        eventDeleteHandling: "Disabled",
+        heightSpec: "BusinessHoursNoScroll"
     });
 
-    // 2️⃣ Drag & drop
+    // CLICK
+    dp.onEventClick = async args => {
+
+    const e = args.e;
+    const form = document.getElementById('formEditarReserva');
+
+    // CASO 1: Es un bloque base libre (sin reserva real)
+    if (e.data.bloqueBase === true) {
+
+        // Limpiar campos
+        form.reset();
+
+        document.getElementById('start').value =
+            e.start().toString().replace(' ', 'T');
+        document.getElementById('end').value =
+            e.end().toString().replace(' ', 'T');
+
+        // Guardar horas pero SIN id (porque aún no existe reserva)
+        form.dataset.eventId = "";
+        form.dataset.bloqueInicio = e.start().toString();
+        form.dataset.bloqueFin = e.end().toString();
+
+        // Mostrar modal (modo creación)
+        const modal = new bootstrap.Modal(
+            document.getElementById('modalEditarReserva')
+        );
+        modal.show();
+
+        return;
+    }
+
+    // CASO 2: Es una reserva real → editar
+
+    document.getElementById('asignatura').value = e.data.asignatura || "";
+    document.getElementById('grupo').value = e.data.grupo || "";
+    document.getElementById('profesor').value = e.data.profesor || "";
+    document.getElementById('actividad').value = e.data.actividad || "";
+
+    document.getElementById('start').value =
+        e.start().toString().replace(' ', 'T');
+
+    document.getElementById('end').value =
+        e.end().toString().replace(' ', 'T');
+
+    form.dataset.eventId = e.id();
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('modalEditarReserva')
+    );
+    modal.show();
+};
+
+
+
+
+
+
+    // MOVER EVENTO
     dp.onEventMoved = async args => {
+        const haySolapamiento = await verificarSolapamiento(
+            args.newStart.toString(),
+            args.newEnd.toString(),
+            args.e.id()
+        );
+
+        if (haySolapamiento) {
+            alert("Solapamiento detectado");
+            args.preventDefault();
+            return;
+        }
+
         await actualizarReserva(args);
     };
 
-    dp.init();
 
-    // 3️⃣ Cargar reservas
-    async function cargarReservasSalon() {
-        try {
-            const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token")
-                }
-            });
 
-            const text = await res.text(); // primero leemos como texto
-            let json;
-            try {
-                json = JSON.parse(text); // luego intentamos parsear a JSON
-            } catch {
-                console.error("Respuesta no es JSON:", text);
-                return;
+document.getElementById('btnEliminarReserva').addEventListener('click', async function() {
+    const form = document.getElementById('formEditarReserva');
+    const id = form.dataset.eventId;
+
+    if (!confirm("¿Seguro que quieres eliminar esta reserva?")) return;
+
+    try {
+        const res = await fetch(`http://192.168.13.202/API/reservas/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
             }
+        });
+        const data = await res.json();
 
-            if (json.status !== "success") {
-                console.error("Error API:", json);
-                return;
-            }
+        if (data.status !== 'success') throw new Error(data.message || "No se pudo eliminar");
 
-            const eventos = json.data.data.map(r => ({
-                id: r.id_reserva,
-                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-                start: r.inicio.replace(" ", "T"),
-                end: r.fin.replace(" ", "T")
-            }));
+        // Eliminar del calendario
+        dp.events.remove(id);
+        dp.update();
 
-            dp.events.list = eventos;
-            dp.update();
+        // Cerrar modal
+        bootstrap.Modal.getInstance(document.getElementById('modalEditarReserva')).hide();
+        cargarReservasSalon(); // Recargar para asegurar sincronización
 
-        } catch (error) {
-            console.error("Error cargando reservas:", error);
-        }
+    } catch (err) {
+        alert(err.message);
     }
+});
 
+    dp.init();
     cargarReservasSalon();
+    generarHorarioRealEventos(horarioPermanente);
+
+
+    // Evento por defecto
+dp.events.add({
+    id: "evento-por-defecto",
+    text: "Matemáticas - 1ºESO\nProfesor X - Clase práctica",
+    start: new DayPilot.Date(DayPilot.Date.today().toString() + "T11:00"),
+    end: new DayPilot.Date(DayPilot.Date.today().toString() + "T1:00"),
+    asignatura: "Matemáticas",
+    grupo: "1ºESO",
+    profesor: "Profesor X",
+    actividad: "Clase práctica"
+});
+
+dp.update();
 
 });
+
+// ---------------- FUNCIONES ----------------
+
+async function generarHorarioRealEventos(horarioPermanente) {
+    const { ultimo, proximo } = obtenerSeptiembre();
+
+    const events = [];
+    let current = new Date(ultimo);
+    let idCounter = 0;
+
+    // Helper: formato YYYY-MM-DD
+    const formatDate = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+    };
+
+    while (current < proximo) {
+        // JS: 0=domingo, 1=lunes...6=sábado
+        const jsDay = current.getDay();
+
+        // Convertimos a tu formato: lunes=1 ... viernes=5
+        if (jsDay >= 1 && jsDay <= 5) {
+            const diaSemana = jsDay;
+
+            // Buscar slots de ese día en el horario permanente
+            const diaHorario = horarioPermanente.find(d => d.dia_semana === diaSemana);
+
+            if (diaHorario && diaHorario.slots.length > 0) {
+                const dayStr = formatDate(current);
+
+                diaHorario.slots.forEach(slot => {
+                    events.push({
+                        start: `${dayStr}T${slot.start}:00`,
+                        end: `${dayStr}T${slot.end}:00`,
+                        id: `slot-${idCounter++}`,
+                        text: "Disponible",
+                        backColor: "#dcdcdc",
+                        borderColor: "#c3c3c3",
+                        fontColor: "#212529",
+                        barHidden: true
+                    });
+                });
+            }
+        }
+
+        // Siguiente día
+        current.setDate(current.getDate() + 1);
+    }
+
+    return events;
+}
+
+
+async function cargarReservasSalon() {
+    const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
+        headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
+    });
+
+    const json = await res.json();
+
+    const eventos = json.data.data.map(r => ({
+        id: r.id_reserva,
+        text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
+        start: new DayPilot.Date(r.inicio.replace(" ", "T")),
+        end: new DayPilot.Date(r.fin.replace(" ", "T")),
+        asignatura: r.asignatura,
+        grupo: r.grupo,
+        profesor: r.profesor,
+        actividad: r.actividad
+    }));
+
+    dp.events.list = eventos;
+    dp.update();
+
+    console.log("EVENTOS CARGADOS", eventos);
+}
+
 
 // 4️⃣ Función para actualizar fechas
 // Modificar la función actualizarReserva para mostrar mejor los errores
@@ -190,38 +409,46 @@ async function verificarSolapamiento(inicio, fin, idExcluir = null) {
     }
 }
 
-// Modificar el onEventMoved para incluir validación
-dp.onEventMoved = async args => {
-    // Verificar solapamiento antes de mover
-    const haySolapamiento = await verificarSolapamiento(
-        args.newStart.toString(),
-        args.newEnd.toString(),
-        args.e.id() // ID de la reserva que estamos moviendo
-    );
-    
-    if (haySolapamiento) {
-        alert("No se puede mover la reserva. El horario se solapa con otra reserva existente.");
-        args.preventDefault(); // Cancelar el movimiento
-        return;
-    }
-    
-    // Si no hay solapamiento, proceder
-    await actualizarReserva(args);
-};
+function generarBloquesDia(fecha) {
 
-// Función para resaltar horas ocupadas
-function resaltarHorasOcupadas(calendario, reservas) {
-    // Puedes usar esta función para colorear de diferente manera
-    // las horas que ya están reservadas
-    const eventos = calendario.events.list;
-    
-    eventos.forEach(evento => {
-        // Añadir clase CSS si quieres resaltarlos
-        evento.backColor = evento.backColor || "#3788d8";
+    const horarios = [
+        ["08:00", "08:50"],
+        ["08:55", "09:45"],
+        ["09:50", "10:40"],
+        ["10:45", "11:35"],
+        ["11:40", "12:30"],
+        ["12:35", "13:25"],
+        ["13:30", "14:20"]
+    ];
+
+    const eventosBase = [];
+
+    horarios.forEach((h, index) => {
+
+        const start = new DayPilot.Date(fecha + "T" + h[0]);
+        const end   = new DayPilot.Date(fecha + "T" + h[1]);
+
+        eventosBase.push({
+            id: "bloque-" + fecha + "-" + index,
+            text: "Disponible",
+            start: start,
+            end: end,
+            backColor: "#e9f7ef",   // verde claro
+            borderColor: "#28a745",
+            cssClass: "bloque-base",
+            bloqueBase: true       // propiedad personalizada
+        });
     });
-    
-    calendario.update();
+
+    return eventosBase;
 }
+
+
+
+
+
+
+
 </script>
 
 
