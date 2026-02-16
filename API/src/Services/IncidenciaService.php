@@ -45,11 +45,12 @@ class IncidenciaService
     {
         $data = Validator::validate($input, [
             'titulo'        => 'required|string|min:3|max:250',
-            'descripcion'   => 'string',
-            'id_ubicacion'  => 'required|int|min:1',
-            'id_estado'     => 'required|int|min:1',
-            'id_prioridad'  => 'required|int|min:1',
-            'id_incidencia'   => 'required|int|min:1'
+            'descripcion'   => 'required|string|min:1',
+            'fecha'         => 'required|string|min:1',
+            'estado'        => 'required|string|min:1',
+            'prioridad'     => 'required|string|min:1',
+            'id_usuario'    => 'required|int|min:1',
+            'id_recurso'    => 'required|string|min:1'
         ]);
 
         try {

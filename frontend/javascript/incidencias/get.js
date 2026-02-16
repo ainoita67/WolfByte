@@ -23,28 +23,34 @@ function obtenerVerIncidencias(){
             incidencias.forEach(incidencia => {
                 let td = document.createElement("tr");
                 td.innerHTML = `
-                    <td class="td-body d-none">
+                    <td class="td-body d-none d-md-table-cell">
                         ${incidencia.id_incidencia}
                     </td>
                     <td class="td-body">
                         ${incidencia.id_recurso}
                     </td>
-                    <td class="td-body">
+                    <td class="td-body d-none d-md-table-cell">
                         ${incidencia.fecha}
                     </td>
                     <td class="td-body">
                         ${incidencia.titulo}
                     </td>
-                    <td class="td-body">
+                    <td class="td-body d-none d-md-table-cell">
                         ${incidencia.descripcion}
                     </td>
-                    <td class="td-body">
+                    <td class="td-body d-none d-md-table-cell">
                         ${incidencia.prioridad}
                     </td>
                     <td class="td-body">
                         ${incidencia.estado}
                     </td>
                     <td class="td-body">
+                        <button class="btn btn-sm bg-primary text-white d-md-none"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalVer"
+                                onclick="verIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
+                            <i class="bi bi-eye"></i> Ver
+                        </button>
                         <button class="btn btn-sm bg-warning text-black"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalEditar"
@@ -79,19 +85,32 @@ function obtenerRecursos(){
         }else{
             recursos.forEach(recurso => {
                 let tr = document.createElement("tr");
-                tr.className = "card h-100 reserva-card border-0 rounded-0";
-                tr.setAttribute("role", "button");
-                tr.setAttribute("data-bs-toggle", "modal");
-                tr.setAttribute("data-bs-target", "#modalIncidencia");
-                tr.setAttribute("data-id", recurso.id_recurso);
-                tr.setAttribute("data-nombre", recurso.descripcion);
+                tr.className = "card h-100 reserva-card border-0 rounded-0 cursor-pointer";
 
                 let td = document.createElement("td");
-                td.className = "p-2 text-black";
+                td.className = "p-2 text-black cursor-pointer";
                 td.textContent = recurso.id_recurso;
 
                 tr.appendChild(td);
                 tablaincidencias.appendChild(tr);
+
+                tr.addEventListener("click", () => {
+                    let modal = new bootstrap.Modal(document.getElementById("modalIncidencia"));
+                    let fechaActual = new Date();
+
+                    let anyo = fechaActual.getFullYear();
+                    let mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+                    let dia = String(fechaActual.getDate()).padStart(2, '0');
+                    let hh = String(fechaActual.getHours()).padStart(2, '0');
+                    let mm = String(fechaActual.getMinutes()).padStart(2, '0');
+                    let ss = String(fechaActual.getSeconds()).padStart(2, '0');
+
+                    let fechaFormateada = `${anyo}-${mes}-${dia}T${hh}:${mm}:${ss}`;
+                    document.getElementById("createIdRecurso").value = recurso.id_recurso;
+                    document.getElementById("createRecurso").value = recurso.descripcion;
+                    document.getElementById("createFecha").value = fechaFormateada;
+                    modal.show();
+                });
             });
         }
     })

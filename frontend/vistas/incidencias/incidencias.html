@@ -36,7 +36,7 @@
                     <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
 
                     <div class="mb-3 espacio">
-                        <input type="radio" name="tipo" id="espacio" checked>
+                        <input type="radio" name="tipo" id="espacio">
                         <label for="espacio" class="me-3">Espacio</label>
                         <input type="radio" name="tipo" id="portatiles">
                         <label for="portatiles">Portátiles</label>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 mt-3 mt-md-0">
-                    <table class="rounded-1 overflow-hidden table-striped col-12 pb-5 mb-5" id="tablaincidencias">
+                    <table class="rounded-1 overflow-hidden table-striped col-12 pb-5 mb-5 cursor-pointer" id="tablaincidencias">
                     </table>
                 </div>
             </div>
@@ -90,31 +90,31 @@
                                 <!-- Fecha -->
                                 <div class="col-md-4">
                                     <label class="form-label">Fecha</label>
-                                    <input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+                                    <input type="datetime-local" step="1" class="form-control" id="createFecha" name="fecha" readonly required>
                                 </div>
 
                                 <!-- ID -->
                                 <div class="col-md-4">
                                     <label class="form-label">ID del recurso</label>
-                                    <input type="text" class="form-control" id="recurso_id" name="id" readonly required>
+                                    <input type="text" class="form-control" id="createIdRecurso" name="id" readonly required>
                                 </div>
 
                                 <!-- Recurso -->
                                 <div class="col-md-4">
                                     <label class="form-label">Nombre del recurso</label>
-                                    <input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
+                                    <input type="text" class="form-control" id="createRecurso" name="recurso" readonly required>
                                 </div>
 
                                 <!-- Titulo -->
                                 <div class="col-12">
                                     <label class="form-label">Título</label>
-                                    <input type="text" class="form-control" id="incidencia_titulo" name="titulo" required>
+                                    <input type="text" class="form-control" id="createTitulo" name="titulo" required>
                                 </div>
 
                                 <!-- Descripcion -->
                                 <div class="col-12">
                                     <label class="form-label">Descripción</label>
-                                    <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3"></textarea>
+                                    <textarea class="form-control" id="createDescripcionIncidencia" name="descripcion" rows="3" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -144,20 +144,10 @@
             };
 
             scriptpost.onload = () => {
-                activarCrearIncidencia(scriptget);
+                activarCrearIncidencia();
             };
 
             let incidenciaSeleccionadaId = null;
-
-            function crearIncidencia(titulo, descripcion, prioridad, estado, fecha, id_recurso) {
-                let fechaFormateada = fecha.replace(" ", "T");
-                document.getElementById("createRecurso").value = id_recurso;
-                document.getElementById("createFecha").value = fechaFormateada;
-                document.getElementById("createTitulo").value = titulo;
-                document.getElementById("createDescripcion").value = descripcion;
-                document.getElementById("createPrioridad").value = prioridad;
-                document.getElementById("createEstado").value = estado;
-            }
         
             const btnverincidencias = document.getElementById("btn-verincidencias");
             if(rol!=="admin"){

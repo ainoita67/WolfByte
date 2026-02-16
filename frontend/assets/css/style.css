@@ -631,3 +631,9 @@ form.login{
     color: #0051ff;
     font-weight: 700;
 }
+
+
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
