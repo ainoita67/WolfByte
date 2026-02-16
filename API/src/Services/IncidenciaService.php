@@ -49,7 +49,7 @@ class IncidenciaService
             'id_ubicacion'  => 'required|int|min:1',
             'id_estado'     => 'required|int|min:1',
             'id_prioridad'  => 'required|int|min:1',
-            'id_profesor'   => 'required|int|min:1'
+            'id_incidencia'   => 'required|int|min:1'
         ]);
 
         try {
@@ -59,7 +59,7 @@ class IncidenciaService
         }
 
         if (!$id) {
-            throw new \Exception("No se pudo crear el Incidencia");
+            throw new \Exception("No se pudo crear la Incidencia");
         }
 
         return ['id' => $id];
@@ -76,10 +76,11 @@ class IncidenciaService
         $data = Validator::validate($input, [
             'titulo'        => 'required|string|min:3|max:250',
             'descripcion'   => 'string',
-            'id_ubicacion'  => 'required|int|min:1',
-            'id_estado'     => 'required|int|min:1',
-            'id_prioridad'  => 'required|int|min:1',
-            'id_profesor'   => 'required|int|min:1'
+            'fecha'         => 'required|string|min:1',
+            'prioridad'     => 'required|string|min:1',
+            'estado'        => 'required|string|min:1',
+            'id_usuario'    => 'required|int|min:1',
+            'id_recurso'    => 'required|string|min:1'
         ]);
 
         try {
@@ -91,25 +92,25 @@ class IncidenciaService
 
         // Interpreta el resultado devuelto por el modelo
         if ($result === 0) {
-            $exists = $this->model->find($id);
+            $exists = $this->model->findById($id);
 
             if (!$exists) {
-                throw new \Exception("Profesor no encontrado", 404);
+                throw new \Exception("Incidencia no encontrado", 404);
             }
 
             return [
                 'status' => 'no_changes',
-                'message' => 'No hubo cambios en los datos del profesor'
+                'message' => 'No hubo cambios en los datos de la incidencia'
             ];
         }
 
         if ($result === -1) {
-            throw new \Exception("No se pudo actualizar el profesor: conflicto con restricciones", 409);
+            throw new \Exception("No se pudo actualizar la incidencia: conflicto con restricciones", 409);
         }
 
         return [
             'status' => 'updated',
-            'message' => 'Profesor actualizado correctamente'
+            'message' => 'Incidencia actualizada correctamente'
         ];
     }
 
@@ -136,8 +137,8 @@ class IncidenciaService
         }
 
         if ($result === -1) {
-            // Restricciones de integridad impiden la eliminación
-            throw new \Exception("No se puede eliminar el Incidencia: el registro está en uso", 409);
+            // Conflicto por FK u otra restricción
+            throw new \Exception("No se puede eliminar la Incidencia: el registro está en uso", 409);
         }
 
         // Si llega aquí, la eliminación fue correcta
