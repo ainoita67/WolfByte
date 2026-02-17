@@ -211,36 +211,5 @@ class EspacioController
             $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
         }
     }
-
-    /**
-     * Opcional: Método para obtener espacios con filtros avanzados
-     */
-    public function search(Request $req, Response $res): void
-    {
-        try {
-            $filters = $req->query();
-            $resultados = [];
-            
-            // Filtro por edificio
-            if (isset($filters['edificio_id'])) {
-                $resultados = $this->service->getEspaciosByEdificio((int) $filters['edificio_id']);
-            }
-            // Filtro por estado
-            elseif (isset($filters['activo']) && $filters['activo'] == '1') {
-                $resultados = $this->service->getEspaciosActivos();
-            }
-            // Sin filtros, obtener todos
-            else {
-                $resultados = $this->service->getAllEspacios();
-            }
-            
-            $res->status(200)->json($resultados);
-
-        } catch (ValidationException $e) {
-            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
-            return;
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
-        }
-    }
+      
 }

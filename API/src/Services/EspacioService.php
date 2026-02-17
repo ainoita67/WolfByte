@@ -56,18 +56,23 @@ class EspacioService
      */
     public function createEspacio(array $input): array
     {
-        $data = Validator::validate($input, [
-            'id_espacio' => 'required|string|min:1|max:10',
-            'descripcion' => 'nullable|string|max:255',
-            'es_aula' => 'required|boolean',
-            'activo' => 'required|boolean',
-            'especial' => 'required|boolean',
-            'numero_planta' => 'nullable|int|min:-5|max:50',
-            'id_edificio' => 'nullable|int|min:1',
-            'nombre_edificio' => 'nullable|string|min:3|max:100',
-            'caracteristicas' => 'nullable|array',
-            'caracteristicas.*' => 'int|min:1'
-        ]);
+        var_dump($input);
+        try {
+            $data = Validator::validate($input, [
+                'id_espacio' => 'required|string|min:1|max:10',
+                'descripcion' => 'string|max:255',
+                'es_aula' => 'required|boolean',
+                'activo' => 'required|boolean',
+                'especial' => 'required|boolean',
+                'numero_planta' => 'int|min:1|max:50',
+                'id_edificio' => 'int|min:1',
+                'nombre_edificio' => 'string|min:3|max:100',
+                'caracteristicas' => 'int|min:1'
+            ]);
+        } catch (ValidationException $e) {
+            // Relanzar con formato más amigable o simplemente relanzar
+            throw new \Exception("Error de validación: " . json_encode($e->getErrors()), 400);
+        }
 
         // Validaciones adicionales
         if (empty($data['id_edificio']) && empty($data['nombre_edificio'])) {
@@ -99,14 +104,14 @@ class EspacioService
 
         // Validar datos de entrada
         $data = Validator::validate($input, [
-            'descripcion' => 'nullable|string|max:255',
+            'descripcion' => 'string|max:255',
             'es_aula' => 'boolean',
             'activo' => 'boolean',
             'especial' => 'boolean',
-            'numero_planta' => 'nullable|int|min:-5|max:50',
-            'id_edificio' => 'nullable|int|min:1',
-            'nombre_edificio' => 'nullable|string|min:3|max:100',
-            'caracteristicas' => 'nullable|array',
+            'numero_planta' => 'int|min:-5|max:50',
+            'id_edificio' => 'int|min:1',
+            'nombre_edificio' => 'string|min:3|max:100',
+            'caracteristicas' => 'array',
             'caracteristicas.*' => 'int|min:1'
         ]);
 
@@ -287,16 +292,16 @@ class EspacioService
         try {
             // Nota: Necesitarías descomentar el método searchByCaracteristicas en el modelo
             // return $this->model->searchByCaracteristicas($data['caracteristicas']);
-            
+
             // Mientras tanto, podemos hacer una búsqueda básica filtrando en PHP
             $allEspacios = $this->model->getAll();
-            
+
             $resultados = [];
             foreach ($allEspacios as $espacio) {
                 if (isset($espacio['caracteristicas_ids'])) {
                     $ids = explode(',', $espacio['caracteristicas_ids']);
                     $ids = array_map('intval', $ids);
-                    
+
                     // Verificar si el espacio tiene todas las características solicitadas
                     $intersection = array_intersect($data['caracteristicas'], $ids);
                     if (count($intersection) === count($data['caracteristicas'])) {
@@ -304,9 +309,9 @@ class EspacioService
                     }
                 }
             }
-            
+
             return $resultados;
-            
+
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
