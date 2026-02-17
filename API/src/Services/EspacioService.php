@@ -56,22 +56,24 @@ class EspacioService
      */
     public function createEspacio(array $input): array
     {
-        var_dump($input);
+        //var_dump($input);
         try {
             $data = Validator::validate($input, [
                 'id_espacio' => 'required|string|min:1|max:10',
                 'descripcion' => 'string|max:255',
-                'es_aula' => 'required|boolean',
-                'activo' => 'required|boolean',
-                'especial' => 'required|boolean',
-                'numero_planta' => 'int|min:1|max:50',
+                'es_aula' => 'required|int',
+                'activo' => 'required|int',
+                'especial' => 'required|int',
+                'numero_planta' => 'int|min:1|max:5',
                 'id_edificio' => 'int|min:1',
-                'nombre_edificio' => 'string|min:3|max:100',
-                'caracteristicas' => 'int|min:1'
+                'nombre_edificio' => 'string|min:1|max:100',
+                'caracteristicasId' => ''
             ]);
+
+            var_dump($data);
         } catch (ValidationException $e) {
             // Relanzar con formato más amigable o simplemente relanzar
-            throw new \Exception("Error de validación: " . json_encode($e->getErrors()), 400);
+            throw new \Exception("Error de validación: ", 400);
         }
 
         // Validaciones adicionales
@@ -83,10 +85,6 @@ class EspacioService
             $id = $this->model->create($data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if (!$id) {
-            throw new \Exception("No se pudo crear el espacio", 500);
         }
 
         return ['id' => $id];

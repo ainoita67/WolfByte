@@ -76,17 +76,12 @@ class EspacioModel
      * Crear un nuevo espacio
      */
     public function create(array $data): string|false
-    {
+    {   
         $this->db->beginTransaction();
         
         try {
-            // 1. Verificar/crear edificio si se proporciona
-            if (!empty($data['nombre_edificio'])) {
-                $edificioId = $this->getOrCreateEdificio($data['nombre_edificio']);
-                $data['id_edificio'] = $edificioId;
-            }
 
-            // 3. Insertar en Recurso
+            // Insertar espacio en Recurso
             $this->db
                 ->query("INSERT INTO Recurso (id_recurso, descripcion, tipo, activo, especial, numero_planta, id_edificio)
                     VALUES (:id_recurso, :descripcion, 'Espacio', :activo, :especial, :numero_planta, :id_edificio)
@@ -99,7 +94,7 @@ class EspacioModel
                 ->bind(':id_edificio', $data['id_edificio'] ?? null)
                 ->execute();
 
-            // 4. Insertar en Espacio
+            // Insertar en Espacio
             $this->db
                 ->query("INSERT INTO Espacio (id_espacio, es_aula)
                     VALUES (:id_espacio, :es_aula)
@@ -109,8 +104,8 @@ class EspacioModel
                 ->execute();
 
             // 5. Insertar características si existen
-            if (!empty($data['caracteristicas']) && is_array($data['caracteristicas'])) {
-                $this->addCaracteristicas($data['id_espacio'], $data['caracteristicas']);
+            if (!empty($data['caracteristicasId']) && is_array($data['caracteristicasId'])) {
+                $this->addCaracteristicas($data['id_espacio'], $data['caracteristicasId']);
             }
 
             $this->db->commit();
@@ -325,14 +320,12 @@ class EspacioModel
     /**
      * Agregar características a un espacio
      */
-    private function addCaracteristicas(string $idEspacio, array $caracteristicas): void
+    public function addCaracteristicas(string $idEspacio, array $caracteristicasId): void
     {
-        foreach ($caracteristicas as $caracteristicaId) {
+        var_dump($idEspacio);
+        foreach ($caracteristicasId as $caracteristicaId) {
             $this->db
-                ->query("INSERT INTO Caracteristica_Espacio (id_espacio, id_caracteristica)
-                    VALUES (:id_espacio, :id_caracteristica)
-                    ON DUPLICATE KEY UPDATE id_espacio = id_espacio
-                ")
+                ->query("INSERT INTO `Caracteristica_Espacio`(`id_espacio`, `id_caracteristica`) VALUES (:id_espacio, :id_caracteristica)")
                 ->bind(':id_espacio', $idEspacio)
                 ->bind(':id_caracteristica', (int) $caracteristicaId)
                 ->execute();
