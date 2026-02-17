@@ -53,8 +53,8 @@ $router->put('/reservas-necesidades/{id_reserva_espacio}/necesidades', 'Controll
 $router->delete('/reservas-necesidades/{id_reserva_espacio}/necesidades/{id_necesidad}', 'Controllers\\NecesidadReservaController@destroy');
 
 // EDIFICIOS
-$router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
-$router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
+$router->get('/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
+$router->get('/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
 $router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
 $router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
@@ -152,6 +152,7 @@ $router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaContro
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');
 $router->put('/reservas/{id}/fechas', 'Controllers\\ReservaController@updateFechas');
 $router->post('/reservas/verificar-disponibilidad', 'Controllers\\ReservaController@verificarDisponibilidad');
+
 // PLANTAS 
 $router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen 
 $router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio 
@@ -160,6 +161,7 @@ $router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update');
 
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
+$router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción de todos los recursos activos que estén en la base de datos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
 
 // LIBERACIÓN PUNTUAL

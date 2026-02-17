@@ -96,7 +96,7 @@ class EdificioController
     {
         try {
             $this->service->deleteEdificio((int) $id);
-            return $res->status(204); // 👈 sin JSON
+            return $res->status(204); // sin JSON
         } catch (Throwable $e) {
             return $res->errorJson(
                 $e->getMessage(),
