@@ -77,34 +77,7 @@ export function generarHorarioPermanentes(rPermanentes) {
     return horario; // array de objetos { dia_semana, slots: [...] }
 }
 
-export async function getLiberacionesRecurso(idRecurso) {
-  try {
-    const response = await fetch(`${API}/reservas_permanentes/recurso/${idRecurso}`);
-    if (!response.ok) throw new Error("Error al obtener reservas permanentes");
-
-    const json = await response.json();
-
-    if (!json.data || !Array.isArray(json.data)) {
-      console.error("JSON.data no es un array", json.data);
-      return [];
-    }
-
-    // Convertimos cada reserva a un objeto plano
-    const rPermanentes = json.data.map(r => ({
-        dia_semana: r.dia_semana,
-        inicio: r.inicio,
-        fin: r.fin,
-    }));
-
-    return rPermanentes;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-}
-
-
-function obtenerSeptiembre() {
+export function obtenerSeptiembre() {
   const hoy = new Date();
   const anio = hoy.getFullYear();
 

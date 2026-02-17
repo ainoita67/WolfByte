@@ -60,13 +60,7 @@
 
 
 <script type="module">
-import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
-
-const horario = generarHorarioPermanentes(await getPermanentesRecurso("salon"));
-console.log(horario);
-
-
-
+    import { generarEventos } from "/frontend/javascript/reservas/crud.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
@@ -87,8 +81,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    dp.events.list = crearSlots();
-    cargarReservasSalon();
+    const eventos = await generarEventos("salon");
+
+    dp.events.list = eventos;
     dp.init();
 
 
@@ -103,64 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
-            const text = await res.text(); // primero leemos como texto
-            let json;
-            try {
-                json = JSON.parse(text); // luego intentamos parsear a JSON
-            } catch {
-                console.error("Respuesta no es JSON:", text);
-                return;
-            }
 
-            if (json.status !== "success") {
-                console.error("Error API:", json);
-                return;
-            }
-
-            const eventos = json.data.data.map(r => ({
-                id: r.id_reserva,
-                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-                start: r.inicio.replace(" ", "T"),
-                end: r.fin.replace(" ", "T")
-            }));
-
-    // Cargar reservas
-    async function cargarReservasSalon() {
-        try {
-            const res = await fetch(`${API}/reservas-salon-actos`, {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token")
-                }
-            });
-
-            const text = await res.text(); // primero leemos como texto
-            let json;
-            try {
-                json = JSON.parse(text); // luego intentamos parsear a JSON
-            } catch {
-                console.error("Respuesta no es JSON:", text);
-                return;
-            }
-
-            if (json.status !== "success") {
-                console.error("Error API:", json);
-                return;
-            }
-
-            const eventos = json.data.data.map(r => ({
-                id: r.id_reserva,
-                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-                start: r.inicio.replace(" ", "T"),
-                end: r.fin.replace(" ", "T")
-            }));
-
-            dp.events.list = dp.events.list.concat(eventos);
-            dp.update();
-
-        } catch (error) {
-            console.error("Error cargando reservas:", error);
-        }
-    }
 });
 
 

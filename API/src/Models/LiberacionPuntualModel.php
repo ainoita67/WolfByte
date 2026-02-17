@@ -51,7 +51,10 @@ class LiberacionPuntualModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Liberacion_puntual l JOIN Reserva_permanente r ON l.id_reserva_permanente = r.id_reserva_permanente WHERE r.id_recurso = :id_recurso")
+                ->query("SELECT l.id_liberacion_puntual as id, l.inicio, l.fin, l.comentario, l.id_reserva, l.id_reserva_permanente, p.id_recurso 
+                    FROM Liberacion_puntual l 
+                    JOIN Reserva_permanente p on l.id_reserva_permanente = p.id_reserva_permanente
+                    WHERE p.id_recurso = :id_recurso")
                 ->bind(':id_recurso', $id_recurso)
                 ->fetchAll();
         } catch (PDOException $e) {
