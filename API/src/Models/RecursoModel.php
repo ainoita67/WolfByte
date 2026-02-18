@@ -16,7 +16,7 @@ class RecursoModel
     }
 
     /**
-     * Obtener todos los recursos
+     * Obtener todos los recursos activos
      */
     public function getAll(): array
     {

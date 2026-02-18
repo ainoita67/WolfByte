@@ -52,7 +52,7 @@ class IncidenciaController
 
             $res->status(201)->json(
                 ['id' => $result['id']],
-                "Incidencia creado correctamente"
+                "Incidencia creada correctamente"
             );
 
         } catch (ValidationException $e) {

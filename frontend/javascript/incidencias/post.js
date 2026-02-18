@@ -4,10 +4,18 @@ function activarCrearIncidencia() {
     if(!formcrear) return;
     formcrear.addEventListener("submit", function (e) {
         e.preventDefault();
-        let fecha = document.getElementById("incidencia_fecha").value;
-        let id_recurso = document.getElementById("recurso_id").value;
-        let titulo = document.getElementById("incidencia_titulo").value;
-        let descripcion = document.getElementById("incidencia_descripcion").value;
+        let fechaFormulario = new Date(document.getElementById("createFecha").value);
+        let anyo = fechaFormulario.getFullYear();
+        let mes = String(fechaFormulario.getMonth() + 1).padStart(2, '0');
+        let dia = String(fechaFormulario.getDate()).padStart(2, '0');
+        let hh = String(fechaFormulario.getHours()).padStart(2, '0');
+        let mm = String(fechaFormulario.getMinutes()).padStart(2, '0');
+        let ss = String(fechaFormulario.getSeconds()).padStart(2, '0');
+
+        let fecha = `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
+        let id_recurso = document.getElementById("createIdRecurso").value;
+        let titulo = document.getElementById("createTitulo").value;
+        let descripcion = document.getElementById("createDescripcionIncidencia").value;
         let prioridad = 'Media';
         let estado = 'Abierta';
         if (!titulo) return;
@@ -31,18 +39,18 @@ function activarCrearIncidencia() {
                 // Limpiar input
                 document.getElementById("formCrearIncidencia").reset();
 
-                alert("Incidencia actualizada correctamente");
+                alert("Incidencia creada correctamente");
                 // Recargar
                 window.location.reload();
             } else {
                 if(response.message){
                     alert(response.message.trim());
                 }else{
-                    alert("Error al actualizar la incidencia");
+                    alert("Error al crear la incidencia");
                 }
             }
         })
-        .catch(err => console.error("Error al actualizar la incidencia:", err));
+        .catch(err => console.error("Error al crear la incidencia:", err));
     })
 };
 

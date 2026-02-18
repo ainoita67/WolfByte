@@ -33,11 +33,12 @@ class RecursoController
         }
     }
 
+
     /**
      * GET /recurso/activos
      * Devuelve todos los recursos activos
      */
-    public function activos(Request $req, Response $res): void
+    public function indexActivos(Request $req, Response $res): void
     {
         try {
             $recursos = $this->service->getAllRecursosActivos();
