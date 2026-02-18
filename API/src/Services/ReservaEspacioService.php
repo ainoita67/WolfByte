@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Services;
 
 use Models\ReservaEspacioModel;
+use Validation\Validator;
 use Validation\ValidationException;
+use Throwable;
 
 class ReservaEspacioService
 {
@@ -24,7 +26,21 @@ class ReservaEspacioService
     // Devuelve todas las reservas de un espacio específico
     public function getReservasPorEspacio($idEspacio): array
     {
-        return $this->model->getByEspacio($idEspacio);
+        Validator::validate(['id' => $idEspacio], [
+            'id' => 'required|string|min:1'
+        ]);
+
+        try {
+            $reservas = $this->model->getByEspacio($idEspacio);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$reservas) {
+            throw new \Exception("reservas no encontrado", 404);
+        }
+
+        return $reservas;
     }
 
     // Devuelve una reserva por su ID

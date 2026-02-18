@@ -1,3 +1,47 @@
+//API Crear necesidades
+document.getElementById("formCrearNecesidad").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let nombre = document.getElementById("crearNecesidad").value.trim();
+    if (!nombre) return;
+    nombre = capitalizar(nombre);
+    fetch(window.location.origin+"/API/necesidades", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nombre: nombre
+        })
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === "success") {
+            // Cerrar modal
+            const modal = bootstrap.Modal.getInstance(
+                document.getElementById("modalCrear")
+            );
+            modal.hide();
+
+            // Limpiar input
+            document.getElementById("formCrearNecesidad").reset();
+
+            // Recargar tarjetas
+            obtenerNecesidades();
+            alert("Necesidad creada correctamente");
+        } else {
+            if(response.message){
+                alert(response.message.trim());
+            }else{
+                alert("Error al crear la necesidad");
+            }
+        }
+    })
+    .catch(err => console.error("Error al crear la necesidad:", err));
+});
+
+
+
 //API Editar necesidades
 document.getElementById("formEditarNecesidad").addEventListener("submit", function (e) {
     e.preventDefault();

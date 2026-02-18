@@ -23,7 +23,15 @@ class IncidenciaModel
     public function all(): array
     {
         return $this->db
-            ->query("SELECT * FROM man_incidencias")
+            ->query("SELECT * FROM Incidencia")
+            ->fetchAll();
+    }
+
+
+    public function findById(int $id): array|false{
+        return $this->db
+            ->query("SELECT * FROM Incidencia WHERE id_incidencia=:id")
+            ->bind(":id", $id)
             ->fetchAll();
     }
 
@@ -32,16 +40,17 @@ class IncidenciaModel
     public function create(array $data): int|false
     {
         $this->db->query("
-            INSERT INTO man_incidencias
-            (titulo, descripcion, id_ubicacion, id_estado, id_prioridad, id_profesor) 
-            VALUES (:titulo, :descripcion, :id_ubicacion, :id_estado, :id_prioridad, :id_profesor)
+            INSERT INTO Incidencia
+            (titulo, descripcion, fecha, estado, prioridad, id_usuario, id_recurso) 
+            VALUES (:titulo, :descripcion, :fecha, :estado, :prioridad, :id_usuario, :id_recurso)
         ")
-        ->bind(":titulo",  $data['titulo'])
-        ->bind(":descripcion", $data['descripcion'])
-        ->bind(":id_ubicacion",   $data['id_ubicacion'])
-        ->bind(":id_estado",    $data['id_estado'])
-        ->bind(":id_prioridad",      $data['id_prioridad'])
-        ->bind(":id_profesor",      $data['id_profesor'])
+        ->bind(":titulo",           $data['titulo'])
+        ->bind(":descripcion",      $data['descripcion'])
+        ->bind(":fecha",            $data['fecha'])
+        ->bind(":estado",           $data['estado'])
+        ->bind(":prioridad",        $data['prioridad'])
+        ->bind(":id_usuario",       $data['id_usuario'])
+        ->bind(":id_recurso",       $data['id_recurso'])
         ->execute();
 
         return (int) $this->db->lastId();
@@ -50,23 +59,22 @@ class IncidenciaModel
     public function update(int $id, array $data): int
     {
         $this->db->query("
-            UPDATE man_incidencias SET
+            UPDATE Incidencia SET
                 titulo = :titulo,
                 descripcion = :descripcion,
-                id_ubicacion = :id_ubicacion,
-                id_estado = :id_estado,
-                id_prioridad = :id_prioridad,
-                id_profesor = :id_profesor,
-                updated_at = NOW()
+                fecha = :fecha,
+                estado = :estado,
+                prioridad = :prioridad,
+                id_usuario = :id_usuario
             WHERE id_incidencia = :id
         ")
         ->bind(":id", $id)
-        ->bind(":titulo",  $data['titulo'])
-        ->bind(":descripcion", $data['descripcion'])
-        ->bind(":id_ubicacion",   $data['id_ubicacion'])
-        ->bind(":id_estado",    $data['id_estado'])
-        ->bind(":id_prioridad",      $data['id_prioridad'])
-        ->bind(":id_profesor",      $data['id_profesor'])
+        ->bind(":titulo",           $data['titulo'])
+        ->bind(":descripcion",      $data['descripcion'])
+        ->bind(":fecha",            $data['fecha'])
+        ->bind(":estado",           $data['estado'])
+        ->bind(":prioridad",        $data['prioridad'])
+        ->bind(":id_usuario",      $data['id_usuario'])
         ->execute();
 
         return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
@@ -76,7 +84,7 @@ class IncidenciaModel
     public function delete(int $id): int
     //elimina con parametros y devuelve el numero de filas eliminadas
     {
-        $this->db->query("DELETE FROM man_incidencias WHERE id_incidencia = :id")
+        $this->db->query("DELETE FROM Incidencia WHERE id_incidencia = :id")
                  ->bind(":id", $id)
                  ->execute();
 
