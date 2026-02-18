@@ -147,7 +147,7 @@ $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@ind
 $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
-$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+$router->delete('/  necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
 //RESERVA DE ESPACIO
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');

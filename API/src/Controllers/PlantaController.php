@@ -26,9 +26,10 @@ class PlantaController
     {
         try {
             $plantas = $this->service->getAllPlantas();
+            // Devolver directamente el array de plantas (como espera el frontend)
             $res->status(200)->json($plantas);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 
@@ -40,11 +41,12 @@ class PlantaController
     {
         try {
             $plantas = $this->service->getPlantasByEdificio((int)$idEdificio);
+            // Devolver directamente el array de plantas
             $res->status(200)->json($plantas);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 404);
+            $res->status(404)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 
@@ -56,19 +58,32 @@ class PlantaController
     {
         try {
             $data = $req->getBody();
+            
+            // Verificar que viene nombre_planta
+            if (!isset($data['nombre_planta']) || empty($data['nombre_planta'])) {
+                $res->status(422)->json(['error' => "El campo 'nombre_planta' es requerido"]);
+                return;
+            }
+            
+            // Verificar que viene numero_planta
+            if (!isset($data['numero_planta']) || $data['numero_planta'] === '') {
+                $res->status(422)->json(['error' => "El campo 'numero_planta' es requerido"]);
+                return;
+            }
+            
             $planta = $this->service->createPlanta((int)$idEdificio, $data);
-            $res->status(201)->json($planta, "Planta creada exitosamente");
+            // Devolver la planta creada directamente
+            $res->status(201)->json($planta);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
+            $res->status(422)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 
     /**
      * PUT /plantas/{id_edificio}?numero_planta={numero}
      * Modifica los datos de una planta específica
-     * IMPORTANTE: Necesitamos el número de planta como query parameter
      */
     public function update(Request $req, Response $res, string $idEdificio): void
     {
@@ -77,17 +92,18 @@ class PlantaController
             $numeroPlanta = $req->getParam('numero_planta');
             
             if (!$numeroPlanta) {
-                $res->errorJson(["El parámetro 'numero_planta' es requerido"], 400);
+                $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }
 
             $data = $req->getBody();
             $planta = $this->service->updatePlanta((int)$numeroPlanta, (int)$idEdificio, $data);
-            $res->status(200)->json($planta, "Planta actualizada exitosamente");
+            // Devolver la planta actualizada directamente
+            $res->status(200)->json($planta);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
+            $res->status(422)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 
@@ -102,16 +118,16 @@ class PlantaController
             $numeroPlanta = $req->getParam('numero_planta');
             
             if (!$numeroPlanta) {
-                $res->errorJson(["El parámetro 'numero_planta' es requerido"], 400);
+                $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }
 
             $this->service->deletePlanta((int)$numeroPlanta, (int)$idEdificio);
-            $res->status(200)->json([], "Planta eliminada exitosamente");
+            $res->status(200)->json(['message' => 'Planta eliminada exitosamente']);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
+            $res->status(422)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 
@@ -126,16 +142,17 @@ class PlantaController
             $numeroPlanta = $req->getParam('numero_planta');
             
             if (!$numeroPlanta) {
-                $res->errorJson(["El parámetro 'numero_planta' es requerido"], 400);
+                $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }
 
             $planta = $this->service->getPlantaDetails((int)$numeroPlanta, (int)$idEdificio);
+            // Devolver los detalles directamente
             $res->status(200)->json($planta);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 404);
+            $res->status(404)->json(['error' => $e->getErrors()]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json(['error' => $e->getMessage()]);
         }
     }
 }

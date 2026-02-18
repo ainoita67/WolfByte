@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-
     <title>Plantas - IES Bajo Aragón</title>
     <script>const BASE = window.location.origin + "/frontend";</script>
 
@@ -26,7 +25,6 @@
 <div id="header"></div>
 
 <main class="container mt-5">
-
     <!-- CABECERA -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Plantas</h2>
@@ -35,69 +33,15 @@
         </button>
     </div>
 
-    <!-- TARJETAS -->
-    <div class="row g-4">
-
-        <!-- PLANTA 1 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-azul text-white">
-                    <h5 class="mb-0">Edificio Loscos</h5>
-                </div>
-
-                <div class="card-body">
-                    <p><strong>Planta:</strong> Planta 0</p>
-                    <p><strong>Nº de aulas:</strong> 6</p>
-
-                    <p class="mb-1"><strong>Espacios especiales:</strong></p>
-                    <ul>
-                        <li>Secretaría</li>
-                        <li>Conserjería</li>
-                        <li>Sala de profesores</li>
-                    </ul>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                </div>
+    <!-- CONTENEDOR DE TARJETAS (se llenará con JavaScript) -->
+    <div id="plantasContainer" class="row g-4">
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
+            <p class="mt-2">Cargando plantas...</p>
         </div>
-
-        <!-- PLANTA 2 -->
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-azul text-white">
-                    <h5 class="mb-0">Edificio Ram</h5>
-                </div>
-
-                <div class="card-body">
-                    <p><strong>Planta:</strong> Planta 1</p>
-                    <p><strong>Nº de aulas:</strong> 8</p>
-
-                    <p class="mb-1"><strong>Espacios especiales:</strong></p>
-                    <ul>
-                        <li>Laboratorio de Física</li>
-                        <li>Aula de Informática</li>
-                    </ul>
-                </div>
-
-                <div class="card-footer text-end">
-                    <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="btn btn-sm btn-danger">
-                        <i class="bi bi-trash"></i> Eliminar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </main>
+    </div>
 
     <!-- VOLVER -->
         <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
@@ -112,42 +56,34 @@
 <div class="modal fade" id="modalCrear" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title">Crear planta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
             <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Edificio</label>
-                    <select class="form-select">
-                        <option>Loscos</option>
-                        <option>Ram</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Planta</label>
-                    <input type="text" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Número de aulas</label>
-                    <input type="number" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3"></textarea>
-                </div>
+                <form id="formCrearPlanta">
+                    <div class="mb-3">
+                        <label class="form-label">Edificio</label>
+                        <select class="form-select" name="edificio" id="selectEdificioCrear" required>
+                            <option value="">Seleccionar edificio</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Número de Planta</label>
+                        <input type="number" class="form-control" name="numero_planta" id="numeroPlantaCrear" required min="-10" max="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Planta</label>
+                        <input type="text" class="form-control" name="nombre_planta" id="nombrePlantaCrear" required placeholder="Ej: Planta baja, Primera planta...">
+                    </div>
+                </form>
             </div>
-
             <div class="modal-footer">
-                <button class="btn bg-azul text-light">Crear</button>82
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formCrearPlanta" class="btn bg-azul text-light">
+                    <i class="bi bi-check-lg"></i> Crear planta
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
-
         </div>
     </div>
 </div>
@@ -156,47 +92,59 @@
 <div class="modal fade" id="modalEditar" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <h5 class="modal-title">Editar planta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
             <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Edificio</label>
-                    <select class="form-select">
-                        <option selected>Loscos</option>
-                        <option>Ram</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Planta</label>
-                    <input type="text" class="form-control" value="Planta 0">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Número de aulas</label>
-                    <input type="number" class="form-control" value="6">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
-                </div>
+                <form id="formEditarPlanta">
+                    <input type="hidden" id="editar_numero_original" name="numero_original">
+                    <input type="hidden" id="editar_edificio_original" name="edificio_original">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Edificio</label>
+                        <select class="form-select" name="edificio" id="editarSelectEdificio" required disabled>
+                            <option value="">Seleccionar edificio</option>
+                        </select>
+                        <small class="text-muted">El edificio no se puede modificar</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Número de Planta</label>
+                        <input type="number" class="form-control" name="numero_planta" id="editarNumeroPlanta" required min="-10" max="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la Planta</label>
+                        <input type="text" class="form-control" name="nombre_planta" id="editarNombrePlanta" required>
+                    </div>
+                </form>
             </div>
-
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar cambios</button>
+                <button type="submit" form="formEditarPlanta" class="btn bg-primary text-white">
+                    <i class="bi bi-check-lg"></i> Actualizar planta
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
-
         </div>
     </div>
 </div>
 
 <footer id="footer"></footer>
+
+<!-- Bootstrap JS (asegúrate de que esté cargado) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Cargar el script de plantas -->
+<script src="../../../../javascript/plantas/plantas.js"></script>
+
+<script>
+    // Script de depuración
+    console.log('HTML cargado');
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM completamente cargado');
+        console.log('Bootstrap disponible:', typeof bootstrap !== 'undefined');
+        console.log('Contenedor plantasContainer:', document.getElementById('plantasContainer'));
+    });
+</script>
 
 </body>
 </html>
