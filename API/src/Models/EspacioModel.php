@@ -76,9 +76,9 @@ class EspacioModel
      * Crear un nuevo espacio
      */
     public function create(array $data): string|false
-    {   
+    {
         $this->db->beginTransaction();
-        
+
         try {
 
             // Insertar espacio en Recurso
@@ -124,109 +124,123 @@ class EspacioModel
     public function update(string $id, array $data): int
     {
         $this->db->beginTransaction();
-        
+        $totalAffected = 0;
+
         try {
-            // 1. Actualizar Recurso
-            $this->db
-                ->query("UPDATE Recurso 
-                    SET descripcion = :descripcion,
-                        activo = :activo,
-                        especial = :especial,
-                        numero_planta = :numero_planta,
-                        id_edificio = :id_edificio
-                    WHERE id_recurso = :id AND tipo = 'Espacio'
-                ")
-                ->bind(':descripcion', $data['descripcion'] ?? null)
-                ->bind(':activo', $data['activo'] ?? 1)
-                ->bind(':especial', $data['especial'] ?? 0)
-                ->bind(':numero_planta', $data['numero_planta'] ?? null)
-                ->bind(':id_edificio', $data['id_edificio'] ?? null)
-                ->bind(':id', $id)
-                ->execute();
+            // 1. Verificar/crear planta si es necesario
+            if (!empty($data['numero_planta']) && !empty($data['id_edificio'])) {
+                $existePlanta = $this->db
+                    ->query("SELECT 1 FROM Planta WHERE numero_planta = :numero_planta AND id_edificio = :id_edificio")
+                    ->bind(':numero_planta', $data['numero_planta'])
+                    ->bind(':id_edificio', $data['id_edificio'])
+                    ->fetch();
 
-            // 2. Actualizar Espacio
-            $this->db
-                ->query("UPDATE Espacio 
-                    SET es_aula = :es_aula
-                    WHERE id_espacio = :id
-                ")
-                ->bind(':es_aula', $data['es_aula'] ?? 0)
-                ->bind(':id', $id)
-                ->execute();
-
-            // 3. Actualizar edificio si se proporciona nombre
-            if (!empty($data['nombre_edificio'])) {
-                $edificioId = $this->getOrCreateEdificio($data['nombre_edificio']);
-                $this->db
-                    ->query("UPDATE Recurso SET id_edificio = :id_edificio WHERE id_recurso = :id")
-                    ->bind(':id_edificio', $edificioId)
-                    ->bind(':id', $id)
-                    ->execute();
-            }
-
-            // 4. Actualizar características
-            if (isset($data['caracteristicas'])) {
-                // Eliminar características existentes
-                $this->db
-                    ->query("DELETE FROM Caracteristica_Espacio WHERE id_espacio = :id")
-                    ->bind(':id', $id)
-                    ->execute();
-                
-                // Agregar nuevas características
-                if (is_array($data['caracteristicas']) && !empty($data['caracteristicas'])) {
-                    $this->addCaracteristicas($id, $data['caracteristicas']);
+                if (!$existePlanta) {
+                    $this->db
+                        ->query("INSERT INTO Planta (numero_planta, id_edificio) VALUES (:numero_planta, :id_edificio)")
+                        ->bind(':numero_planta', $data['numero_planta'])
+                        ->bind(':id_edificio', $data['id_edificio'])
+                        ->execute();
+                    // No sumamos al contador porque es una inserción, no una actualización del espacio
                 }
             }
 
+            // 2. Si se proporciona nombre_edificio, obtener o crear el edificio
+            if (!empty($data['nombre_edificio'])) {
+                $edificioId = $this->getOrCreateEdificio($data['nombre_edificio']);
+                $data['id_edificio'] = $edificioId;
+                // No sumamos al contador porque es una operación auxiliar
+            }
+
+            // 3. Actualizar Recurso
+            $recursoUpdates = [];
+            $recursoParams = [':id' => $id];
+
+            $fields = [];
+            if (array_key_exists('descripcion', $data)) {
+                $fields[] = "descripcion = :descripcion";
+                $recursoParams[':descripcion'] = $data['descripcion'];
+            }
+            if (array_key_exists('activo', $data)) {
+                $fields[] = "activo = :activo";
+                $recursoParams[':activo'] = $data['activo'];
+            }
+            if (array_key_exists('especial', $data)) {
+                $fields[] = "especial = :especial";
+                $recursoParams[':especial'] = $data['especial'];
+            }
+            if (array_key_exists('numero_planta', $data)) {
+                $fields[] = "numero_planta = :numero_planta";
+                $recursoParams[':numero_planta'] = $data['numero_planta'];
+            }
+            if (array_key_exists('id_edificio', $data)) {
+                $fields[] = "id_edificio = :id_edificio";
+                $recursoParams[':id_edificio'] = $data['id_edificio'];
+            }
+
+            if (!empty($fields)) {
+                $recursoQuery = "UPDATE Recurso SET " . implode(', ', $fields) . " WHERE id_recurso = :id AND tipo = 'Espacio'";
+
+                $stmt = $this->db->query($recursoQuery);
+                foreach ($recursoParams as $param => $value) {
+                    $stmt->bind($param, $value);
+                }
+                $stmt->execute();
+
+                // Verificar si realmente se actualizó algo
+                $recursoAffected = $this->db
+                    ->query("SELECT ROW_COUNT() AS affected")
+                    ->fetch()['affected'];
+                $totalAffected += (int) $recursoAffected;
+            }
+
+            // 4. Actualizar Espacio (solo si se proporciona es_aula)
+            if (array_key_exists('es_aula', $data)) {
+                $this->db
+                    ->query("UPDATE Espacio SET es_aula = :es_aula WHERE id_espacio = :id")
+                    ->bind(':es_aula', $data['es_aula'])
+                    ->bind(':id', $id)
+                    ->execute();
+
+                $espacioAffected = $this->db
+                    ->query("SELECT ROW_COUNT() AS affected")
+                    ->fetch()['affected'];
+                $totalAffected += (int) $espacioAffected;
+            }
+
+            // 5. Actualizar características si se proporcionan
+            if (array_key_exists('caracteristicasId', $data)) {
+                // Log para depuración
+                error_log("Actualizando características. Datos recibidos: " . json_encode($data['caracteristicasId']));
+
+                // Eliminar características existentes
+                $deleteResult = $this->db
+                    ->query("DELETE FROM Caracteristica_Espacio WHERE id_espacio = :id")
+                    ->bind(':id', $id)
+                    ->execute();
+
+                error_log("Eliminación de características: " . ($deleteResult ? 'éxito' : 'fallo'));
+
+                // Agregar nuevas características SOLO si el array no está vacío
+                if (!empty($data['caracteristicasId']) && is_array($data['caracteristicasId'])) {
+                    $this->addCaracteristicas($id, $data['caracteristicasId']);
+                } else {
+                    error_log("No hay características para insertar o el array está vacío");
+                }
+
+                // Consideramos que hubo cambios en características
+                $totalAffected += 1;
+            }
+
             $this->db->commit();
-            
-            return $this->db
-                ->query("SELECT ROW_COUNT() AS affected")
-                ->fetch()['affected'];
+
+            // Si totalAffected > 0, hubo cambios reales
+            return $totalAffected > 0 ? $totalAffected : 0;
 
         } catch (\Exception $e) {
             $this->db->rollback();
             error_log("Error al actualizar espacio: " . $e->getMessage());
-            return 0;
-        }
-    }
-
-    /**
-     * Eliminar espacio
-     */
-    public function delete(string $id): int
-    {
-        $this->db->beginTransaction();
-        
-        try {
-            // 1. Eliminar características asociadas
-            $this->db
-                ->query("DELETE FROM Caracteristica_Espacio WHERE id_espacio = :id")
-                ->bind(':id', $id)
-                ->execute();
-
-            // 2. Eliminar el espacio
-            $this->db
-                ->query("DELETE FROM Espacio WHERE id_espacio = :id")
-                ->bind(':id', $id)
-                ->execute();
-
-            // 3. Eliminar el recurso
-            $this->db
-                ->query("DELETE FROM Recurso WHERE id_recurso = :id AND tipo = 'Espacio'")
-                ->bind(':id', $id)
-                ->execute();
-
-            $this->db->commit();
-            
-            return $this->db
-                ->query("SELECT ROW_COUNT() AS affected")
-                ->fetch()['affected'];
-
-        } catch (\Exception $e) {
-            $this->db->rollback();
-            error_log("Error al eliminar espacio: " . $e->getMessage());
-            return 0;
+            throw $e;
         }
     }
 
@@ -290,10 +304,6 @@ class EspacioModel
     }
 
     /**
-     * Métodos auxiliares
-     */
-
-    /**
      * Obtener o crear edificio
      */
     private function getOrCreateEdificio(string $nombreEdificio): ?int
@@ -320,15 +330,25 @@ class EspacioModel
     /**
      * Agregar características a un espacio
      */
-    public function addCaracteristicas(string $idEspacio, array $caracteristicasId): void
+
+    private function addCaracteristicas(string $idEspacio, array $caracteristicasId): void
     {
-        var_dump($idEspacio);
         foreach ($caracteristicasId as $caracteristicaId) {
-            $this->db
-                ->query("INSERT INTO `Caracteristica_Espacio`(`id_espacio`, `id_caracteristica`) VALUES (:id_espacio, :id_caracteristica)")
-                ->bind(':id_espacio', $idEspacio)
-                ->bind(':id_caracteristica', (int) $caracteristicaId)
-                ->execute();
+            // Verificar que la característica existe antes de insertar
+            $existe = $this->db
+                ->query("SELECT 1 FROM Caracteristica WHERE id_caracteristica = :id")
+                ->bind(':id', $caracteristicaId)
+                ->fetch();
+
+            if ($existe) {
+                $this->db
+                    ->query("INSERT INTO Caracteristica_Espacio (id_espacio, id_caracteristica) VALUES (:id_espacio, :id_caracteristica)")
+                    ->bind(':id_espacio', $idEspacio)
+                    ->bind(':id_caracteristica', (int) $caracteristicaId)
+                    ->execute();
+            } else {
+                error_log("Característica con ID $caracteristicaId no existe, se omite");
+            }
         }
     }
 
@@ -354,7 +374,7 @@ class EspacioModel
     // public function searchByCaracteristicas(array $caracteristicasIds): array
     // {
     //     $placeholders = implode(',', array_fill(0, count($caracteristicasIds), '?'));
-        
+
     //     return $this->db
     //         ->query("
     //             SELECT 

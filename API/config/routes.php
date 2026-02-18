@@ -70,13 +70,9 @@ $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@
 
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
+$router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@getByEdificio');
 $router->post('/espacios', 'Controllers\\EspacioController@store');
-
-// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
-// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
-// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
-// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
+$router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
@@ -101,18 +97,6 @@ $router->delete('/reservas/{id}','Controllers\\ReservaController@destroy'); // E
 $router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
 $router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
 $router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
-
-//Espacios
-
-$router->get('/espacios', 'Controllers\\EspacioController@index');
-$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
-$router->post('/espacios', 'Controllers\\EspacioController@store');
-$router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
-$router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-$router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
-$router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
-$router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
-
 
 // RESERVAS ESPACIOS
 $router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); // Devuelve todas las reservas de tipo “espacio”
