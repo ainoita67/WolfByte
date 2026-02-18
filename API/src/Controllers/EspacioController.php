@@ -18,10 +18,12 @@ class EspacioController
         $this->service = new EspacioService();
     }
 
+    /**
+     * Obtener todos los espacios
+     */
     public function index(Request $req, Response $res): void
     {
         try {
-            // Obtener todos los espacios
             $espacios = $this->service->getAllEspacios();
             $res->status(200)->json($espacios);
         } catch (Throwable $e) {
@@ -29,10 +31,12 @@ class EspacioController
         }
     }
 
+    /**
+     * Obtener espacio por ID
+     */
     public function show(Request $req, Response $res, string $id): void
     {
         try {
-            // Obtener espacio por ID
             $espacio = $this->service->getEspacioById($id);
             $res->status(200)->json($espacio);
 
@@ -45,18 +49,21 @@ class EspacioController
         }
     }
 
+    /**
+     * Crear nuevo espacio
+     */
     public function store(Request $req, Response $res): void
     {
         try {
-            // Crear nuevo espacio
             $result = $this->service->createEspacio($req->json());
 
             $res->status(201)->json(
-                $result,
+                ['id' => $result['id']],
                 "Espacio creado correctamente"
             );
 
         } catch (ValidationException $e) {
+
             $res->status(422)->json(
                 ['errors' => $e->errors],
                 "Errores de validación"
@@ -64,10 +71,52 @@ class EspacioController
             return;
 
         } catch (Throwable $e) {
-            $code = $e->getCode() ?: 500;
-            $res->errorJson(app_debug() ? $e->getMessage() : "Error interno del servidor", $code);
+
+            $res->errorJson(app_debug() ? $e->getMessage() : "Error interno del servidor", 500);
             return;
         }
     }
 
+    /**
+     * Actualizar espacio
+     */
+    public function update(Request $req, Response $res, string $id): void
+    {
+        try {
+            $result = $this->service->updateEspacio($id, $req->json());
+            
+            if ($result['status'] === 'no_changes') {
+                $res->status(200)->json([], $result['message']);
+                return;
+            }
+
+            $res->status(200)->json([], $result['message']);
+        }
+        catch (ValidationException $e) {
+            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
+        }
+        catch (Throwable $e) {
+            $code = $e->getCode() > 0 ? $e->getCode() : 500;
+            $res->errorJson($e->getMessage(), $code);
+        }
+    }
+
+    /**
+     * Obtener espacios por edificio
+     */
+    public function getByEdificio(Request $req, Response $res, string $idEdificio): void
+    {
+        try {
+            $espacios = $this->service->getEspaciosByEdificio((int) $idEdificio);
+            $res->status(200)->json($espacios);
+
+        } catch (ValidationException $e) {
+            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
+            return;
+        } catch (Throwable $e) {
+            $status = $e->getCode() === 404 ? 404 : 500;
+            $res->errorJson($e->getMessage(), $status);
+        }
+    }
+          
 }

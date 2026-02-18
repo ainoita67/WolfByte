@@ -17,6 +17,9 @@ class EspacioService
         $this->model = new EspacioModel();
     }
 
+    /**
+     * Obtener todos los espacios
+     */
     public function getAllEspacios(): array
     {
         try {
@@ -26,6 +29,9 @@ class EspacioService
         }
     }
 
+    /**
+     * Obtener espacio por ID
+     */
     public function getEspacioById(string $id): array
     {
         Validator::validate(['id' => $id], [
@@ -44,60 +50,168 @@ class EspacioService
 
         return $espacio;
     }
+
+    // Crear espacio
     public function createEspacio(array $input): array
     {
-        // Validar datos requeridos - CORREGIDO: es_aula NO es required
-        $data = Validator::validate($input, [
-            'id_recurso' => 'required|string|min:3|max:10',
-            'descripcion' => 'required|string|min:5|max:255',
-            'numero_planta' => 'required|int|min:0|max:20',
-            'id_edificio' => 'required|int|min:1',
-            'es_aula' => 'boolean',  // Cambiado de 'required|boolean' a solo 'boolean'
-            'activo' => 'boolean',
-            'especial' => 'boolean'
-        ]);
+        try {
+            $data = Validator::validate($input, [
+                'id_espacio' => 'required|string|min:1|max:10',
+                'descripcion' => 'string|max:255',
+                'es_aula' => 'required|int',
+                'activo' => 'required|int',
+                'especial' => 'required|int',
+                'numero_planta' => 'int|min:0|max:5',
+                'id_edificio' => 'int|min:1',
+                'nombre_edificio' => 'string|min:1|max:100',
+                'caracteristicasId' => ''
+            ]);
 
-        // Debug: mostrar datos validados
-        error_log("Datos validados: " . print_r($data, true));
+        } catch (ValidationException $e) {
+            throw new \Exception("Error de validación: " . json_encode($e->errors), 400);
+        }
 
-        // Asignar valores por defecto si no vienen
-        $data['es_aula'] = $data['es_aula'] ?? false;
-        $data['activo'] = $data['activo'] ?? true;
-        $data['especial'] = $data['especial'] ?? false;
+        if (empty($data['id_edificio']) && !empty($data['nombre_edificio'])) {
+
+            $data['id_edificio'] = null;
+        }
+
+        if (empty($data['id_edificio'])) {
+            throw new \Exception("Debe proporcionar id_edificio", 400);
+        }
 
         try {
-            $result = $this->model->create($data);
+            $id = $this->model->create($data);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
 
-            // Debug: mostrar resultado
-            error_log("Resultado de create(): " . ($result ? "true" : "false"));
+        return ['id' => $id];
+    }
+
+    /**
+     * Actualizar espacio
+     */
+    public function updateEspacio(string $id, array $input): array
+    {
+        // Validar ID
+        Validator::validate(['id' => $id], [
+            'id' => 'required|string|min:1|max:10'
+        ]);
+
+        // Validar datos de entrada
+        $data = Validator::validate($input, [
+            'descripcion' => 'string|max:255',
+            'es_aula' => 'required|int',
+            'activo' => 'required|int',
+            'especial' => 'required|int',
+            'numero_planta' => 'int|min:0|max:5',
+            'id_edificio' => 'int|min:1',
+            'nombre_edificio' => 'string|min:1|max:100',
+            'caracteristicasId' => ''
+        ]);
+
+        // Verificar que el espacio exista antes de actualizar
+        try {
+            $exists = $this->model->findById($id);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$exists) {
+            throw new \Exception("Espacio no encontrado", 404);
+        }
+
+        try {
+            // var_dump($data);
+            $result = $this->model->update($id, $data);
+
+            if ($result === 0) {
+                // Puede ser que no haya cambios o que no se encontró el registro
+                return [
+                    'status' => 'no_changes',
+                    'message' => 'No hubo cambios en los datos del espacio'
+                ];
+            }
+
+            return [
+                'status' => 'updated',
+                'message' => 'Espacio actualizado correctamente',
+                'affected_rows' => $result
+            ];
 
         } catch (Throwable $e) {
-            // Capturar errores específicos de la base de datos
-            $errorMessage = $e->getMessage();
-            error_log("Error en createEspacio: " . $errorMessage); // Debug
-
-            // Detectar errores comunes
-            if (str_contains($errorMessage, 'Duplicate entry')) {
-                throw new \Exception("El ID del espacio ya existe", 409);
-            }
-
-            if (str_contains($errorMessage, 'foreign key constraint fails')) {
-                if (str_contains($errorMessage, 'Edificio')) {
-                    throw new \Exception("El edificio especificado no existe", 404);
-                }
-                throw new \Exception("Error de integridad referencial", 400);
-            }
-
-            throw new \Exception("Error interno en la base de datos: " . $errorMessage, 500);
+            throw new \Exception("Error al actualizar espacio: " . $e->getMessage(), 500);
         }
-
-        if (!$result) {
-            // Obtener más información del error
-            error_log("Resultado falso - Revisar logs de PDO");
-            throw new \Exception("No se pudo crear el espacio. Verifique los datos e intente nuevamente.", 500);
-        }
-
-        // Obtener el espacio creado para devolverlo completo
-        return $this->getEspacioById($data['id_recurso']);
     }
+
+    /**
+     * Obtener espacios por edificio
+     */
+    public function getEspaciosByEdificio(int $idEdificio): array
+    {
+        Validator::validate(['id_edificio' => $idEdificio], [
+            'id_edificio' => 'required|int|min:1'
+        ]);
+
+        try {
+            return $this->model->getByEdificio($idEdificio);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Obtener espacios activos
+     */
+    public function getEspaciosActivos(): array
+    {
+        try {
+            return $this->model->getActivos();
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Cambiar estado activo/inactivo de un espacio
+     */
+    public function toggleEstadoEspacio(string $id, int $estado): array
+    {
+        Validator::validate([
+            'id' => $id,
+            'estado' => $estado
+        ], [
+            'id' => 'required|string|min:1|max:10',
+            'estado' => 'required|int|in:0,1'
+        ]);
+
+        try {
+            // Verificar que el espacio exista
+            $exists = $this->model->findById($id);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$exists) {
+            throw new \Exception("Espacio no encontrado", 404);
+        }
+
+        try {
+            $success = $this->model->toggleEstado($id, $estado);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$success) {
+            throw new \Exception("No se pudo cambiar el estado del espacio", 500);
+        }
+
+        $estadoTexto = $estado === 1 ? 'activado' : 'desactivado';
+        return [
+            'status' => 'updated',
+            'message' => "Espacio {$estadoTexto} correctamente"
+        ];
+    }
+
 }
