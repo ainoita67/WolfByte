@@ -67,9 +67,10 @@ class PlantaService
      */
     public function createPlanta(int $idEdificio, array $data): array
     {
-        // Validar datos
+        // Validar datos - INCLUYE nombre_planta
         $validatedData = Validator::validate($data, [
-            'numero_planta' => 'required|int|min:-10|max:100' // Permite plantas negativas (subsuelos)
+            'numero_planta' => 'required|int|min:-10|max:100',
+            'nombre_planta' => 'required|string|max:100'
         ]);
 
         // Validar ID edificio
@@ -78,8 +79,12 @@ class PlantaService
         ]);
 
         try {
-            // Crear la planta
-            $success = $this->model->create($validatedData['numero_planta'], $idEdificio);
+            // Crear la planta con nombre_planta
+            $success = $this->model->create(
+                $validatedData['numero_planta'], 
+                $idEdificio,
+                $validatedData['nombre_planta']
+            );
             
             if (!$success) {
                 throw new \Exception("No se pudo crear la planta", 500);
@@ -103,7 +108,6 @@ class PlantaService
 
     /**
      * Actualizar una planta
-     * IMPORTANTE: Necesitamos el número de planta actual en los parámetros
      */
     public function updatePlanta(int $numeroPlantaActual, int $idEdificio, array $data): array
     {
@@ -116,9 +120,10 @@ class PlantaService
             'id_edificio' => 'required|int|min:1'
         ]);
 
-        // Validar datos de actualización
+        // Validar datos de actualización - INCLUYE nombre_planta como opcional
         $validatedData = Validator::validate($data, [
-            'nuevo_numero_planta' => 'int|min:-10|max:100'
+            'nuevo_numero_planta' => 'int|min:-10|max:100',
+            'nombre_planta' => 'string|max:100'
         ]);
 
         if (empty($validatedData)) {

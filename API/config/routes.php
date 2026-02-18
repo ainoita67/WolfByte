@@ -51,7 +51,7 @@ $router->put('/reservas-necesidades/{id_reserva_espacio}/necesidades', 'Controll
 $router->delete('/reservas-necesidades/{id_reserva_espacio}/necesidades/{id_necesidad}', 'Controllers\\NecesidadReservaController@destroy');
 
 // EDIFICIOS
-$router->protected( 'GET', '/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
+$router->get('/edificios', 'Controllers\\EdificioController@index'); //seleccionar todos los edificios
 $router->protected( 'GET', '/edificios/{id}', 'Controllers\\EdificioController@show'); // ver info de un edificio por id
 $router->post('/edificios', 'Controllers\\EdificioController@store'); // insertar nuevo edificio
 $router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // actualizar edificio por id 
@@ -103,7 +103,7 @@ $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@ind
 $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
-$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+$router->delete('/  necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
 // PLANTAS 
 $router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las plantas y al edificio que pertenecen 
