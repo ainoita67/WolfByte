@@ -4,68 +4,160 @@ function capitalizar(string) {
 
 
 
+// VER INCIDENCIAS
+
 //API Obtener ver incidencias
 function obtenerVerIncidencias(){
     fetch(window.location.origin+"/API/incidencias")
     .then(res => res.json())
     .then(response => {
         let incidencias = response.data;
-
-        let tablaverincidencias = document.getElementById("verIncidenciasTableBody");
-        tablaverincidencias.innerHTML = "";
-        if(incidencias.length === 0){
-            let card = document.createElement("tr");
-            card.innerHTML = `
-                <td>No hay incidencias registradas</td>
-            `;
-            tablaverincidencias.appendChild(card);
-        }else{
-            incidencias.forEach(incidencia => {
-                let td = document.createElement("tr");
-                td.innerHTML = `
-                    <td class="td-body d-none d-md-table-cell">
-                        ${incidencia.id_incidencia}
-                    </td>
-                    <td class="td-body">
-                        ${incidencia.id_recurso}
-                    </td>
-                    <td class="td-body d-none d-md-table-cell">
-                        ${incidencia.fecha}
-                    </td>
-                    <td class="td-body">
-                        ${incidencia.titulo}
-                    </td>
-                    <td class="td-body d-none d-md-table-cell">
-                        ${incidencia.descripcion}
-                    </td>
-                    <td class="td-body d-none d-md-table-cell">
-                        ${incidencia.prioridad}
-                    </td>
-                    <td class="td-body">
-                        ${incidencia.estado}
-                    </td>
-                    <td class="td-body">
-                        <button class="btn btn-sm bg-primary text-white d-md-none"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalVer"
-                                onclick="verIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
-                            <i class="bi bi-eye"></i> Ver
-                        </button>
-                        <button class="btn btn-sm bg-warning text-black"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalEditar"
-                                onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
-                            <i class="bi bi-pencil"></i> Editar
-                        </button>
-                    </td>
-                `;
-                tablaverincidencias.appendChild(td);
-            });
-        }
+        mostrarIncidencias(incidencias);
     });
 }
 
 
+function mostrarIncidencias(incidencias){
+    let tablaverincidencias = document.getElementById("verIncidenciasTableBody");
+    tablaverincidencias.innerHTML = "";
+    if(incidencias.length === 0){
+        let numColumnas = document.getElementsByTagName("table")[0].querySelectorAll("thead tr th").length;
+        let row = document.createElement("tr");
+        row.className = "text-start";
+        row.innerHTML = `
+            <td colspan="${numColumnas}" class="p-3">No se han encontrado incidencias</td>
+        `;
+        tablaverincidencias.appendChild(row);
+    }else{
+        incidencias.forEach(incidencia => {
+            let td = document.createElement("tr");
+            td.innerHTML = `
+                <td class="td-body d-none d-md-table-cell">
+                    ${incidencia.id_incidencia}
+                </td>
+                <td class="td-body">
+                    ${incidencia.id_recurso}
+                </td>
+                <td class="td-body d-none d-md-table-cell">
+                    ${incidencia.fecha}
+                </td>
+                <td class="td-body">
+                    ${incidencia.titulo}
+                </td>
+                <td class="td-body d-none d-md-table-cell">
+                    ${incidencia.descripcion}
+                </td>
+                <td class="td-body d-none d-md-table-cell">
+                    ${incidencia.prioridad}
+                </td>
+                <td class="td-body">
+                    ${incidencia.estado}
+                </td>
+                <td class="td-body">
+                    <button class="btn btn-sm bg-primary text-white d-md-none"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalVer"
+                            onclick="verIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
+                        <i class="bi bi-eye"></i> Ver
+                    </button>
+                    <button class="btn btn-sm bg-warning text-black"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditar"
+                            onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
+                        <i class="bi bi-pencil"></i> Editar
+                    </button>
+                </td>
+            `;
+            tablaverincidencias.appendChild(td);
+        });
+    }
+}
+
+
+//API Obtener recursos para filtrar incidencias
+function obtenerRecursosSelect(){
+    fetch(window.location.origin+"/API/recurso")
+    .then(res => res.json())
+    .then(response => {
+        let recursos = response.data;
+
+        let filtrarRecurso = document.getElementById("filtrarRecurso");
+        filtrarRecurso.innerHTML = "";
+        let optiontodos=document.createElement("option");
+        optiontodos.setAttribute("value", "Todos");
+        optiontodos.textContent = "Todos";
+        filtrarRecurso.appendChild(optiontodos);
+
+        recursos.forEach(recurso => {
+            let option = document.createElement("option");
+            option.setAttribute("value", recurso.id_recurso);
+            option.textContent = recurso.id_recurso;
+            filtrarRecurso.appendChild(option);
+        });
+    })
+    .catch(error => console.error("<p>Error al obtener recursos</p>", error));
+}
+
+
+
+//API Obtener incidencias para filtrarlas
+document.getElementById("formFiltrarIncidencia")
+.addEventListener("submit", function(e){
+    e.preventDefault();
+    fetch(window.location.origin+"/API/incidencias")
+        .then(res => res.json())
+        .then(response => {
+        let incidencias = response.data;
+
+        let recurso = document.getElementById("filtrarRecurso").value;
+        let prioridad = document.getElementById("filtrarPrioridad").value;
+        let estado = document.getElementById("filtrarEstado").value;
+        let fechaInicio = document.getElementById("filtrarFechaInicio").value;
+        let fechaFin = document.getElementById("filtrarFechaFin").value;
+
+        incidenciasFiltradas=incidencias.filter(incidencia => {
+            // Filtro por recurso
+            if(recurso!=="Todos"&&incidencia.id_recurso!=recurso){
+                return false;
+            }
+
+            // Filtro por prioridad
+            if(prioridad!=="Todos"&&incidencia.prioridad!=prioridad){
+                return false;
+            }
+
+            // Filtro por estado
+            if(estado!=="Todos"&&incidencia.estado!=estado){
+                return false;
+            }
+
+            // Filtro por fechas
+            let fechaInc = new Date(incidencia.fecha);
+
+            if(fechaInicio){
+                if(fechaInc < new Date(fechaInicio)){
+                    return false;
+                }
+            }
+
+            if(fechaFin){
+                if(fechaInc > new Date(fechaFin)){
+                    return false;
+                }
+            }
+
+            return true;
+        })
+
+        mostrarIncidencias(incidenciasFiltradas);
+    });
+});
+
+
+
+
+
+// CREAR INCIDENCIA
 
 //API Obtener recursos para crear incidencia
 function obtenerRecursos(){
@@ -105,7 +197,7 @@ function obtenerRecursos(){
             });
         }
     })
-    .catch(error => console.error("Error al obtener recursos:", error));
+    .catch(error => console.error("<p>Error al obtener recursos</p>", error));
 }
 
 
@@ -148,7 +240,7 @@ function obtenerPortatiles(){
             });
         }
     })
-    .catch(error => console.error("Error al obtener portatiles:", error));
+    .catch(error => console.error("<p>Error al obtener portatiles</p>", error));
 }
 
 
@@ -191,7 +283,7 @@ function obtenerEspacios(){
             });
         }
     })
-    .catch(error => console.error("Error al obtener espacios:", error));
+    .catch(error => console.error("<p>Error al obtener espacios</p>", error));
 }
 
 
@@ -243,7 +335,7 @@ function obtenerEspaciosPorEdificio(edificio){
                 tablaincidencias.appendChild(card);
             }
         })
-        .catch(error => console.error("Error al obtener espacios por edificio:", error));
+        .catch(error => console.error("<p>Error al obtener espacios por edificio</p>", error));
     }
 }
 
@@ -286,7 +378,7 @@ function obtenerEdificios(){
             });
         }
     })
-    .catch(error => console.error("Error al obtener edificios:", error));
+    .catch(error => console.error("<p>Error al obtener edificios</p>", error));
 }
 
 
@@ -328,14 +420,13 @@ function obtenerPlantas(edificio){
             });
         }
     })
-    .catch(error => console.error("Error al obtener plantas:", error));
+    .catch(error => console.error("<p>Error al obtener plantas</p>", error));
 }
 
 
 
 //API Obtener espacios para crear incidencia
 function obtenerEspaciosPorPlanta(edificio, planta=-1){
-    console.log(planta);
     if(!edificio||edificio<=0){
         return obtenerEspacios();
     }else if(!planta||planta<0){
@@ -383,7 +474,7 @@ function obtenerEspaciosPorPlanta(edificio, planta=-1){
                 tablaincidencias.appendChild(card);
             }
         })
-        .catch(error => console.error("Error al obtener espacios por edificio:", error));
+        .catch(error => console.error("<p>Error al obtener espacios por edificio</p>", error));
     }
 }
 
