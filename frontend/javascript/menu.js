@@ -42,7 +42,7 @@ function generateHeaderNav(menuactivo, role) {
         // si hay usuario llena los navs con los enlaces necesarios
 
         //apartados del menu, para reutilizarlos y bucles
-        const menus = [
+        let menus=[
             { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
             { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
             { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
@@ -50,6 +50,9 @@ function generateHeaderNav(menuactivo, role) {
             { texto: "Incidencias", href: "/frontend/vistas/incidencias/incidencias.html", key: "incidencias" },
             { texto: "Liberar aulas", href: "/frontend/vistas/liberar/liberar.html", key: "liberar" }
         ];
+        if(role=="admin"){
+            menus.find(menu => menu.key=='incidencias').href = "/frontend/vistas/incidencias/verincidencias.html";
+        }
 
         //MENU DESKTOP
         // crear ul y logo

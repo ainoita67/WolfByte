@@ -615,10 +615,9 @@ form.login{
 
 
 /* MENU ADMINISTRADOR */
-#aside-admin {
+#aside-admin{
     border-color: #2a457e;
-    width: 260px; 
-    min-height: 80vh;
+    width: 260px;
     border-bottom:#2a457eb6 solid 2px;
     border-right:#2a457eb6 solid 2px;
     border-bottom-right-radius: 10px;
