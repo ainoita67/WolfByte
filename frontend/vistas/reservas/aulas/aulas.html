@@ -2,7 +2,16 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
         <script>
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -10,51 +19,29 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("aulas", "admin");
+                generarPagina("menu", "admin");
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
         </script>
 
-        <title>Aulas - IES Bajo Aragón</title>
+
+        <title>Reservas aula - IES Bajo Aragón</title>
     </head>
     <body>
+
         <div id="header"></div>
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="text-center">Aulas</h2>
+                <h2 class="text-center">Aulas disponibles</h2>
                 <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
                     <i class="bi bi-filter"></i> Filtrar
                 </button>
             </div>
-            <div class="table-responsive">
-                <table class="table table-striped align-middle text-center tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Edificio</th>
-                            <th>Planta baja</th>
-                            <th>1ª planta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th class="bg-azul text-light">RAM</th>
-                            <td>R1, R2, R3, R4, R5</td>
-                            <td>R25, R26, R27, R28, R29</td>
-                        </tr>
-                        <tr>
-                            <th class="bg-azul text-light">Loscos</th>
-                            <td>L1, L2, L3, L4, L5</td>
-                            <td>L25, L26, L27, L28, L29</td>
-                        </tr>
-                        <tr>
-                            <th class="bg-azul text-light">Redondo</th>
-                            <td></td>
-                            <td>RPL1, RPL2</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="contenedor-aulas">
+
+            
             </div>
 
             <!--Modal filtrar-->
@@ -68,60 +55,14 @@
                         <form id="formFiltrarAulas" class="px-3">
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <label class="form-label" for="f_alumnos">Número mínimo de alumnos</label>
-                                        <input type="number" class="form-control" id="f_alumnos" min="1" value="25">
-                                    </div>
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <label class="form-label" for="f_capacidad">Capacidad máxima</label>
-                                        <input type="number" class="form-control" id="f_capacidad" min="1" value="30">
-                                    </div>
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <label class="form-label" for="f_edificio">Edificio</label>
-                                        <select class="form-select" id="f_edificio">
-                                            <option value="">Todos</option>
-                                            <option>RAM</option>
-                                            <option>Loscos</option>
-                                            <option>Redondo</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 col-md-6 mb-3">
-                                        <label class="form-label" for="f_planta">Planta</label>
-                                        <select class="form-select" id="f_planta">
-                                            <option value="">Todas</option>
-                                            <option>Planta baja</option>
-                                            <option>1ª planta</option>
-                                        </select>
-                                    </div>
                                     <div class="col-12 mb-3">
-                                        <label class="form-label">Material disponible</label>
-                                        <div class="row">
-                                            <div class="col-6 col-md-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="m_proyector">
-                                                    <label class="form-check-label" for="m_proyector">Proyector</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="m_pizarra">
-                                                    <label class="form-check-label" for="m_pizarra">Pizarra digital</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="m_ordenadores">
-                                                    <label class="form-check-label" for="m_ordenadores">Ordenadores</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-3">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="m_audio">
-                                                    <label class="form-check-label" for="m_audio">Equipo de audio</label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <label class="form-label" for="caracteristicas">Características</label>
+                                        <select class="form-select" id="caracteristicas" multiple size="3">
+                                            <!-- Opciones generadas dinámicamente -->
+                                        </select>
+                                        <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
                                     </div>
+                                    
                                     <div class="col-12 col-md-6 mb-3">
                                         <label class="form-label" for="f_fecha">Fecha</label>
                                         <input type="date" class="form-control" id="f_fecha">
@@ -137,9 +78,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
-                                <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
-                                <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                <button type="reset" class="col-3 btn bg-verde border text-light rounded-3"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
+                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                             </div>
                         </form>
                     </div>
@@ -155,19 +96,165 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
-        <script>
-            document.querySelectorAll(".btn-editar").forEach(boton => {
-                boton.addEventListener("click", function () {
-                    const fila = this.closest("tr");
-                    const celdas = fila.querySelectorAll("td");
+<script type="module">
+import { getAulas, getAulasDisponibles } from "/frontend/javascript/espacio/aulas.js";
+import { getCaracteristicas } from "/frontend/javascript/espacio/caracteristicas.js";
 
-                    document.getElementById("editNombre").value = celdas[0].textContent.trim();
-                    document.getElementById("editTipo").value = celdas[1].textContent.trim();
-                    document.getElementById("editCapacidad").value = celdas[2].textContent.trim();
-                    document.getElementById("editEstado").value = celdas[3].textContent.trim();
+document.addEventListener("DOMContentLoaded", async () => {
+    const data = await getAulas();
+    crearTarjetas(data);
+
+    await cargarCaracteristicas();
+
+    const form = document.getElementById("formFiltrarAulas");
+
+    //al enviar el formulario de filtrar
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fecha = document.getElementById("f_fecha").value;
+        const horaInicio = document.getElementById("f_hora_inicio").value || "00:00";
+        const horaFin = document.getElementById("f_hora_fin").value || "23:59";
+
+        const select = document.getElementById("caracteristicas");
+        let caracteristicasSeleccionadas = Array.from(select.selectedOptions)
+        .map(opt => opt.value);
+
+        let data;
+
+        // Si los tres campos tienen valor → disponibilidad
+        if (fecha && horaInicio && horaFin) {
+            data = await getAulasDisponibles(fecha, horaInicio, horaFin);
+        } else {
+            // Si falta alguno → todas las aulas
+            data = await getAulas();
+        }
+
+        crearTarjetas(data, caracteristicasSeleccionadas);
+        cerrarModal("modalFiltrar");
+
+    });
+
+    form.addEventListener("reset", async () => {
+        setTimeout(async () => {
+            const data = await getAulas();
+            crearTarjetas(data, []);
+        }, 0);
+    });
+
+});
+
+function cerrarModal(id) {
+    const modalElement = document.getElementById(id);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modal.hide();
+
+    // Limpieza manual del backdrop (fix Bootstrap)
+    setTimeout(() => {
+        document.body.classList.remove("modal-open");
+        document.body.style.removeProperty("padding-right");
+
+        const backdrops = document.querySelectorAll(".modal-backdrop");
+        backdrops.forEach(b => b.remove());
+    }, 200);
+}
+
+function crearTarjetas(data, caracteristicasSeleccionadas = []) {
+    const contenedor = document.querySelector(".contenedor-aulas");
+    contenedor.innerHTML = ""; // limpiar contenido estático
+    // data = { edificio: { planta: [aulas] } }
+    for (const [edificio, plantas] of Object.entries(data)) {
+
+        // --- Tarjeta edificio ---
+        const edificioCard = document.createElement("div");
+        edificioCard.className = "edificio-card";
+
+        const tituloEdificio = document.createElement("h3");
+        tituloEdificio.textContent = edificio.toUpperCase();
+        edificioCard.appendChild(tituloEdificio);
+
+        // --- Plantas ---
+        for (const [planta, aulas] of Object.entries(plantas)) {
+
+            const plantaDiv = document.createElement("div");
+            plantaDiv.className = "planta";
+
+            const plantaTitulo = document.createElement("span");
+            plantaTitulo.className = "planta-titulo";
+            plantaTitulo.textContent = planta;
+            plantaDiv.appendChild(plantaTitulo);
+
+            const aulasDiv = document.createElement("div");
+            aulasDiv.className = "aulas";
+
+            // --- Botones de aulas ---
+            aulas.forEach(aula => {
+                const btn = document.createElement("button");
+                btn.id = aula.id_recurso;
+                btn.className = "aula";
+                btn.textContent = aula.id_recurso;
+
+                btn.title = aula.descripcion;
+
+                // si tiene reservas marcar
+                if (aula.reservas > 0) {
+                    btn.classList.add("ocupada");
+                    btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
+                }
+
+                //caracteristicas seleccionadas → comprobar si el aula las cumple
+                if (caracteristicasSeleccionadas.length > 0) {
+
+                    const aulaCaracteristicas = aula.caracteristicas || [];
+
+                    // comprobar si tiene TODAS las seleccionadas
+                    const cumple = caracteristicasSeleccionadas.every(c =>
+                        aulaCaracteristicas.includes(c)
+                    );
+
+                    if (!cumple) {
+                        btn.classList.add("no-cumple");
+
+                        btn.title += " - No cumple con las características seleccionadas";
+                    }
+                }
+
+                // REDIRECCIÓN
+                btn.addEventListener("click", () => {
+                    const id = aula.id_recurso;
+                    window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}`;
                 });
+                aulasDiv.appendChild(btn);
             });
-        </script>
+
+            plantaDiv.appendChild(aulasDiv);
+            edificioCard.appendChild(plantaDiv);
+        }
+
+        contenedor.appendChild(edificioCard);
+    }
+}
+
+async function cargarCaracteristicas() {
+    const select = document.getElementById("caracteristicas");
+
+    try {
+        const caracteristicas = await getCaracteristicas();
+
+        select.innerHTML = ""; // limpiar por si acaso
+
+        caracteristicas.forEach(c => {
+            const option = document.createElement("option");
+            option.value = c.nombre;
+            option.textContent = c.nombre;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error cargando características:", error);
+    }
+}
+</script>
 
             
         <footer id="footer"></footer>

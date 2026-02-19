@@ -60,11 +60,14 @@
 
 
 <script type="module">
-    import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+// cojer id de la url
+const params = new URLSearchParams(window.location.search);
+const idAula = params.get("id");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
-        viewType: "Week",
+        viewType: "WorkWeek",
         theme: "calendar_green",
         startDate: DayPilot.Date.today(),
 
@@ -81,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    const eventos = await generarEventos("salon");
+    const eventos = await generarEventos(idAula);
 
     dp.events.list = eventos;
     dp.init();
