@@ -37,6 +37,12 @@
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
             <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
             
+            <div class="container mt-3 text-end">
+                <button id="btnVolver" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
             <div class="container my-4 d-flex flex-column" style="height: 50vh;">
                 <div class="row d-flex justify-content-between align-items-center mb-3">
                     <button id="prevWeek"
@@ -60,17 +66,14 @@
 
 
 <script type="module">
-import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
-
-const horario = generarHorarioPermanentes(await getPermanentesRecurso("salon"));
-console.log(horario);
-
-
-
+import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+// cojer id de la url
+const params = new URLSearchParams(window.location.search);
+const idAula = params.get("id");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
-        viewType: "Week",
+        viewType: "WorkWeek",
         theme: "calendar_green",
         startDate: DayPilot.Date.today(),
 
@@ -87,8 +90,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    dp.events.list = crearSlots();
-    cargarReservasSalon();
+    const eventos = await generarEventos(idAula);
+
+    dp.events.list = eventos;
     dp.init();
 
 
@@ -103,66 +107,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
-            const text = await res.text(); // primero leemos como texto
-            let json;
-            try {
-                json = JSON.parse(text); // luego intentamos parsear a JSON
-            } catch {
-                console.error("Respuesta no es JSON:", text);
-                return;
-            }
 
-            if (json.status !== "success") {
-                console.error("Error API:", json);
-                return;
-            }
-
-            const eventos = json.data.data.map(r => ({
-                id: r.id_reserva,
-                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-                start: r.inicio.replace(" ", "T"),
-                end: r.fin.replace(" ", "T")
-            }));
-
-    // Cargar reservas
-    async function cargarReservasSalon() {
-        try {
-            const res = await fetch(`${API}/reservas-salon-actos`, {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token")
-                }
-            });
-
-            const text = await res.text(); // primero leemos como texto
-            let json;
-            try {
-                json = JSON.parse(text); // luego intentamos parsear a JSON
-            } catch {
-                console.error("Respuesta no es JSON:", text);
-                return;
-            }
-
-            if (json.status !== "success") {
-                console.error("Error API:", json);
-                return;
-            }
-
-            const eventos = json.data.data.map(r => ({
-                id: r.id_reserva,
-                text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-                start: r.inicio.replace(" ", "T"),
-                end: r.fin.replace(" ", "T")
-            }));
-
-            dp.events.list = dp.events.list.concat(eventos);
-            dp.update();
-
-        } catch (error) {
-            console.error("Error cargando reservas:", error);
-        }
-    }
 });
 
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+});
 
 
 </script>

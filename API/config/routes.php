@@ -68,18 +68,6 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Espacios
-
-$router->get('/espacios', 'Controllers\\EspacioController@index');
-$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
-$router->post('/espacios', 'Controllers\\EspacioController@store');
-
-// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
-// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
-// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
-// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
-
 // MATERIALES 
 $router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
 $router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
@@ -122,12 +110,16 @@ $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
 $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
+$router->get('/aulas', 'Controllers\\EspacioController@indexAulas'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta
+$router->post('/aulas/disponibles', 'Controllers\\EspacioController@indexAulasDisponibles'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta y que estén disponibles en el rango de fecha y hora especificado
+
 
 // RESERVAS ESPACIOS
 $router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); // Devuelve todas las reservas de tipo “espacio”
 $router->get('/mis-reservas-espacio','Controllers\\ReservaEspacioController@misReservas'); // Devuelve todas las reservas de espacio de un usuario autenticado
 $router->post('/reservaEspacio','Controllers\\ReservaEspacioController@store'); // Añade una nueva reserva de un espacio
-$router->get('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@show'); // Devuelve las reservas de un espacio específico por ID de espacio
+$router->get('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@show'); // Devuelve informacion de una reserva de espacio por ID de reserva
+$router->get('/reservaEspacio/espacio/{id}','Controllers\\ReservaEspacioController@showEspacio'); // Devuelve las reservas de un espacio específico por ID de espacio
 $router->put('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@update'); // Cambia los datos de una reserva de espacio (comprobar disponibilidad)
 $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cambiarFechas'); // Cambia el rango de fechas de una reserva de espacio (comprobar disponibilidad)
 
