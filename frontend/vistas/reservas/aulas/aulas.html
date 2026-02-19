@@ -101,12 +101,11 @@ import { getAulas, getAulasDisponibles } from "/frontend/javascript/espacio/aula
 import { getCaracteristicas } from "/frontend/javascript/espacio/caracteristicas.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const data = await getAulas();
-    crearTarjetas(data);
-
     await cargarCaracteristicas();
 
     const form = document.getElementById("formFiltrarAulas");
+
+    filtrosGuardadosyCrearTarjetas();
 
     //al enviar el formulario de filtrar
     form.addEventListener("submit", async (e) => {
@@ -221,6 +220,18 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
 
                 // REDIRECCIÓN
                 btn.addEventListener("click", () => {
+                    // Guardar estado actual del filtro
+                    const filtros = {
+                        fecha: document.getElementById("f_fecha").value,
+                        horaInicio: document.getElementById("f_hora_inicio").value,
+                        horaFin: document.getElementById("f_hora_fin").value,
+                        caracteristicas: Array.from(
+                            document.getElementById("caracteristicas").selectedOptions
+                        ).map(opt => opt.value)
+                    };
+
+                    sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
+
                     const id = aula.id_recurso;
                     window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}`;
                 });
@@ -252,6 +263,46 @@ async function cargarCaracteristicas() {
 
     } catch (error) {
         console.error("Error cargando características:", error);
+    }
+}
+
+async function filtrosGuardadosyCrearTarjetas(){
+
+    const filtrosGuardados = sessionStorage.getItem("filtrosAulas");
+
+    if (filtrosGuardados) {
+
+        const filtros = JSON.parse(filtrosGuardados);
+
+        // rellenar los inputs como tocan 
+        document.getElementById("f_fecha").value = filtros.fecha;
+        document.getElementById("f_hora_inicio").value = filtros.horaInicio || "00:00";
+        document.getElementById("f_hora_fin").value = filtros.horaFin || "23:59";
+
+        const select = document.getElementById("caracteristicas");
+
+        Array.from(select.options).forEach(opt => {
+            opt.selected = filtros.caracteristicas?.includes(opt.value);
+        });
+
+        // Volver a aplicar el filtro automáticamente
+        let data;
+
+        if (filtros.fecha && filtros.horaInicio && filtros.horaFin) {
+            data = await getAulasDisponibles(
+                filtros.fecha,
+                filtros.horaInicio,
+                filtros.horaFin
+            );
+        } else {
+            data = await getAulas();
+        }
+
+        crearTarjetas(data, filtros.caracteristicas || []);
+
+    } else {
+        const data = await getAulas();
+        crearTarjetas(data);
     }
 }
 </script>

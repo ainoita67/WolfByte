@@ -37,6 +37,12 @@
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
             <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
             
+            <div class="container mt-3 text-end">
+                <button id="btnVolver" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
             <div class="container my-4 d-flex flex-column" style="height: 50vh;">
                 <div class="row d-flex justify-content-between align-items-center mb-3">
                     <button id="prevWeek"
@@ -104,6 +110,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+});
 
 
 </script>
