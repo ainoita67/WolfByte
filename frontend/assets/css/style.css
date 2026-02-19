@@ -631,3 +631,73 @@ form.login{
     color: #0051ff;
     font-weight: 700;
 }
+
+
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+
+.contenedor-aulas {
+    max-width: 900px;
+    margin: auto;
+    display: grid;
+    gap: 20px;
+}
+
+/* Tarjeta edificio */
+.edificio-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.edificio-card h3 {
+    margin-bottom: 15px;
+    color: #274C9C;
+}
+
+/* Planta */
+.planta {
+    margin-bottom: 15px;
+}
+
+.planta-titulo {
+    font-weight: 600;
+    font-size: 14px;
+    color: #666;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Contenedor aulas */
+.aulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Botón aula */
+.aula {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #d0d7e2;
+    background: #f7f9fc;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.aula:hover {
+    background: #e6ecff;
+    border-color: #2f4f9f;
+}
+
+.aula.ocupada {
+    background-color: #ce6a5d;
+}
+
+.aula.no-cumple {
+    border: 2px solid #dc3545 !important;
+}

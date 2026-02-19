@@ -30,11 +30,13 @@ class ReservaEspacioController
     }
 
     // Devuelve todas las reservas de un espacio específico
-    public function showByEspacio(Request $req, Response $res, $idEspacio): void
+    public function showEspacio(Request $req, Response $res, string $id): void
     {
         try {
-            $reservas = $this->service->getReservasByEspacio($idEspacio);
-            $res->status(200)->json($reservas);
+            $data = $this->service->getReservasPorEspacio($id);
+            $res->status(200)->json($data);
+        } catch (ValidationException $e) {
+            $res->status(404)->json(['error' => $e->getMessage()]);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
