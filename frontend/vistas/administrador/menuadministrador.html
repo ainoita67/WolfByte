@@ -251,28 +251,28 @@
                 </div>
 
                 <script>                    
-                    const scriptget = document.createElement("script");
-                    scriptget.src = BASE + "/javascript/incidencias/get.js";
-                    document.head.appendChild(scriptget);
+                    const scriptgetincidencias = document.createElement("script");
+                    scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
+                    document.head.appendChild(scriptgetincidencias);
 
-                    const scriptpost = document.createElement("script");
-                    scriptpost.src = BASE + "/javascript/incidencias/post.js";
-                    document.head.appendChild(scriptpost);
+                    const scriptpostincidencias = document.createElement("script");
+                    scriptpostincidencias.src = BASE + "/javascript/incidencias/post.js";
+                    document.head.appendChild(scriptpostincidencias);
 
-                    scriptget.onload = () => {
+                    scriptgetincidencias.onload = () => {
                         obtenerIncidenciasTarjetas(5);
                         obtenerRecursosSelect();
                         activarFiltrarIncidencia("card",5);
                     };
 
-                    scriptpost.onload = () => {
+                    scriptpostincidencias.onload = () => {
                         activarEditarTarjetasIncidencia();
                     };
                 </script>
 
                 <!-- MODAL FILTRAR INCIDENCIAS -->
                 <div class="modal fade" id="modalFiltrarIncidencias" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title"><i class="bi bi-filter me-2"></i>Filtrar incidencias</h5>

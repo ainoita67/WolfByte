@@ -578,8 +578,14 @@ function mostrarIncidenciasTarjetas(incidencias, limite){
                         <p class="mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
                         <p class="mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
                     </div>
-                    <div class="estado-incidencia-abierta"></div>
                 `;
+                if(incidencia.estado=="Abierta"){
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado aceptado"></div>';
+                }else if(incidencia.estado=="Resuelta"){
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado rechazado"></div>';
+                }else{
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado"></div>';
+                }
 
                 divIncidencia.addEventListener("click", function(){
 
