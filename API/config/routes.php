@@ -60,7 +60,7 @@ $router->put('/edificios/{id}', 'Controllers\\EdificioController@update'); // ac
 $router->delete('/edificios/{id}', 'Controllers\\EdificioController@destroy'); // eliminar edificio por id
  
 
-// Caracteristicas
+// Características
 
 $router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
 $router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');

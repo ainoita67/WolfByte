@@ -22,107 +22,92 @@
     </head>
     <body>
 
-    <div id="header"></div>
-<main class="container-fluid p-0">
-    <div class="d-flex">
-<!-- ASIDE (desktop fijo) -->
-    <aside class="d-none d-lg-block bg-light p-4" id="aside-admin">
-      <h5 class="mb-3">Menú Admin</h5>
-
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link text-primary" href="usuarios/usuarios.html">Usuarios</a></li>
-                    <li class="nav-item"><a class="nav-link text-primary" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
-                    <li class="nav-item"><a class="nav-link text-primary" href="portatiles/portatiles.html">Portátiles</a></li>
-                    <li class="nav-item"><a class="nav-link text-primary" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
-                    <li class="nav-item"><a class="nav-link text-primary" href="logacciones/logacciones.html">Log de Acciones</a></li>
-                    <hr class="my-3">
-                    <h6 class="text-primary">Tablas auxiliares</h6>
-                    <ul class="nav flex-column ps-3">
-                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
-                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
-                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
-                        <li class="nav-item"><a class="nav-link text-primary" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
-                    </ul>
-                </ul>
-            </aside>
-
-            <!-- CONTENIDO -->
-            <section class="flex-grow-1 p-3 p-lg-4">
-
-                <!-- Botón menú SOLO en móvil/tablet -->
-                <div class="d-lg-none mb-3">
-                    <button class="btn btn-outline-secondary"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#adminOffcanvas"
-                        aria-controls="adminOffcanvas">
-                        <i class="bi bi-list"></i> Menú Admin
-                    </button>
-                </div>
-
-                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
-                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas" aria-labelledby="adminOffcanvasLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="adminOffcanvasLabel">Menú Admin</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-                    </div>
-
-                    <div class="offcanvas-body">
-                        <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link text-black" href="usuarios/usuarios.html">Usuarios</a></li>
-                            <li class="nav-item"><a class="nav-link text-black" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
-                            <li class="nav-item"><a class="nav-link text-black" href="portatiles/portatiles.html">Portátiles</a></li>
-                            <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
-                            <li class="nav-item"><a class="nav-link text-black" href="logacciones/logacciones.html">Log de Acciones</a></li>
-                            <hr class="my-3">
-                            <h6 class="text-dark">Tablas auxiliares</h6>
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
-                                <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
-                                <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
-                                <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
-                            </ul>
+        <div id="header"></div>
+        <main class="container-fluid w-100 row p-0">
+            <div class="d-flex h-100">
+                <!-- ASIDE (desktop fijo) -->
+                <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="portatiles/portatiles.html">Portátiles</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="logacciones/logacciones.html">Log de Acciones</a></li>
+                        <hr class="my-3">
+                        <h6 class="text-white">Tablas auxiliares</h6>
+                        <ul class="nav flex-column ps-3">
+                            <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
                         </ul>
+                    </ul>
+                </aside>
+
+                <!-- CONTENIDO -->
+                <section class="flex-grow-1 p-3 p-lg-4">
+
+                    <!-- Botón menú SOLO en móvil/tablet -->
+                    <div class="d-lg-none mb-3">
+                        <button class="btn btn-outline-secondary"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#adminOffcanvas"
+                            aria-controls="adminOffcanvas">
+                            <i class="bi bi-list"></i> Menú Admin
+                        </button>
                     </div>
-                </div>
 
+                    <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas" aria-labelledby="adminOffcanvasLabel">
+                        <div class="offcanvas-header mb-0 pb-1">
+                            <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                        </div>
 
-            <!-- Contenido principal -->
+                        <div class="offcanvas-body mt-0 pt-0">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link text-black" href="usuarios/usuarios.html">Usuarios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black" href="portatiles/portatiles.html">Portátiles</a></li>
+                                <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
+                                <li class="nav-item"><a class="nav-link text-black" href="logacciones/logacciones.html">Log de Acciones</a></li>
+                                <hr class="my-3">
+                                <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <ul class="nav flex-column ps-3">
+                                    <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características de Espacios</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades de Reservas</a></li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Contenido principal -->
                     <div class="container-fluid col-10">
                         <div class="row g-3">
 
-            <!-- INCIDENCIAS -->
-                            <div class="col-12 col-md-6 col-lg-4 p-3">
+                            <!-- INCIDENCIAS -->
+                            <div class="col-12 col-lg-6 col-xl-4 p-3">
                                 <div class="mb-4 d-flex justify-content-between">
-                                    <h5 class="ms-3">Incidencias</h5>
-                                    <button class="btn bg-verde text-light col-3">
+                                    <h5 class="ms-3">Incidencias recientes</h5>
+                                    <button class="btn bg-verde text-light col-3" data-bs-toggle="modal" data-bs-target="#modalFiltrarIncidencias">
                                         <i class="bi bi-filter"></i> Filtrar
                                     </button>
                                 </div>
 
                                 <!--TARJETA-->
-                                <div class="mb-4">
-                                    <div class="card h-100 reserva-card"
-                                        role="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalincidencia"
-                                        data-id="02">
-
-                                        <div class="card-body bg-secondary-subtle">
-                                            <h6 class="fw-bold">Incidencia #02</h6>
-                                            <h6 class="fw-bold">Proyector no funciona</h6>
-                                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                                        </div>
-                                        <div class="estado-incidencia-abierta"></div>
-                                    </div>
+                                <div class="mb-4" id="tarjetasIncidencias">
                                 </div>
-                                
+                                <div class="mb-4">
+                                        <button class="btn btn-success text-white border-0 rounded-3 p-3 w-100" id="btnVerIncidencias">Ver todas las incidencias</button>
+                                </div>
                             </div>
 
                             <!-- AUTORIZAR -->
-                            <div class="col-12 col-md-6 col-lg-4 p-3">
+                            <div class="col-12 col-lg-6 col-xl-4 p-3">
                                 <div class="mb-4 d-flex justify-content-between">
                                     <h5 class="ms-3">Reservas Pendientes de Autorizar</h5>
                                     <button class="btn bg-verde text-light col-3">
@@ -151,7 +136,7 @@
                             </div>
 
                             <!-- PROXIMAS -->
-                            <div class="col-12 col-md-6 col-lg-4 p-3">
+                            <div class="col-12 col-lg-6 col-xl-4 p-3">
                                 <div class="mb-4 d-flex justify-content-between">
                                     <h5 class="ms-3">Próximas Reservas</h5>
                                     <button class="btn bg-verde text-light col-3">
@@ -177,255 +162,304 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </div>
                     </div>
-                </div>
-
                 </section>
-            </div>
-            <div class="divvolver container offset-7 offset-md-8 p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
-            </div>
+                <div class="divvolver container offset-7 offset-md-8 p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                    <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+                </div>
 
-            <!--MODAL INCIDENCIA-->
-            <div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
+                <!--MODAL INCIDENCIA-->
+                <div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+
+                            <form id="formincidencia" method="post" action="#">
+                                <div class="modal-body container-fluid">
+                                    <div class="row g-3">
+
+                                        <!-- ID -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="incidencia_id">ID</label>
+                                            <input type="number" class="form-control" id="incidencia_id" name="id" readonly required>
+                                        </div>
+
+                                        <!-- Fecha -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="incidencia_fecha">Fecha</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+                                        </div>
+
+                                        <!-- Recurso -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="incidencia_recurso">Recurso</label>
+                                            <input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
+                                        </div>
+
+                                        <!-- Titulo -->
+                                        <div class="col-12">
+                                            <label class="form-label" for="incidencia_titulo">Título</label>
+                                            <input type="text" class="form-control" id="incidencia_titulo" name="titulo" required>
+                                        </div>
+
+                                        <!-- Descripcion -->
+                                        <div class="col-12">
+                                            <label class="form-label" for="incidencia_descripcion">Descripción</label>
+                                            <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3" required></textarea>
+                                        </div>
+
+                                        <!-- Usuario -->
+                                        <div class="col-md-4">
+                                            <input type="hidden" class="form-control" id="incidencia_id_usuario" name="idusuario" readonly required>
+                                            <label class="form-label" for="incidencia_usuario">Usuario</label>
+                                            <input type="text" class="form-control" id="incidencia_usuario" name="usuario" readonly required>
+                                        </div>
+
+                                        <!-- Estado -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="incidencia_estado">Estado</label>
+                                            <select class="form-select" id="incidencia_estado" name="estado" required>
+                                                <option value="Abierta">Abierta</option>
+                                                <option value="En proceso">En proceso</option>
+                                                <option value="Resuelta">Resuelta</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Prioridad -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="incidencia_prioridad">Prioridad</label>
+                                            <select class="form-select" id="incidencia_prioridad" name="prioridad" required>
+                                                <option value="Baja">Baja</option>
+                                                <option value="Media">Media</option>
+                                                <option value="Alta">Alta</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-between">
+                                        <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar cambios</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
+                </div>
 
-                    <form id="formincidencia" method="post" action="#">
-                        <div class="modal-body container-fluid">
-                        <div class="row g-3">
+                <script>                    
+                    const scriptget = document.createElement("script");
+                    scriptget.src = BASE + "/javascript/incidencias/get.js";
+                    document.head.appendChild(scriptget);
 
-                            <!-- ID -->
-                            <div class="col-md-4">
-                            <label class="form-label">ID</label>
-                            <input type="number" class="form-control" id="incidencia_id" name="id" readonly>
+                    const scriptpost = document.createElement("script");
+                    scriptpost.src = BASE + "/javascript/incidencias/post.js";
+                    document.head.appendChild(scriptpost);
+
+                    scriptget.onload = () => {
+                        obtenerIncidenciasTarjetas(5);
+                        obtenerRecursosSelect();
+                        activarFiltrarIncidencia("card",5);
+                    };
+
+                    scriptpost.onload = () => {
+                        activarEditarTarjetasIncidencia();
+                    };
+                </script>
+
+                <!-- MODAL FILTRAR INCIDENCIAS -->
+                <div class="modal fade" id="modalFiltrarIncidencias" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="bi bi-filter me-2"></i>Filtrar incidencias</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
+                            <form id="formFiltrarIncidencia" class="px-3">
+                                <div class="modal-body">
+                                    <div class="row g-4">
+                                        <!-- Fecha inicio -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="filtrarFechaInicio">Fecha inicio</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="filtrarFechaInicio" name="filtrarFechaInicio">
+                                        </div>
 
-                            <!-- Fecha -->
-                            <div class="col-md-4">
-                            <label class="form-label">Fecha</label>
-                            <input type="datetime-local" class="form-control" id="incidencia_fecha" name="fecha">
-                            </div>
+                                        <!-- Fecha fin -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="filtrarFechaFin">Fecha fin</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="filtrarFechaFin" name="filtrarFechaFin">
+                                        </div>
 
-                            <!-- Recurso -->
-                            <div class="col-md-4">
-                            <label class="form-label">Recurso</label>
-                            <select class="form-select" id="incidencia_recurso" name="recurso">
-                                <option value="">-- Selecciona --</option>
-                                <option value="proyector">Proyector</option>
-                                <option value="portatil">Portátil</option>
-                                <option value="pantalla">Pantalla</option>
-                                <option value="altavoces">Altavoces</option>
-                                <option value="aula">Aula</option>
-                            </select>
-                            </div>
+                                        <!-- Recurso -->
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="filtrarRecurso">Recurso</label>
+                                            <select class="form-select" id="filtrarRecurso" name="filtrarRecurso">
+                                            </select>
+                                        </div>
 
-                            <!-- Titulo -->
-                            <div class="col-12">
-                            <label class="form-label">Título</label>
-                            <input type="text" class="form-control" id="incidencia_titulo" name="titulo">
-                            </div>
+                                        <!-- Prioridad -->
+                                        <div class="col-md-6 pe-3">
+                                            <label class="form-label" for="filtrarPrioridad">Prioridad</label>
+                                            <select class="form-select" id="filtrarPrioridad" name="filtrarPrioridad">
+                                                <option value="Todos" selected>Todos</option>
+                                                <option value="Alta">Alta</option>
+                                                <option value="Media">Media</option>
+                                                <option value="Baja">Baja</option>
+                                            </select>
+                                        </div>
 
-                            <!-- Descripcion -->
-                            <div class="col-12">
-                            <label class="form-label">Descripción</label>
-                            <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3"></textarea>
-                            </div>
-
-                            <!-- Usuario -->
-                            <div class="col-md-4">
-                            <label class="form-label">Usuario</label>
-                            <input type="text" class="form-control" id="incidencia_usuario" name="usuario">
-                            </div>
-
-                            <!-- Estado -->
-                            <div class="col-md-4">
-                            <label class="form-label">Estado</label>
-                            <select class="form-select" id="incidencia_estado" name="estado">
-                                <option value="abierta">Abierta</option>
-                                <option value="en_proceso">En proceso</option>
-                                <option value="resuelta">Resuelta</option>
-                            </select>
-                            </div>
-
-                            <!-- Prioridad -->
-                            <div class="col-md-4">
-                            <label class="form-label">Prioridad</label>
-                            <select class="form-select" id="incidencia_prioridad" name="prioridad">
-                                <option value="baja">Baja</option>
-                                <option value="media">Media</option>
-                                <option value="alta">Alta</option>
-                            </select>
-                            </div>
-
+                                        <!-- Estado -->
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="filtrarEstado">Estado</label>
+                                            <select class="form-select" id="filtrarEstado" name="filtrarEstado">
+                                                <option value="Todos" selected>Todos</option>
+                                                <option value="Abierta">Abierta</option>
+                                                <option value="En proceso">En proceso</option>
+                                                <option value="Resuelta">Resuelta</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                    <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
+                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                </div>
+                            </form>
                         </div>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
+                <!--MODAL RESERVA-->
+                <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalReservaTitulo">Reserva</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
 
+                            <form id="formReserva" method="post" action="#">
+                                <div class="modal-body container-fluid">
+                                    <div class="row g-3">
+                                        <!-- ID reserva -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">ID Reserva</label>
+                                            <input type="number" class="form-control" id="reserva_id" name="reserva_id" readonly>
+                                        </div>
+
+                                        <!-- Autorizada -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">Autorizada</label>
+                                            <select class="form-select" id="reserva_autorizada" name="autorizada">
+                                            <option value="pendiente">Pendiente</option>
+                                            <option value="autorizada">Autorizada</option>
+                                            <option value="denegada">Denegada</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Fecha creación -->
+                                        <div class="col-md-4">
+                                            <label class="form-label">F. creación</label>
+                                            <input type="datetime-local" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
+                                        </div>
+
+                                        <!-- Inicio -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Inicio</label>
+                                            <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
+                                        </div>
+
+                                        <!-- Fin -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Fin</label>
+                                            <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+                                        </div>
+
+                                        <!-- Espacio/Portátil -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Espacio / Portátil</label>
+                                            <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
+                                        </div>
+
+                                        <!-- Asignatura -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Asignatura</label>
+                                            <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
+                                        </div>
+
+                                        <!-- Grupo -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Grupo</label>
+                                            <input type="text" class="form-control" id="reserva_grupo" name="grupo">
+                                        </div>
+
+                                        <!-- Profesor -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Profesor</label>
+                                            <input type="text" class="form-control" id="reserva_profesor" name="profesor">
+                                        </div>
+
+                                        <!-- Unidades -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Unidades</label>
+                                            <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
+                                        </div>
+
+                                        <!-- Espacio en el que se usa -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Espacio en el que se usa</label>
+                                            <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
+                                        </div>
+
+                                        <!-- Actividad -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Actividad</label>
+                                            <input type="text" class="form-control" id="reserva_actividad" name="actividad">
+                                        </div>
+
+                                        <!-- Necesidades -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Necesidades</label>
+                                            <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="2">
+                                            <option value="proyector">Proyector</option>
+                                            <option value="altavoces">Altavoces</option>
+                                            <option value="microfono">Micrófono</option>
+                                            <option value="pizarra_digital">Pizarra digital</option>
+                                            </select>
+                                            <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                                        </div>
+
+                                        <!-- Observaciones -->
+                                        <div class="col-12">
+                                            <label class="form-label">Observaciones</label>
+                                            <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
-            <script>
-            const modalincidencia = document.getElementById('modalincidencia');
-
-            modalincidencia.addEventListener('show.bs.modal', function (event) {
-                const card = event.relatedTarget; // la tarjeta clicada
-
-                // leer data attributes
-                const id = card.getAttribute('data-id');
-                // rellenar formulario
-                document.getElementById('incidencia_id').value = id;
-            });
-            </script>
-
-            <!--MODAL RESERVA-->
-            <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalReservaTitulo">Reserva</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                    </div>
-
-                    <form id="formReserva" method="post" action="#">
-                    <div class="modal-body container-fluid">
-                        <div class="row g-3">
-                            <!-- ID reserva -->
-                            <div class="col-md-4">
-                                <label class="form-label">ID Reserva</label>
-                                <input type="number" class="form-control" id="reserva_id" name="reserva_id" readonly>
-                            </div>
-
-                            <!-- Autorizada -->
-                            <div class="col-md-4">
-                                <label class="form-label">Autorizada</label>
-                                <select class="form-select" id="reserva_autorizada" name="autorizada">
-                                <option value="pendiente">Pendiente</option>
-                                <option value="autorizada">Autorizada</option>
-                                <option value="denegada">Denegada</option>
-                                </select>
-                            </div>
-
-                            <!-- Fecha creación -->
-                            <div class="col-md-4">
-                                <label class="form-label">F. creación</label>
-                                <input type="datetime-local" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
-                            </div>
-
-                            <!-- Inicio -->
-                            <div class="col-md-6">
-                                <label class="form-label">Inicio</label>
-                                <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
-                            </div>
-
-                            <!-- Fin -->
-                            <div class="col-md-6">
-                                <label class="form-label">Fin</label>
-                                <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
-                            </div>
-
-                            <!-- Espacio/Portátil -->
-                            <div class="col-md-6">
-                                <label class="form-label">Espacio / Portátil</label>
-                                <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
-                            </div>
-
-                            <!-- Asignatura -->
-                            <div class="col-md-6">
-                                <label class="form-label">Asignatura</label>
-                                <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
-                            </div>
-
-                            <!-- Grupo -->
-                            <div class="col-md-6">
-                                <label class="form-label">Grupo</label>
-                                <input type="text" class="form-control" id="reserva_grupo" name="grupo">
-                            </div>
-
-                            <!-- Profesor -->
-                            <div class="col-md-6">
-                                <label class="form-label">Profesor</label>
-                                <input type="text" class="form-control" id="reserva_profesor" name="profesor">
-                            </div>
-
-                            <!-- Unidades -->
-                            <div class="col-md-6">
-                                <label class="form-label">Unidades</label>
-                                <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
-                            </div>
-
-                            <!-- Espacio en el que se usa -->
-                            <div class="col-md-6">
-                                <label class="form-label">Espacio en el que se usa</label>
-                                <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
-                            </div>
-
-                            <!-- Actividad -->
-                            <div class="col-md-6">
-                                <label class="form-label">Actividad</label>
-                                <input type="text" class="form-control" id="reserva_actividad" name="actividad">
-                            </div>
-
-                            <!-- Necesidades -->
-                            <div class="col-md-6">
-                                <label class="form-label">Necesidades</label>
-                                <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="2">
-                                <option value="proyector">Proyector</option>
-                                <option value="altavoces">Altavoces</option>
-                                <option value="microfono">Micrófono</option>
-                                <option value="pizarra_digital">Pizarra digital</option>
-                                </select>
-                                <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
-                            </div>
-
-                            <!-- Observaciones -->
-                            <div class="col-12">
-                                <label class="form-label">Observaciones</label>
-                                <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                    </div>
-                    </form>
-
-                    </div>
-                </div>
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-5 pe-md-0 text-end fs-5">
+                <a href="../menu.html" class="bg-azul rounded-pill p-2 px-3 me-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
         <footer id="footer"></footer>
-
         <!-- RELLENAR MODAL -->
-
         <script>
-        const modalReserva = document.getElementById('modalReserva');
-
-        modalReserva.addEventListener('show.bs.modal', function (event) {
-            const card = event.relatedTarget; // la tarjeta clicada
-
-            // leer data attributes
-            const id = card.getAttribute('data-id');
-            // rellenar formulario
-            document.getElementById('reserva_id').value = id;
-        });
+            document.getElementById("btnVerIncidencias").addEventListener("click", () => {
+                window.location.href = `${BASE}/vistas/incidencias/verincidencias.html`;
+            });
         </script>
     </body>
 </html>

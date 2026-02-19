@@ -18,6 +18,7 @@ function obtenerVerIncidencias(){
 
 
 function mostrarIncidencias(incidencias){
+    incidencias=incidencias.reverse();
     let tablaverincidencias = document.getElementById("verIncidenciasTableBody");
     tablaverincidencias.innerHTML = "";
     if(incidencias.length === 0){
@@ -101,57 +102,67 @@ function obtenerRecursosSelect(){
 
 
 //API Obtener incidencias para filtrarlas
-document.getElementById("formFiltrarIncidencia")
-.addEventListener("submit", function(e){
-    e.preventDefault();
-    fetch(window.location.origin+"/API/incidencias")
-        .then(res => res.json())
-        .then(response => {
-        let incidencias = response.data;
+function activarFiltrarIncidencia(tipo, limite=5){
+    let formfiltrar = document.getElementById("formFiltrarIncidencia");
+    if(!formfiltrar) return;
+    formfiltrar.addEventListener("submit", function(e){
+        e.preventDefault();
+        fetch(window.location.origin+"/API/incidencias")
+            .then(res => res.json())
+            .then(response => {
+            let incidencias = response.data;
 
-        let recurso = document.getElementById("filtrarRecurso").value;
-        let prioridad = document.getElementById("filtrarPrioridad").value;
-        let estado = document.getElementById("filtrarEstado").value;
-        let fechaInicio = document.getElementById("filtrarFechaInicio").value;
-        let fechaFin = document.getElementById("filtrarFechaFin").value;
+            let recurso = document.getElementById("filtrarRecurso").value;
+            let prioridad = document.getElementById("filtrarPrioridad").value;
+            let estado = document.getElementById("filtrarEstado").value;
+            let fechaInicio = document.getElementById("filtrarFechaInicio").value;
+            let fechaFin = document.getElementById("filtrarFechaFin").value;
 
-        incidenciasFiltradas=incidencias.filter(incidencia => {
-            // Filtro por recurso
-            if(recurso!=="Todos"&&incidencia.id_recurso!=recurso){
-                return false;
-            }
-
-            // Filtro por prioridad
-            if(prioridad!=="Todos"&&incidencia.prioridad!=prioridad){
-                return false;
-            }
-
-            // Filtro por estado
-            if(estado!=="Todos"&&incidencia.estado!=estado){
-                return false;
-            }
-
-            // Filtro por fechas
-            let fechaInc = new Date(incidencia.fecha);
-
-            if(fechaInicio){
-                if(fechaInc < new Date(fechaInicio)){
+            incidenciasFiltradas=incidencias.filter(incidencia => {
+                // Filtro por recurso
+                if(recurso!=="Todos"&&incidencia.id_recurso!=recurso){
                     return false;
                 }
-            }
 
-            if(fechaFin){
-                if(fechaInc > new Date(fechaFin)){
+                // Filtro por prioridad
+                if(prioridad!=="Todos"&&incidencia.prioridad!=prioridad){
                     return false;
                 }
+
+                // Filtro por estado
+                if(estado!=="Todos"&&incidencia.estado!=estado){
+                    return false;
+                }
+
+                // Filtro por fechas
+                let fechaInc = new Date(incidencia.fecha);
+
+                if(fechaInicio){
+                    if(fechaInc < new Date(fechaInicio)){
+                        return false;
+                    }
+                }
+
+                if(fechaFin){
+                    if(fechaInc > new Date(fechaFin)){
+                        return false;
+                    }
+                }
+
+                return true;
+            })
+
+            if(tipo=="tabla"){
+                mostrarIncidencias(incidenciasFiltradas);
+            }else if(tipo=="card"){
+                mostrarIncidenciasTarjetas(incidenciasFiltradas, limite);
             }
-
-            return true;
-        })
-
-        mostrarIncidencias(incidenciasFiltradas);
+            let modalfiltrar = document.getElementById("modalFiltrarIncidencias");
+            let cerrarmodal = bootstrap.Modal.getInstance(modalfiltrar) || new bootstrap.Modal(modalfiltrar);
+            cerrarmodal.hide();
+        });
     });
-});
+}
 
 
 
@@ -183,6 +194,16 @@ function obtenerRecursos(){
                 tr.setAttribute("data-bs-target", "#modalIncidencia");
                 tr.setAttribute("data-id", recurso.id_recurso);
                 tr.setAttribute("data-nombre", recurso.descripcion);
+                tr.addEventListener("mouseenter", () => {
+                    tr.querySelectorAll("td").forEach(td =>
+                        td.style.backgroundColor = "#bbbbbb",
+                    );
+                });
+                tr.addEventListener("mouseleave", () => {
+                    tr.querySelectorAll("td").forEach(td =>
+                        td.style.backgroundColor = "",
+                    );
+                });
 
                 let td = document.createElement("td");
                 td.className = "p-2 text-black cursor-pointer";
@@ -494,4 +515,96 @@ function anyadirValores(elemento){
     document.getElementById("createIdRecurso").value = elemento.id_recurso;
     document.getElementById("createRecurso").value = elemento.descripcion;
     document.getElementById("createFecha").value = fechaFormateada;
+}
+
+
+
+// Menú administrador tarjetas de incidencias
+
+function obtenerIncidenciasTarjetas(limite){
+    fetch(window.location.origin+"/API/incidencias")
+    .then(res => res.json())
+    .then(response => {
+        let incidencias = response.data;
+        let tarjetasIncidencias = document.getElementById("tarjetasIncidencias");
+        tarjetasIncidencias.innerHTML = "";
+        if(!incidencias||incidencias.length === 0){
+            let card = document.createElement("div");
+            card.className = "card h-100 reserva-card text-center";
+            card.innerHTML = `
+                <div class="card-body bg-secondary-subtle">No se han encontrado incidencias</div>
+            `;
+            tarjetasIncidencias.appendChild(card);
+        }else{
+            mostrarIncidenciasTarjetas(incidencias, limite);
+        };
+    });
+}
+
+
+
+function mostrarIncidenciasTarjetas(incidencias, limite){
+    let num=0;
+    let tarjetasIncidencias = document.getElementById("tarjetasIncidencias");
+    if(!tarjetasIncidencias) return;
+    tarjetasIncidencias.innerHTML = "";
+    if(!incidencias||incidencias.length === 0){
+        let card = document.createElement("div");
+        card.className = "card h-100 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body bg-secondary-subtle">No se han encontrado incidencias</div>
+        `;
+        tarjetasIncidencias.appendChild(card);
+    }else{
+        incidencias=incidencias.reverse();
+        incidencias.forEach(incidencia => {
+            if(num<limite){
+                let divIncidencia = document.createElement("div");
+                divIncidencia.className="card h-100 mb-4 reserva-card";
+                divIncidencia.setAttribute("role", "button");
+                divIncidencia.setAttribute("data-bs-toggle", "modal");
+                divIncidencia.setAttribute("data-bs-target", "#modalincidencia");
+                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+                divIncidencia.setAttribute("data-titulo", incidencia.titulo);
+                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+                divIncidencia.innerHTML = `
+                    <div class="card-body bg-secondary-subtle">
+                        <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
+                        <p class="fw-bold mb-0">${incidencia.titulo}</p>
+                        <p class="mb-0"><span class="fw-bold">Fecha: </span>${incidencia.fecha}</p>
+                        <p class="mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
+                        <p class="mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
+                    </div>
+                    <div class="estado-incidencia-abierta"></div>
+                `;
+
+                divIncidencia.addEventListener("click", function(){
+
+                    fetch(window.location.origin+"/API/user/"+incidencia.id_usuario)
+                    .then(res => res.json())
+                    .then(response => {
+                        let usuario = response.data;
+
+                        document.getElementById("incidencia_id").value = incidencia.id_incidencia;
+                        document.getElementById("incidencia_titulo").value = incidencia.titulo;
+                        document.getElementById("incidencia_descripcion").value = incidencia.descripcion;
+                        document.getElementById("incidencia_estado").value = capitalizar(incidencia.estado);
+                        document.getElementById("incidencia_prioridad").value = capitalizar(incidencia.prioridad);
+                        document.getElementById("incidencia_id_usuario").value = incidencia.id_usuario;
+                        document.getElementById("incidencia_usuario").value = usuario.nombre;
+                        document.getElementById("incidencia_recurso").value = incidencia.id_recurso;
+
+                        document.getElementById("incidencia_fecha").value = incidencia.fecha.replace(" ", "T");
+                    });
+
+                });
+
+                tarjetasIncidencias.appendChild(divIncidencia);
+                num++;
+            }
+        });
+    }
 }
