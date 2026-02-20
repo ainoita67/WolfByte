@@ -37,6 +37,12 @@
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
             <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
             
+            <div class="container mt-3 text-end">
+                <button id="btnVolver" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
             <div class="container my-4 d-flex flex-column" style="height: 50vh;">
                 <div class="row d-flex justify-content-between align-items-center mb-3">
                     <button id="prevWeek"
@@ -60,11 +66,14 @@
 
 
 <script type="module">
-    import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+// cojer id de la url
+const params = new URLSearchParams(window.location.search);
+const idAula = params.get("id");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
-        viewType: "Week",
+        viewType: "WorkWeek",
         theme: "calendar_green",
         startDate: DayPilot.Date.today(),
 
@@ -81,7 +90,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     });
 
-    const eventos = await generarEventos("salon");
+    const eventos = await generarEventos(idAula);
 
     dp.events.list = eventos;
     dp.init();
@@ -101,6 +110,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+});
 
 
 </script>

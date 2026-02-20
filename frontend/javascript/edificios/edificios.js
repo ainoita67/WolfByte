@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarEdificios() {
         try {
-            const res = await apiFetch('/edificios');
-            if (!res) return;
-
+            const res = await fetch('http://192.168.13.202:80/API/edificios');
             const data = await res.json();
 
             if (data.status === 'error') {
@@ -49,56 +47,63 @@ document.addEventListener('DOMContentLoaded', () => {
                 contenedor.appendChild(tarjeta);
             });
 
-            // EDITAR
+            // EVENTOS botones
             document.querySelectorAll('.btnEditar').forEach(btn => {
-                btn.addEventListener('click', e => {
-                    document.getElementById('editId').value = e.target.dataset.id;
-                    document.getElementById('editNombre').value = e.target.dataset.nombre;
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.dataset.id;
+                    const nombre = e.target.dataset.nombre;
 
-                    new bootstrap.Modal(document.getElementById('modalEditar')).show();
+                    document.getElementById('editId').value = id;
+                    document.getElementById('editNombre').value = nombre;
+
+                    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+                    modal.show();
                 });
             });
 
-            // BORRAR
             document.querySelectorAll('.btnBorrar').forEach(btn => {
-                btn.addEventListener('click', async e => {
-                    const id = e.currentTarget.dataset.id;
+                btn.addEventListener('click', async (e) => {
+                    const id = e.target.dataset.id;
 
                     if (!confirm('¿Seguro que quieres borrar este edificio?')) return;
 
-                    const res = await apiFetch(`/edificios/${id}`, {
+                    const res = await fetch(`http://192.168.13.202/edificios/${id}`, {
                         method: 'DELETE'
                     });
-                    if (!res) return;
-
+                    
+                    // Si devuelve 204, no hay JSON
                     if (res.status === 204) {
                         alert('Edificio borrado');
-                        cargarEdificios();
+                        cargarEdificios();  // <-- recarga solo la lista
+                        return;
+                    }
+                    
+                    const data = await res.json();
+                    if (data.status === 'error') {
+                        alert(data.message);
                         return;
                     }
 
-                    const data = await res.json();
-                    alert(data.message);
                 });
             });
 
         } catch (err) {
-            console.error(err);
             contenedor.innerHTML = `<p class="text-danger">Error al cargar edificios</p>`;
         }
     }
 
-    // CREAR
-    document.getElementById('formCrear').addEventListener('submit', async e => {
+    // CREAR EDIFICIO
+    document.getElementById('formCrear').addEventListener('submit', async (e) => {
         e.preventDefault();
-
         const nombre = document.getElementById('crearNombre').value;
 
-        const res = await apiFetch('/edificios', {
+        const res = await fetch('http://192.168.13.202/API/edificios', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ nombre_edificio: nombre })
         });
-        if (!res) return;
 
         const data = await res.json();
 
@@ -107,22 +112,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        bootstrap.Modal.getInstance(document.getElementById('modalCrear')).hide();
+        alert('Edificio creado');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalCrear'));
+        modal.hide();
         cargarEdificios();
     });
 
-    // EDITAR
-    document.getElementById('formEditar').addEventListener('submit', async e => {
+    // EDITAR EDIFICIO
+    document.getElementById('formEditar').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const id = document.getElementById('editId').value;
         const nombre = document.getElementById('editNombre').value;
 
-        const res = await apiFetch(`/edificios/${id}`, {
+        const res = await fetch(`http://192.168.13.202/API/edificios/${id}`, {
             method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({ nombre_edificio: nombre })
         });
-        if (!res) return;
 
         const data = await res.json();
 
@@ -131,8 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        bootstrap.Modal.getInstance(document.getElementById('modalEditar')).hide();
+        alert('Edificio actualizado');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
+        modal.hide();
         cargarEdificios();
+        
     });
 
     cargarEdificios();
