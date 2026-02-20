@@ -44,10 +44,6 @@ $router->put('/user/{id}',          'Controllers\\UsuarioController@update'); //
 $router->patch('/user/{id}', 'Controllers\\UsuarioController@patch');
  // Actualizar la contraseña de un usuario o modifica el campo de active a incactive o de inactive a active del usuario del que se pase el id 
 
- // NECESIDAD 
-$router ->get('/necesidades', 'Controllers\\NecesidadController@index'); // Devuelve las necesidades que tenemos en la base de datos 
-$router ->post('/necesidades', 'Controllers\\NecesidadController@store'); // Añade una nueva necesidad 
-$router ->put('/necesidades/{id}', 'Controllers\\NecesidadController@update'); // Modifica los datos de una necesidad 
 
 // Necesidad Reservas
 $router->post('/reservas-necesidades/{id_reserva_espacio}/necesidades', 'Controllers\\NecesidadReservaController@store');
@@ -146,6 +142,10 @@ $router->put('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteContro
 $router->get('/reservas_permanentes/{id}', 'Controllers\\ReservaPermanenteController@show'); //ver una reserva permanente por id
 $router ->patch ('/reservas_permanentes/desactivar_todo', 'Controllers\\ReservaPermanenteController@deactivate'); //desactivar todas las reservas permanentes
 
+// NECESIDAD 
+$router ->get('/necesidades', 'Controllers\\NecesidadController@index'); // Devuelve las necesidades que tenemos en la base de datos 
+$router ->post('/necesidades', 'Controllers\\NecesidadController@store'); // Añade una nueva necesidad 
+$router ->put('/necesidades/{id}', 'Controllers\\NecesidadController@update'); // Modifica los datos de una necesidad 
 
 // NECESIDAD RESERVA
 $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@index');

@@ -44,14 +44,6 @@ class IncidenciaModel
     }
 
 
-    public function findByRecurso(int $id_recurso): array|false{
-        return $this->db
-            ->query("SELECT * FROM Incidencia WHERE id_recurso=:id_recurso")
-            ->bind(":id_recurso", $id_recurso)
-            ->fetchAll();
-    }
-
-
     //consulta a la bdd devuelve el id si se ha insertado o false en caso de error
     public function create(array $data): int|false
     {
