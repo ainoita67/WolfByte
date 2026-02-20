@@ -567,9 +567,6 @@ function mostrarIncidenciasTarjetas(incidencias, limite){
                 divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
                 divIncidencia.setAttribute("data-titulo", incidencia.titulo);
                 divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-                divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
                 divIncidencia.innerHTML = `
                     <div class="card-body bg-secondary-subtle">
                         <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
@@ -682,10 +679,6 @@ function mostrarMisIncidencias(incidencias){
             divIncidencia.setAttribute("data-bs-target", "#modalincidencia");
             divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
             divIncidencia.setAttribute("data-titulo", incidencia.titulo);
-            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
-            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
             divIncidencia.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
                     <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>

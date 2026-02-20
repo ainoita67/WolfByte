@@ -116,7 +116,7 @@
                                 </div>
 
                                 <!-- Tarjeta -->
-                                <div class="mb-4">
+                                <div class="mb-4" id="tarjetasReservas">
                                     <div class="card h-100 reserva-card"
                                         role="button"
                                         data-bs-toggle="modal"
@@ -250,7 +250,7 @@
                     </div>
                 </div>
 
-                <script>                    
+                <script>
                     const scriptgetincidencias = document.createElement("script");
                     scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
                     document.head.appendChild(scriptgetincidencias);
@@ -266,6 +266,23 @@
                     };
 
                     scriptpostincidencias.onload = () => {
+                        activarEditarTarjetasIncidencia();
+                    };
+                    const scriptgetreservas = document.createElement("script");
+                    scriptgetreservas.src = BASE + "/javascript/reservas/get.js";
+                    document.head.appendChild(scriptgetreservas);
+
+                    const scriptpostreservas = document.createElement("script");
+                    scriptpostreservas.src = BASE + "/javascript/reservas/post.js";
+                    document.head.appendChild(scriptpostreservas);
+
+                    scriptgetreservas.onload = () => {
+                        obtenerIncidenciasTarjetas(5);
+                        obtenerRecursosSelect();
+                        activarFiltrarIncidencia("card",5);
+                    };
+
+                    scriptpostreservas.onload = () => {
                         activarEditarTarjetasIncidencia();
                     };
                 </script>
