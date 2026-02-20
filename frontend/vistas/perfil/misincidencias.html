@@ -15,6 +15,7 @@
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
+			const id_usuario=2;
         </script>
 
 
@@ -26,209 +27,102 @@
 
         <main class="container mt-5">
             <h2 class="text-center mb-4">Mis incidencias</h2>
-            <div class="row g-4">
+            <!-- Tarjeta -->
+			<div class="row g-4 mt-4 d-flex" id="tarjetasIncidencias">
+			</div>
 
-                <!-- Tarjeta -->
-                <div class="col-lg-3 col-6">
-                    <div class="card h-100 reserva-card"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalincidencia"
-                        data-id="02">
+			<!-- MODAL incidencia -->
+			<div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered">
+					<div class="modal-content">
 
-                        <div class="card-body bg-secondary-subtle">
-                            <h6 class="fw-bold">Incidencia #02</h6>
-                            <h6 class="fw-bold">Proyector no funciona</h6>
-                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                        </div>
-                        <div class="estado-incidencia-abierta resuelta"></div>
-                    </div>
-                </div>
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+						</div>
 
-                <!-- Tarjeta -->
-                <div class="col-lg-3 col-6">
-                    <div class="card h-100 reserva-card"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalincidencia"
-                        data-id="02">
+						<form id="formincidencia" method="post" action="#">
+							<div class="modal-body container-fluid">
+								<div class="row g-3">
 
-                        <div class="card-body bg-secondary-subtle">
-                            <h6 class="fw-bold">Incidencia #02</h6>
-                            <h6 class="fw-bold">Proyector no funciona</h6>
-                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                        </div>
-                        <div class="estado-incidencia-abierta proceso"></div>
-                    </div>
-                </div>
-                <!-- Tarjeta -->
-                <div class="col-lg-3 col-6">
-                    <div class="card h-100 reserva-card"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalincidencia"
-                        data-id="02">
+									<!-- ID -->
+									<div class="col-md-4">
+										<label class="form-label" for="incidencia_id">ID</label>
+										<input type="number" class="form-control" id="incidencia_id" name="id" readonly required>
+									</div>
 
-                        <div class="card-body bg-secondary-subtle">
-                            <h6 class="fw-bold">Incidencia #02</h6>
-                            <h6 class="fw-bold">Proyector no funciona</h6>
-                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                        </div>
-                        <div class="estado-incidencia-abierta proceso"></div>
-                    </div>
-                </div>
-                <!-- Tarjeta -->
-                <div class="col-lg-3 col-6">
-                    <div class="card h-100 reserva-card"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalincidencia"
-                        data-id="02">
+									<!-- Fecha -->
+									<div class="col-md-8">
+										<label class="form-label" for="incidencia_fecha">Fecha</label>
+										<input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+									</div>
 
-                        <div class="card-body bg-secondary-subtle">
-                            <h6 class="fw-bold">Incidencia #02</h6>
-                            <h6 class="fw-bold">Proyector no funciona</h6>
-                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                        </div>
-                        <div class="estado-incidencia-abierta resuelta"></div>
-                    </div>
-                </div>
-                <!-- Tarjeta -->
-                <div class="col-lg-3 col-6">
-                    <div class="card h-100 reserva-card"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalincidencia"
-                        data-id="02">
+									<!-- Titulo -->
+									<div class="col-12">
+										<label class="form-label" for="incidencia_titulo">Título</label>
+										<input type="text" class="form-control" id="incidencia_titulo" name="titulo" required>
+									</div>
 
-                        <div class="card-body bg-secondary-subtle">
-                            <h6 class="fw-bold">Incidencia #02</h6>
-                            <h6 class="fw-bold">Proyector no funciona</h6>
-                            <p class="mb-1"><strong>Fecha: </strong>2026-02-06 11:30:00</p>
-                            <p class="mb-0"><strong>Prioridad:</strong>Alta Media Baja</p>
-                            <p class="mb-0"><strong>Estado:</strong>Abierta En proceso Resuelta</p>
-                        </div>
-                        <div class="estado-incidencia-abierta"></div>
-                    </div>
-                </div>
+									<!-- Descripcion -->
+									<div class="col-12">
+										<label class="form-label" for="incidencia_descripcion">Descripción</label>
+										<textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3" required></textarea>
+									</div>
 
-            </div>
+									<!-- Usuario -->
+									<div class="col-md-6">
+										<input type="hidden" class="form-control" id="incidencia_id_usuario" name="idusuario" readonly required>
+										<label class="form-label" for="incidencia_usuario">Usuario</label>
+										<input type="text" class="form-control" id="incidencia_usuario" name="usuario" readonly required>
+									</div>
 
- <!-- MODAL incidencia -->
-<div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
+									<!-- Recurso -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_recurso">Recurso</label>
+										<input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
+									</div>
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
+									<!-- Estado -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_estado">Estado</label>
+										<input type="text" class="form-control" id="incidencia_estado" name="estado" readonly required>
+									</div>
 
-      <form id="formincidencia" method="post" action="#">
-        <div class="modal-body">
-          <div class="row g-3">
-
-            <!-- ID -->
-            <div class="col-md-4">
-              <label class="form-label">ID</label>
-              <input type="number" class="form-control" id="incidencia_id" name="id" readonly>
-            </div>
-
-            <!-- Fecha -->
-            <div class="col-md-8">
-              <label class="form-label">Fecha</label>
-              <input type="datetime-local" class="form-control" id="incidencia_fecha" name="fecha">
-            </div>
-
-            <!-- Titulo -->
-            <div class="col-12">
-              <label class="form-label">Título</label>
-              <input type="text" class="form-control" id="incidencia_titulo" name="titulo">
-            </div>
-
-            <!-- Descripcion -->
-            <div class="col-12">
-              <label class="form-label">Descripción</label>
-              <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3"></textarea>
-            </div>
-
-            <!-- Usuario -->
-            <div class="col-md-6">
-              <label class="form-label">Usuario</label>
-              <input type="text" class="form-control" id="incidencia_usuario" name="usuario">
-            </div>
-
-            <!-- Recurso -->
-            <div class="col-md-6">
-              <label class="form-label">Recurso</label>
-              <select class="form-select" id="incidencia_recurso" name="recurso">
-                <option value="">-- Selecciona --</option>
-                <option value="proyector">Proyector</option>
-                <option value="portatil">Portátil</option>
-                <option value="pantalla">Pantalla</option>
-                <option value="altavoces">Altavoces</option>
-                <option value="aula">Aula</option>
-              </select>
-            </div>
-
-            <!-- Estado -->
-            <div class="col-md-6">
-              <label class="form-label">Estado</label>
-              <select class="form-select" id="incidencia_estado" name="estado">
-                <option value="abierta">Abierta</option>
-                <option value="en_proceso">En proceso</option>
-                <option value="resuelta">Resuelta</option>
-              </select>
-            </div>
-
-            <!-- Prioridad -->
-            <div class="col-md-6">
-              <label class="form-label">Prioridad</label>
-              <select class="form-select" id="incidencia_prioridad" name="prioridad">
-                <option value="baja">Baja</option>
-                <option value="media">Media</option>
-                <option value="alta">Alta</option>
-              </select>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-</div>
+									<!-- Prioridad -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_prioridad">Prioridad</label>
+										<input type="text" class="form-control" id="incidencia_prioridad" name="prioridad" readonly required>
+									</div>
+								</div>
+								<div class="modal-footer d-flex justify-content-between">
+									<button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar cambios</button>
+									<button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 
 
-<!-- RELLENAR MODAL -->
 
-<script>
-  const modalincidencia = document.getElementById('modalincidencia');
+		<script>		
+			const scriptgetincidencias = document.createElement("script");
+			scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
+			document.head.appendChild(scriptgetincidencias);
 
-  modalincidencia.addEventListener('show.bs.modal', function (event) {
-    const card = event.relatedTarget; // la tarjeta clicada
+			const scriptpostincidencias = document.createElement("script");
+			scriptpostincidencias.src = BASE + "/javascript/incidencias/post.js";
+			document.head.appendChild(scriptpostincidencias);
 
-    // leer data attributes
-    const id = card.getAttribute('data-id');
-    // rellenar formulario
-    document.getElementById('incidencia_id').value = id;
-  });
-</script>
+			scriptgetincidencias.onload = () => {
+				obtenerMisIncidencias(id_usuario);
+			};
 
-
+			scriptpostincidencias.onload = () => {
+				activarEditarTarjetasIncidencia();
+			};
+		</script>
         </main>
         <footer id="footer"></footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
