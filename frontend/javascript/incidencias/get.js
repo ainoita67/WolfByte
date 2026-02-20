@@ -40,7 +40,7 @@ function mostrarIncidencias(incidencias){
                     ${incidencia.id_recurso}
                 </td>
                 <td class="td-body d-none d-md-table-cell">
-                    ${incidencia.fecha}
+                    ${formatearFecha(incidencia.fecha)}
                 </td>
                 <td class="td-body">
                     ${incidencia.titulo}
@@ -521,7 +521,7 @@ function anyadirValores(elemento){
 
 // Menú administrador tarjetas de incidencias
 
-function obtenerIncidenciasTarjetas(limite){
+function obtenerIncidenciasTarjetas(limite=5){
     fetch(window.location.origin+"/API/incidencias")
     .then(res => res.json())
     .then(response => {
@@ -574,17 +574,17 @@ function mostrarIncidenciasTarjetas(incidencias, limite){
                     <div class="card-body bg-secondary-subtle">
                         <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
                         <p class="fw-bold mb-0">${incidencia.titulo}</p>
-                        <p class="mb-0"><span class="fw-bold">Fecha: </span>${incidencia.fecha}</p>
+                        <p class="mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
                         <p class="mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
                         <p class="mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
                     </div>
                 `;
                 if(incidencia.estado=="Abierta"){
-                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado aceptado"></div>';
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta abierta"></div>';
                 }else if(incidencia.estado=="Resuelta"){
-                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado rechazado"></div>';
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta"></div>';
                 }else{
-                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="aceptado-rechazado"></div>';
+                    divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso"></div>';
                 }
 
                 divIncidencia.addEventListener("click", function(){
@@ -611,6 +611,121 @@ function mostrarIncidenciasTarjetas(incidencias, limite){
                 tarjetasIncidencias.appendChild(divIncidencia);
                 num++;
             }
+        });
+    }
+}
+
+
+
+function formatearFecha(stringFecha){
+    let fecha = new Date(stringFecha);
+
+    let anyo = fecha.getFullYear();
+    let mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    let dia = String(fecha.getDate()).padStart(2, '0');
+    let hh = String(fecha.getHours()).padStart(2, '0');
+    let mm = String(fecha.getMinutes()).padStart(2, '0');
+    let ss = String(fecha.getSeconds()).padStart(2, '0');
+
+    let fechaFormateada = `${dia}/${mes}/${anyo} ${hh}:${mm}:${ss}`;
+    return fechaFormateada;
+}
+
+
+
+
+
+//MIS INCIDENCIAS
+
+function obtenerMisIncidencias(usuario){
+    fetch(window.location.origin+"/API/incidencias/usuario/"+usuario)
+    .then(res => res.json())
+    .then(response => {
+        let incidencias = response.data;
+        let tarjetasIncidencias = document.getElementById("tarjetasIncidencias");
+        tarjetasIncidencias.innerHTML = "";
+        if(!incidencias||incidencias.length === 0){
+            let card = document.createElement("div");
+            card.className = "card bg-secondary-subtle h-100 reserva-card text-center";
+            card.innerHTML = `
+                <div class="card-body">No se han encontrado incidencias</div>
+            `;
+            tarjetasIncidencias.appendChild(card);
+        }else{
+            mostrarMisIncidencias(incidencias);
+        };
+    });
+}
+
+
+
+function mostrarMisIncidencias(incidencias){
+    let tarjetasIncidencias = document.getElementById("tarjetasIncidencias");
+    if(!tarjetasIncidencias) return;
+    tarjetasIncidencias.innerHTML = "";
+    if(!incidencias||incidencias.length === 0){
+        let card = document.createElement("div");
+        card.className = "card bg-secondary-subtle h-100 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body">No se han encontrado incidencias</div>
+        `;
+        tarjetasIncidencias.appendChild(card);
+    }else{
+        incidencias=incidencias.reverse();
+        incidencias.forEach(incidencia => {
+            let div = document.createElement("div");
+            div.className="col-lg-3 col-6";
+            let divIncidencia = document.createElement("div");
+            divIncidencia.className="card h-100 p-0 mb-4 reserva-card";
+            divIncidencia.setAttribute("role", "button");
+            divIncidencia.setAttribute("data-bs-toggle", "modal");
+            divIncidencia.setAttribute("data-bs-target", "#modalincidencia");
+            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+            divIncidencia.setAttribute("data-titulo", incidencia.titulo);
+            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+            divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
+            divIncidencia.innerHTML = `
+                <div class="card-body bg-secondary-subtle">
+                    <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
+                    <p class="fw-bold mb-0">${incidencia.titulo}</p>
+                    <p class="mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
+                    <p class="mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
+                    <p class="mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
+                </div>
+            `;
+            if(incidencia.estado=="Abierta"){
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta abierta cursor-pointer"></div>';
+            }else if(incidencia.estado=="Resuelta"){
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta"></div>';
+            }else{
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso"></div>';
+            }
+
+            divIncidencia.addEventListener("click", function(){
+
+                fetch(window.location.origin+"/API/user/"+incidencia.id_usuario)
+                .then(res => res.json())
+                .then(response => {
+                    let usuario = response.data;
+
+                    document.getElementById("incidencia_id").value = incidencia.id_incidencia;
+                    document.getElementById("incidencia_titulo").value = incidencia.titulo;
+                    document.getElementById("incidencia_descripcion").value = incidencia.descripcion;
+                    document.getElementById("incidencia_estado").value = capitalizar(incidencia.estado);
+                    document.getElementById("incidencia_prioridad").value = capitalizar(incidencia.prioridad);
+                    document.getElementById("incidencia_id_usuario").value = incidencia.id_usuario;
+                    document.getElementById("incidencia_usuario").value = usuario.nombre;
+                    document.getElementById("incidencia_recurso").value = incidencia.id_recurso;
+
+                    document.getElementById("incidencia_fecha").value = incidencia.fecha.replace(" ", "T");
+                });
+
+            });
+
+            div.appendChild(divIncidencia);
+            tarjetasIncidencias.appendChild(div);
         });
     }
 }
