@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
         <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
@@ -90,14 +92,15 @@
 
 
             
-<script>
-
-let dp;
+<script type="module">
+import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+// cojer id de la url
+const params = new URLSearchParams(window.location.search);
+const idAula = params.get("id");
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-     dp = new DayPilot.Calendar("dp", {
-        viewType: "Week",
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "WorkWeek",
         theme: "calendar_green",
         startDate: DayPilot.Date.today(),
 
@@ -111,342 +114,69 @@ document.addEventListener("DOMContentLoaded", async () => {
         businessEndsHour: 22,
         eventDeleteHandling: "Disabled",
         heightSpec: "BusinessHoursNoScroll"
+
     });
 
-    // CLICK
-    dp.onEventClick = async args => {
+    const eventos = await generarEventos(idAula);
 
-    const e = args.e;
-    const form = document.getElementById('formEditarReserva');
+    dp.events.list = eventos;
+    dp.init();
+    dp.onEventClick = function(args) {
 
-    // CASO 1: Es un bloque base libre (sin reserva real)
-    if (e.data.bloqueBase === true) {
-
-        // Limpiar campos
-        form.reset();
-
-        document.getElementById('start').value =
-            e.start().toString().replace(' ', 'T');
-        document.getElementById('end').value =
-            e.end().toString().replace(' ', 'T');
-
-        // Guardar horas pero SIN id (porque aún no existe reserva)
-        form.dataset.eventId = "";
-        form.dataset.bloqueInicio = e.start().toString();
-        form.dataset.bloqueFin = e.end().toString();
-
-        // Mostrar modal (modo creación)
-        const modal = new bootstrap.Modal(
-            document.getElementById('modalEditarReserva')
-        );
-        modal.show();
-
-        return;
+    if (args.e.data.bloqueBase) {
+        abrirModalCrear(args.e.data.start, args.e.data.end);
+    } else {
+        abrirModalEditar(args.e.data);
     }
 
-    // CASO 2: Es una reserva real → editar
-
-    document.getElementById('asignatura').value = e.data.asignatura || "";
-    document.getElementById('grupo').value = e.data.grupo || "";
-    document.getElementById('profesor').value = e.data.profesor || "";
-    document.getElementById('actividad').value = e.data.actividad || "";
-
-    document.getElementById('start').value =
-        e.start().toString().replace(' ', 'T');
-
-    document.getElementById('end').value =
-        e.end().toString().replace(' ', 'T');
-
-    form.dataset.eventId = e.id();
-
-    const modal = new bootstrap.Modal(
-        document.getElementById('modalEditarReserva')
-    );
-    modal.show();
 };
 
 
-
-
-
-
-    // MOVER EVENTO
-    dp.onEventMoved = async args => {
-        const haySolapamiento = await verificarSolapamiento(
-            args.newStart.toString(),
-            args.newEnd.toString(),
-            args.e.id()
-        );
-
-        if (haySolapamiento) {
-            alert("Solapamiento detectado");
-            args.preventDefault();
-            return;
-        }
-
-        await actualizarReserva(args);
-    };
-
-
-
-document.getElementById('btnEliminarReserva').addEventListener('click', async function() {
-    const form = document.getElementById('formEditarReserva');
-    const id = form.dataset.eventId;
-
-    if (!confirm("¿Seguro que quieres eliminar esta reserva?")) return;
-
-    try {
-        const res = await fetch(`http://192.168.13.202/API/reservas/${id}`, {
-            method: 'DELETE',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            }
-        });
-        const data = await res.json();
-
-        if (data.status !== 'success') throw new Error(data.message || "No se pudo eliminar");
-
-        // Eliminar del calendario
-        dp.events.remove(id);
+    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    document.getElementById("prevWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(-7);
         dp.update();
-
-        // Cerrar modal
-        bootstrap.Modal.getInstance(document.getElementById('modalEditarReserva')).hide();
-        cargarReservasSalon(); // Recargar para asegurar sincronización
-
-    } catch (err) {
-        alert(err.message);
-    }
-});
-
-    dp.init();
-    cargarReservasSalon();
-    generarHorarioRealEventos(horarioPermanente);
-
-
-    // Evento por defecto
-dp.events.add({
-    id: "evento-por-defecto",
-    text: "Matemáticas - 1ºESO\nProfesor X - Clase práctica",
-    start: new DayPilot.Date(DayPilot.Date.today().toString() + "T11:00"),
-    end: new DayPilot.Date(DayPilot.Date.today().toString() + "T1:00"),
-    asignatura: "Matemáticas",
-    grupo: "1ºESO",
-    profesor: "Profesor X",
-    actividad: "Clase práctica"
-});
-
-dp.update();
-
-});
-
-// ---------------- FUNCIONES ----------------
-
-async function generarHorarioRealEventos(horarioPermanente) {
-    const { ultimo, proximo } = obtenerSeptiembre();
-
-    const events = [];
-    let current = new Date(ultimo);
-    let idCounter = 0;
-
-    // Helper: formato YYYY-MM-DD
-    const formatDate = (date) => {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, "0");
-        const d = String(date.getDate()).padStart(2, "0");
-        return `${y}-${m}-${d}`;
-    };
-
-    while (current < proximo) {
-        // JS: 0=domingo, 1=lunes...6=sábado
-        const jsDay = current.getDay();
-
-        // Convertimos a tu formato: lunes=1 ... viernes=5
-        if (jsDay >= 1 && jsDay <= 5) {
-            const diaSemana = jsDay;
-
-            // Buscar slots de ese día en el horario permanente
-            const diaHorario = horarioPermanente.find(d => d.dia_semana === diaSemana);
-
-            if (diaHorario && diaHorario.slots.length > 0) {
-                const dayStr = formatDate(current);
-
-                diaHorario.slots.forEach(slot => {
-                    events.push({
-                        start: `${dayStr}T${slot.start}:00`,
-                        end: `${dayStr}T${slot.end}:00`,
-                        id: `slot-${idCounter++}`,
-                        text: "Disponible",
-                        backColor: "#dcdcdc",
-                        borderColor: "#c3c3c3",
-                        fontColor: "#212529",
-                        barHidden: true
-                    });
-                });
-            }
-        }
-
-        // Siguiente día
-        current.setDate(current.getDate() + 1);
-    }
-
-    return events;
-}
-
-
-async function cargarReservasSalon() {
-    const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
-        headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
     });
 
-    const json = await res.json();
-
-    const eventos = json.data.data.map(r => ({
-        id: r.id_reserva,
-        text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
-        start: new DayPilot.Date(r.inicio.replace(" ", "T")),
-        end: new DayPilot.Date(r.fin.replace(" ", "T")),
-        asignatura: r.asignatura,
-        grupo: r.grupo,
-        profesor: r.profesor,
-        actividad: r.actividad
-    }));
-
-    dp.events.list = eventos;
-    dp.update();
-
-    console.log("EVENTOS CARGADOS", eventos);
-}
-
-
-// 4️⃣ Función para actualizar fechas
-// Modificar la función actualizarReserva para mostrar mejor los errores
-async function actualizarReserva(args) {
-    const idReserva = args.e.id();
-    const inicio = args.newStart.toString();
-    const fin = args.newEnd.toString();
-
-    try {
-        const res = await fetch(
-            `http://192.168.13.202/API/reservas/${idReserva}/fechas`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + localStorage.getItem("token")
-                },
-                body: JSON.stringify({ inicio, fin })
-            }
-        );
-
-        const text = await res.text();
-        let json;
-        
-        try {
-            json = JSON.parse(text);
-        } catch {
-            console.error("Respuesta no es JSON:", text);
-            alert("Error del servidor (respuesta inválida)");
-            args.preventDefault();
-            return;
-        }
-
-        if (json.status !== "success") {
-            // Mostrar mensaje específico si existe
-            const mensaje = json.message || json.data?.message || "No se pudo guardar el cambio";
-            alert(`Error: ${mensaje}`);
-            args.preventDefault();
-            return;
-        }
-        
-        // Éxito
-        console.log("Reserva actualizada correctamente");
-        
-    } catch (error) {
-        console.error(error);
-        alert("Error de conexión con el servidor");
-        args.preventDefault();
-    }
-}
-
-// Añade esta función para verificar solapamientos
-async function verificarSolapamiento(inicio, fin, idExcluir = null) {
-    try {
-        const res = await fetch("http://192.168.13.202/API/reservas-salon-actos", {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            }
-        });
-        
-        const data = await res.json();
-        
-        if (data.status !== "success") return true; // Por precaución
-        
-        const nuevasInicio = new Date(inicio);
-        const nuevasFin = new Date(fin);
-        
-        // Verificar solapamiento con otras reservas
-        const haySolapamiento = data.data.data.some(r => {
-            // Excluir la reserva actual que estamos moviendo
-            if (idExcluir && r.id_reserva == idExcluir) return false;
-            
-            const existenteInicio = new Date(r.inicio.replace(" ", "T"));
-            const existenteFin = new Date(r.fin.replace(" ", "T"));
-            
-            // Comprobar si se solapan
-            return (
-                (nuevasInicio < existenteFin && nuevasFin > existenteInicio) ||
-                (nuevasInicio.getTime() === existenteInicio.getTime() && 
-                 nuevasFin.getTime() === existenteFin.getTime())
-            );
-        });
-        
-        return haySolapamiento;
-        
-    } catch (error) {
-        console.error("Error verificando solapamiento:", error);
-        return true; // Por precaución
-    }
-}
-
-function generarBloquesDia(fecha) {
-
-    const horarios = [
-        ["08:00", "08:50"],
-        ["08:55", "09:45"],
-        ["09:50", "10:40"],
-        ["10:45", "11:35"],
-        ["11:40", "12:30"],
-        ["12:35", "13:25"],
-        ["13:30", "14:20"]
-    ];
-
-    const eventosBase = [];
-
-    horarios.forEach((h, index) => {
-
-        const start = new DayPilot.Date(fecha + "T" + h[0]);
-        const end   = new DayPilot.Date(fecha + "T" + h[1]);
-
-        eventosBase.push({
-            id: "bloque-" + fecha + "-" + index,
-            text: "Disponible",
-            start: start,
-            end: end,
-            backColor: "#e9f7ef",   // verde claro
-            borderColor: "#28a745",
-            cssClass: "bloque-base",
-            bloqueBase: true       // propiedad personalizada
-        });
+    document.getElementById("nextWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(7);
+        dp.update();
     });
 
-    return eventosBase;
+
+});
+
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+});
+
+function abrirModalEditar(evento) {
+
+    document.getElementById("asignatura").value = evento.asignatura;
+    document.getElementById("grupo").value = evento.grupo;
+    document.getElementById("profesor").value = evento.profesor;
+    document.getElementById("actividad").value = evento.actividad;
+
+    document.getElementById("start").value = evento.start.substring(0,16);
+    document.getElementById("end").value = evento.end.substring(0,16);
+
+    const modal = new bootstrap.Modal(document.getElementById("modalEditarReserva"));
+    modal.show();
 }
 
+function abrirModalCrear(start, end) {
 
+    document.getElementById("asignatura").value = "";
+    document.getElementById("grupo").value = "";
+    document.getElementById("profesor").value = "";
+    document.getElementById("actividad").value = "";
 
+    document.getElementById("start").value = start.substring(0,16);
+    document.getElementById("end").value = end.substring(0,16);
 
-
+    const modal = new bootstrap.Modal(document.getElementById("modalEditarReserva"));
+    modal.show();
+}
 
 
 </script>
