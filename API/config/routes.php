@@ -71,12 +71,7 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Espacios
-//Reservas de portatiles
-$router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
-$router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
-$router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
-
+// Espacios 
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
 $router->post('/espacios', 'Controllers\\EspacioController@store');
@@ -110,3 +105,14 @@ $router ->get('/plantas', 'Controllers\\PlantaController@index'); //Devuelve las
 $router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdificio'); //Devuelve las plantas de un edificio 
 $router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos 
 $router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio 
+
+// PORTATILES - SIN CONFLICTOS
+$router->get('/reservaPortatiles',                          'Controllers\\ReservaPortatilController@index'); // Devuelve todas las reservas de portátiles
+$router->get('/reservaPortatiles/material/{id}',           'Controllers\\ReservaPortatilController@show'); // Para ver por material
+$router->get('/reservaPortatiles/usuario/{id_usuario}',    'Controllers\\ReservaPortatilController@showByUsuario');    // Para ver por usuario
+$router->get('/reservaPortatiles/{idReserva}',             'Controllers\\ReservaPortatilController@showById'); // Para ver por ID de reserva
+$router->post('/reservaPortatiles',                         'Controllers\\ReservaPortatilController@store'); // Para crear una nueva reserva de portátil
+$router->post('/reservaPortatiles/disponibilidad',         'Controllers\\ReservaPortatilController@disponibilidad') ; // Para verificar la disponibilidad de un portátil en un rango de fechas
+$router->put('/reservaPortatiles/{id}',                     'Controllers\\ReservaPortatilController@update'); // Para actualizar una reserva de portátil por ID de reserva
+$router->patch('/reservaPortatiles/{id}',                   'Controllers\\ReservaPortatilController@patch'); // Para actualizar parcialmente una reserva de portátil por ID de reserva
+$router->patch('/reservaPortatiles/{id}/unidades',         'Controllers\\ReservaPortatilController@updateUnidades'); // Para actualizar solo el número de unidades de una reserva de portátil por ID de reserva
