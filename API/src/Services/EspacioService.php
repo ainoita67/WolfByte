@@ -214,4 +214,41 @@ class EspacioService
         ];
     }
 
+    /**
+     * Obtener espacios libres entre dos fechas
+     */
+    public function getEspaciosLibresEntreFechas(array $input): array
+    {
+        // Validar fechas
+        $data = Validator::validate($input, [
+            'fecha_inicio' => 'required|string|min:10|max:19',
+            'fecha_fin' => 'required|string|min:10|max:19'
+        ]);
+
+        // Validar formato de fechas
+        $fechaInicio = strtotime($data['fecha_inicio']);
+        $fechaFin = strtotime($data['fecha_fin']);
+
+        if (!$fechaInicio || !$fechaFin) {
+            throw new \Exception("Formato de fecha inválido. Use YYYY-MM-DD HH:MM:SS", 400);
+        }
+
+        if ($fechaInicio >= $fechaFin) {
+            throw new \Exception("La fecha de inicio debe ser anterior a la fecha de fin", 400);
+        }
+
+        try {
+            $espacios = $this->model->getEspaciosLibres($data['fecha_inicio'], $data['fecha_fin']);
+
+            return [
+                'fecha_inicio' => $data['fecha_inicio'],
+                'fecha_fin' => $data['fecha_fin'],
+                'total_espacios' => count($espacios),
+                'espacios' => $espacios
+            ];
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
 }

@@ -84,18 +84,16 @@ class EspacioController
     {
         try {
             $result = $this->service->updateEspacio($id, $req->json());
-            
+
             if ($result['status'] === 'no_changes') {
                 $res->status(200)->json([], $result['message']);
                 return;
             }
 
             $res->status(200)->json([], $result['message']);
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             $code = $e->getCode() > 0 ? $e->getCode() : 500;
             $res->errorJson($e->getMessage(), $code);
         }
@@ -118,5 +116,32 @@ class EspacioController
             $res->errorJson($e->getMessage(), $status);
         }
     }
-          
+
+    /**
+     * Obtener espacios libres entre dos fechas
+     */
+    public function getEspaciosLibres(Request $req, Response $res): void
+    {
+        try {
+            // Obtener fechas de los query params
+            $fechaInicio = $req->getParam('fecha_inicio');
+            $fechaFin = $req->getParam('fecha_fin');
+
+            if (!$fechaInicio || !$fechaFin) {
+                throw new \Exception("Debe proporcionar fecha_inicio y fecha_fin como parámetros de consulta", 400);
+            }
+
+            $result = $this->service->getEspaciosLibresEntreFechas([
+                'fecha_inicio' => $fechaInicio,
+                'fecha_fin' => $fechaFin
+            ]);
+
+            $res->status(200)->json($result, "Espacios libres encontrados");
+        } catch (ValidationException $e) {
+            $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
+        } catch (Throwable $e) {
+            $code = $e->getCode() > 0 ? $e->getCode() : 500;
+            $res->errorJson($e->getMessage(), $code);
+        }
+    }
 }

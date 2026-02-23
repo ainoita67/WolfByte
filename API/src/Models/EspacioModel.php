@@ -369,35 +369,45 @@ class EspacioModel
     }
 
     /**
-     * Buscar espacios por características
+     * Obtener espacios libres entre dos fechas
      */
-    // public function searchByCaracteristicas(array $caracteristicasIds): array
-    // {
-    //     $placeholders = implode(',', array_fill(0, count($caracteristicasIds), '?'));
+    public function getEspaciosLibres(string $fechaInicio, string $fechaFin): array
+    {
+        return $this->db
+            ->query("SELECT 
+                    e.id_espacio,
+                    e.es_aula,
+                    r.descripcion,
+                    r.activo,
+                    r.especial,
+                    r.numero_planta,
+                    r.id_edificio,
+                    ed.nombre_edificio,
+                    p.nombre_planta,
+                    GROUP_CONCAT(DISTINCT c.nombre ORDER BY c.nombre ASC SEPARATOR ', ') as caracteristicas
+                FROM Espacio e
+                INNER JOIN Recurso r ON e.id_espacio = r.id_recurso
+                LEFT JOIN Edificio ed ON r.id_edificio = ed.id_edificio
+                LEFT JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
+                LEFT JOIN Caracteristica_Espacio ce ON e.id_espacio = ce.id_espacio
+                LEFT JOIN Caracteristica c ON ce.id_caracteristica = c.id_caracteristica
+                WHERE r.tipo = 'Espacio'
+                AND r.activo = 1
+                AND e.id_espacio NOT IN (
+                    SELECT DISTINCT re.id_espacio
+                    FROM Reserva_espacio re
+                    INNER JOIN Reserva res ON re.id_reserva = res.id_reserva
+                    WHERE res.autorizada = 1
+                    AND (
+                        (res.inicio < :fecha_fin AND res.fin > :fecha_inicio)
+                    )
+                )
+                GROUP BY e.id_espacio, e.es_aula, r.descripcion, r.activo, r.especial, 
+                        r.numero_planta, r.id_edificio, ed.nombre_edificio, p.nombre_planta
+                ORDER BY ed.nombre_edificio, r.numero_planta, e.id_espacio")
+            ->bind(':fecha_inicio', $fechaInicio)
+            ->bind(':fecha_fin', $fechaFin)
+            ->fetchAll();
+    }
 
-    //     return $this->db
-    //         ->query("
-    //             SELECT 
-    //                 e.id_espacio,
-    //                 e.es_aula,
-    //                 r.descripcion,
-    //                 r.activo,
-    //                 r.especial,
-    //                 r.numero_planta,
-    //                 ed.nombre_edificio,
-    //                 COUNT(DISTINCT ce.id_caracteristica) as caracteristicas_count
-    //             FROM Espacio e
-    //             INNER JOIN Recurso r ON e.id_espacio = r.id_recurso
-    //             LEFT JOIN Edificio ed ON r.id_edificio = ed.id_edificio
-    //             INNER JOIN Caracteristica_Espacio ce ON e.id_espacio = ce.id_espacio
-    //             WHERE r.tipo = 'Espacio' AND r.activo = 1 
-    //                   AND ce.id_caracteristica IN ($placeholders)
-    //             GROUP BY e.id_espacio, e.es_aula, r.descripcion, r.activo, r.especial, 
-    //                      r.numero_planta, ed.nombre_edificio
-    //             HAVING caracteristicas_count = ?
-    //             ORDER BY ed.nombre_edificio, r.numero_planta
-    //         ")
-    //         ->bindMultiple(array_merge($caracteristicasIds, [count($caracteristicasIds)]))
-    //         ->fetchAll();
-    // }
 }

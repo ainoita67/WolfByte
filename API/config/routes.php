@@ -73,6 +73,7 @@ $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@
 $router->get('/espacios', 'Controllers\\EspacioController@index');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
 $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@getByEdificio');
+$router->get('/espaciosLibres', 'Controllers\\EspacioController@getEspaciosLibres');
 $router->post('/espacios', 'Controllers\\EspacioController@store');
 $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
 
