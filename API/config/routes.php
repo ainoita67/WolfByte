@@ -88,19 +88,18 @@ $router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // 
 $router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material  
 $router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
 
-// RESERVAS
-$router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
-
+// Caracteristicas
 $router->get('/caracteristicas', 'Controllers\\CaracteristicaController@index');
 $router->get('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@show');
 $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store');
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Caracteristicas
 // RESERVAS
-$router->get('/mis-reservas','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
+$router->get('/mis-reservas/{id_usuario}','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
 $router->get('/reservas','Controllers\\ReservaController@index'); // Devuelve todas las reservas (para admin o listado general)
+$router->get('/reservas-pendientes','Controllers\\ReservaController@pendientes'); // Devuelve las reservas sin autorizar (para admin o listado general)
+$router->get('/reservas-proximas','Controllers\\ReservaController@proximas'); // Devuelve las reservas próximas (para admin o listado general)
 $router->get('/reservas/{id}','Controllers\\ReservaController@show'); // Devuelve los detalles de una reserva específica por ID
 $router->post('/reservas','Controllers\\ReservaController@store'); // Crea una nueva reserva
 $router->put('/reservas/{id}','Controllers\\ReservaController@update'); // Actualiza una reserva existente por ID
