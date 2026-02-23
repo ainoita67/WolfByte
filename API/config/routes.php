@@ -68,21 +68,15 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Espacios
-
-$router->get('/espacios', 'Controllers\\EspacioController@index');
-$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
-$router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@getByEdificio');
-$router->get('/espaciosLibres', 'Controllers\\EspacioController@getEspaciosLibres');
-$router->post('/espacios', 'Controllers\\EspacioController@store');
-$router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-
 // MATERIALES 
 $router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
 $router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
 $router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID 
 $router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material  
 $router ->get('/material/{id}/disponibilidad', 'Controllers\\MaterialController@disponibilidad'); // Devuelve la disponibilidad de un material en una fecha específica
+
+$router->get('/aulas', 'Controllers\\EspacioController@indexAulas'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta
+$router->post('/aulas/disponibles', 'Controllers\\EspacioController@indexAulasDisponibles'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta y que estén disponibles en el rango de fecha y hora especificado
 
 // RESERVAS
 $router->get('/mis-reservas', 'Controllers\\ReservaController@misReservas');
@@ -93,7 +87,6 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Caracteristicas
 // RESERVAS
 $router->get('/mis-reservas','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
 $router->get('/reservas','Controllers\\ReservaController@index'); // Devuelve todas las reservas (para admin o listado general)
@@ -102,7 +95,6 @@ $router->post('/reservas','Controllers\\ReservaController@store'); // Crea una n
 $router->put('/reservas/{id}','Controllers\\ReservaController@update'); // Actualiza una reserva existente por ID
 $router->delete('/reservas/{id}','Controllers\\ReservaController@destroy'); // Elimina una reserva por ID
 
-// Espacios
 //Reservas de portatiles
 $router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
 $router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
