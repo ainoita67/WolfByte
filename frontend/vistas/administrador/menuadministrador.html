@@ -98,25 +98,32 @@
                                     </button>
                                 </div>
 
-                                <!--TARJETA-->
+                                <!-- TARJETAS -->
                                 <div class="mb-4" id="tarjetasIncidencias">
                                 </div>
                                 <div class="mb-4">
-                                        <button class="btn btn-success text-white border-0 rounded-3 p-3 w-100" id="btnVerIncidencias">Ver todas las incidencias</button>
+                                    <button class="btn btn-success text-white border-0 rounded-3 p-3 w-100" id="btnVerIncidencias">Ver todas las incidencias</button>
                                 </div>
                             </div>
+                            <script>
+                                document.getElementById("btnVerIncidencias").addEventListener("click", () => {
+                                    window.location.href = `${BASE}/vistas/incidencias/verincidencias.html`;
+                                });
+                            </script>
 
-                            <!-- AUTORIZAR -->
+                            <!-- AUTORIZAR RESERVAS -->
                             <div class="col-12 col-lg-6 col-xl-4 p-3">
                                 <div class="mb-4 d-flex justify-content-between">
                                     <h5 class="ms-3">Reservas Pendientes de Autorizar</h5>
-                                    <button class="btn bg-verde text-light col-3">
+                                    <button class="btn bg-verde text-light col-3" data-bs-toggle="modal" data-bs-target="#modalFiltrarReservasAutorizar">
                                         <i class="bi bi-filter"></i> Filtrar
                                     </button>
                                 </div>
 
-                                <!-- Tarjeta -->
-                                <div class="mb-4">
+                                <!-- TARJETAS -->
+                                <div class="mb-4" id="tarjetasReservasAutorizar">
+                                </div>
+                                <div class="mb-4" id="tarjetasReservas">
                                     <div class="card h-100 reserva-card"
                                         role="button"
                                         data-bs-toggle="modal"
@@ -132,19 +139,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
 
-                            <!-- PROXIMAS -->
+                            <!-- PRÓXIMAS RESERVAS -->
                             <div class="col-12 col-lg-6 col-xl-4 p-3">
                                 <div class="mb-4 d-flex justify-content-between">
                                     <h5 class="ms-3">Próximas Reservas</h5>
-                                    <button class="btn bg-verde text-light col-3">
+                                    <button class="btn bg-verde text-light col-3" data-bs-toggle="modal" data-bs-target="#modalFiltrarReservasPróximas">
                                         <i class="bi bi-filter"></i> Filtrar
                                     </button>
                                 </div>
 
-                                <!-- Tarjeta -->
+                                <!-- TARJETAS -->
+                                <div class="mb-4" id="tarjetasReservasProximas">
+                                </div>
                                 <div class="mb-4">
                                     <div class="card h-100 reserva-card"
                                         role="button"
@@ -250,26 +258,6 @@
                     </div>
                 </div>
 
-                <script>                    
-                    const scriptgetincidencias = document.createElement("script");
-                    scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
-                    document.head.appendChild(scriptgetincidencias);
-
-                    const scriptpostincidencias = document.createElement("script");
-                    scriptpostincidencias.src = BASE + "/javascript/incidencias/post.js";
-                    document.head.appendChild(scriptpostincidencias);
-
-                    scriptgetincidencias.onload = () => {
-                        obtenerIncidenciasTarjetas(5);
-                        obtenerRecursosSelect();
-                        activarFiltrarIncidencia("card",5);
-                    };
-
-                    scriptpostincidencias.onload = () => {
-                        activarEditarTarjetasIncidencia();
-                    };
-                </script>
-
                 <!-- MODAL FILTRAR INCIDENCIAS -->
                 <div class="modal fade" id="modalFiltrarIncidencias" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -355,75 +343,75 @@
                                         <div class="col-md-4">
                                             <label class="form-label">Autorizada</label>
                                             <select class="form-select" id="reserva_autorizada" name="autorizada">
-                                            <option value="pendiente">Pendiente</option>
-                                            <option value="autorizada">Autorizada</option>
-                                            <option value="denegada">Denegada</option>
+                                                <option value="Pendiente">Pendiente</option>
+                                                <option value="Autorizada">Autorizada</option>
+                                                <option value="Denegada">Denegada</option>
                                             </select>
                                         </div>
 
                                         <!-- Fecha creación -->
                                         <div class="col-md-4">
-                                            <label class="form-label">F. creación</label>
-                                            <input type="datetime-local" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
+                                            <label class="form-label" for="reserva_f_creacion">F. creación</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
                                         </div>
 
                                         <!-- Inicio -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Inicio</label>
-                                            <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
+                                            <label class="form-label" for="reserva_inicio">Inicio</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio">
                                         </div>
 
                                         <!-- Fin -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Fin</label>
-                                            <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+                                            <label class="form-label" for="reserva_fin">Fin</label>
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin">
                                         </div>
 
                                         <!-- Espacio/Portátil -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Espacio / Portátil</label>
+                                            <label class="form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
                                             <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
                                         </div>
 
                                         <!-- Asignatura -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Asignatura</label>
+                                            <label class="form-label" for="reserva_asignatura">Asignatura</label>
                                             <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
                                         </div>
 
                                         <!-- Grupo -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Grupo</label>
+                                            <label class="form-label" for="reserva_grupo">Grupo</label>
                                             <input type="text" class="form-control" id="reserva_grupo" name="grupo">
                                         </div>
 
                                         <!-- Profesor -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Profesor</label>
+                                            <label class="form-label" for="reserva_profesor">Profesor</label>
                                             <input type="text" class="form-control" id="reserva_profesor" name="profesor">
                                         </div>
 
                                         <!-- Unidades -->
-                                        <div class="col-md-6">
-                                            <label class="form-label">Unidades</label>
+                                        <div class="col-md-6" id="div_reserva_unidades">
+                                            <label class="form-label" for="reserva_unidades">Unidades</label>
                                             <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
                                         </div>
 
                                         <!-- Espacio en el que se usa -->
-                                        <div class="col-md-6">
+                                        <div class="col-md-6" id="div_reserva_espacio_uso">
                                             <label class="form-label">Espacio en el que se usa</label>
                                             <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
                                         </div>
 
                                         <!-- Actividad -->
-                                        <div class="col-md-6">
-                                            <label class="form-label">Actividad</label>
+                                        <div class="col-md-6" id="div_reserva_actividad">
+                                            <label class="form-label" for="reserva_actividad">Actividad</label>
                                             <input type="text" class="form-control" id="reserva_actividad" name="actividad">
                                         </div>
 
                                         <!-- Necesidades -->
-                                        <div class="col-md-6">
-                                            <label class="form-label">Necesidades</label>
+                                        <div class="col-md-6" id="div_reserva_necesidades">
+                                            <label class="form-label" for="reserva_necesidades">Necesidades</label>
                                             <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="2">
                                             <option value="proyector">Proyector</option>
                                             <option value="altavoces">Altavoces</option>
@@ -435,15 +423,14 @@
 
                                         <!-- Observaciones -->
                                         <div class="col-12">
-                                            <label class="form-label">Observaciones</label>
+                                            <label class="form-label" for="reserva_observaciones">Observaciones</label>
                                             <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar cambios</button>
+                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>
@@ -455,11 +442,43 @@
             </div>
         </main>
         <footer id="footer"></footer>
-        <!-- RELLENAR MODAL -->
+
         <script>
-            document.getElementById("btnVerIncidencias").addEventListener("click", () => {
-                window.location.href = `${BASE}/vistas/incidencias/verincidencias.html`;
-            });
+            const scriptgetincidencias = document.createElement("script");
+            scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
+            document.head.appendChild(scriptgetincidencias);
+
+            const scriptpostincidencias = document.createElement("script");
+            scriptpostincidencias.src = BASE + "/javascript/incidencias/post.js";
+            document.head.appendChild(scriptpostincidencias);
+
+            scriptgetincidencias.onload = () => {
+                obtenerIncidenciasTarjetas(5);
+                obtenerRecursosSelect();
+                activarFiltrarIncidencia("card",5);
+            };
+
+            scriptpostincidencias.onload = () => {
+                activarEditarTarjetasIncidencia();
+            };
+            const scriptgetreservas = document.createElement("script");
+            scriptgetreservas.src = BASE + "/javascript/reservas/get.js";
+            document.head.appendChild(scriptgetreservas);
+
+            const scriptpostreservas = document.createElement("script");
+            scriptpostreservas.src = BASE + "/javascript/reservas/post.js";
+            document.head.appendChild(scriptpostreservas);
+
+            scriptgetreservas.onload = () => {
+                obtenerReservasAutorizar();
+                obtenerReservasProximas();
+                obtenerRecursosSelect();
+                activarFiltrarIncidencia("card",5);
+            };
+
+            scriptpostreservas.onload = () => {
+                activarEditarTarjetasIncidencia();
+            };
         </script>
     </body>
 </html>
