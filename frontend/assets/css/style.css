@@ -657,6 +657,7 @@ form.login{
 .edificio-card h3 {
     margin-bottom: 15px;
     color: #274C9C;
+    font-weight: 700;
 }
 
 /* Planta */
@@ -700,4 +701,100 @@ form.login{
 
 .aula.no-cumple {
     border: 2px solid #dc3545 !important;
+}
+
+
+.carro-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e6eaf2;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+/* Cabecera tipo tarjeta administrativa */
+.carro-card h3 {
+    margin: 0;
+    padding: 12px 16px;
+    background: #f5f7fb;
+    color: #274C9C;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-bottom: 1px solid #c4cbd1;
+}
+
+/* Contenido */
+.carro-body {
+    padding: 14px 16px;
+}
+
+.carro-info {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: black;
+}
+
+.carro-info strong {
+    color: #274C9C;
+    font-weight: 650;
+}
+
+/* Pie */
+.carro-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #c4cbd1;
+    background: #fafbfe;
+}
+
+/* Botón más integrado */
+.carro-footer .btn {
+    font-weight: 500;
+}
+
+/* Contenedor de métricas */
+.carro-metricas {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Caja de cada métrica */
+.carro-metrica {
+    flex: 1;
+    background: #f5f7fb;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #e6eaf2;
+}
+
+/* Número grande */
+.carro-metrica-num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #274C9C;
+    line-height: 1;
+}
+
+/* Texto pequeño */
+.carro-metrica-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Variantes de estado */
+.carro-metrica.ocupados .carro-metrica-num {
+    color: #dc3545; /* rojo Bootstrap */
+}
+
+.carro-metrica.libres .carro-metrica-num {
+    color: #198754; /* verde Bootstrap */
 }

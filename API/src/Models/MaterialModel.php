@@ -212,57 +212,6 @@ class MaterialModel
     }
 
     /**
-     * Verificar disponibilidad del material en una fecha específica
-     */
-    public function checkAvailability(string $id, string $fecha): array
-    {
-        try {
-            // Convertir fecha a inicio y fin del día
-            $fechaInicio = date('Y-m-d 00:00:00', strtotime($fecha));
-            $fechaFin = date('Y-m-d 23:59:59', strtotime($fecha));
-
-            // Obtener unidades totales
-            $material = $this->findById($id);
-            
-            if (!$material) {
-                throw new \Exception('Material no encontrado');
-            }
-
-            $unidadesTotales = $material['unidades'];
-
-            // Obtener unidades reservadas para esa fecha
-            $result = $this->db
-                ->query("
-                    SELECT COALESCE(SUM(rp.unidades), 0) as unidades_reservadas
-                    FROM Reserva_Portatiles rp
-                    JOIN Reserva r ON rp.id_reserva_material = r.id_reserva
-                    WHERE rp.id_material = :id
-                    AND r.autorizada = 1
-                    AND r.inicio <= :fecha_fin
-                    AND r.fin >= :fecha_inicio
-                ")
-                ->bind(':id', $id)
-                ->bind(':fecha_inicio', $fechaInicio)
-                ->bind(':fecha_fin', $fechaFin)
-                ->fetch();
-
-            $unidadesReservadas = $result['unidades_reservadas'] ?? 0;
-            $unidadesDisponibles = $unidadesTotales - $unidadesReservadas;
-
-            return [
-                'id_material' => $id,
-                'fecha' => $fecha,
-                'unidades_totales' => $unidadesTotales,
-                'unidades_reservadas' => $unidadesReservadas,
-                'unidades_disponibles' => $unidadesDisponibles,
-                'disponible' => $unidadesDisponibles > 0
-            ];
-        } catch (PDOException $e) {
-            throw new \Exception("Error al verificar disponibilidad: " . $e->getMessage());
-        }
-    }
-
-    /**
      * Buscar materiales con filtros
      */
     public function search(array $filters): array
@@ -336,5 +285,94 @@ class MaterialModel
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar stock: " . $e->getMessage());
         }
+    }
+
+    public function getCarritosDisponibilidad($inicio, $fin, $dia_semana, $hora_inicio, $hora_fin): array
+    {
+        return $this->db
+            ->query("SELECT 
+                    r.id_recurso,
+                    r.descripcion,
+                    p.nombre_planta,
+                    ed.nombre_edificio,
+                    m.unidades,
+                    -- unidades reservadas = puntuales + permanentes - liberadas (no negativo y int)
+                    CAST(GREATEST(
+                        COALESCE(puntuales.unidades_puntuales, 0)
+                        + COALESCE(permanentes.unidades_permanentes, 0)
+                        - COALESCE(liberadas.unidades_liberadas, 0),
+                    0) AS UNSIGNED) AS unidades_reservadas
+                FROM Recurso r
+                JOIN Material m
+                    ON r.id_recurso = m.id_material
+                LEFT JOIN Planta p
+                    ON r.numero_planta = p.numero_planta 
+                    AND r.id_edificio = p.id_edificio
+                LEFT JOIN Edificio ed
+                    ON ed.id_edificio = r.id_edificio
+
+                /* Reservas puntuales agregadas por material (id_material = id_recurso) */
+                LEFT JOIN (
+                    SELECT rp.id_material, SUM(rp.unidades) AS unidades_puntuales
+                    FROM Reserva_Portatiles rp
+                    JOIN Reserva res
+                        ON res.id_reserva = rp.id_reserva_material
+                        AND res.inicio < :res_fin
+                        AND res.fin > :res_inicio
+                    GROUP BY rp.id_material
+                ) puntuales
+                    ON puntuales.id_material = r.id_recurso
+
+                /* Reservas permanentes agregadas por recurso */
+                LEFT JOIN (
+                    SELECT rp.id_recurso, SUM(rp.unidades) AS unidades_permanentes
+                    FROM Reserva_permanente rp
+                    WHERE rp.activo = true
+                    AND rp.dia_semana = :dia_semana
+                    AND rp.inicio < :rp_fin
+                    AND rp.fin > :rp_inicio
+                    GROUP BY rp.id_recurso
+                ) permanentes
+                    ON permanentes.id_recurso = r.id_recurso
+
+                /* Liberaciones puntuales: sumadas por recurso (vía Reserva_permanente -> rp.id_recurso) */
+                LEFT JOIN (
+                    SELECT rp.id_recurso, COALESCE(SUM(lp.unidades), 0) AS unidades_liberadas
+                    FROM Liberacion_puntual lp
+                    JOIN Reserva_permanente rp
+                        ON rp.id_reserva_permanente = lp.id_reserva_permanente
+                        AND rp.activo = true
+                        AND rp.dia_semana = :dia_semana2
+                        AND rp.inicio < :rp_fin2
+                        AND rp.fin > :rp_inicio2
+                    WHERE lp.inicio < :lp_fin
+                    AND lp.fin > :lp_inicio
+                    GROUP BY rp.id_recurso
+                ) liberadas
+                    ON liberadas.id_recurso = r.id_recurso
+
+                GROUP BY 
+                    r.id_recurso,
+                    r.descripcion,
+                    p.nombre_planta,
+                    ed.nombre_edificio,
+                    m.unidades
+
+                ORDER BY 
+                    ed.nombre_edificio,
+                    p.numero_planta,
+                    r.id_recurso
+            ")
+            ->bind(':dia_semana', $dia_semana)
+            ->bind(':rp_inicio', $hora_inicio)
+            ->bind(':rp_fin', $hora_fin)
+            ->bind(':res_inicio', $inicio)
+            ->bind(':res_fin', $fin)
+            ->bind(':lp_inicio', $inicio)
+            ->bind(':lp_fin', $fin)
+            ->bind(':dia_semana2', $dia_semana)
+            ->bind(':rp_inicio2', $hora_inicio)
+            ->bind(':rp_fin2', $hora_fin)
+            ->fetchAll();
     }
 }
