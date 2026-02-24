@@ -82,27 +82,6 @@ class MaterialController
         }
     }
 
-    // En src/Controllers/MaterialController.php - método disponibilidad()
-    public function disponibilidad(Request $req, Response $res, string $id): void
-    {
-        try {
-            // Obtener el parámetro 'fecha' de los query params
-            $fecha = $req->getParam('fecha'); // o $req->getQueryParams()['fecha']
-            
-            if (!$fecha) {
-                $res->errorJson(["El parámetro 'fecha' es requerido"], 400);
-                return;
-            }
-
-            $disponibilidad = $this->service->checkAvailability($id, $fecha);
-            $res->status(200)->json($disponibilidad);
-        } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
-        } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-
     /**
      * GET /material/search
      * Busca materiales con filtros
@@ -141,4 +120,14 @@ class MaterialController
         }
     }
 
+    public function indexCarritos(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios que son aulas
+            $carritos = $this->service->getCarritos($req->json());
+            $res->status(200)->json($carritos);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
 }

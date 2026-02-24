@@ -27,7 +27,7 @@
         </script>
 
 
-        <title>Salón de Actos - IES Bajo Aragón</title>
+        <title>Aulas - IES Bajo Aragón</title>
     </head>
     <body>
 
@@ -43,25 +43,59 @@
                 </button>
             </div>
 
-            <div class="container my-4 d-flex flex-column" style="height: 50vh;">
-                <div class="row d-flex justify-content-between align-items-center mb-3">
-                    <button id="prevWeek"
-                            type="button"
-                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                            style="width: 2.5rem; height: 2.5rem;">
-                    <i class="bi bi-arrow-left-circle fs-2"></i>
-                    </button>
-                    <button id="nextWeek"
-                            type="button"
-                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                            style="width: 2.5rem; height: 2.5rem;">
-                    <i class="bi bi-arrow-right-circle fs-2"></i>
-                    </button>
+            <div class="container-fluid p-4">
+                <div class="row g-4">
 
+                    <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
+                    
+                    <!-- CALENDARIO -->
+                    <section class="col-12 col-lg-8 d-flex flex-column" style="height: 70vh;">
+
+                        <div class="row d-flex justify-content-between align-items-center mb-3">
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+                        </div>
+
+                        <div id="dp" class="flex-grow-1"></div>
+
+                    </section>
+
+                    <!-- ASIDE INFORMACIÓN -->
+                    <aside class="col-12 col-lg-2 mb-4">
+                        <div style="height: 3.5rem;"></div>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title" id="info-id">Aula</h5>
+                                <hr>
+
+                                <p><strong>Descripción:</strong></p>
+                                <p id="info-descripcion" class="text-muted small"></p>
+
+                                <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
+                                <p><strong>Planta:</strong> <span id="info-planta"></span></p>
+
+                                <p><strong>Características:</strong></p>
+                                <ul id="info-caracteristicas" class="small"></ul>
+
+                                <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
+
+
+                            </div>
+                        </div>
+                    </aside>
 
                 </div>
-
-                <div id="dp" class="flex-grow-1"></div>
             </div>
 
 
@@ -89,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         heightSpec: "BusinessHoursNoScroll"
 
     });
-
+    cargarInfoAula(idAula);
     const eventos = await generarEventos(idAula);
 
     dp.events.list = eventos;
@@ -114,6 +148,30 @@ document.getElementById("btnVolver").addEventListener("click", () => {
     window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
 });
 
+import { getEspacio } from "/frontend/javascript/espacio/espacios.js";
+
+async function cargarInfoAula(id) {
+    const aula = await getEspacio(id);
+
+    if (!aula) return;
+
+    document.getElementById("info-id").textContent = 'Aula ' + aula.id;
+    document.getElementById("info-descripcion").textContent = aula.descripcion;
+    document.getElementById("info-edificio").textContent = aula.edificio;
+    document.getElementById("info-planta").textContent = aula.planta;
+
+    const cont = document.getElementById("info-caracteristicas");
+    cont.textContent = "";
+    aula.caracteristicas.forEach(caracteristica => {
+        const li = document.createElement('li');
+        li.textContent = caracteristica;
+        cont.appendChild(li);
+    });
+
+    document.getElementById("info-especial").textContent =
+    aula.autorizacion ? "Sí" : "No";
+
+}
 
 </script>
 

@@ -112,7 +112,9 @@ $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@ve
 
 $router->get('/aulas', 'Controllers\\EspacioController@indexAulas'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta
 $router->post('/aulas/disponibles', 'Controllers\\EspacioController@indexAulasDisponibles'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta y que estén disponibles en el rango de fecha y hora especificado
-
+$router->get('/otrosespacios', 'Controllers\\EspacioController@indexOtrosEspacios'); // Devuelve solo los espacios que no son aulas ni salon de actos organizadas por edificio y planta
+$router->post('/otrosespacios/disponibles', 'Controllers\\EspacioController@indexOtrosEspaciosDisponibles'); // Devuelve solo los espacios que no son aulas ni salon de actos organizadas por edificio y planta y que estén disponibles en el rango de fecha y hora especificado
+$router->post('/portatiles/disponibles', 'Controllers\\MaterialController@indexCarritos'); // Devuelve solo los espacios que son salon de actos organizados por edificio y planta
 
 // RESERVAS ESPACIOS
 $router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); // Devuelve todas las reservas de tipo “espacio”

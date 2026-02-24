@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Reservas aula - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-center">Otros Espacios disponibles</h2>
+                <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
+                    <i class="bi bi-filter"></i> Filtrar
+                </button>
+            </div>
+            <div class="contenedor-aulas">
+
+            
+            </div>
+
+            <!--Modal filtrar-->
+            <div class="modal fade" id="modalFiltrar" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="bi bi-filter me-2"></i>Filtrar aulas</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form id="formFiltrarAulas" class="px-3">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label" for="f_fecha">Fecha</label>
+                                        <input type="date" class="form-control" id="f_fecha">
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label class="form-label" for="f_hora_inicio">Hora inicio</label>
+                                        <input type="time" class="form-control" id="f_hora_inicio">
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label class="form-label" for="f_hora_fin">Hora fin</label>
+                                        <input type="time" class="form-control" id="f_hora_fin">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                <button type="reset" class="col-3 btn bg-verde border text-light rounded-3"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
+                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+<script type="module">
+import { getOtrosEspacios, getOtrosEspaciosDisponibles } from "/frontend/javascript/espacio/espacios.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const form = document.getElementById("formFiltrarAulas");
+
+    filtrosGuardadosyCrearTarjetas();
+
+    //al enviar el formulario de filtrar
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const fecha = document.getElementById("f_fecha").value;
+        const horaInicio = document.getElementById("f_hora_inicio").value || "00:00";
+        const horaFin = document.getElementById("f_hora_fin").value || "23:59";
+
+        let data;
+
+        // Si los tres campos tienen valor → disponibilidad
+        if (fecha && horaInicio && horaFin) {
+            data = await getOtrosEspaciosDisponibles(fecha, horaInicio, horaFin);
+        } else {
+            // Si falta alguno → todas los otros espacios
+            data = await getOtrosEspacios();
+        }
+
+        crearTarjetas(data);
+        cerrarModal("modalFiltrar");
+
+    });
+
+    form.addEventListener("reset", async () => {
+        setTimeout(async () => {
+            const data = await getOtrosEspacios();
+            crearTarjetas(data);
+        }, 0);
+    });
+
+});
+
+function cerrarModal(id) {
+    const modalElement = document.getElementById(id);
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modal.hide();
+
+    // Limpieza manual del backdrop (fix Bootstrap)
+    setTimeout(() => {
+        document.body.classList.remove("modal-open");
+        document.body.style.removeProperty("padding-right");
+
+        const backdrops = document.querySelectorAll(".modal-backdrop");
+        backdrops.forEach(b => b.remove());
+    }, 200);
+}
+
+function crearTarjetas(data) {
+    const contenedor = document.querySelector(".contenedor-aulas");
+    contenedor.innerHTML = ""; // limpiar contenido estático
+    // data = { edificio: { planta: [aulas] } }
+    for (const [edificio, plantas] of Object.entries(data)) {
+
+        // --- Tarjeta edificio ---
+        const edificioCard = document.createElement("div");
+        edificioCard.className = "edificio-card";
+
+        const tituloEdificio = document.createElement("h3");
+        tituloEdificio.textContent = edificio.toUpperCase();
+        edificioCard.appendChild(tituloEdificio);
+
+        // --- Plantas ---
+        for (const [planta, aulas] of Object.entries(plantas)) {
+
+            const plantaDiv = document.createElement("div");
+            plantaDiv.className = "planta";
+
+            const plantaTitulo = document.createElement("span");
+            plantaTitulo.className = "planta-titulo";
+            plantaTitulo.textContent = planta;
+            plantaDiv.appendChild(plantaTitulo);
+
+            const aulasDiv = document.createElement("div");
+            aulasDiv.className = "aulas";
+
+            // --- Botones de aulas ---
+            aulas.forEach(aula => {
+                const btn = document.createElement("button");
+                btn.id = aula.id_recurso;
+                btn.className = "aula";
+                btn.textContent = aula.id_recurso + (aula.descripcion ? ` - ${aula.descripcion}` : "");
+
+                // si tiene reservas marcar
+                if (aula.reservas > 0) {
+                    btn.classList.add("ocupada");
+                    btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
+                }
+
+                // REDIRECCIÓN
+                btn.addEventListener("click", () => {
+                    // Guardar estado actual del filtro
+                    const filtros = {
+                        fecha: document.getElementById("f_fecha").value,
+                        horaInicio: document.getElementById("f_hora_inicio").value,
+                        horaFin: document.getElementById("f_hora_fin").value,
+                    };
+
+                    sessionStorage.setItem("filtrosEspacios", JSON.stringify(filtros));
+
+                    const id = aula.id_recurso;
+                    window.location.href = `${BASE}/vistas/reservas/otrosespacios/vistasemanal.html?id=${encodeURIComponent(id)}`;
+                });
+                aulasDiv.appendChild(btn);
+            });
+
+            plantaDiv.appendChild(aulasDiv);
+            edificioCard.appendChild(plantaDiv);
+        }
+
+        contenedor.appendChild(edificioCard);
+    }
+}
+
+async function filtrosGuardadosyCrearTarjetas(){
+
+    const filtrosGuardados = sessionStorage.getItem("filtrosEspacios");
+
+    if (filtrosGuardados) {
+
+        const filtros = JSON.parse(filtrosGuardados);
+
+        // rellenar los inputs como tocan 
+        document.getElementById("f_fecha").value = filtros.fecha;
+        document.getElementById("f_hora_inicio").value = filtros.horaInicio || "00:00";
+        document.getElementById("f_hora_fin").value = filtros.horaFin || "23:59";
+
+        // Volver a aplicar el filtro automáticamente
+        let data;
+
+        if (filtros.fecha && filtros.horaInicio && filtros.horaFin) {
+            data = await getOtrosEspaciosDisponibles(
+                filtros.fecha,
+                filtros.horaInicio,
+                filtros.horaFin
+            );
+        } else {
+            data = await getOtrosEspacios();
+        }
+
+        crearTarjetas(data);
+
+    } else {
+        const data = await getOtrosEspacios();
+        crearTarjetas(data);
+    }
+}
+</script>
+
+            
+        <footer id="footer"></footer>
+    </body>
+</html>
