@@ -47,3 +47,31 @@ function obtenerNecesidades(){
         }
     });
 }
+
+
+
+//API Obtener necesidades para filtrar
+function obtenerNecesidadesSelectMultiple(){
+    fetch(window.location.origin+"/API/necesidades")
+    .then(res => res.json())
+    .then(response => {
+        let necesidades = response.data;
+
+        necesidades.sort((a, b) => 
+            a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' })
+        );
+        
+        let selectNecesidad = document.querySelectorAll(".selectMultipleNecesidad")
+        selectNecesidad.forEach(select => {
+            select.innerHTML = "";
+
+            necesidades.forEach(necesidad => {
+                let option = document.createElement("option");
+                option.setAttribute("value", necesidad.id_necesidad);
+                option.textContent = necesidad.nombre;
+                select.appendChild(option);
+            });
+        });
+    })
+    .catch(error => console.error("<p>Error al obtener necesidades</p>", error));
+}

@@ -163,8 +163,8 @@
                         <h5 class="modal-title"><i class="bi bi-filter me-2"></i>Filtrar incidencias</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <form id="formFiltrarIncidencia" class="px-3">
-                        <div class="modal-body">
+                    <form id="formFiltrarIncidencia">
+                        <div class="modal-body p-4">
                             <div class="row g-4">
                                 <!-- Fecha inicio -->
                                 <div class="col-md-4">
@@ -181,7 +181,7 @@
                                 <!-- Recurso -->
                                 <div class="col-md-4">
                                     <label class="form-label" for="filtrarRecurso">Recurso</label>
-                                    <select class="form-select" id="filtrarRecurso" name="filtrarRecurso">
+                                    <select class="form-select filtrarRecurso" id="filtrarRecurso" name="filtrarRecurso">
                                     </select>
                                 </div>
 
@@ -225,10 +225,17 @@
             const scriptpost = document.createElement("script");
             scriptpost.src = BASE + "/javascript/incidencias/post.js";
             document.head.appendChild(scriptpost);
+
+            const scriptgetrecursos = document.createElement("script");
+            scriptgetrecursos.src = BASE + "/javascript/recursos/get.js";
+            document.head.appendChild(scriptgetrecursos);
+            
+            scriptgetrecursos.onload = () => {
+                obtenerRecursosSelect();
+            };
             
             scriptget.onload = () => {
                 obtenerVerIncidencias();
-                obtenerRecursosSelect();
                 activarFiltrarIncidencia("tabla");
             };
 

@@ -75,31 +75,6 @@ function mostrarIncidencias(incidencias){
 }
 
 
-//API Obtener recursos para filtrar incidencias
-function obtenerRecursosSelect(){
-    fetch(window.location.origin+"/API/recurso")
-    .then(res => res.json())
-    .then(response => {
-        let recursos = response.data;
-
-        let filtrarRecurso = document.getElementById("filtrarRecurso");
-        filtrarRecurso.innerHTML = "";
-        let optiontodos=document.createElement("option");
-        optiontodos.setAttribute("value", "Todos");
-        optiontodos.textContent = "Todos";
-        filtrarRecurso.appendChild(optiontodos);
-
-        recursos.forEach(recurso => {
-            let option = document.createElement("option");
-            option.setAttribute("value", recurso.id_recurso);
-            option.textContent = recurso.id_recurso;
-            filtrarRecurso.appendChild(option);
-        });
-    })
-    .catch(error => console.error("<p>Error al obtener recursos</p>", error));
-}
-
-
 
 //API Obtener incidencias para filtrarlas
 function activarFiltrarIncidencia(tipo, limite=5){
@@ -170,7 +145,7 @@ function activarFiltrarIncidencia(tipo, limite=5){
 
 // CREAR INCIDENCIA
 
-//API Obtener recursos para crear incidencia
+//API Obtener recursos activos para crear incidencia
 function obtenerRecursos(){
     fetch(window.location.origin+"/API/recurso/activos")
     .then(res => res.json())

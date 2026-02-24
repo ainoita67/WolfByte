@@ -138,6 +138,7 @@ class ReservaModel
                         r.profesor,
                         rec.id_recurso,
                         NULL AS unidades,
+                        NULL AS usaenespacio,
                         re.actividad,
                         n.nombre AS necesidades,
                         r.observaciones
@@ -163,6 +164,7 @@ class ReservaModel
                         r.profesor,
                         rec.id_recurso,
                         rp.unidades,
+                        rp.usaenespacio,
                         NULL AS actividad,
                         NULL AS necesidades,
                         r.observaciones

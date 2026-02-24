@@ -13,17 +13,7 @@ function obtenerReservasAutorizar(){
         let reservas = response.data;
         let tarjetasReservas = document.getElementById("tarjetasReservasAutorizar");
         if(!tarjetasReservas) return;
-        tarjetasReservas.innerHTML = "";
-        if(!reservas||reservas.length === 0){
-            let card = document.createElement("div");
-            card.className = "card h-100 reserva-card text-center";
-            card.innerHTML = `
-                <div class="card-body bg-secondary-subtle">No se han encontrado reservas</div>
-            `;
-            tarjetasReservas.appendChild(card);
-        }else{
-            mostrarReservasAutorizarTarjetas(reservas, tarjetasReservas);
-        }
+        mostrarReservasTarjetas(reservas, tarjetasReservas);
     });
 }
 
@@ -34,21 +24,11 @@ function obtenerReservasProximas(){
         let reservas = response.data;
         let tarjetasReservas = document.getElementById("tarjetasReservasProximas");
         if(!tarjetasReservas) return;
-        tarjetasReservas.innerHTML = "";
-        if(!reservas||reservas.length === 0){
-            let card = document.createElement("div");
-            card.className = "card h-100 reserva-card text-center";
-            card.innerHTML = `
-                <div class="card-body bg-secondary-subtle">No se han encontrado reservas</div>
-            `;
-            tarjetasReservas.appendChild(card);
-        }else{
-            mostrarReservasAutorizarTarjetas(reservas, tarjetasReservas);
-        }
+        mostrarReservasTarjetas(reservas, tarjetasReservas);
     });
 }
 
-function mostrarReservasAutorizarTarjetas(reservas, tarjetasReservas){
+function mostrarReservasTarjetas(reservas, tarjetasReservas){
     tarjetasReservas.innerHTML = "";
     if(!reservas||reservas.length === 0){
         let card = document.createElement("div");
@@ -66,10 +46,16 @@ function mostrarReservasAutorizarTarjetas(reservas, tarjetasReservas){
             divReserva.setAttribute("data-bs-target", "#modalReserva");
             divReserva.setAttribute("data-id", reserva.id_reserva);
             divReserva.setAttribute("data-titulo", reserva.titulo);
+
+            let tipo='Portátil';                
+            if(reserva.tipo == 'Reserva_espacio'){
+                tipo='Espacio';
+            }
+
             divReserva.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
                     <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
-                    <p class="mb-0"><span class="fw-bold">Espacio/Material: </span>${reserva.id_recurso}
+                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
                     <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
                     <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
                     ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
@@ -121,6 +107,95 @@ function mostrarReservasAutorizarTarjetas(reservas, tarjetasReservas){
             tarjetasReservas.appendChild(divReserva);
         });
     }
+}
+
+
+
+//API Obtener reservas para filtrarlas
+function activarFiltrarReservasAutorizar(){
+    let formfiltrar = document.getElementById("formFiltrarReservasAutorizar");
+    if(!formfiltrar) return;
+    formfiltrar.addEventListener("submit", function(e){
+    e.preventDefault();
+    fetch(window.location.origin+"/API/reservas-pendientes")
+        .then(res => res.json())
+        .then(response => {
+            let reservas = response.data;
+            let tarjetasReservas = document.getElementById("tarjetasReservasAutorizar");
+            let modalfiltrar = document.getElementById("modalFiltrarReservasAutorizar");
+            let recurso = document.getElementById("filtrarRecursoAutorizar").value;
+            let fechaInicio = document.getElementById("filtrarFechaInicioAutorizar").value;
+            let fechaFin = document.getElementById("filtrarFechaFinAutorizar").value;
+            filtrarReservas(reservas, modalfiltrar, tarjetasReservas, recurso, fechaInicio, fechaFin);
+        });
+    });
+}
+
+
+
+//API Obtener reservas para filtrarlas
+function activarFiltrarReservasProximas(){
+    let formfiltrar = document.getElementById("formFiltrarReservasProximas");
+    if(!formfiltrar) return;
+    formfiltrar.addEventListener("submit", function(e){
+    e.preventDefault();
+    fetch(window.location.origin+"/API/reservas-proximas")
+        .then(res => res.json())
+        .then(response => {
+            let reservas = response.data;
+            let tarjetasReservas = document.getElementById("tarjetasReservasProximas");
+            let modalfiltrar = document.getElementById("modalFiltrarReservasProximas");
+            let recurso = document.getElementById("filtrarRecursoProximas").value;
+            let fechaInicio = document.getElementById("filtrarFechaInicioProximas").value;
+            let fechaFin = document.getElementById("filtrarFechaFinProximas").value;
+            let tipo = document.getElementById("filtrarTipoProximas").value;
+            filtrarReservas(reservas, modalfiltrar, tarjetasReservas, recurso, fechaInicio, fechaFin, tipo);
+        });
+    });
+}
+
+
+
+function filtrarReservas(reservas, modalfiltrar, tarjetasReservas, recurso, fechaInicio, fechaFin, tipo=null){
+    if(tipo=='Espacio'){
+        tipo='Reserva_espacio';
+    }else if(tipo=='Portatil'){
+        tipo='Reserva_material';
+    }
+    reservasFiltradas=reservas.filter(reserva => {
+        // Filtro por recurso
+        if(recurso!=="Todos"&&reserva.id_recurso!=recurso){
+            return false;
+        }
+
+        // Filtro por tipo
+        if(tipo!=null){
+            if(tipo!=="Todos"&&reserva.tipo!=tipo){
+                return false;
+            }
+        }
+
+        // Filtro por fechas
+        let fechaInc = new Date(reserva.inicio);
+
+        if(fechaInicio){
+            if(fechaInc < new Date(fechaInicio)){
+                return false;
+            }
+        }
+
+        if(fechaFin){
+            if(fechaInc > new Date(fechaFin)){
+                return false;
+            }
+        }
+
+        return true;
+    })
+
+    mostrarReservasTarjetas(reservasFiltradas, tarjetasReservas);
+    let cerrarmodal = bootstrap.Modal.getInstance(modalfiltrar) || new bootstrap.Modal(modalfiltrar);
+    cerrarmodal.hide();
 }
 
 
