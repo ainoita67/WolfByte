@@ -69,18 +69,6 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
-// Espacios
-
-$router->get('/espacios', 'Controllers\\EspacioController@index');
-$router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
-$router->post('/espacios', 'Controllers\\EspacioController@store');
-
-// $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
-// $router->put('/espacios/{id}', 'Controllers\\EspacioController@update');
-// $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
-// $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
-// $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
-
 // MATERIALES 
 $router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
 $router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
@@ -122,6 +110,9 @@ $router->delete('/espacios/{id}', 'Controllers\\EspacioController@destroy');
 $router->get('/edificios/{id}/espacios', 'Controllers\\EspacioController@findByEdificio');
 $router->get('/espacios/{id}/disponibilidad', 'Controllers\\EspacioController@verificarDisponibilidad');
 
+$router->get('/aulas', 'Controllers\\EspacioController@indexAulas'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta
+$router->post('/aulas/disponibles', 'Controllers\\EspacioController@indexAulasDisponibles'); // Devuelve solo los espacios que son aulas organizadas por edificio y planta y que estén disponibles en el rango de fecha y hora especificado
+
 
 // RESERVAS ESPACIOS
 $router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); // Devuelve todas las reservas de tipo “espacio”
@@ -151,7 +142,7 @@ $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@ind
 $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
-$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+$router->delete('/  necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
 //RESERVA DE ESPACIO
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');

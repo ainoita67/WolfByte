@@ -2,10 +2,14 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-
-        
-
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
         <script>
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -13,99 +17,130 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                    generarPagina("admin", "admin");
+                generarPagina("menu", "admin");
                 };
                 document.head.appendChild(script2);
             };
-        document.head.appendChild(script1);
-    </script>
+            document.head.appendChild(script1);
+        </script>
+        
 
-
-        <title>Edificios - IES Bajo Aragón</title>
+        <title>Reservas - IES Bajo Aragón</title>
     </head>
     <body>
+
         <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edificios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear edificio
-                </button>
-            </div>
-        </div>
 
-        <div class="row g-4" id="contenedorTarjetas"></div>
+        <script src="../../../../javascript/edificios/edificios.js" defer></script>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
-            </div>
-        </div>
-
+<main class="container mt-5">
+  <body>
+    
+  
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Edificios</h2>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            <i class="bi bi-plus-circle"></i> Crear edificio
+        </button>
     </div>
 
+    <!-- Aquí irán las tarjetas -->
+    <div id="contenedorTarjetas" class="row g-4 mt-3">
+        <!-- tarjetas generadas por JS -->
+    </div>
 
-</main>
+    <div class="mt-5 container-fluid text-end">
+        <a href="../../menuadministrador.html" class="volver p-2 px-4 text-dark">Volver al menú</a>
+    </div>
 
 <!-- MODAL CREAR -->
 <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear edificio</h5>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+        <i class="bi bi-plus-circle"></i> Crear edificio
+        </button>
 
-            <form id="formCrear">
-                <div class="modal-header">
-                    <h5 class="modal-title">Crear edificio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <label class="form-label">Nombre del edificio</label>
-                    <input type="text" class="form-control" id="crearNombre" required>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-success" type="submit">Crear</button>
-                </div>
-            </form>
-
-        </div>
+      </div>
+      <div class="modal-body">
+        <form id="formCrear">
+          <div class="mb-3">
+            <label for="crearNombre" class="form-label">Nombre edificio</label>
+            <input type="text" id="crearNombre" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-success">Crear</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
-
 
 <!-- MODAL EDITAR -->
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
 
-            <form id="formEditar">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Editar edificio</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Editar edificio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
 
-                <div class="modal-body">
-                    <input type="hidden" id="editId">
+      <div class="modal-body">
+        <form id="formEditar">
+          <input type="hidden" id="editId">
 
-                    <label class="form-label">Nombre del edificio</label>
-                    <input type="text" class="form-control" id="editNombre" required>
-                </div>
+          <div class="mb-3">
+            <label for="editNombre" class="form-label">Nombre del edificio</label>
+            <input type="text" id="editNombre" class="form-control" required>
+          </div>
 
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" type="submit">Guardar cambios</button>
-                </div>
-            </form>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Guardar cambios
+            </button>
+          </div>
+        </form>
+      </div>
 
-        </div>
     </div>
+  </div>
 </div>
 
-<footer id="footer"></footer>
+<!-- MODAL ELIMINAR -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-</body>
-<script src="/frontend/javascript/sesion/api.js"></script>
-<script src="/frontend/javascript/sesion/authGuard.js"></script>
-<script src="/frontend/javascript/edificios/edificios.js" defer></script>
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Eliminar edificio</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
 
+      <div class="modal-body">
+        <p>¿Estás seguro de que quieres eliminar este edificio?</p>
+        <p class="fw-bold" id="eliminarNombre"></p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>   
+</main>
+
+
+        <footer id="footer"></footer>
+    </body>
 </html>
+
+
+

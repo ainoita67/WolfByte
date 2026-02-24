@@ -15,12 +15,17 @@ export async function cargarReservas(idRecurso) {
             json = JSON.parse(text); // luego intentamos parsear a JSON
         } catch {
             console.error("Respuesta no es JSON:", text);
-            return;
+            return [];
         }
 
         if (json.status !== "success") {
             console.error("Error API:", json);
-            return;
+            return [];
+        }
+
+        // Si no hay reservas, devolver array vacío
+        if (!json.data || json.data.length === 0) {
+            return [];
         }
 
         const eventos = json.data.map(r => ({
@@ -46,7 +51,7 @@ export async function generarEventos(idRecurso) {
     const liberaciones = await getLiberacionesRecurso(idRecurso);
     const eventosdisponibles = aplicarLiberaciones(eventos, liberaciones);
     // Cargar reservas reales
-    const eventosReservas = await cargarReservas(idRecurso);
+    const eventosReservas = await cargarReservas(idRecurso) || [];
     // Combinar eventos disponibles con reservas reales (reservas reales tienen prioridad)
     const eventoscombinados = combinarDisponiblesYReservas(eventosdisponibles, eventosReservas);
 
