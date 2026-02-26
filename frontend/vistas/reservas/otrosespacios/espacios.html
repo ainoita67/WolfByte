@@ -34,7 +34,7 @@
         <div id="header"></div>
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="text-center">Aulas disponibles</h2>
+                <h2 class="text-center">Otros Espacios disponibles</h2>
                 <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
                     <i class="bi bi-filter"></i> Filtrar
                 </button>
@@ -56,22 +56,14 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-12 mb-3">
-                                        <label class="form-label" for="caracteristicas">Características</label>
-                                        <select class="form-select" id="caracteristicas" multiple size="3">
-                                            <!-- Opciones generadas dinámicamente -->
-                                        </select>
-                                        <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
-                                    </div>
-                                    
-                                    <div class="col-12 col-md-6 mb-3">
                                         <label class="form-label" for="f_fecha">Fecha</label>
                                         <input type="date" class="form-control" id="f_fecha">
                                     </div>
-                                    <div class="col-12 col-md-3 mb-3">
+                                    <div class="col-12 col-md-6 mb-3">
                                         <label class="form-label" for="f_hora_inicio">Hora inicio</label>
                                         <input type="time" class="form-control" id="f_hora_inicio">
                                     </div>
-                                    <div class="col-12 col-md-3 mb-3">
+                                    <div class="col-12 col-md-6 mb-3">
                                         <label class="form-label" for="f_hora_fin">Hora fin</label>
                                         <input type="time" class="form-control" id="f_hora_fin">
                                     </div>
@@ -97,11 +89,9 @@
         crossorigin="anonymous"></script>
 
 <script type="module">
-import { getAulas, getAulasDisponibles } from "/frontend/javascript/espacio/aulas.js";
-import { getCaracteristicas } from "/frontend/javascript/espacio/caracteristicas.js";
+import { getOtrosEspacios, getOtrosEspaciosDisponibles } from "/frontend/javascript/espacio/espacios.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    await cargarCaracteristicas();
 
     const form = document.getElementById("formFiltrarAulas");
 
@@ -115,29 +105,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         const horaInicio = document.getElementById("f_hora_inicio").value || "00:00";
         const horaFin = document.getElementById("f_hora_fin").value || "23:59";
 
-        const select = document.getElementById("caracteristicas");
-        let caracteristicasSeleccionadas = Array.from(select.selectedOptions)
-        .map(opt => opt.value);
-
         let data;
 
         // Si los tres campos tienen valor → disponibilidad
         if (fecha && horaInicio && horaFin) {
-            data = await getAulasDisponibles(fecha, horaInicio, horaFin);
+            data = await getOtrosEspaciosDisponibles(fecha, horaInicio, horaFin);
         } else {
-            // Si falta alguno → todas las aulas
-            data = await getAulas();
+            // Si falta alguno → todas los otros espacios
+            data = await getOtrosEspacios();
         }
 
-        crearTarjetas(data, caracteristicasSeleccionadas);
+        crearTarjetas(data);
         cerrarModal("modalFiltrar");
 
     });
 
     form.addEventListener("reset", async () => {
         setTimeout(async () => {
-            const data = await getAulas();
-            crearTarjetas(data, []);
+            const data = await getOtrosEspacios();
+            crearTarjetas(data);
         }, 0);
     });
 
@@ -158,7 +144,7 @@ function cerrarModal(id) {
     }, 200);
 }
 
-function crearTarjetas(data, caracteristicasSeleccionadas = []) {
+function crearTarjetas(data) {
     const contenedor = document.querySelector(".contenedor-aulas");
     contenedor.innerHTML = ""; // limpiar contenido estático
     // data = { edificio: { planta: [aulas] } }
@@ -191,31 +177,12 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
                 const btn = document.createElement("button");
                 btn.id = aula.id_recurso;
                 btn.className = "aula";
-                btn.textContent = aula.id_recurso;
-
-                btn.title = aula.descripcion;
+                btn.textContent = aula.id_recurso + (aula.descripcion ? ` - ${aula.descripcion}` : "");
 
                 // si tiene reservas marcar
                 if (aula.reservas > 0) {
                     btn.classList.add("ocupada");
                     btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
-                }
-
-                //caracteristicas seleccionadas → comprobar si el aula las cumple
-                if (caracteristicasSeleccionadas.length > 0) {
-
-                    const aulaCaracteristicas = aula.caracteristicas || [];
-
-                    // comprobar si tiene TODAS las seleccionadas
-                    const cumple = caracteristicasSeleccionadas.every(c =>
-                        aulaCaracteristicas.includes(c)
-                    );
-
-                    if (!cumple) {
-                        btn.classList.add("no-cumple");
-
-                        btn.title += " - No cumple con las características seleccionadas";
-                    }
                 }
 
                 // REDIRECCIÓN
@@ -225,15 +192,12 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
                         fecha: document.getElementById("f_fecha").value,
                         horaInicio: document.getElementById("f_hora_inicio").value,
                         horaFin: document.getElementById("f_hora_fin").value,
-                        caracteristicas: Array.from(
-                            document.getElementById("caracteristicas").selectedOptions
-                        ).map(opt => opt.value)
                     };
 
-                    sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
+                    sessionStorage.setItem("filtrosEspacios", JSON.stringify(filtros));
 
                     const id = aula.id_recurso;
-                    window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}`;
+                    window.location.href = `${BASE}/vistas/reservas/otrosespacios/vistasemanal.html?id=${encodeURIComponent(id)}`;
                 });
                 aulasDiv.appendChild(btn);
             });
@@ -246,29 +210,9 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
     }
 }
 
-async function cargarCaracteristicas() {
-    const select = document.getElementById("caracteristicas");
-
-    try {
-        const caracteristicas = await getCaracteristicas();
-
-        select.innerHTML = ""; // limpiar por si acaso
-
-        caracteristicas.forEach(c => {
-            const option = document.createElement("option");
-            option.value = c.nombre;
-            option.textContent = c.nombre;
-            select.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error("Error cargando características:", error);
-    }
-}
-
 async function filtrosGuardadosyCrearTarjetas(){
 
-    const filtrosGuardados = sessionStorage.getItem("filtrosAulas");
+    const filtrosGuardados = sessionStorage.getItem("filtrosEspacios");
 
     if (filtrosGuardados) {
 
@@ -279,29 +223,23 @@ async function filtrosGuardadosyCrearTarjetas(){
         document.getElementById("f_hora_inicio").value = filtros.horaInicio || "00:00";
         document.getElementById("f_hora_fin").value = filtros.horaFin || "23:59";
 
-        const select = document.getElementById("caracteristicas");
-
-        Array.from(select.options).forEach(opt => {
-            opt.selected = filtros.caracteristicas?.includes(opt.value);
-        });
-
         // Volver a aplicar el filtro automáticamente
         let data;
 
         if (filtros.fecha && filtros.horaInicio && filtros.horaFin) {
-            data = await getAulasDisponibles(
+            data = await getOtrosEspaciosDisponibles(
                 filtros.fecha,
                 filtros.horaInicio,
                 filtros.horaFin
             );
         } else {
-            data = await getAulas();
+            data = await getOtrosEspacios();
         }
 
-        crearTarjetas(data, filtros.caracteristicas || []);
+        crearTarjetas(data);
 
     } else {
-        const data = await getAulas();
+        const data = await getOtrosEspacios();
         crearTarjetas(data);
     }
 }

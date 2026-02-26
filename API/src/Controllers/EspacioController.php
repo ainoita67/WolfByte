@@ -70,4 +70,47 @@ class EspacioController
         }
     }
 
+    public function indexAulas(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios que son aulas
+            $espacios = $this->service->getAllAulas();
+            $res->status(200)->json($espacios);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function indexAulasDisponibles(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios que son aulas
+            $espacios = $this->service->getAulasDisponibles($req->json());
+            $res->status(200)->json($espacios);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function indexOtrosEspacios(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios que son aulas
+            $espacios = $this->service->getOtrosEspacios();
+            $res->status(200)->json($espacios);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function indexOtrosEspaciosDisponibles(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios que son aulas
+            $espacios = $this->service->getOtrosEspaciosDisponibles($req->json());
+            $res->status(200)->json($espacios);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
 }

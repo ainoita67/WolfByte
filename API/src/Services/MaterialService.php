@@ -131,24 +131,6 @@ class MaterialService
         }
     }
 
-    public function checkAvailability(string $id, string $fecha): array
-    {
-        // Validar ID y fecha
-        Validator::validate([
-            'id' => $id,
-            'fecha' => $fecha
-        ], [
-            'id' => 'required|string|min:1|max:10',
-            'fecha' => 'required|string'
-        ]);
-
-        try {
-            return $this->model->checkAvailability($id, $fecha);
-        } catch (Throwable $e) {
-            throw new \Exception("Error al verificar disponibilidad: " . $e->getMessage(), 500);
-        }
-    }
-
     public function searchMaterials(array $filters): array
     {
         // Validar filtros
@@ -201,6 +183,51 @@ class MaterialService
                 throw $e;
             }
             throw new \Exception("Error al actualizar stock: " . $e->getMessage(), 500);
+        }
+    }
+
+    public function getCarritos(array $input): array
+    {
+        $data = Validator::validate($input, [
+            'fecha'     => 'required|string',
+            'hora_inicio'    => 'required|string',
+            'hora_fin'       => 'required|string',
+
+        ]);
+
+        $fecha = $data['fecha'];
+        $hora_inicio = $data['hora_inicio'];
+        $hora_fin = $data['hora_fin'];
+        $dia_semana = date('w', strtotime($fecha));
+        $inicio = date('Y-m-d', strtotime($fecha)) . ' ' . $hora_inicio;
+        $fin = date('Y-m-d', strtotime($fecha)) . ' ' . $hora_fin;
+
+        try {
+
+            $carritos = $this->model->getCarritosDisponibilidad($inicio, $fin, $dia_semana, $hora_inicio, $hora_fin);
+            $resultado = [];
+
+            foreach ($carritos as $carrito) {
+
+                $edificio = $carrito['nombre_edificio'] ?: 'Sin edificio';
+                $planta = $carrito['nombre_planta'] ?: 'Sin planta';
+
+                $carritoFormateado = [
+                    'id_recurso' => $carrito['id_recurso'],
+                    'descripcion' => $carrito['descripcion'],
+                    'edificio' => $edificio,
+                    'planta' => $planta,
+                    'portatiles' => $carrito['unidades'],
+                    'reservados' => $carrito['unidades_reservadas']
+                ];
+
+                $resultado[] = $carritoFormateado;
+            }
+
+            return $resultado;
+
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
     }
 }

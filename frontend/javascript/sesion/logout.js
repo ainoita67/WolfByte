@@ -11,6 +11,14 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
             throw new Error(data.message || 'Error al cerrar sesión');
         }
 
+        // Eliminar token JWT
+        localStorage.removeItem('token');
+
+        // Limpiar datos de sesión del frontend
+        sessionStorage.removeItem('correo');
+        sessionStorage.removeItem('rol');
+        sessionStorage.removeItem('id_usuario');
+
         console.log('Logout OK:', data);
 
         // Redirige al login
