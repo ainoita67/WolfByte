@@ -70,6 +70,7 @@ class ReservaModel
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.tipo,
                     r.f_creacion,
                     r.inicio,
                     r.fin,
@@ -82,12 +83,15 @@ class ReservaModel
                     NULL AS usaenespacio,
                     re.actividad,
                     n.nombre AS necesidades,
-                    r.observaciones
+                    r.observaciones,
+                    u.id_usuario,
+                    u.nombre AS nombreusuario
                 FROM Reserva r
                 JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                 JOIN Recurso rec ON rec.id_recurso = re.id_espacio
-                JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
-                JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
+                LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                JOIN Usuario u ON r.id_usuario = u.id_usuario
                 WHERE r.tipo = 'Reserva_espacio' AND r.autorizada IS NULL
 
                 UNION ALL
@@ -95,6 +99,7 @@ class ReservaModel
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.tipo,
                     r.f_creacion,
                     r.inicio,
                     r.fin,
@@ -107,10 +112,13 @@ class ReservaModel
                     rp.usaenespacio,
                     NULL AS actividad,
                     NULL AS necesidades,
-                    r.observaciones
+                    r.observaciones,
+                    u.id_usuario,
+                    u.nombre AS nombreusuario
                 FROM Reserva r
                 JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                 JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                JOIN Usuario u ON r.id_usuario = u.id_usuario
                 WHERE r.tipo = 'Reserva_material' AND r.autorizada IS NULL
             ")
             ->fetchAll();
@@ -141,12 +149,15 @@ class ReservaModel
                         NULL AS usaenespacio,
                         re.actividad,
                         n.nombre AS necesidades,
-                        r.observaciones
+                        r.observaciones,
+                        u.id_usuario,
+                        u.nombre AS nombreusuario
                     FROM Reserva r
                     JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                     JOIN Recurso rec ON rec.id_recurso = re.id_espacio
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                    JOIN Usuario u ON r.id_usuario = u.id_usuario
                     WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada=1
 
                     UNION ALL
@@ -167,10 +178,13 @@ class ReservaModel
                         rp.usaenespacio,
                         NULL AS actividad,
                         NULL AS necesidades,
-                        r.observaciones
+                        r.observaciones,
+                        u.id_usuario,
+                        u.nombre AS nombreusuario
                     FROM Reserva r
                     JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                     JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                    JOIN Usuario u ON r.id_usuario = u.id_usuario
                     WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND r.autorizada=1
                 ) union_result ORDER BY inicio, id_reserva;
             ")

@@ -302,91 +302,87 @@
                                 <div class="modal-body container-fluid">
                                     <div class="row g-3">
                                         <!-- ID reserva -->
-                                        <div class="col-md-4">
+                                        <div class="col-lg-6">
                                             <label class="form-label">ID Reserva</label>
                                             <input type="number" class="form-control" id="reserva_id" name="reserva_id" readonly>
                                         </div>
 
-                                        <!-- Autorizada -->
-                                        <div class="col-md-4">
-                                            <label class="form-label">Autorizada</label>
-                                            <select class="form-select" id="reserva_autorizada" name="autorizada">
-                                                <option value="Pendiente">Pendiente</option>
-                                                <option value="Autorizada">Autorizada</option>
-                                                <option value="Denegada">Denegada</option>
-                                            </select>
-                                        </div>
-
                                         <!-- Fecha creación -->
-                                        <div class="col-md-4">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_f_creacion">F. creación</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
                                         </div>
 
                                         <!-- Inicio -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_inicio">Inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio">
                                         </div>
 
                                         <!-- Fin -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_fin">Fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin">
                                         </div>
 
                                         <!-- Espacio/Portátil -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
                                             <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
                                         </div>
 
                                         <!-- Asignatura -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_asignatura">Asignatura</label>
                                             <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
                                         </div>
 
                                         <!-- Grupo -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_grupo">Grupo</label>
                                             <input type="text" class="form-control" id="reserva_grupo" name="grupo">
                                         </div>
 
                                         <!-- Profesor -->
-                                        <div class="col-md-6">
+                                        <div class="col-lg-6">
                                             <label class="form-label" for="reserva_profesor">Profesor</label>
                                             <input type="text" class="form-control" id="reserva_profesor" name="profesor">
                                         </div>
 
+                                        <!-- Usuario -->
+                                        <div id="div_reserva_usuario">
+                                            <label class="form-label" for="reserva_usuario">Usuario</label>
+                                            <input type="text" class="form-control" id="reserva_usuario" name="usuario" required readonly>
+                                        </div>
+
                                         <!-- Unidades -->
-                                        <div class="col-md-6 mb-3" id="div_reserva_unidades">
+                                        <div class="col-lg-6" id="div_reserva_unidades">
                                             <label class="form-label" for="reserva_unidades">Unidades</label>
                                             <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
                                         </div>
 
                                         <!-- Espacio en el que se usa -->
-                                        <div class="col-md-6" id="div_reserva_espacio_uso">
+                                        <div class="col-lg-6" id="div_reserva_espacio_uso">
                                             <label class="form-label">Espacio en el que se usa</label>
                                             <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
                                         </div>
 
                                         <!-- Actividad -->
-                                        <div class="col-md-6" id="div_reserva_actividad">
+                                        <div class="col-lg-6" id="div_reserva_actividad">
                                             <label class="form-label" for="reserva_actividad">Actividad</label>
                                             <input type="text" class="form-control" id="reserva_actividad" name="actividad">
                                         </div>
 
                                         <!-- Necesidades -->
-                                        <div class="col-md-6 mb-0 pb-0" id="div_reserva_necesidades">
+                                        <div class="col-12" id="div_reserva_necesidades">
                                             <label class="form-label" for="reserva_necesidades">Necesidades</label>
                                             <select class="form-select selectMultipleNecesidad" id="reserva_necesidades" name="necesidades" multiple size="4">
                                             </select>
-                                            <div class="form-text mb-0 pb-0">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                                            <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
                                         </div>
 
                                         <!-- Observaciones -->
-                                        <div class="col-12 mt-0 pt-0">
+                                        <div class="col-12">
                                             <label class="form-label" for="reserva_observaciones">Observaciones</label>
                                             <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
                                         </div>
@@ -500,6 +496,8 @@
         <footer id="footer"></footer>
 
         <script>
+            const id_usuario = sessionStorage.getItem("id_usuario");
+
             const scriptgetincidencias = document.createElement("script");
             scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
             document.head.appendChild(scriptgetincidencias);
