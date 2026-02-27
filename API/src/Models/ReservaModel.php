@@ -239,4 +239,42 @@ class ReservaModel
             ")
             ->fetchAll();
     }
+
+    public function update(int $id, array $data): array{
+        try{
+            $this->db
+                ->query("
+                    UPDATE Reserva SET
+                    asignatura = :asignatura,
+                    autorizada = :autorizada,
+                    observaciones = :observaciones,
+                    grupo = :grupo,
+                    profesor = :profesor,
+                    f_creacion = :f_creacion,
+                    inicio = :inicio,
+                    fin = :fin,
+                    id_usuario = :id_usuario,
+                    id_usuario_autoriza = :id_usuario_autoriza,
+                    tipo = :tipo
+                    WHERE id_reserva = :id
+                ")
+                ->bind(':asignatura',           $data['asignatura'])
+                ->bind(':autorizada',           $data['autorizada'])
+                ->bind(':observaciones',        $data['observaciones'])
+                ->bind(':grupo',                $data['grupo'])
+                ->bind(':profesor',             $data['profesor'])
+                ->bind(':f_creacion',           $data['f_creacion'])
+                ->bind(':inicio',               $data['inicio'])
+                ->bind(':fin',                  $data['fin'])
+                ->bind(':id_usuario',           $data['id_usuario'])
+                ->bind(':id_usuario_autoriza',  $data['id_usuario_autoriza'])
+                ->bind(':tipo',                 $data['tipo'])
+                ->bind(':id',                   $id)
+                ->execute();
+
+                return $this->findById($id);
+        } catch (PDOException $e) {
+            throw new \Exception("Error al actualizar la reserva");
+        }
+    }
 }

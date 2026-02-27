@@ -79,7 +79,7 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
                 document.getElementById("reserva_asignatura").value = reserva.asignatura;
                 document.getElementById("reserva_grupo").value = reserva.grupo;
                 document.getElementById("reserva_profesor").value = reserva.profesor;
-                document.getElementById("reserva_id_usuario").value = reserva.usuario;
+                document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
                 document.getElementById("reserva_usuario").value = reserva.nombreusuario;
                 
                 document.getElementById("reserva_unidades").value = reserva.unidades;
