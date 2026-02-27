@@ -83,6 +83,7 @@ $router->post('/caracteristicas', 'Controllers\\CaracteristicaController@store')
 $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@update');
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
+// Espacios 
 // RESERVAS
 $router->get('/mis-reservas/{id_usuario}','Controllers\\ReservaController@misReservas'); // Devuelve las reservas del usuario autenticado
 $router->get('/reservas','Controllers\\ReservaController@index'); // Devuelve todas las reservas (para admin o listado general)
@@ -157,6 +158,23 @@ $router ->get('/plantas/{id_edificio}', 'Controllers\\PlantaController@showByEdi
 $router ->post('/plantas/{id_edificio}', 'Controllers\\PlantaController@store'); //Agrega una planta al edificio que pongamos 
 $router ->put('/plantas/{id_edificio}', 'Controllers\\PlantaController@update'); //Modifica los datos de la planta de un edificio 
 
+// MATERIALES (CARROS DE PORTÁTILES)
+$router->get('/portatiles/materiales',                 'Controllers\\PortatilController@materiales'); // Listar materiales
+$router->get('/portatiles/materiales/{id}',            'Controllers\\PortatilController@material'); // Ver material por ID
+$router->post('/portatiles/materiales',                'Controllers\\PortatilController@createMaterial'); // Crear material
+$router->put('/portatiles/materiales/{id}',            'Controllers\\PortatilController@updateMaterial'); // Actualizar material
+$router->delete('/portatiles/materiales/{id}',         'Controllers\\PortatilController@deleteMaterial'); // Eliminar material
+
+// RESERVAS DE PORTÁTILES
+$router->get('/portatiles/reservas',                   'Controllers\\PortatilController@reservas'); // Listar todas las reservas
+$router->get('/portatiles/reservas/usuario/{id_usuario}', 'Controllers\\PortatilController@reservasByUsuario'); // Reservas por usuario
+$router->get('/portatiles/reservas/{id}',              'Controllers\\PortatilController@reserva'); // Ver reserva por ID
+$router->post('/portatiles/reservas',                  'Controllers\\PortatilController@createReserva'); // Crear reserva
+$router->post('/portatiles/reservas/disponibilidad',   'Controllers\\PortatilController@disponibilidad'); // Verificar disponibilidad
+$router->put('/portatiles/reservas/{id}',              'Controllers\\PortatilController@updateReserva'); // Actualizar reserva
+$router->patch('/portatiles/reservas/{id}',            'Controllers\\PortatilController@patchReserva'); // Actualizar parcialmente
+$router->patch('/portatiles/reservas/{id}/unidades',   'Controllers\\PortatilController@patchUnidades'); // Actualizar unidades
+$router->delete('/portatiles/reservas/{id}',           'Controllers\\PortatilController@deleteReserva'); // Eliminar reserva
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
 $router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción de todos los recursos activos que estén en la base de datos
