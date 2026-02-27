@@ -23,11 +23,11 @@ function obtenerNecesidades(){
         }else{
             necesidades.forEach(necesidad => {
                 let card = document.createElement("div");
-                card.className = "col-12 col-md-6 col-lg-4 mt-5 mb-5";
+                card.className = "col-12 col-md-6 col-lg-4 mt-5";
                 card.innerHTML = `
                     <div class="card text-center shadow-sm overflow-hidden h-100">
                         <div class="bg-blue card-head rounded-top">
-                            <p class="fs-6 text-light m-0 py-2">ID: ${necesidad.id_necesidad}</p>
+                            <p class="fs-6 text-light m-0 pt-2">ID: ${necesidad.id_necesidad}</p>
                         </div>
                         <div class="card-body">
                             <p class="fs-5 card-title">${necesidad.nombre}</p>
