@@ -1,9 +1,9 @@
-import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
-import { generarHorarioRealEventos, getLiberacionesRecurso, aplicarLiberaciones, combinarDisponiblesYReservas } from "/frontend/javascript/reservas/disponibilidad.js";
+import { getPermanentesRecurso, generarHorarioPermanentes } from "./horario_permanente.js";
+import { generarHorarioRealEventos, getLiberacionesRecurso, aplicarLiberaciones, combinarDisponiblesYReservas } from "./disponibilidad.js";
 
 export async function cargarReservas(idRecurso) {
     try {
-        const res = await fetch(`${API}/reservaEspacio/espacio/${idRecurso}`, {
+        const res = await fetch(`${API}/reservaMaterial/material/${idRecurso}`, {
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("token")
             }
@@ -30,9 +30,10 @@ export async function cargarReservas(idRecurso) {
 
         const eventos = json.data.map(r => ({
             id: r.id_reserva,
-            text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
+            text: ` ${r.unidades} unidades - ${r.asignatura} - ${r.grupo} ${r.profesor}`,
             start: r.inicio.replace(" ", "T"),
-            end: r.fin.replace(" ", "T")
+            end: r.fin.replace(" ", "T"),
+            unidades: Number(r.unidades)
         }));
 
         return eventos; // array de eventos para el calendario
@@ -42,18 +43,26 @@ export async function cargarReservas(idRecurso) {
 }
 
 // generar el calendario completo con reservas permanentes libereaciones y reservas reales
-export async function generarEventos(idRecurso) {
+export async function generarEventos(idRecurso, unidadesRecurso) {
+    console.log("Generando eventos para recurso ID:", idRecurso, "con unidades:", unidadesRecurso);
     // Cargar reservas permanentes y slot de disponibilidad
     const permanentes = await getPermanentesRecurso(idRecurso);
-    const horario = generarHorarioPermanentes(permanentes);
+    console.log("Reservas permanentes:", permanentes);
+    const horario = generarHorarioPermanentes(permanentes, unidadesRecurso);
+    console.log("Horario permanente generado:", horario);
     const eventos = await generarHorarioRealEventos(horario);
+    console.log("Eventos horarios permanentes:", eventos);
     // Aplicar liberaciones para obtener eventos disponibles
     const liberaciones = await getLiberacionesRecurso(idRecurso);
-    const eventosdisponibles = aplicarLiberaciones(eventos, liberaciones);
+    console.log("Liberaciones obtenidas:", liberaciones);
+    const eventosdisponibles = aplicarLiberaciones(eventos, liberaciones, unidadesRecurso);
+    console.log("Eventos disponibles tras aplicar liberaciones:", eventosdisponibles);
     // Cargar reservas reales
     const eventosReservas = await cargarReservas(idRecurso) || [];
+    console.log("Reservas reales cargadas:", eventosReservas);
     // Combinar eventos disponibles con reservas reales (reservas reales tienen prioridad)
-    const eventoscombinados = combinarDisponiblesYReservas(eventosdisponibles, eventosReservas);
+    const eventoscombinados = combinarDisponiblesYReservas(eventosdisponibles, eventosReservas, unidadesRecurso);
+    console.log("Eventos combinados (disponibles + reservas reales):", eventoscombinados);
 
     return eventoscombinados;
 }
