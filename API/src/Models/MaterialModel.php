@@ -52,12 +52,16 @@ class MaterialModel
                     SELECT 
                         r.id_recurso,
                         r.descripcion,
-                        r.tipo,
-                        r.activo,
                         r.especial,
-                        m.unidades
+                        m.unidades,
+                        p.nombre_planta,
+                        e.nombre_edificio,
+                        p.numero_planta,
+                        e.id_edificio
                     FROM Recurso r
                     INNER JOIN Material m ON r.id_recurso = m.id_material
+                    INNER JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
+                    INNER JOIN Edificio e ON e.id_edificio = r.id_edificio
                     WHERE r.id_recurso = :id AND r.tipo = 'Material'
                 ")
                 ->bind(':id', $id)
