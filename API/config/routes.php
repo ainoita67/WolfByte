@@ -98,6 +98,8 @@ $router->delete('/reservas/{id}','Controllers\\ReservaController@destroy'); // E
 $router->get('/reservas-portatiles', 'Controllers\\ReservaPortatilController@index');
 $router->get('/reservas-portatiles/{id}', 'Controllers\\ReservaPortatilController@show');
 $router->post('/reservas-portatiles', 'Controllers\\ReservaPortatilController@store');
+$router->get('/reservaMaterial/material/{id}','Controllers\\ReservaMaterialController@showMaterial'); // Devuelve las reservas de un carrito específico por ID de carrito
+
 
 //Espacios
 
