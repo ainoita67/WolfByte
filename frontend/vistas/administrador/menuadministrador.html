@@ -298,37 +298,48 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
 
-                            <form id="formReserva" method="post" action="#">
+                            <form id="formReserva">
                                 <div class="modal-body container-fluid">
                                     <div class="row g-3">
+                                        <div class="row mt-4 mb-3 ps-4" id="div_botones_autorizar">
+                                            <div class="col-6 p-1">
+                                                <button type="button" class="col-12 btn btn-success border rounded-pill text-light fs-5"><i class="bi bi-check2"></i> Autorizar</button>
+                                            </div>
+                                            <div class="col-6 p-1">
+                                                <button type="button" class="col-12 btn btn-danger border rounded-pill text-light fs-5" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                            </div>
+                                        </div>
+                                        <p class="fs-5 mb-0">Editar reserva</p>
+                                        <input type="hidden" id="reserva_autorizada" name="autorizada">
                                         <!-- ID reserva -->
                                         <div class="col-lg-6">
                                             <label class="form-label">ID Reserva</label>
-                                            <input type="number" class="form-control" id="reserva_id" name="reserva_id" readonly>
+                                            <input type="number" class="form-control" id="reserva_id" name="reserva_id" required readonly>
                                         </div>
 
                                         <!-- Fecha creación -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_f_creacion">F. creación</label>
-                                            <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" readonly>
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" required readonly>
                                         </div>
 
                                         <!-- Inicio -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_inicio">Inicio</label>
-                                            <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio">
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio" required>
                                         </div>
 
                                         <!-- Fin -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_fin">Fin</label>
-                                            <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin">
+                                            <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin" required>
                                         </div>
 
                                         <!-- Espacio/Portátil -->
                                         <div class="col-lg-6">
+                                            <input type="hidden" id="reserva_tipo" name="tipo" required readonly>
                                             <label class="form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
-                                            <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil">
+                                            <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil" required readonly>
                                         </div>
 
                                         <!-- Asignatura -->
@@ -340,17 +351,18 @@
                                         <!-- Grupo -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_grupo">Grupo</label>
-                                            <input type="text" class="form-control" id="reserva_grupo" name="grupo">
+                                            <input type="text" class="form-control" id="reserva_grupo" name="grupo" required>
                                         </div>
 
                                         <!-- Profesor -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_profesor">Profesor</label>
-                                            <input type="text" class="form-control" id="reserva_profesor" name="profesor">
+                                            <input type="text" class="form-control" id="reserva_profesor" name="profesor" required>
                                         </div>
 
                                         <!-- Usuario -->
                                         <div id="div_reserva_usuario">
+                                            <input type="hidden" id="reserva_id_usuario" name="id_usuario" required readonly>
                                             <label class="form-label" for="reserva_usuario">Usuario</label>
                                             <input type="text" class="form-control" id="reserva_usuario" name="usuario" required readonly>
                                         </div>
@@ -358,19 +370,19 @@
                                         <!-- Unidades -->
                                         <div class="col-lg-6" id="div_reserva_unidades">
                                             <label class="form-label" for="reserva_unidades">Unidades</label>
-                                            <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0">
+                                            <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0" required>
                                         </div>
 
                                         <!-- Espacio en el que se usa -->
                                         <div class="col-lg-6" id="div_reserva_espacio_uso">
                                             <label class="form-label">Espacio en el que se usa</label>
-                                            <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso">
+                                            <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso" required>
                                         </div>
 
                                         <!-- Actividad -->
                                         <div class="col-lg-6" id="div_reserva_actividad">
                                             <label class="form-label" for="reserva_actividad">Actividad</label>
-                                            <input type="text" class="form-control" id="reserva_actividad" name="actividad">
+                                            <input type="text" class="form-control" id="reserva_actividad" name="actividad" required>
                                         </div>
 
                                         <!-- Necesidades -->
