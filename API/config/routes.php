@@ -190,3 +190,9 @@ $router->post('/liberaciones', 'Controllers\\LiberacionPuntualController@store')
 $router->post('/liberaciones/reserva/{id_reserva}', 'Controllers\\LiberacionPuntualController@storeByReserva'); //Añadir una liberación puntual ligada a una reserva
 $router->put('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@update'); //Editar una liberación puntual
 $router->delete('/liberaciones/{id}', 'Controllers\\LiberacionPuntualController@destroy'); //Eliminar una liberación puntual
+
+// CARACTERÍSTICAS DE ESPACIOS
+$router->get('/caracteristicasEspacios', 'Controllers\\CaracteristicaEspacioController@index'); // Listar todas las características de espacios
+$router->get('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@showByEspacio'); // Listar características de un espacio específico
+$router->get('/espacios/{id}/caracteristicas/disponibles', 'Controllers\\CaracteristicaEspacioController@showDisponibles'); // Listar características disponibles para un espacio específico
+$router->post('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@asignar'); // Asignar una característica a un espacio específico 
