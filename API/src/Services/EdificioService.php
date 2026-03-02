@@ -64,7 +64,7 @@ class EdificioService
         }
 
         // Capitalizar nombre
-        $data['nombre_edificio'] = ucfirst(strtolower(trim($data['nombre_edificio'])));
+        $data['nombre_edificio'] = ucfirst(trim($data['nombre_edificio']));
 
         try {
             $edificio = $this->model->create($data);
@@ -99,7 +99,7 @@ class EdificioService
         }
 
         // Capitalizar nombre
-        $data['nombre_edificio'] = ucfirst(strtolower(trim($data['nombre_edificio'])));
+        $data['nombre_edificio'] = ucfirst(trim($data['nombre_edificio']));
 
         try {
             // Verificar que existe
