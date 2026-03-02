@@ -49,7 +49,7 @@
                     <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
                     
                     <!-- CALENDARIO -->
-                    <section class="col-12 col-lg-8 d-flex flex-column" style="height: 70vh;">
+                    <section class="col-12 col-lg-8 d-flex flex-column mb-2 mb-lg-5">
 
                         <div class="row d-flex justify-content-between align-items-center mb-3">
                             <button id="prevWeek"
@@ -67,16 +67,16 @@
                             </button>
                         </div>
 
-                        <div id="dp" class="flex-grow-1"></div>
+                        <div id="dp" class="shadow-sm rounded-3 p-1"></div>
 
                     </section>
 
                     <!-- ASIDE INFORMACIÓN -->
                     <aside class="col-12 col-lg-2 mb-4">
-                        <div style="height: 3.5rem;"></div>
+                        <div class="d-none d-lg-block" style="height: 3.5rem;"></div>
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <h5 class="card-title" id="info-id">Carrito de Portátiles</h5>
+                                <h5 class="card-title" id="info-id">Carrito de portátiles</h5>
                                 <hr>
 
                                 <p><strong>Descripción:</strong></p>
@@ -84,9 +84,6 @@
                                 <p><strong>Unidades:</strong> <span id="info-unidades"></span></p>
                                 <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
                                 <p><strong>Planta:</strong> <span id="info-planta"></span></p>
-
-
-
                                 <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
 
 
@@ -96,7 +93,6 @@
 
                 </div>
             </div>
-
 
 <script type="module">
 import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";

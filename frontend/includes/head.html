@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9MNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
-<!-- Estilos y favicon dinámicos -->
+<!-- includes dinámicos -->
 <script>
     // CSS propio
     const linkCSS = document.createElement('link');
@@ -15,10 +15,16 @@
     linkCSS.href = BASE + '/assets/css/style.css';
     document.head.appendChild(linkCSS);
 
-    // Favicon
+    // logout
+    const scriptLogout = document.createElement('script');
+    scriptLogout.src = BASE + '/javascript/sesion/logout.js';
+    document.head.appendChild(scriptLogout);
+
+    // favicon
     const linkFavicon = document.createElement('link');
-    linkFavicon.rel = 'icon';
-    linkFavicon.href = BASE + '/assets/img/favicon.png';
-    linkFavicon.type = 'image/png';
+    linkFavicon.rel = 'shortcut icon';
+    linkFavicon.href = BASE + '/assets/img/favicon.ico';
+    linkFavicon.type = 'image/x-icon';
     document.head.appendChild(linkFavicon);
+
 </script>
