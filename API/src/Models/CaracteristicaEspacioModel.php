@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Models;
 
 use Core\DB;
-use PDOException;
 
-class CaracteristicaModel
+class CaracteristicaEspacioModel
 {
     private DB $db;
     
@@ -16,26 +15,21 @@ class CaracteristicaModel
     }
 
     /**
-     * Obtener todos las Caracteristicas
+     * Obtener todas las relaciones espacio-característica
      */
     public function getAll(): array
     {
         return $this->db
-            ->query("SELECT * FROM Caracteristica ORDER BY nombre")
+            ->query("
+                SELECT ce.id_espacio, ce.id_caracteristica, 
+                       e.descripcion as espacio_descripcion,
+                       c.nombre as caracteristica_nombre
+                FROM Caracteristica_Espacio ce
+                INNER JOIN Recurso e ON ce.id_espacio = e.id_recurso
+                INNER JOIN Caracteristica c ON ce.id_caracteristica = c.id_caracteristica
+                ORDER BY ce.id_espacio, c.nombre
+            ")
             ->fetchAll();
-    }
-
-    /**
-     * Obtener Caracteristica por ID
-     */
-    public function findById(int $id): ?array
-    {
-        $result = $this->db
-            ->query("SELECT * FROM Caracteristica WHERE id_caracteristica = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ?: null;
     }
 
     /**
@@ -125,104 +119,37 @@ class CaracteristicaModel
     }
 
     /**
-     * Crear Caracteristica
+     * Verificar si un espacio tiene una característica específica
      */
-    public function create(array $data): int|false
+    public function tieneCaracteristica(string $idEspacio, int $idCaracteristica): bool
     {
-        // Verificar si ya existe una característica con el mismo nombre
-        $existe = $this->db
-            ->query("SELECT COUNT(*) as total FROM Caracteristica WHERE nombre = :nombre")
-            ->bind(':nombre', $data['nombre'])
-            ->fetch();
-
-        if ($existe['total'] > 0) {
-            return false; // Ya existe
-        }
-
-        $this->db
-            ->query("
-                INSERT INTO Caracteristica (nombre)
-                VALUES (:nombre)
-            ")
-            ->bind(':nombre', $data['nombre'])
-            ->execute();
-
-        return (int) $this->db->lastId();
-    }
-
-    /**
-     * Actualizar Caracteristica
-     */
-    public function update(int $id, array $data): int
-    {
-        // Verificar si ya existe otra característica con el mismo nombre
-        $existe = $this->db
-            ->query("
-                SELECT COUNT(*) as total 
-                FROM Caracteristica 
-                WHERE nombre = :nombre AND id_caracteristica != :id
-            ")
-            ->bind(':nombre', $data['nombre'])
-            ->bind(':id', $id)
-            ->fetch();
-
-        if ($existe['total'] > 0) {
-            return -1; // Conflicto: ya existe otro con ese nombre
-        }
-
-        $this->db
-            ->query("
-                UPDATE Caracteristica
-                SET nombre = :nombre
-                WHERE id_caracteristica = :id
-            ")
-            ->bind(':nombre', $data['nombre'])
-            ->bind(':id', $id)
-            ->execute();
-
-        return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
-    }
-
-    /**
-     * Eliminar Caracteristica
-     */
-    public function delete(int $id): int
-    {
-        // Verificar si la característica está siendo usada
-        $enUso = $this->db
+        $result = $this->db
             ->query("
                 SELECT COUNT(*) as total 
                 FROM Caracteristica_Espacio 
-                WHERE id_caracteristica = :id
+                WHERE id_espacio = :id_espacio AND id_caracteristica = :id_caracteristica
             ")
-            ->bind(':id', $id)
+            ->bind(':id_espacio', $idEspacio)
+            ->bind(':id_caracteristica', $idCaracteristica)
             ->fetch();
 
-        if ($enUso['total'] > 0) {
-            return -1; // Está en uso
-        }
-
-        $this->db
-            ->query("DELETE FROM Caracteristica WHERE id_caracteristica = :id")
-            ->bind(':id', $id)
-            ->execute();
-
-        return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
+        return $result['total'] > 0;
     }
 
     /**
-     * Buscar características por nombre (para autocompletado)
+     * Contar cuántos espacios tienen una característica
      */
-    public function search(string $termino): array
+    public function contarEspaciosConCaracteristica(int $idCaracteristica): int
     {
-        return $this->db
+        $result = $this->db
             ->query("
-                SELECT * FROM Caracteristica 
-                WHERE nombre LIKE :termino 
-                ORDER BY nombre
-                LIMIT 10
+                SELECT COUNT(*) as total 
+                FROM Caracteristica_Espacio 
+                WHERE id_caracteristica = :id_caracteristica
             ")
-            ->bind(':termino', "%$termino%")
-            ->fetchAll();
+            ->bind(':id_caracteristica', $idCaracteristica)
+            ->fetch();
+
+        return (int)$result['total'];
     }
 }
