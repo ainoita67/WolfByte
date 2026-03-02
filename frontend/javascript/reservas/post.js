@@ -107,7 +107,7 @@ function activarEditarTarjetasReserva() {
         let grupo = document.getElementById("reserva_grupo").value;
         let profesor = document.getElementById("reserva_profesor").value;
         let usuario = document.getElementById("reserva_id_usuario").value;
-        let usuarioautoriza=null
+        let usuarioautoriza=null;
         if(autorizada==1){
             usuarioautoriza = sessionStorage.getItem("id_usuario");
         }
@@ -144,11 +144,11 @@ function activarEditarTarjetasReserva() {
 //API Editar reservas
 function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
     if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
-        // if(tipo=="Reserva_espacio"){
-        //     modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, observaciones, formeditar, modal);
-        // }else if(tipo=="Reserva_material"){
-        //     modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, unidades, espacio_uso, observaciones, formeditar, modal);
-        // }
+        if(tipo=="Reserva_espacio"){
+            modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, observaciones, formeditar, modal);
+        }else if(tipo=="Reserva_material"){
+            modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, unidades, espacio_uso, observaciones, formeditar, modal);
+        }
         fetch(window.location.origin+"/API/reservas/"+id, {
             method: "PUT",
             headers: {

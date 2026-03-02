@@ -20,7 +20,6 @@ class EdificioController
 
     /**
      * GET /edificios
-     * Devuelve todos los edificios
      */
     public function index(Request $req, Response $res): void
     {
@@ -34,12 +33,11 @@ class EdificioController
 
     /**
      * GET /edificios/{id}
-     * Devuelve un edificio por ID
      */
-    public function show(Request $req, Response $res, array $args): void
+    public function show(Request $req, Response $res, string $id): void  // Cambiado a string $id
     {
         try {
-            $edificio = $this->service->getEdificioById((int) $args['id']);
+            $edificio = $this->service->getEdificioById((int) $id);
             $res->status(200)->json($edificio);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 404);
@@ -50,57 +48,96 @@ class EdificioController
 
     /**
      * POST /edificios
-     * Crea un nuevo edificio
      */
     public function store(Request $req, Response $res): void
     {
         try {
             $data = $req->getBody();
+            
+            if (!isset($data['nombre_edificio']) || empty(trim($data['nombre_edificio']))) {
+                $res->errorJson('El nombre del edificio es obligatorio', 422);
+                return;
+            }
+
             $edificio = $this->service->createEdificio($data);
-            $res->status(201)->json($edificio);
+            
+            $res->status(201)->json([
+                'status' => 'success',
+                'data' => $edificio,
+                'message' => 'Edificio creado correctamente'
+            ]);
+            
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->status(422)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
     /**
      * PUT /edificios/{id}
-     * Actualiza un edificio existente
+     * IMPORTANTE: El parámetro debe ser string $id, no array $params
      */
-    public function update(Request $req, Response $res, $args): void
+    public function update(Request $req, Response $res, string $id): void  // Cambiado a string $id
     {
         try {
-            // El router pasa el ID como string
-            $id = is_array($args) ? (int) $args['id'] : (int) $args;
-
             $data = $req->getBody();
+            
+            if (!isset($data['nombre_edificio']) || empty(trim($data['nombre_edificio']))) {
+                $res->errorJson('El nombre del edificio es obligatorio', 422);
+                return;
+            }
 
-            $edificio = $this->service->updateEdificio($id, $data);
-
-            $res->status(200)->json($edificio);
+            $edificio = $this->service->updateEdificio((int)$id, $data);
+            
+            $res->status(200)->json([
+                'status' => 'success',
+                'data' => $edificio,
+                'message' => 'Edificio actualizado correctamente'
+            ]);
+            
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->status(422)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->status(500)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
-
     /**
      * DELETE /edificios/{id}
-     * Elimina un edificio
      */
-public function destroy(Request $req, Response $res, $id): Response
-{
-    try {
-        $this->service->deleteEdificio((int)$id);
-        return $res->status(204)->json([]);
-    } catch (Throwable $e) {
-        return $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+    public function destroy(Request $req, Response $res, string $id): void  // Cambiado a string $id
+    {
+        try {
+            $this->service->deleteEdificio((int)$id);
+            
+            $res->status(200)->json([
+                'status' => 'success',
+                'message' => 'Edificio eliminado correctamente'
+            ]);
+            
+        } catch (ValidationException $e) {
+            $res->status(422)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        } catch (Throwable $e) {
+            $res->status(500)->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
-}
-
-
 }
