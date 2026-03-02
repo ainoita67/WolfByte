@@ -95,7 +95,7 @@ class Response
     public function errorJson(string $message, int $code = 400): void
     {
         $this->status($code)
-             ->json([], $message);
+            ->json([], $message);
     }
 
 

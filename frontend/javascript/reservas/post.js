@@ -40,14 +40,14 @@ function activarCrearReserva() {
                 // Limpiar input
                 document.getElementById("formCrearReserva").reset();
 
-                alert("Reserva creada correctamente");
+                mostrarToast("Reserva creada correctamente", 'success');
                 // Recargar
                 window.location.reload();
             } else {
                 if(response.message){
-                    alert(response.message.trim());
+                    mostrarToast(response.message.trim(), 'danger');
                 }else{
-                    alert("Error al crear la reserva");
+                    mostrarToast("Error al crear la reserva", 'danger');
                 }
             }
         })
@@ -118,16 +118,16 @@ function activarEditarTarjetasReserva() {
         let espacio_uso=null;
         if(tipo=="Reserva_espacio"){
             actividad = document.getElementById("reserva_actividad").value;
-            necesidades = document.getElementById("reserva_necesidades").value;
+            necesidades = Array.from(document.getElementById("reserva_necesidades").selectedOptions).map(opt => opt.value);
         }else if(tipo=="Reserva_material"){
             unidades = document.getElementById("reserva_unidades").value;
             espacio_uso = document.getElementById("reserva_espacio_uso").value;
         }else{
-            alert("Error al actualizar los datos");
+            mostrarToast("Error al actualizar los datos", 'danger');
             return;
         }
         if(!id||!fechacreacion||!inicio||!fin||!tipo||!id_recurso||!grupo||!profesor||!usuario){
-            alert("Error al actualizar los datos. Campos obligatorios no rellenados.");
+            mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
         }
 
@@ -144,73 +144,67 @@ function activarEditarTarjetasReserva() {
 //API Editar reservas
 function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
     if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
+        resultado=0;
         if(tipo=="Reserva_espacio"){
-            modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, observaciones, formeditar, modal);
-        }else if(tipo=="Reserva_material"){
-            modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, unidades, espacio_uso, observaciones, formeditar, modal);
+            resultado=modificarReservaEspacio(id, id_recurso, actividad, necesidades);
+        }else if(tipo=="Reserva_portatil"){
+            resultado=modificarReservaPortatil(id, id_recurso, unidades, espacio_uso);
         }
-        fetch(window.location.origin+"/API/reservas/"+id, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo})
-        })
-        .then(res => res.json())
-        .then(response => {
-            if (response.status === "success") {
-                // Cerrar modal
-                modal.hide();
+        if(resultado!=1){
+            mostrarToast("Error al actualizar la reserva", 'danger');
+        }else{
+            fetch(window.location.origin+"/API/reservas/"+id, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo})
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.status === "success") {
+                    // Cerrar modal
+                    modal.hide();
 
-                // Limpiar input
-                formeditar.reset();
+                    // Limpiar input
+                    formeditar.reset();
 
-                alert("Reserva actualizada correctamente");
-                // Recargar
-                window.location.reload();
-            } else {
-                if(response.message){
-                    alert(response.message.trim());
-                }else{
-                    alert("Error al actualizar la reserva");
+                    mostrarToast("Reserva actualizada correctamente", 'success');
+                    // Recargar
+                    obtenerReservasAutorizar();
+                    obtenerReservasProximas();
+                } else {
+                    if(response.message){
+                        mostrarToast(response.message.trim(), 'danger');
+                    }else{
+                        mostrarToast("Error al actualizar la reserva", 'danger');
+                    }
                 }
-            }
-        })
-        .catch(err => console.error("Error al actualizar la reserva:", err));
+            })
+            .catch(err => console.error("Error al actualizar la reserva:", err));
+        }
     }else{
-        alert("Error al actualizar la reserva");
+        mostrarToast("Error al actualizar la reserva", 'danger');
     }
 }
 
 
 
 //API Editar reservas de tipo espacio
-function modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
-    fetch(window.location.origin+"/API/reservas/"+id, {
+function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
+    fetch(window.location.origin+"/API/reservaEspacio/"+id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({autorizada: autorizada, f_creacion: fechacreacion, inicio: inicio, fin: fin, tipo: tipo, id_recurso: id_recurso, asignatura: asignatura, grupo: grupo, profesor: profesor, usuario: usuario, usuarioautoriza: usuarioautoriza, actividad: actividad, necesidades: necesidades, unidades: unidades, espacio_uso: espacio_uso})
+        body: JSON.stringify({id_recurso: id_recurso, actividad: actividad, necesidades: necesidades})
     })
     .then(res => res.json())
     .then(response => {
         if (response.status === "success") {
-            // Cerrar modal
-            modal.hide();
-
-            // Limpiar input
-            formeditar.reset();
-
-            alert("Reserva actualizada correctamente");
-            // Recargar
-            window.location.reload();
+            return 1;
         } else {
-            if(response.message){
-                alert(response.message.trim());
-            }else{
-                alert("Error al actualizar la reserva");
-            }
+            return -1;
         }
     })
     .catch(err => console.error("Error al actualizar la reserva:", err));
@@ -219,32 +213,20 @@ function modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tip
 
 
 //API Editar reservas de tipo portátil
-function modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
+function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso){
     fetch(window.location.origin+"/API/reservas/"+id, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, f_creacion: fechacreacion, inicio: inicio, fin: fin, tipo: tipo, id_recurso: id_recurso, asignatura: asignatura, grupo: grupo, profesor: profesor, usuario: usuario, usuarioautoriza: usuarioautoriza, actividad: actividad, necesidades: necesidades, unidades: unidades, espacio_uso: espacio_uso})
+        body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso})
     })
     .then(res => res.json())
     .then(response => {
         if (response.status === "success") {
-            // Cerrar modal
-            modal.hide();
-
-            // Limpiar input
-            formeditar.reset();
-
-            alert("Reserva actualizada correctamente");
-            // Recargar
-            window.location.reload();
+            return 1;
         } else {
-            if(response.message){
-                alert(response.message.trim());
-            }else{
-                alert("Error al actualizar la reserva");
-            }
+            return -1;
         }
     })
     .catch(err => console.error("Error al actualizar la reserva:", err));
@@ -263,4 +245,57 @@ function formatearFecha(fecha){
     let ss = String(fechaFormulario.getSeconds()).padStart(2, '0');
 
     return `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
+}
+
+
+
+function mostrarToast(mensaje, tipo = 'success') {
+    console.log('Toast:', mensaje, tipo);
+    
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+        console.log('Contenedor de toasts creado');
+    }
+    
+    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    let bgClass = 'bg-success';
+    
+    if (tipo === 'error'||tipo === 'danger') {
+        bgClass = 'bg-danger';
+    } else if (tipo === 'warning') {
+        bgClass = 'bg-warning';
+    } else if (tipo === 'info') {
+        bgClass = 'bg-info';
+    }
+    
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${mensaje}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, {
+        animation: true,
+        autohide: true,
+        delay: 3000
+    });
+    
+    toast.show();
+    
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
 }

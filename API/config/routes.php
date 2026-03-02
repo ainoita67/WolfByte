@@ -122,7 +122,7 @@ $router->get('/reservaEspacio','Controllers\\ReservaEspacioController@index'); /
 $router->get('/mis-reservas-espacio','Controllers\\ReservaEspacioController@misReservas'); // Devuelve todas las reservas de espacio de un usuario autenticado
 $router->post('/reservaEspacio','Controllers\\ReservaEspacioController@store'); // Añade una nueva reserva de un espacio
 $router->get('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@show'); // Devuelve informacion de una reserva de espacio por ID de reserva
-$router->get('/reservaEspacio/espacio/{id}','Controllers\\ReservaEspacioController@showEspacio'); // Devuelve las reservas de un espacio específico por ID de espacio
+$router->get('/reservaEspacio/espacio/{id_espacio}','Controllers\\ReservaEspacioController@showEspacio'); // Devuelve las reservas de un espacio específico por ID de espacio
 $router->put('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@update'); // Cambia los datos de una reserva de espacio (comprobar disponibilidad)
 $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cambiarFechas'); // Cambia el rango de fechas de una reserva de espacio (comprobar disponibilidad)
 
@@ -145,7 +145,7 @@ $router->get('/necesidad-reservas', 'Controllers\\NecesidadReservaController@ind
 $router->get('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@show');
 $router->post('/necesidad-reservas', 'Controllers\\NecesidadReservaController@store');
 $router->put('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@update');
-$router->delete('/  necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
+$router->delete('/necesidad-reservas/{id}', 'Controllers\\NecesidadReservaController@destroy');
 
 //RESERVA DE ESPACIO
 $router->get('/reservas-salon-actos', 'Controllers\\ReservaSalonActosController@index');

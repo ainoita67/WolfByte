@@ -24,7 +24,7 @@ class ReservaEspacioService
     }
 
     // Devuelve todas las reservas de un espacio específico
-    public function getReservasPorEspacio($idEspacio): array
+    public function getReservasPorEspacio(string $idEspacio): array
     {
         Validator::validate(['id' => $idEspacio], [
             'id' => 'required|string|min:1'
@@ -50,7 +50,7 @@ class ReservaEspacioService
 
         if (!$reserva) {
             throw new ValidationException([
-                "id_reserva_espacio" => "Reserva no encontrada"
+                "Reserva ".$id => "Reserva no encontrada"
             ]);
         }
 
@@ -72,13 +72,6 @@ class ReservaEspacioService
         return $this->model->update($id, $data);
     }
 
-    // Elimina una reserva
-    public function deleteReserva(int $id): void
-    {
-        $this->getReservaById($id);
-        $this->model->delete($id);
-    }
-
     // Valida los datos de la reserva
     private function validateReservaData(array $data, bool $isNew = true): void
     {
@@ -88,7 +81,7 @@ class ReservaEspacioService
             $errors['actividad'] = "La actividad es obligatoria";
         }
 
-        if (!isset($data['id_espacio']) || !is_numeric($data['id_espacio'])) {
+        if (!isset($data['id_espacio']) || is_numeric($data['id_espacio'])) {
             $errors['id_espacio'] = "El ID del espacio es obligatorio y debe ser numérico";
         }
 

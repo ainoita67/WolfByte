@@ -32,13 +32,13 @@ class NecesidadReservaModel
     /**
      * Obtener necesidad de reserva por ID
      */
-    public function findById(int $id): array|false
+    public function findById(int $id): array
     {
         try {
             return $this->db
                 ->query("SELECT * FROM Necesidad_R_espacio WHERE id_reserva_espacio = :id")
                 ->bind(':id', $id)
-                ->fetch();
+                ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al buscar la necesidad de reserva");
         }
@@ -58,32 +58,9 @@ class NecesidadReservaModel
                 ->bind(':reserva', $data['id_reserva_espacio'])
                 ->bind(':necesidad', $data['id_necesidad'])
                 ->execute();
-
             return $this->findById((int)$this->db->lastId());
         } catch (PDOException $e) {
             throw new \Exception("Error al crear la necesidad de reserva");
-        }
-    }
-
-    /**
-     * Actualizar necesidad de reserva
-     */
-    public function update(int $id, array $data): array
-    {
-        try {
-            $this->db
-                ->query("
-                    UPDATE Necesidad_R_espacio
-                    SET id_necesidad = :necesidad
-                    WHERE id_reserva_espacio = :id
-                ")
-                ->bind(':necesidad', $data['id_necesidad'])
-                ->bind(':id', $id)
-                ->execute();
-
-            return $this->findById($id);
-        } catch (PDOException $e) {
-            throw new \Exception("Error al actualizar la necesidad de reserva");
         }
     }
 
