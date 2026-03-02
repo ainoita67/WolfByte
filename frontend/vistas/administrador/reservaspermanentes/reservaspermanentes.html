@@ -26,60 +26,227 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Reservas permanentes</h2>
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear material
+                    <i class="bi bi-plus-circle"></i> Crear Reserva Permanen
                 </button>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Unidades</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Proyector Epson</td>
-                            <td>Proyectores</td>
-                            <td>5</td>
-                            <td>Disponible</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
+        <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
+            <thead>
+                <tr>
+                    <th>Aula</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Observacion</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-101</td>
+                    <td>8:50</td>
+                    <td>9:50</td>
+                    <td>Clase Matematicas</td>
+                    <td>
+                    <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                        <i class="bi bi-pencil"></i>
+                    </button>
 
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Portátil HP</td>
-                            <td>Ordenadores</td>
-                            <td>10</td>
-                            <td>En uso</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
+                    <button class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+<!-- MODAL CREAR RESERVA -->
+<div class="modal fade" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Crear reserva permanente</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            <div class="modal-body">
+                <form id="formCrearReserva">
+                    <div class="mb-3">
+                        <label class="fw-bold">Aula</label>
+                        <select class="form-select" name="aula" required>
+                            <option value="">Seleccionar aula</option>
+                            <option>A-101</option>
+                            <option>A-102</option>
+                            <option>A-201</option>
+                        </select>
+                    </div>
 
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="fw-bold">Hora inicio</label>
+                            <select class="form-select" name="horainicio" required>
+                                <option selected disabled>Seleccionar hora de inicio</option>
+                                <option>8:50</option>
+                                <option>9:45</option>
+                                <option>10:40</option>
+                                <option>12:00</option>
+                                <option>12:55</option>
+                                <option>13:50</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="fw-bold">Hora fin</label>
+                            <select class="form-select" name="horafin" required>
+                                <option selected disabled>Seleccionar hora de fin</option>
+                                <option>9:40</option>
+                                <option>10:35</option>
+                                <option>11:30</option>
+                                <option>12:50</option>
+                                <option>13:45</option>
+                                <option>14:40</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Observación</label>
+                        <input type="text" class="form-control" name="observacion" placeholder="Ej: Clase Matemáticas">
+                    </div>
+                    <button class="btn btn-success w-100">Guardar reserva</button>
+                </form>
             </div>
-        </main>
-        <footer id="footer"></footer>
-    </body>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL EDITAR RESERVA -->
+<div class="modal fade" id="modalEditar" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Editar reserva permanente</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarReserva">
+                    <input type="hidden" id="editIndex">
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Aula</label>
+                        <select class="form-select" id="editAula" required>
+                            <option value="">Seleccionar aula</option>
+                            <option>A-101</option>
+                            <option>A-102</option>
+                            <option>A-201</option>
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="fw-bold">Hora inicio</label>
+                            <select class="form-select" id="editHoraInicio" required>
+                                <option selected disabled>Seleccionar hora de inicio</option>
+                                <option>8:50</option>
+                                <option>9:45</option>
+                                <option>10:40</option>
+                                <option>12:00</option>
+                                <option>12:55</option>
+                                <option>13:50</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label class="fw-bold">Hora fin</label>
+                            <select class="form-select" id="editHoraFin" required>
+                                <option selected disabled>Seleccionar hora de fin</option>
+                                <option>9:40</option>
+                                <option>10:35</option>
+                                <option>11:30</option>
+                                <option>12:50</option>
+                                <option>13:45</option>
+                                <option>14:40</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="fw-bold">Observación</label>
+                        <input type="text" class="form-control" id="editObservacion">
+                    </div>
+                    <button class="btn bg-azul text-white w-100">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Seleccionar el tbody de la tabla
+const tabla = document.querySelector("table tbody");
+
+// Función para activar botones de editar y borrar
+function activarBotones() {
+    document.querySelectorAll(".btn-borrar").forEach(btn => {
+        btn.onclick = () => btn.closest("tr").remove();
+    });
+
+    document.querySelectorAll(".btn-editar").forEach(btn => {
+        btn.onclick = () => {
+            const fila = btn.closest("tr");
+            const index = Array.from(tabla.rows).indexOf(fila);
+            document.getElementById("editAula").value = fila.children[0].textContent;
+            document.getElementById("editHoraInicio").value = fila.children[1].textContent;
+            document.getElementById("editHoraFin").value = fila.children[2].textContent;
+            document.getElementById("editObservacion").value = fila.children[3].textContent;
+        };
+    });
+}
+ 
+// Crear reserva
+document.getElementById("formCrearReserva").addEventListener("submit", function(e){
+    e.preventDefault();
+    const aula = this.aula.value;
+    const horainicio = this.horainicio.value;
+    const horafin = this.horafin.value;
+    const observacion = this.observacion.value;
+
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+        <td>${aula}</td>
+        <td>${horainicio}</td>
+        <td>${horafin}</td>
+        <td>${observacion}</td>
+        <td>
+            <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar"></button>
+            <button class="btn btn-danger btn-sm btn-borrar"></button>
+        </td>
+    `;
+    tabla.appendChild(fila);
+    this.reset(); 
+    activarBotones();
+    bootstrap.Modal.getInstance(document.getElementById("modalCrear")).hide();
+});
+
+// Editar reserva
+document.getElementById("formEditarReserva").addEventListener("submit", function(e){
+    e.preventDefault();
+    const index = document.getElementById("editIndex").value;
+    const fila = tabla.rows[index];
+    fila.children[0].textContent = document.getElementById("editAula").value;
+    fila.children[1].textContent = document.getElementById("editHoraInicio").value;
+    fila.children[2].textContent = document.getElementById("editHoraFin").value;
+    fila.children[3].textContent = document.getElementById("editObservacion").value;
+
+    bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
+});
+
+// Inicializar botones al cargar la página
+activarBotones();
+</script>
+</body>
 </html>

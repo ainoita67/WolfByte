@@ -16,7 +16,7 @@ class ReservaPermanenteModel
     }
 
     /**
-     * Obtener todas las necesidades de reserva
+     * Obtener todas las reservas permanentes activas
      */
     public function getAll(): array
     {
@@ -114,17 +114,45 @@ class ReservaPermanenteModel
     }
 
     /**
-     * Eliminar reserva permanente
+     * Activar reserva permanente
      */
-    public function delete(int $id): void
+    public function activar(int $id): array
     {
         try {
             $this->db
-                ->query("DELETE FROM Reserva_permanente WHERE id_reserva_espacio = :id")
-                ->bind(':id', $id)
+                ->query("
+                    UPDATE Reserva_permanente SET
+                        activo = :activo
+                    WHERE id_reserva_permanente = :id
+                ")
+                ->bind(':id',           $id)
+                ->bind(':activo',       1)
                 ->execute();
+
+            return $this->findById($id);
         } catch (PDOException $e) {
-            throw new \Exception("Error al eliminar la reserva permanente");
+            throw new \Exception("Error al activar la reserva permanente");
+        }
+    }
+
+    /**
+     * Desactivar todas las reservas permanentes
+     */
+    public function desactivar(): array
+    {
+        try {
+            $this->db
+                ->query("
+                    UPDATE Reserva_permanente SET
+                        activo = :activo
+                    WHERE activo = 1
+                ")
+                ->bind(':activo',   0)
+                ->execute();
+
+            return $this->getAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al desactivar las reservas permanentes");
         }
     }
 }

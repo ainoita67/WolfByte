@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8">
 
-        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const BASE = window.location.origin + "/frontend";
+        </script>
+
         <script>
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -20,80 +23,108 @@
 
         <title>Necesidades de reserva - IES Bajo Aragón</title>
     </head>
+
     <body>
         <div id="header"></div>
+
         <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-left mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Necesidades de reserva</h2>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                    <i class="bi bi-plus-circle"></i> Crear necesidad
+                </button>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Necesidad</th>
-                            <th class="d-none d-md-table-cell">Descripción</th>
-                            <th>Fecha</th>
-                            <th class="d-none d-md-table-cell">Horario</th>
-                            <th>Prioridad</th>
-                            <th class="d-none d-md-table-cell">Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Clase Matemáticas</td>
-                            <td class="d-none d-md-table-cell">Aula con proyector para clase teórica</td>
-                            <td>15/02/2026</td>
-                            <td class="d-none d-md-table-cell">08:00 - 10:00</td>
-                            <td><span class="badge bg-danger">Alta</span></td>
-                            <td class="d-none d-md-table-cell"><span class="badge bg-success">Aprobada</span></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm d-md-none" data-bs-toggle="modal" data-bs-target="#modalMostrar">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-check-lg"></i>
-                                </button>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
+            <!-- Tarjetas -->
+            <div class="row mx-0 g-4 container-fluid" id="necesidadesReservaContainer"></div>
 
-                        <tr>
-                            <td>Práctica Informática</td>
-                            <td class="d-none d-md-table-cell">Sala con 20 ordenadores</td>
-                            <td>18/02/2026</td>
-                            <td class="d-none d-md-table-cell">10:00 - 12:00</td>
-                            <td><span class="badge bg-warning text-dark">Media</span></td>
-                            <td class="d-none d-md-table-cell"><span class="badge bg-secondary">Pendiente</span></td>
-                            <td>
-                                <button class="btn btn-primary btn-sm d-md-none" data-bs-toggle="modal" data-bs-target="#modalMostrar">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-check-lg"></i>
-                                </button>
-                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
+                <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+                    <i class="bi bi-caret-left-fill"></i> Volver
+                </a>
             </div>
         </main>
+
+        <!-- MODAL CREAR -->
+        <div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crear nueva necesidad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form id="formCrearNecesidad">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre de la necesidad</label>
+                                <input type="text" class="form-control" id="crearNecesidad" name="crearNecesidad" placeholder="Ej: Proyector" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
+                            <button type="submit" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                                <i class="bi bi-check2"></i> Crear
+                            </button>
+                            <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL EDITAR -->
+        <div class="modal fade" id="modalEditar" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar necesidad</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="formEditarNecesidad">
+                        <div class="modal-body p-4 pb-1">
+                            <div class="mb-3">
+                                <input type="hidden" id="editId" name="editId" readonly required>
+                                <label class="form-label">Nombre de la necesidad</label>
+                                <input type="text" class="form-control" id="editNombre" name="editNombre" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 mx-0 text-center d-flex justify-content-center modal-footer">
+                            <button type="submit" form="formEditarNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
+                                <i class="bi bi-check2"></i> Aplicar cambios
+                            </button>
+                            <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
+                                <i class="bi bi-x-lg"></i> Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <footer id="footer"></footer>
+        <script>
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/necesidades/get.js";
+            document.head.appendChild(scriptget);
+
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/necesidades/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerNecesidades();
+            };
+
+            let necesidadSeleccionadaId = null;
+
+            function editarNecesidad(id, nombre) {
+                necesidadSeleccionadaId = id;
+                document.getElementById("editNombre").value = nombre;
+            }
+        </script>
     </body>
 </html>

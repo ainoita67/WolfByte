@@ -19,11 +19,17 @@ class ReservaPermanenteService
         $this->model = new ReservaPermanenteModel();
     }
 
+    /**
+     * Obtener todas las reservas permanentes activas
+     */
     public function getAllReservasPermanentes(): array
     {
         return $this->model->getAll();
     }
 
+    /**
+     * Obtener reserva permanente por ID
+     */
     public function getReservaPermanenteById(string $id): array
     {
         $data = Validator::validate(['id' => $id], [
@@ -32,28 +38,36 @@ class ReservaPermanenteService
 
         try{
             $ReservaPermanente = $this->model->findById($data['id']);
+            return $ReservaPermanente;
         }catch(Throwable $e) {
-            throw new ValidationException("Reserva permanente no encontrada");
+            throw new ValidationException(["Reserva permanente no encontrada"]);
         }
 
-        return $ReservaPermanente;
+        return ["mensaje" => "Reserva permanente no encontrada"];
     }
 
-    public function getReservaPermanenteByIdRecurso(string $id_recurso): array
+    /**
+     * Obtener reserva permanente por ID de recurso
+     */
+    public function getReservaPermanenteRecurso(string $id_recurso): array
     {
         $data = Validator::validate(['id_recurso' => $id_recurso], [
             'id_recurso' => 'required|string|min:1'
         ]);
 
-        $ReservaPermanente = $this->model->findByIdRecurso($data['id_recurso']);
-
-        if(!$ReservaPermanente){
+        try{
+            $ReservaPermanente = $this->model->findByIdRecurso($data['id_recurso']);
+            return $ReservaPermanente;
+        }catch(Throwable $e) {
             throw new ValidationException(["Recurso no encontrado"]);
         }
 
-        return $ReservaPermanente;
+        return ["mensaje" => "Recurso no encontrado"];
     }
 
+    /**
+     * Crear reserva permanente
+     */
     public function createReservaPermanente(array $input): array
     {
         if($input['activo']=="true"||$input['activo']=="1"||$input['activo']==1){
@@ -77,9 +91,12 @@ class ReservaPermanenteService
         return $this->model->create($data);
     }
 
+    /**
+     * Actualizar reserva permanente
+     */
     public function updateReservaPermanente(string $id, array $input): array
     {
-        $id = (int)Validator::validate(['id' => $id], [
+        $id = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
@@ -104,8 +121,27 @@ class ReservaPermanenteService
         return $this->model->update($id, $data);
     }
 
-    public function deleteReservaPermanente(int $id): void
+    /**
+     * Activar reserva permanente
+     */
+    public function activarReservaPermanente(string $id): array
     {
-        $this->model->delete($id);
+        $data = Validator::validate(['id' => $id], [
+            'id' => 'required|int|min:1'
+        ]);
+
+        if(empty($data['id'])) {
+            throw new ValidationException("id es obligatorio");
+        }
+
+        return $this->model->activar($data['id']);
+    }
+
+    /**
+     * Desactivar todas las reservas permanentes
+     */
+    public function desactivarReservasPermanentes(): array
+    {
+        return $this->model->desactivar();
     }
 }

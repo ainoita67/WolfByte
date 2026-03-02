@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    <title>Reserva de aulas - IES Bajo Aragón</title>
+
+    <script>const BASE = window.location.origin + "/frontend";</script>
+
+    <script>
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
+                generarPagina("aulas", "admin");
+            };
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main class="container mt-5 mb-5">
+
+    <!-- CABECERA -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 id="reservaTitulo">Reserva de salon de actos</h2>
+    </div>
+
+    <!-- FORMULARIO -->
+    <form id="formReserva" method="post" action="#">
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- Inicio -->
+                    <div class="col-md-6">
+                        <label class="form-label">Inicio</label>
+                        <input type="datetime-local" class="form-control" id="reserva_inicio" name="inicio">
+                    </div>
+
+                    <!-- Fin -->
+                    <div class="col-md-6">
+                        <label class="form-label">Fin</label>
+                        <input type="datetime-local" class="form-control" id="reserva_fin" name="fin">
+                    </div>
+
+                    <!-- Actividad -->
+                    <div class="col-md-6">
+                        <label class="form-label">Actividad</label>
+                        <input type="text" class="form-control" id="reserva_asignatura" name="actividad">
+                    </div>
+
+                    <!-- Grupo -->
+                    <div class="col-md-6">
+                        <label class="form-label">Grupo</label>
+                        <input type="text" class="form-control" id="reserva_grupo" name="grupo">
+                    </div>
+
+                    <!-- Profesor -->
+                    <div class="col-md-6">
+                        <label class="form-label">Profesor</label>
+                        <input type="text" class="form-control" id="reserva_profesor" name="profesor">
+                    </div>
+
+                    <!-- Necesidades -->
+                    <div class="col-md-6">
+                        <label class="form-label">Necesidades</label>
+                        <select class="form-select" id="reserva_necesidades" name="necesidades[]" multiple size="2">
+                        <option value="proyector">Proyector</option>
+                        <option value="altavoces">Altavoces</option>
+                        <option value="microfono">Micrófono</option>
+                        <option value="pizarra_digital">Pizarra digital</option>
+                        </select>
+                        <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="col-12">
+                        <label class="form-label">Observaciones</label>
+                        <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="card-footer d-flex justify-content-end gap-3 pt-3">
+                <button type="submit" class="btn btn-primary">
+                    Guardar cambios
+                </button>
+            </div>
+
+
+    </form>
+</main>
+
+<footer id="footer"></footer>
+
+</body>
+</html>
