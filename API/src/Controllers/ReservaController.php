@@ -89,12 +89,12 @@ class ReservaController
     }
 
 
-    public function updateFechas($request, $response, $id)
+    public function updateFechas(Request $req, Response $res, $id)
     {
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!$body) {
-            return $response
+            return $res
                 ->status(400)
                 ->json([
                     'status' => 'error',
@@ -111,7 +111,7 @@ class ReservaController
             ?? null;
         
         if ($start === null || $end === null) {
-            return $response
+            return $res
                 ->status(400)
                 ->json([], 'Fechas inválidas');
         }
@@ -120,7 +120,7 @@ class ReservaController
         $ok = $this->service->updateFechasReserva((int)$id, $start, $end);
 
         if (!$ok) {
-            return $response
+            return $res
                 ->status(500)
                 ->json([
                     'status' => 'error',
@@ -128,7 +128,7 @@ class ReservaController
                 ]);
         }
 
-        return $response->json([
+        return $res->json([
             'status' => 'success'
         ]);
     }
@@ -181,6 +181,20 @@ class ReservaController
             error_log("Exception en verificarDisponibilidad: " . $e->getMessage());
             // Por seguridad, si hay error no permitir el cambio
             return false;
+        }
+    }
+
+    public function update(Request $req, Response $res, $args): void
+    {
+        try {
+            $id = is_array($args) ? (int)$args['id'] : (int)$args;
+            $data = $req->getBody();
+            $necesidad = $this->service->updateReserva($id, $data);
+            $res->status(200)->json($necesidad);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
         }
     }
 }

@@ -90,7 +90,7 @@ function activarEditarTarjetasReserva() {
         e.preventDefault();
 
         let id = document.getElementById("reserva_id").value;
-        let autorizada = document.getElementById("reserva_autorizada").value;
+        let autorizada = document.getElementById("reserva_autorizada").value.trim()||null;;
         if(autorizada=="Pendiente"){
             autorizada=null;
         }else if(autorizada=="Denegada"){
@@ -98,12 +98,12 @@ function activarEditarTarjetasReserva() {
         }else if(autorizada=="Autorizada"){
             autorizada=1;
         }
-        let fechacreacion = document.getElementById("reserva_f_creacion").value;
-        let inicio = document.getElementById("reserva_inicio").value;
-        let fin = document.getElementById("reserva_fin").value;
+        let fechacreacion = formatearFecha(document.getElementById("reserva_f_creacion").value);
+        let inicio = formatearFecha(document.getElementById("reserva_inicio").value);
+        let fin = formatearFecha(document.getElementById("reserva_fin").value);
         let tipo = document.getElementById("reserva_tipo").value;
         let id_recurso = document.getElementById("reserva_espacio_portatil").value;
-        let asignatura = document.getElementById("reserva_asignatura").value;
+        let asignatura = document.getElementById("reserva_asignatura").value.trim()||null;
         let grupo = document.getElementById("reserva_grupo").value;
         let profesor = document.getElementById("reserva_profesor").value;
         let usuario = document.getElementById("reserva_id_usuario").value;
@@ -111,7 +111,7 @@ function activarEditarTarjetasReserva() {
         if(autorizada==1){
             usuarioautoriza = sessionStorage.getItem("id_usuario");
         }
-        let observaciones = sessionStorage.getItem("reserva_observaciones");
+        let observaciones = document.getElementById("reserva_observaciones").value.trim()||null;
         let actividad=null;
         let necesidades=null;
         let unidades=null;
@@ -132,8 +132,9 @@ function activarEditarTarjetasReserva() {
         }
 
         let modal = bootstrap.Modal.getInstance(
-            document.getElementById("modalreserva")
+            document.getElementById("modalReserva")
         );
+        console.log(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal);
         modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal);
     });
 }
@@ -142,19 +143,18 @@ function activarEditarTarjetasReserva() {
 
 //API Editar reservas
 function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
-    if(tipo=="Reserva_espacio"){
-        modificarReservaEspacio();
-    }else if(tipo=="Reserva_material"){
-        modificarReservaPortatil();
-    }
-
     if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
+        // if(tipo=="Reserva_espacio"){
+        //     modificarReservaEspacio(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, observaciones, formeditar, modal);
+        // }else if(tipo=="Reserva_material"){
+        //     modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, unidades, espacio_uso, observaciones, formeditar, modal);
+        // }
         fetch(window.location.origin+"/API/reservas/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({autorizada: autorizada, f_creacion: fechacreacion, inicio: inicio, fin: fin, tipo: tipo, id_recurso: id_recurso, asignatura: asignatura, grupo: grupo, profesor: profesor, usuario: usuario, usuarioautoriza: usuarioautoriza, actividad: actividad, necesidades: necesidades, unidades: unidades, espacio_uso: espacio_uso})
+            body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo})
         })
         .then(res => res.json())
         .then(response => {
@@ -248,4 +248,19 @@ function modificarReservaPortatil(id, autorizada, fechacreacion, inicio, fin, ti
         }
     })
     .catch(err => console.error("Error al actualizar la reserva:", err));
+}
+
+
+
+function formatearFecha(fecha){
+    if (!fecha) return null;
+    let fechaFormulario = new Date(fecha);
+    let anyo = fechaFormulario.getFullYear();
+    let mes = String(fechaFormulario.getMonth() + 1).padStart(2, '0');
+    let dia = String(fechaFormulario.getDate()).padStart(2, '0');
+    let hh = String(fechaFormulario.getHours()).padStart(2, '0');
+    let mm = String(fechaFormulario.getMinutes()).padStart(2, '0');
+    let ss = String(fechaFormulario.getSeconds()).padStart(2, '0');
+
+    return `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
 }

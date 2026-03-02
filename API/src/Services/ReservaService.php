@@ -5,6 +5,7 @@ namespace Services;
 
 use Models\ReservaModel;
 use Validation\ValidationException;
+use Validation\Validator;
 
 class ReservaService
 {
@@ -213,6 +214,29 @@ class ReservaService
         } catch (\Exception $e) {
             error_log("ERROR en updateFechas: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function updateReserva(int $id, array $input): array
+    {
+        try{
+            $data = Validator::validate($input, [
+                'asignatura'            => 'nullable|string|min:1',
+                'autorizada'            => 'nullable|in:0,1',
+                'observaciones'         => 'nullable|string|min:1',
+                'grupo'                 => 'required|string|min:1',
+                'profesor'              => 'required|string|min:1',
+                'f_creacion'            => 'required|string',
+                'inicio'                => 'required|string',
+                'fin'                   => 'required|string',
+                'id_usuario'            => 'required|int|min:1',
+                'id_usuario_autoriza'   => 'nullable|int|min:1',
+                'tipo'                  => 'required|string|min:1'
+            ]);
+
+            return $this->model->update($id, $data);
+        }catch(Exception $e){
+            throw new ValidationException(json_encode($errors));
         }
     }
 }
