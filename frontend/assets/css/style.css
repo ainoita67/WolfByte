@@ -137,103 +137,34 @@ nav ul li a img{
 
 /*MENÚ NAV PERFIL*/
 
-#perfil:hover > ul{
+.desplegablemenu:hover > ul{
     display: block !important;
     height: max-content !important;
 }
 
-#perfil ul li:hover{
+.desplegablemenu ul li:hover{
     background-color: #90a300 !important;
     color: white !important;
 }
 
-#menuordenador ul #perfil ul li a{
-    text-decoration: none !important;
-    padding: 0.25em 0 !important;
-}
 
-#perfil ul li{
+.desplegablemenu ul li{
     margin: 0 !important;
     width: 100%;
 }
 
-#perfil ul li:hover *{
+.desplegablemenu ul li:hover *{
     color: white !important;
 }
 
-#perfil ul li *{
+.desplegablemenu ul li *{
     padding: 0.5em !important;
     text-align: center !important;
     margin-left: 0 !important;
 }
 
-#perfil ul li a{
+.desplegablemenu ul li a{
     color: black !important;
-}
-
-
-
-
-
-/*MENÚ NAV MÓVIL*/
-
-#menumovillogin ul{
-    height: 3em;
-    padding-left: 7.5% !important;
-}
-
-#menumovil ul li a img, #menumovillogin ul li a img{
-    height: 3em;
-}
-
-#menumovil ul{
-    height: 3em;
-    padding-left: -10% !important;
-}
-
-#menumovil ul li:nth-child(3), #menumovil ul li:nth-child(4){
-    padding-left: 1em !important;
-    padding-right: 1em !important;
-    margin: 0 !important;
-}
-
-#menumovil ul li:nth-child(3):hover, #menumovil ul li:nth-child(3):active,
-#menumovil ul li:nth-child(4):hover, #menumovil ul li:nth-child(4):active{
-    background-color: #90a300;
-}
-
-
-
-
-
-/*MENÚ NAV ORDENADOR*/
-
-#menuordenador ul li:not(:last-child) a{
-    padding: 1.7em !important;
-    width: 100% !important;
-}
-
-#menuordenador ul li:not(:last-child){
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-#menuordenador ul li:last-child{
-    margin-right: 1em;
-}
-
-#menuordenador ul li:not(:first-child) a:hover{
-    background-color: #90a300;
-}
-
-#menuordenador ul li:last-child:hover{
-    background-color: #90a300;
-}
-
-.dropdown-menu{
-    right: 0;
-    background-color: white !important;
-    border: 1px solid white !important;
 }
 
 
