@@ -15,9 +15,9 @@ function generateHeaderNav(menuactivo, role) {
 
     //si no hay usuario cargar menus vacios
     if (!role){
-        nav.classList.add("row", "d-lg-grid");
+        nav.classList.add("row", "d-xl-grid");
         nav.innerHTML = 
-            `<ul class="col-7 d-grid d-lg-grid text-center fs-5 pt-3 pe-1">
+            `<ul class="col-7 d-grid d-xl-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="${BASE}/assets/img/ieslogo.png" alt="Logo"></a>
                 </li>
@@ -44,14 +44,14 @@ function generateHeaderNav(menuactivo, role) {
 
         // UL PARA TODO Y LOGO
         const ul = document.createElement('ul');
-            ul.classList.add("col-12", "d-flex", "d-lg-grid", "text-center", "fs-5", "py-2", "py-lg-4", "ps-4", "ps-lg-0", "mb-0");
+            ul.classList.add("col-12", "d-flex", "justify-content-between", "d-xl-grid", "text-center", "fs-5", "py-2", "py-xl-4", "ps-4", "ps-xl-0", "mb-0");
             ul.innerHTML = 
-                `<li class="col-lg-12 col-2">
+                `<li class="col-xl-12 col-2">
                     <a href="${BASE}/vistas/menu.html">
                         <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
                     </a>
                 </li>
-                <li class="d-block d-lg-none offset-6 offset-sm-7"></li>
+                <li class="d-block d-xl-none offset-4 offset-md-6 offset-lg-7"></li>
                 `;
 
         nav.appendChild(ul);
@@ -59,24 +59,28 @@ function generateHeaderNav(menuactivo, role) {
         // NAV DESKTOP
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
+            li.classList.add("py-2", "d-none", "d-xl-block");
 
             const a = document.createElement('a');
             a.href = `${BASE}${menu.href}`;
             a.textContent = menu.texto;
 
             if(menuactivo === menu.key){
-                a.classList.add("fw-bold", "text-lightgrey");
-                a.style.color = "grey";
+                a.style.fontWeight = "900";
             }
 
             li.appendChild(a);
             ul.appendChild(li);
         });
 
+        // LI DESPLEGABLES PARA EL FLEX
+
+        const liDesplegable = document.createElement('li');
+            liDesplegable.classList.add("d-flex", "align-items-center","gap-4", "ms-auto", "me-4");
+
         // NAV MOVIL HAMBURGUESA
-        const liMenu = document.createElement('li');
-            liMenu.classList.add("mx-3", "list-group-item", "pt-2", "pb-2", "d-lg-none", "ms-5", "desplegablemenu");
+        const divMenu = document.createElement('div');
+            divMenu.classList.add("list-group-item", "d-xl-none", "desplegablemenu");
 
             const aMenu = document.createElement('a');
                 aMenu.href = "#";
@@ -84,7 +88,7 @@ function generateHeaderNav(menuactivo, role) {
                 aMenu.setAttribute("data-bs-toggle", "dropdown");
                 aMenu.setAttribute("aria-expanded", "false");
                 aMenu.innerHTML = `<i class="bi bi-list fs-1"></i>`;
-            liMenu.appendChild(aMenu);
+            divMenu.appendChild(aMenu);
 
             // Crear UL del dropdown
             const dropdown = document.createElement('ul');
@@ -101,15 +105,15 @@ function generateHeaderNav(menuactivo, role) {
                     dropdown.appendChild(li);
                 });
                 
-        liMenu.appendChild(dropdown);
-        ul.appendChild(liMenu);
+        divMenu.appendChild(dropdown);
+        liDesplegable.appendChild(divMenu);
 
         // PERFIL COMUN PARA DESKTOP Y MOVIL
-        const lip = document.createElement('li');
-        ul.appendChild(lip);
-        lip.classList.add("list-group-item", "pt-2", "pb-2", "desplegablemenu");
-        lip.id = "perfil";
-        lip.innerHTML = 
+        const divPerfil = document.createElement('div');
+        liDesplegable.appendChild(divPerfil);
+        divPerfil.classList.add("list-group-item", "pt-2", "pb-2", "desplegablemenu");
+        divPerfil.id = "perfil";
+        divPerfil.innerHTML = 
             `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle fs-1"></i>
             </a>
@@ -128,6 +132,7 @@ function generateHeaderNav(menuactivo, role) {
                 </li>
             </ul>
             `;
-}
+        ul.appendChild(liDesplegable);
+    }
 }
 
