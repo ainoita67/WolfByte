@@ -262,3 +262,9 @@
 2026-01-23T11:55:58+01:00 - Exception: Provided key is too short
 2026-01-23T11:56:20+01:00 - Exception: Provided key is too short
 2026-01-23T11:56:22+01:00 - Exception: Provided key is too short
+2026-02-09T12:21:22+01:00 - Exception: Call to undefined method Services\ReservaService::esReservaSalonActos()
+2026-02-09T12:21:24+01:00 - Exception: No autorizado
+2026-02-09T12:21:24+01:00 - Exception: Call to undefined method Services\ReservaService::esReservaSalonActos()
+2026-02-09T12:21:36+01:00 - Exception: Call to undefined method Services\ReservaService::esReservaSalonActos()
+2026-02-09T12:27:23+01:00 - Exception: Call to undefined method Services\ReservaService::esReservaSalonActos()
+2026-02-09T12:30:25+01:00 - Exception: Call to undefined method Services\ReservaService::esReservaSalonActos()

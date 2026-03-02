@@ -19,9 +19,9 @@ function generateHeaderNav(menuactivo, role) {
 
     //si no hay usuario cargar menus vacios
     if (!role){
-        navd.classList.add("row", "d-none", "d-xl-grid");
+        navd.classList.add("row", "d-none", "d-lg-grid");
         navd.innerHTML = 
-            `<ul class="col-7 d-none d-xl-grid text-center fs-5 pt-3 pe-1">
+            `<ul class="col-7 d-none d-lg-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="${BASE}/assets/img/ieslogo.png" alt="Logo"></a>
                 </li>
@@ -29,9 +29,9 @@ function generateHeaderNav(menuactivo, role) {
             </ul>
             `;
         
-        navm.classList.add("row", "mt-0", "d-xl-none");
+        navm.classList.add("row", "mt-0", "d-lg-none");
         navm.innerHTML = 
-            `<ul class="col-7 d-grid d-xl-none text-center fs-5 pt-2">
+            `<ul class="col-7 d-grid d-lg-none text-center fs-5 pt-2">
                 <li class="col-12 ps-2 pe-5">
                     <a href="#"><img src="${BASE}/assets/img/ieslogo.png" alt="Logo"></a>
                 </li>
@@ -42,20 +42,23 @@ function generateHeaderNav(menuactivo, role) {
         // si hay usuario llena los navs con los enlaces necesarios
 
         //apartados del menu, para reutilizarlos y bucles
-        const menus = [
-            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.html", key: "liberar" }
+        let menus=[
+            { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
+            { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
+            { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            { texto: "Otros espacios", href: "/frontend/vistas/reservas/espacios/espacios.html", key: "espacios" },
+            { texto: "Incidencias", href: "/frontend/vistas/incidencias/incidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/frontend/vistas/liberar/liberar.html", key: "liberar" }
         ];
+        if(role=="admin"){
+            menus.find(menu => menu.key=='incidencias').href = "/frontend/vistas/incidencias/verincidencias.html";
+        }
 
         //MENU DESKTOP
         // crear ul y logo
         const uld = document.createElement('ul');
             uld.id = "menudesktop"
-            uld.classList.add("col-12", "d-none", "d-xl-grid", "text-center", "fs-5", "pt-3");
+            uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
             if(role=="admin"){
                 uld.innerHTML = 
                 `<li class="col-12">
@@ -79,7 +82,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartados menu desktop
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("pt-5", "pb-5", "d-none", "d-xl-block", "ms-5");
+            li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
 
             const a = document.createElement('a');
             a.href = menu.href;
@@ -100,7 +103,7 @@ function generateHeaderNav(menuactivo, role) {
             liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
 
             const aa = document.createElement('a');
-            aa.href = BASE + "/vistas/administrador/menuadministrador.html";
+            aa.href = "/frontend/vistas/administrador/menuadministrador.html";
             aa.textContent = "Administrador";
 
             if(menuactivo === "admin"){
@@ -116,7 +119,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartado perfil
         const lipd = document.createElement('li');
         uld.appendChild(lipd);
-        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-xl-block");
+        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-lg-block");
         lipd.id = "perfil";
         lipd.innerHTML = 
             `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
@@ -127,7 +130,7 @@ function generateHeaderNav(menuactivo, role) {
                     <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
                 </li>
                 <li>
-                    <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
+                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
                 </li>
                 <li>
                     <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
@@ -141,7 +144,7 @@ function generateHeaderNav(menuactivo, role) {
         // MENU MOVIL
         // Crear UL principal
         const ulm = document.createElement('ul');
-        ulm.classList.add("col-12", "d-flex", "d-xl-none", "text-center", "fs-5", "pt-3", "ps-4");
+        ulm.classList.add("col-12", "d-flex", "d-lg-none", "text-center", "fs-5", "pt-3", "ps-4");
         // logo
         ulm.innerHTML = 
             `<li class="col-2">
@@ -155,7 +158,7 @@ function generateHeaderNav(menuactivo, role) {
 
         // Menú hamburguesa
         const liMenu = document.createElement('li');
-            liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-xl-none", "ms-5");
+            liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-lg-none", "ms-5");
             liMenu.id = "perfil";
 
             const aMenu = document.createElement('a');
@@ -197,7 +200,7 @@ function generateHeaderNav(menuactivo, role) {
         // apartado perfil
         const lipm = document.createElement('li');
         ulm.appendChild(lipm);
-        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-xl-none");
+        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
         lipm.id = "perfil";
         lipm.innerHTML = 
         `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">

@@ -76,134 +76,120 @@ function generarPagina(menu, rol){
 function botonesAccesibilidad() {
     const body = document.body;
     const main = document.querySelector("main");
+    const accesibilidadDiv = document.getElementById("accesibilidad");
+    const botones = accesibilidadDiv.querySelectorAll("button");
 
     // Cargar estado guardado al iniciar
-    const savedFontSize = localStorage.getItem("fontSize");
-    if(savedFontSize) body.style.fontSize = savedFontSize;
+    const savedFontSize = localStorage.getItem("fontSizeMain");
     if(savedFontSize) main.style.fontSize = savedFontSize;
 
     const highContrast = localStorage.getItem("highContrast") === "true";
     if(highContrast) body.classList.add("bg-dark", "text-white");
     if(highContrast) main.classList.add("bg-dark", "text-white");
 
-    const resetearBtn = document.querySelector("#accesibilidad button:nth-child(2)");
-    if(resetearBtn){
-        resetearBtn.addEventListener("click", () => {
-            localStorage.removeItem("fontSizeMain");
-            localStorage.removeItem("highContrast");
+    const btnAccesibilidad = document.getElementById("btnaccesibilidad");
 
-            // Reseteamos estilos en el DOM
-            main.style.fontSize = "1em"; // tamaño por defecto
-            body.classList.remove("bg-dark", "text-white");
-            main.classList.remove("bg-dark", "text-white");
-            toggleBotones();
+    function abrirAccesibilidad() {
+        accesibilidadDiv.classList.add("abierto");
+        botones.forEach(btn => btn.style.display = "block");
+    }
+
+    function cerrarAccesibilidad() {
+        accesibilidadDiv.classList.remove("abierto");
+
+        botones.forEach((btn, i) => {
+            if (i > 0) btn.style.display = "none";
         });
     }
 
+    btnAccesibilidad.addEventListener("click", () => {
+        const abierto = accesibilidadDiv.classList.contains("abierto");
+        if (!abierto) {
+            abrirAccesibilidad();
+        }else{
+            cerrarAccesibilidad();
+        }
+    });
+
+    btnAccesibilidad.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+            e.preventDefault();
+            const abierto = accesibilidadDiv.classList.contains("abierto");
+            if (!abierto) {
+                abrirAccesibilidad();
+            }else{
+                cerrarAccesibilidad();
+            }
+        }
+    });
+
+    const restablecerBtn = document.getElementById("restablecer");
+
+    function restablecer(){
+        // Resetear estilos en el DOM
+        main.style.fontSize = "1em";
+        body.classList.remove("bg-dark", "text-white");
+        main.classList.remove("bg-dark", "text-white");
+        localStorage.removeItem("fontSizeMain");
+        localStorage.removeItem("highContrast");
+    }
+
+    restablecerBtn.addEventListener("click", () => {
+        restablecer();
+    });
+
+
+    restablecerBtn.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+            restablecer();
+        }
+    });
+
     // Botón aumentar letra
-    const aumentarBtn = document.querySelector("#accesibilidad button:nth-child(3)");
+    const aumentarBtn = document.getElementById("masletra");
     if(aumentarBtn){
         aumentarBtn.addEventListener("click", () => {
             const style = window.getComputedStyle(main);
             const currentPx = parseFloat(style.fontSize); // tamaño en px
             const basePx = parseFloat(window.getComputedStyle(body).fontSize); // 1em = tamaño body
             const currentEm = currentPx / basePx; // convertimos a em
-            const newEm = currentEm + 0.1; // aumentamos 0.1em
-            main.style.fontSize = newEm + "em";
-            localStorage.setItem("fontSizeMain", main.style.fontSize);
+            if(currentEm<1.5){ // límite máximo 2em
+                const newEm = currentEm + 0.1; // aumentamos 0.1em
+                main.style.fontSize = newEm + "em";
+                localStorage.setItem("fontSizeMain", main.style.fontSize);
+            }
         });
     }
 
-    // if(aumentarBtn){
-    //     aumentarBtn.addEventListener("click", () => {
-    //         let currentSize = window.getComputedStyle(main).fontSize;
-    //         currentSize = parseFloat(currentSize) + 0.2; // aumentar 2em
-    //         main.style.fontSize = currentSize + "em";
-    //         localStorage.setItem("fontSize", main.style.fontSize);
-    //     });
-    // }
-
     // Botón disminuir letra
-    const disminuirBtn = document.querySelector("#accesibilidad button:nth-child(4)");
+    const disminuirBtn = document.getElementById("menosletra");
     if(disminuirBtn){
         disminuirBtn.addEventListener("click", () => {
             const style = window.getComputedStyle(main);
             const currentPx = parseFloat(style.fontSize); // tamaño en px
             const basePx = parseFloat(window.getComputedStyle(body).fontSize); // 1em = tamaño body
             const currentEm = currentPx / basePx; // convertimos a em
-            const newEm = currentEm - 0.1; // disminuimos 0.1em
-            main.style.fontSize = newEm + "em";
-            localStorage.setItem("fontSizeMain", main.style.fontSize);
+            if(currentEm>0.75){ // límite mínimo 0.5em
+                const newEm = currentEm - 0.1; // disminuimos 0.1em
+                main.style.fontSize = newEm + "em";
+                localStorage.setItem("fontSizeMain", main.style.fontSize);
+            }
         });
     }
 
-    // if(disminuirBtn){
-    //     disminuirBtn.addEventListener("click", () => {
-    //         let currentSize = window.getComputedStyle(main).fontSize;
-    //         currentSize = parseFloat(currentSize) - 0.2; // disminuir 2em
-    //         main.style.fontSize = currentSize + "em";
-    //         localStorage.setItem("fontSize", main.style.fontSize);
-    //     });
-    // }
-
     // Botón alto contraste
-    const contrasteBtn = document.querySelector("#accesibilidad button:nth-child(5)");
+    const contrasteBtn = document.getElementById("altocontraste");
     if(contrasteBtn){
         contrasteBtn.addEventListener("click", () => aplicarAltoContraste());
     }
 
-    const accesibilidadDiv = document.getElementById("accesibilidad");
-    const primerBoton = accesibilidadDiv.querySelector("button:nth-child(1)");
-    const todosBotones = accesibilidadDiv.querySelectorAll("button");
-
-    // Función para desplegar o cerrar
-    function toggleBotones() {
-        const botones = Array.from(todosBotones).slice(1); // todos menos el primero
-        const estanOcultos = botones.some(btn => btn.style.display === "none" || btn.style.display === "");
-
-        if(estanOcultos){
-            // Mostrar todos excepto el primero
-            botones.forEach(btn => btn.style.display = "block");
-            primerBoton.style.display = "none"; // ocultamos el primer botón
-        } else {
-            // Ocultar todos excepto el primero
-            botones.forEach(btn => btn.style.display = "none");
-            primerBoton.style.display = "block"; // mostramos el primer botón de nuevo
-        }
-    }
-
-
-    // Abrir o cerrar con Enter en el div
-    accesibilidadDiv.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            toggleBotones();
-            e.preventDefault(); // Evita que haga scroll
-        }
-    });
-
-    // Cerrar al hacer click fuera
-    document.addEventListener("click", (e) => {
-        if (!accesibilidadDiv.contains(e.target)) {
-            // Si alguno de los botones está desplegado
-            const estanDesplegados = Array.from(todosBotones).some((btn, i) => i > 0 && btn.style.display === "block");
-            if (estanDesplegados) toggleBotones();
-        }
-    });
-
     // Cerrar al perder foco del div
     accesibilidadDiv.addEventListener("focusout", (e) => {
         if (!accesibilidadDiv.contains(e.relatedTarget)) {
-            const estanDesplegados = Array.from(todosBotones).some((btn, i) => i > 0 && btn.style.display === "block");
-            if (estanDesplegados) toggleBotones();
-        }
-    });
-
-    primerBoton.addEventListener("click", toggleBotones);
-
-    primerBoton.addEventListener("keydown", (e) => {
-        if(e.key === "Enter" || e.key === " "){ // también barra espaciadora
-            toggleBotones();
-            e.preventDefault();
+            const botonesVisibles = Array.from(accesibilidadDiv.querySelectorAll("button")).some((btn,i) => i>0 && btn.style.display === "block");
+            if (botonesVisibles && accesibilidadDiv.classList.contains("abierto")) {
+                cerrarAccesibilidad();
+            }
         }
     });
 }
@@ -211,6 +197,8 @@ function botonesAccesibilidad() {
 function aplicarAltoContraste(aplicar = false) {
     const body = document.body;
     const main = document.querySelector("main");
+    const botones = document.querySelectorAll(".btn-outline-secondary");
+    const botoneslight = document.querySelectorAll(".btn-outline-light");
     let highContrast = localStorage.getItem("highContrast") === "true";
 
     if(aplicar){
@@ -218,9 +206,17 @@ function aplicarAltoContraste(aplicar = false) {
         if(highContrast){
             body.classList.add("bg-dark", "text-white");
             main.classList.add("bg-dark", "text-white");
+            botones.forEach(btn => {
+                btn.classList.remove("btn-outline-secondary");
+                btn.classList.add("btn-outline-light");
+            });
         } else {
             body.classList.remove("bg-dark", "text-white");
             main.classList.remove("bg-dark", "text-white");
+            botoneslight.forEach(btn => {
+                btn.classList.remove("btn-outline-light");
+                btn.classList.add("btn-outline-secondary");
+            });
         }
         return;
     }
@@ -228,10 +224,18 @@ function aplicarAltoContraste(aplicar = false) {
     if(highContrast){
         body.classList.remove("bg-dark", "text-white");
         main.classList.remove("bg-dark", "text-white");
+        botoneslight.forEach(btn => {
+            btn.classList.remove("btn-outline-light");
+            btn.classList.add("btn-outline-secondary");
+        });
         localStorage.setItem("highContrast", "false");
     } else {
         body.classList.add("bg-dark", "text-white");
         main.classList.add("bg-dark", "text-white");
+        botones.forEach(btn => {
+            btn.classList.remove("btn-outline-secondary");
+            btn.classList.add("btn-outline-light");
+        });
         localStorage.setItem("highContrast", "true");
     }
 }

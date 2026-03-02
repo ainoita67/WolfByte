@@ -89,7 +89,7 @@ class EdificioModel
     /**
      * Eliminar edificio
      */
-    public function delete(int $id): void
+    public function deleteById(int $id): void
     {
         try {
             $this->db
