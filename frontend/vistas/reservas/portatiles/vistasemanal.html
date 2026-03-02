@@ -2,8 +2,10 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
         <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
         <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
@@ -25,7 +27,7 @@
         </script>
 
 
-        <title>Salón de Actos - IES Bajo Aragón</title>
+        <title>Portátiles - IES Bajo Aragón</title>
     </head>
     <body>
 
@@ -35,39 +37,134 @@
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
             <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
             
-            <div class="container my-5">
-                <div id="dp"></div>
+            <div class="container mt-3 text-end">
+                <button id="btnVolver" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
+            <div class="container-fluid p-4">
+                <div class="row g-4">
+
+                    <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
+                    
+                    <!-- CALENDARIO -->
+                    <section class="col-12 col-lg-8 d-flex flex-column" style="height: 70vh;">
+
+                        <div class="row d-flex justify-content-between align-items-center mb-3">
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+                        </div>
+
+                        <div id="dp" class="flex-grow-1"></div>
+
+                    </section>
+
+                    <!-- ASIDE INFORMACIÓN -->
+                    <aside class="col-12 col-lg-2 mb-4">
+                        <div style="height: 3.5rem;"></div>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title" id="info-id">Carrito de Portátiles</h5>
+                                <hr>
+
+                                <p><strong>Descripción:</strong></p>
+                                <p id="info-descripcion" class="text-muted small"></p>
+                                <p><strong>Unidades:</strong> <span id="info-unidades"></span></p>
+                                <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
+                                <p><strong>Planta:</strong> <span id="info-planta"></span></p>
+
+
+
+                                <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
+
+
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
             </div>
 
 
-            <script>
-                  const dp = new DayPilot.Calendar("dp", {
-                    viewType: "Week",
-                    theme: "calendar_green"
-                });
-                dp.events.list = [
-                    {
-                    "start": "2026-01-26T10:30:00",
-                    "end": "2026-01-26T13:30:00",
-                    "id": "225eb40f-5f78-b53b-0447-a885c8e92233",
-                    "text": "Calendar Event 1"
-                    },
-                    {
-                    "start": "2026-01-27T12:30:00",
-                    "end": "2026-01-27T15:00:00",
-                    "id": "1f67def5-e1dd-57fc-2d39-eb7a5f8e789a",
-                    "text": "Calendar Event 2"
-                    },
-                    {
-                    "start": "2026-01-28T10:30:00",
-                    "end": "2026-01-28T16:00:00",
-                    "id": "aba78fd9-09d0-642e-612d-0e7e002c29f5",
-                    "text": "Calendar Event 3"
-                    }
-                ];
+<script type="module">
+import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";
 
-                dp.init();
-            </script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const idAula = params.get("id");
+    const carrito = await getCarrito(idAula);
+
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "WorkWeek",
+        theme: "calendar_green",
+        startDate: DayPilot.Date.today(),
+
+        locale: "es-es",            // formato europeo
+        headerDateFormat: "dd/MM/yyyy",
+        weekStarts: 1,
+
+        cellDuration: 5,
+        cellHeight: 8, 
+        businessBeginsHour: 8,
+        businessEndsHour: 15,
+        eventDeleteHandling: "Disabled",
+        heightSpec: "BusinessHoursNoScroll"
+
+    });
+    cargarInfoCarrito(carrito);
+    const eventos = await generarEventos(idAula, carrito.unidades);
+
+    dp.events.list = eventos;
+    dp.init();
+
+
+    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    document.getElementById("prevWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(-7);
+        dp.update();
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(7);
+        dp.update();
+    });
+
+
+});
+
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+});
+
+import { getCarrito } from "/frontend/javascript/portatiles/get.js";
+
+async function cargarInfoCarrito(carrito) {
+
+    if (!carrito) return;
+
+    document.getElementById("info-id").textContent = 'Carrito de portátiles ' + carrito.id;
+    document.getElementById("info-descripcion").textContent = carrito.descripcion;
+    document.getElementById("info-edificio").textContent = carrito.edificio;
+    document.getElementById("info-planta").textContent = carrito.planta;
+    document.getElementById("info-unidades").textContent = carrito.unidades;
+    document.getElementById("info-especial").textContent =
+    carrito.autorizacion ? "Sí" : "No";
+
+}
+
+</script>
 
         </main>
         <footer id="footer"></footer>

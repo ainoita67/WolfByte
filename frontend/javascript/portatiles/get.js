@@ -1,12 +1,12 @@
-export async function getEspacio(id) {
+export async function getCarrito(id) {
   try {
-    const response = await fetch(`${API}/espacios/${id}`, {
+    const response = await fetch(`${API}/material/${id}`, {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token")
       }
     });
 
-    if (!response.ok) throw new Error("Error al obtener espacio");
+    if (!response.ok) throw new Error("Error al obtener carrito");
 
     const json = await response.json();
 
@@ -15,21 +15,21 @@ export async function getEspacio(id) {
       return null;
     }
 
-    const e = json.data;
+    const c = json.data;
 
-    const espacio = {
-        id: e.id_recurso,
-        descripcion: e.descripcion,
-        autorizacion: e.especial,
-        planta: e.nombre_planta,
-        edificio: e.nombre_edificio,
-        caracteristicas: e.caracteristicas
+    const carrito = {
+        id: c.id_recurso,
+        descripcion: c.descripcion,
+        autorizacion: c.especial,
+        planta: c.nombre_planta,
+        edificio: c.nombre_edificio,
+        unidades: c.unidades
     };
 
-    return espacio;
+    return carrito;
 
   } catch (error) {
-    console.error("Error getEspacio:", error);
+    console.error("Error getCarrito:", error);
     return null;
   }
 }

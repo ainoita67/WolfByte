@@ -25,7 +25,7 @@ export async function getPermanentesRecurso(idRecurso) {
   }
 }
 
-export function generarHorarioPermanentes(rPermanentes, unidades) {
+export function generarHorarioPermanentes(rPermanentes, unidadesRecurso) {
     const diasSemana = [1, 2, 3, 4, 5]; // lunes a viernes
     const slotsBase = [
         { start: "08:50", end: "09:40" },
@@ -36,7 +36,6 @@ export function generarHorarioPermanentes(rPermanentes, unidades) {
         { start: "13:50", end: "14:40" }
     ];
 
-    // Función para convertir "HH:MM" a minutos
     const tiempoAMinutos = t => {
         const [h, m] = t.split(":").map(Number);
         return h * 60 + m;
@@ -45,31 +44,44 @@ export function generarHorarioPermanentes(rPermanentes, unidades) {
     const horario = [];
 
     diasSemana.forEach(dia => {
-        // Copiamos los slotsBase
-        let slotsDia = [...slotsBase];
 
-        // Filtramos los slots que se solapan con reservas del día
         const reservasDia = rPermanentes.filter(r => r.dia_semana === dia);
 
-        slotsDia = slotsDia.filter(slot => {
-            const slotStart = tiempoAMinutos(slot.start);
-            const slotEnd = tiempoAMinutos(slot.end);
+        const slotsDia = slotsBase
+            .map(slot => {
 
-            //si almenos una reserva se solapa con el slot "some" devuelve true con ! lo cambiamos a false para que el filter elimine ese slot.
-            return !reservasDia.some(reserva => {
-                const resStart = tiempoAMinutos(reserva.inicio);
-                const resEnd = tiempoAMinutos(reserva.fin);
+                const slotStart = tiempoAMinutos(slot.start);
+                const slotEnd = tiempoAMinutos(slot.end);
 
-                // Devuelve true si hay solapamiento
-                return slotStart < resEnd && slotEnd > resStart;
-            });
+                // Sumamos unidades de reservas que se solapan
+                const unidadesReservadas = reservasDia
+                    .filter(reserva => {
+                        const resStart = tiempoAMinutos(reserva.inicio);
+                        const resEnd = tiempoAMinutos(reserva.fin);
+                        return slotStart < resEnd && slotEnd > resStart;
+                    })
+                    .reduce((total, reserva) => total + Number(reserva.unidades), 0);
+
+                const unidadesLibres = unidadesRecurso - unidadesReservadas;
+
+                // Si no quedan unidades, no devolvemos slot
+                if (unidadesLibres <= 0) return null;
+
+                return {
+                    start: slot.start,
+                    end: slot.end,
+                    unidades_libres: unidadesLibres
+                };
+            })
+            .filter(Boolean); // elimina null
+
+        horario.push({
+            dia_semana: dia,
+            slots: slotsDia
         });
-
-        // Añadimos al array final
-        horario.push({ dia_semana: dia, slots: slotsDia });
     });
 
-    return horario; // array de objetos { dia_semana, slots: [...] }
+    return horario;
 }
 
 export function obtenerSeptiembre() {
