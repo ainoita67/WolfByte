@@ -16,12 +16,6 @@ document.addEventListener('click', async (e) => {
             throw new Error(data.message || 'Error al cerrar sesión');
         }
 
-<<<<<<< Updated upstream
-        console.log('Logout OK:', data);
-
-        // Redirige al login
-        window.location.href = '/frontend/auth/login.html';
-=======
         // Limpiar almacenamiento
         localStorage.removeItem('token');
         sessionStorage.removeItem('correo');
@@ -29,7 +23,6 @@ document.addEventListener('click', async (e) => {
         sessionStorage.removeItem('id_usuario');
 
         window.location.href = `${BASE}/auth/login.html`;
->>>>>>> Stashed changes
 
     } catch (error) {
         alert(error.message);
