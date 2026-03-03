@@ -50,7 +50,7 @@ class ReservaPermanenteController
     }
 
     /**
-     * GET /reservas_permanentes/{id_recurso}
+     * GET /reservas_permanentes/recurso/{id_recurso}
      * Muestra todas las reservas permanentes activas por recurso
      */
     public function showActivasRecurso(Request $req, Response $res, string $id): void

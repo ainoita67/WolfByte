@@ -38,18 +38,41 @@ class IncidenciaService
         }
     }
 
-
+    public function getIncidenciasByUsuario(string $id_usuario): array
+    {
+        try {
+            // Pide al modelo que devuelva todas las incidencias de un usuario
+            $id=(int)$id_usuario;
+            return $this->model->findByUsuario($id);
+        } catch (Throwable $e) {
+            // Si algo falla, lo encapsula en una excepción controlada
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+    
+    public function getIncidenciasByRecurso(string $id_recurso): array
+    {
+        try {
+            // Pide al modelo que devuelva todas las incidencias de un recurso
+            $id=(int)$id_recurso;
+            return $this->model->findByRecurso($id);
+        } catch (Throwable $e) {
+            // Si algo falla, lo encapsula en una excepción controlada
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
 
     // Valida los datos, y tras ello los manda al modelo para crear la incidencia
     public function createIncidencia(array $input): array
     {
         $data = Validator::validate($input, [
             'titulo'        => 'required|string|min:3|max:250',
-            'descripcion'   => 'string',
-            'id_ubicacion'  => 'required|int|min:1',
-            'id_estado'     => 'required|int|min:1',
-            'id_prioridad'  => 'required|int|min:1',
-            'id_incidencia'   => 'required|int|min:1'
+            'descripcion'   => 'required|string|min:1',
+            'fecha'         => 'required|string|min:1',
+            'estado'        => 'required|string|min:1',
+            'prioridad'     => 'required|string|min:1',
+            'id_usuario'    => 'required|int|min:1',
+            'id_recurso'    => 'required|string|min:1'
         ]);
 
         try {
@@ -95,7 +118,7 @@ class IncidenciaService
             $exists = $this->model->findById($id);
 
             if (!$exists) {
-                throw new \Exception("Incidencia no encontrado", 404);
+                throw new \Exception("Incidencia no encontrada", 404);
             }
 
             return [
@@ -133,7 +156,7 @@ class IncidenciaService
         // Gestiona las posibles respuestas del modelo
         if ($result === 0) {
             // No existe la incidencia
-            throw new \Exception("Incidencia no encontrado", 404);
+            throw new \Exception("Incidencia no encontrada", 404);
         }
 
         if ($result === -1) {

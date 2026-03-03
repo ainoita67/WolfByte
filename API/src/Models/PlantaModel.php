@@ -25,6 +25,7 @@ class PlantaModel
                 ->query("
                     SELECT 
                         p.numero_planta,
+                        p.nombre_planta,
                         p.id_edificio,
                         e.nombre_edificio,
                         COUNT(esp.id_espacio) as total_espacios
@@ -32,7 +33,7 @@ class PlantaModel
                     INNER JOIN Edificio e ON p.id_edificio = e.id_edificio
                     LEFT JOIN Recurso r ON p.numero_planta = r.numero_planta AND p.id_edificio = r.id_edificio
                     LEFT JOIN Espacio esp ON r.id_recurso = esp.id_espacio
-                    GROUP BY p.numero_planta, p.id_edificio, e.nombre_edificio
+                    GROUP BY p.numero_planta, p.nombre_planta, p.id_edificio, e.nombre_edificio
                     ORDER BY e.nombre_edificio, p.numero_planta
                 ")
                 ->fetchAll();
@@ -51,6 +52,7 @@ class PlantaModel
                 ->query("
                     SELECT 
                         p.numero_planta,
+                        p.nombre_planta,
                         p.id_edificio,
                         e.nombre_edificio,
                         COUNT(esp.id_espacio) as total_espacios
@@ -59,7 +61,7 @@ class PlantaModel
                     LEFT JOIN Recurso r ON p.numero_planta = r.numero_planta AND p.id_edificio = r.id_edificio
                     LEFT JOIN Espacio esp ON r.id_recurso = esp.id_espacio
                     WHERE p.id_edificio = :id_edificio
-                    GROUP BY p.numero_planta, p.id_edificio, e.nombre_edificio
+                    GROUP BY p.numero_planta, p.nombre_planta, p.id_edificio, e.nombre_edificio
                     ORDER BY p.numero_planta
                 ")
                 ->bind(':id_edificio', $idEdificio)
@@ -95,7 +97,7 @@ class PlantaModel
     /**
      * Crear una nueva planta
      */
-    public function create(int $numeroPlanta, int $idEdificio): bool
+    public function create(int $numeroPlanta, int $idEdificio, string $nombrePlanta): bool
     {
         try {
             // Verificar que el edificio existe
@@ -113,14 +115,15 @@ class PlantaModel
                 throw new \Exception("La planta ya existe en este edificio");
             }
 
-            // Crear la planta
+            // Crear la planta con nombre_planta
             return $this->db
                 ->query("
-                    INSERT INTO Planta (numero_planta, id_edificio)
-                    VALUES (:numero_planta, :id_edificio)
+                    INSERT INTO Planta (numero_planta, id_edificio, nombre_planta)
+                    VALUES (:numero_planta, :id_edificio, :nombre_planta)
                 ")
                 ->bind(':numero_planta', $numeroPlanta)
                 ->bind(':id_edificio', $idEdificio)
+                ->bind(':nombre_planta', $nombrePlanta)
                 ->execute();
         } catch (PDOException $e) {
             throw new \Exception("Error al crear planta: " . $e->getMessage());
@@ -128,9 +131,7 @@ class PlantaModel
     }
 
     /**
-     * Actualizar una planta (cambiar su número)
-     * Nota: En tu esquema, la planta se identifica por (numero_planta, id_edificio)
-     * Esto es un UPDATE complejo porque la PK es compuesta
+     * Actualizar una planta
      */
     public function update(int $numeroPlantaActual, int $idEdificio, array $data): bool
     {
@@ -141,8 +142,8 @@ class PlantaModel
             if (isset($data['nuevo_numero_planta'])) {
                 $nuevoNumero = (int)$data['nuevo_numero_planta'];
                 
-                // Verificar que el nuevo número no existe
-                if ($this->exists($nuevoNumero, $idEdificio)) {
+                // Verificar que el nuevo número no existe (si es diferente)
+                if ($nuevoNumero !== $numeroPlantaActual && $this->exists($nuevoNumero, $idEdificio)) {
                     throw new \Exception("Ya existe una planta con ese número en este edificio");
                 }
 
@@ -159,7 +160,7 @@ class PlantaModel
                     ->bind(':id_edificio', $idEdificio)
                     ->execute();
 
-                // Actualizar la planta
+                // Actualizar el número de planta
                 $this->db
                     ->query("
                         UPDATE Planta 
@@ -169,6 +170,23 @@ class PlantaModel
                     ")
                     ->bind(':nuevo_numero', $nuevoNumero)
                     ->bind(':numero_actual', $numeroPlantaActual)
+                    ->bind(':id_edificio', $idEdificio)
+                    ->execute();
+
+                $numeroPlantaActual = $nuevoNumero; // Actualizar para el siguiente paso
+            }
+
+            // Si se quiere cambiar el nombre de planta
+            if (isset($data['nombre_planta'])) {
+                $this->db
+                    ->query("
+                        UPDATE Planta 
+                        SET nombre_planta = :nombre_planta
+                        WHERE numero_planta = :numero_planta 
+                        AND id_edificio = :id_edificio
+                    ")
+                    ->bind(':nombre_planta', $data['nombre_planta'])
+                    ->bind(':numero_planta', $numeroPlantaActual)
                     ->bind(':id_edificio', $idEdificio)
                     ->execute();
             }
@@ -228,6 +246,7 @@ class PlantaModel
                 ->query("
                     SELECT 
                         p.numero_planta,
+                        p.nombre_planta,
                         p.id_edificio,
                         e.nombre_edificio,
                         e.id_edificio,

@@ -7,6 +7,7 @@ use Models\UsuarioModel;
 use Firebase\JWT\JWT;
 use Core\Request;
 use Core\Response;
+use Core\Session;
 
 class AuthController
 {
@@ -42,6 +43,20 @@ class AuthController
         $token = JWT::encode($payload, JWT_SECRET, 'HS256');
 
         $response->json(['token' => $token], 'Login correcto');
+    }
+
+    public function logout(Request $req, Response $res): void
+    {
+        // Destruye la sesión PHP
+        if (session_status() !== PHP_SESSION_NONE) {
+            $_SESSION = [];
+            session_destroy();
+        }
+
+        // También destruye la sesión en tu helper
+        Session::destroy();
+
+        $res->status(200)->json([], "Sesión cerrada correctamente");
     }
 }
     

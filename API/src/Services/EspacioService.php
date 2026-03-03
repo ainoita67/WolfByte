@@ -34,6 +34,10 @@ class EspacioService
 
         try {
             $espacio = $this->model->findById($id);
+            $caracteristicas = $this->model->getCaracteristicasEspacio($id) ?? [];
+
+            $espacio['caracteristicas'] = $caracteristicas;
+
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
@@ -193,4 +197,96 @@ class EspacioService
         }
     }
 
+
+    public function getOtrosEspacios(): array
+    {
+        try {
+            $aulas = $this->model->getOtrosEspacios();
+            $resultado = [];
+
+            foreach ($aulas as $aula) {
+
+                $edificio = $aula['nombre_edificio'] ?: 'Sin edificio';
+                $planta = $aula['nombre_planta'] ?: 'Sin planta';
+
+                if (!isset($resultado[$edificio])) {
+                    $resultado[$edificio] = [];
+                }
+
+                if (!isset($resultado[$edificio][$planta])) {
+                    $resultado[$edificio][$planta] = [];
+                }
+
+                // Obtener características
+                $caracteristicas = $this->model->getCaracteristicasEspacio($aula['id_recurso']) ?? [];
+
+                $aulaFormateada = [
+                    'id_recurso' => $aula['id_recurso'],
+                    'descripcion' => $aula['descripcion'],
+                    'caracteristicas' => $caracteristicas
+                ];
+
+                $resultado[$edificio][$planta][] = $aulaFormateada;
+            }
+
+            return $resultado;
+
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
+    public function getOtrosEspaciosDisponibles(array $input): array
+    {
+        $data = Validator::validate($input, [
+            'fecha'     => 'required|string',
+            'hora_inicio'    => 'required|string',
+            'hora_fin'       => 'required|string',
+
+        ]);
+
+        $fecha = $data['fecha'];
+        $hora_inicio = $data['hora_inicio'];
+        $hora_fin = $data['hora_fin'];
+        $dia_semana = date('w', strtotime($fecha));
+        $inicio = date('Y-m-d', strtotime($fecha)) . ' ' . $hora_inicio;
+        $fin = date('Y-m-d', strtotime($fecha)) . ' ' . $hora_fin;
+
+        try {
+
+            $aulas = $this->model->getOtrosEspaciosLibres($inicio, $fin, $dia_semana, $hora_inicio, $hora_fin);
+            $resultado = [];
+
+            foreach ($aulas as $aula) {
+
+                $edificio = $aula['nombre_edificio'] ?: 'Sin edificio';
+                $planta = $aula['nombre_planta'] ?: 'Sin planta';
+
+                if (!isset($resultado[$edificio])) {
+                    $resultado[$edificio] = [];
+                }
+
+                if (!isset($resultado[$edificio][$planta])) {
+                    $resultado[$edificio][$planta] = [];
+                }
+
+                // Obtener características
+                $caracteristicas = $this->model->getCaracteristicasEspacio($aula['id_recurso']) ?? [];
+
+                $aulaFormateada = [
+                    'id_recurso' => $aula['id_recurso'],
+                    'descripcion' => $aula['descripcion'],
+                    'reservas' => $aula['total_reservas'],
+                    'caracteristicas' => $caracteristicas
+                ];
+
+                $resultado[$edificio][$planta][] = $aulaFormateada;
+            }
+
+            return $resultado;
+
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
 }

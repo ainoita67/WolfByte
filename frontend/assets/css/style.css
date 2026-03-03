@@ -74,9 +74,9 @@ a{
 
 nav ul li{
     list-style: none;
-    height: min-content;
     vertical-align: middle;
     align-self: center;
+    padding: 0.5em 1em !important;
 }
 
 nav ul{
@@ -90,38 +90,6 @@ nav{
     max-width: 101% !important;
 }
 
-nav:nth-child(1) ul li:not(:last-child){
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-nav:nth-child(1) ul li:not(:last-child) a{
-    padding: 1.5em 0 !important;
-    margin: 0 !important;
-}
-
-nav:nth-child(1) ul li:last-child{
-    padding: 2em 2em 1.3em 2em !important;
-    margin-left: -1em !important;
-}
-
-nav:nth-child(1) ul li:last-child a i{
-    padding: 1.5em 0 !important;
-    margin-top: 1.7em !important;
-}
-
-nav:nth-child(1) ul li:nth-child(1){
-    margin-left: 1.5em !important;
-}
-
-nav:nth-child(1) ul li:nth-child(1) a img{
-    margin-top: -0.2em !important;
-}
-
-nav ul li:not(:first-child) a:hover{
-    background-color: #90a300 !important;
-}
-
 nav *{
     color: white !important;
     text-decoration: none !important;
@@ -131,109 +99,49 @@ nav ul li a img{
     height: 4em;
 }
 
+nav ul li a{
+    font-size: 1em !important;
+    font-weight: 400;
+}
 
+nav ul li a:hover{
+    font-size: 1.01em !important;
+    font-weight: 500;
+}
 
 
 
 /*MENÚ NAV PERFIL*/
 
-#perfil:hover > ul{
+.desplegablemenu:hover > ul{
     display: block !important;
     height: max-content !important;
 }
 
-#perfil ul li:hover{
+.desplegablemenu ul li:hover{
     background-color: #90a300 !important;
     color: white !important;
 }
 
-#menuordenador ul #perfil ul li a{
-    text-decoration: none !important;
-    padding: 0.25em 0 !important;
-}
 
-#perfil ul li{
+.desplegablemenu ul li{
     margin: 0 !important;
     width: 100%;
 }
 
-#perfil ul li:hover *{
+.desplegablemenu ul li:hover *{
     color: white !important;
+    background-color: #90a300 !important;
 }
 
-#perfil ul li *{
+.desplegablemenu ul li *{
     padding: 0.5em !important;
     text-align: center !important;
     margin-left: 0 !important;
 }
 
-#perfil ul li a{
+.desplegablemenu ul li a{
     color: black !important;
-}
-
-
-
-
-
-/*MENÚ NAV MÓVIL*/
-
-#menumovillogin ul{
-    height: 3em;
-    padding-left: 7.5% !important;
-}
-
-#menumovil ul li a img, #menumovillogin ul li a img{
-    height: 3em;
-}
-
-#menumovil ul{
-    height: 3em;
-    padding-left: -10% !important;
-}
-
-#menumovil ul li:nth-child(3), #menumovil ul li:nth-child(4){
-    padding-left: 1em !important;
-    padding-right: 1em !important;
-    margin: 0 !important;
-}
-
-#menumovil ul li:nth-child(3):hover, #menumovil ul li:nth-child(3):active,
-#menumovil ul li:nth-child(4):hover, #menumovil ul li:nth-child(4):active{
-    background-color: #90a300;
-}
-
-
-
-
-
-/*MENÚ NAV ORDENADOR*/
-
-#menuordenador ul li:not(:last-child) a{
-    padding: 1.7em !important;
-    width: 100% !important;
-}
-
-#menuordenador ul li:not(:last-child){
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-#menuordenador ul li:last-child{
-    margin-right: 1em;
-}
-
-#menuordenador ul li:not(:first-child) a:hover{
-    background-color: #90a300;
-}
-
-#menuordenador ul li:last-child:hover{
-    background-color: #90a300;
-}
-
-.dropdown-menu{
-    right: 0;
-    background-color: white !important;
-    border: 1px solid white !important;
 }
 
 
@@ -612,11 +520,12 @@ form.login{
     background-color: #cea141;
 }
 
+
+
 /* MENU ADMINISTRADOR */
-#aside-admin {
+#aside-admin{
     border-color: #2a457e;
-    width: 260px; 
-    min-height: 80vh;
+    width: 260px;
     border-bottom:#2a457eb6 solid 2px;
     border-right:#2a457eb6 solid 2px;
     border-bottom-right-radius: 10px;
@@ -657,6 +566,7 @@ form.login{
 .edificio-card h3 {
     margin-bottom: 15px;
     color: #274C9C;
+    font-weight: 700;
 }
 
 /* Planta */
@@ -700,4 +610,100 @@ form.login{
 
 .aula.no-cumple {
     border: 2px solid #dc3545 !important;
+}
+
+
+.carro-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e6eaf2;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+/* Cabecera tipo tarjeta administrativa */
+.carro-card h3 {
+    margin: 0;
+    padding: 12px 16px;
+    background: #f5f7fb;
+    color: #274C9C;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-bottom: 1px solid #c4cbd1;
+}
+
+/* Contenido */
+.carro-body {
+    padding: 14px 16px;
+}
+
+.carro-info {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: black;
+}
+
+.carro-info strong {
+    color: #274C9C;
+    font-weight: 650;
+}
+
+/* Pie */
+.carro-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #c4cbd1;
+    background: #fafbfe;
+}
+
+/* Botón más integrado */
+.carro-footer .btn {
+    font-weight: 500;
+}
+
+/* Contenedor de métricas */
+.carro-metricas {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Caja de cada métrica */
+.carro-metrica {
+    flex: 1;
+    background: #f5f7fb;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #e6eaf2;
+}
+
+/* Número grande */
+.carro-metrica-num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #274C9C;
+    line-height: 1;
+}
+
+/* Texto pequeño */
+.carro-metrica-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Variantes de estado */
+.carro-metrica.ocupados .carro-metrica-num {
+    color: #dc3545; /* rojo Bootstrap */
+}
+
+.carro-metrica.libres .carro-metrica-num {
+    color: #198754; /* verde Bootstrap */
 }
