@@ -102,3 +102,30 @@ export async function getRoles() {
     return {};
   }
 }
+
+export async function getUsuarioById(id) {
+  try {
+    const response = await fetch(`${API}/user/${id}`);
+    if (!response.ok) throw new Error("Error al obtener usuario");
+
+    const json = await response.json();
+
+    const rolesMap = await getRoles();
+    const u = json.data;
+
+    return new Usuario({
+      id_usuario: u.id_usuario,
+      nombre: u.nombre,
+      correo: u.correo,
+      usuario_activo: u.usuario_activo === 1,
+      rol: {
+        id_rol: u.id_rol,
+        rol: rolesMap[Number(u.id_rol)] ?? "desconocido"
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
