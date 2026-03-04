@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
+    <script src="../../../javascript/sesion/authGuard.js"></script>
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
     <script>const BASE = window.location.origin + "/frontend";</script>
-
+    <script>const API = window.location.origin + "/API";</script>
+    <!--
+    AÑADE:
+        <script src="/frontend/javascript/includes.js"></script>
+        <script src="/frontend/javascript/menu.js"></script>
+    QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+    -->
     <script>
         const script1 = document.createElement("script");
         script1.src = BASE + "/javascript/includes.js";
@@ -12,203 +19,247 @@
             const script2 = document.createElement("script");
             script2.src = BASE + "/javascript/menu.js";
             script2.onload = () => {
-                generarPagina("admin", "admin");
+                generarPagina("menu", "admin");
             };
             document.head.appendChild(script2);
         };
         document.head.appendChild(script1);
     </script>
 
-    <title>Aulas y Espacios - IES Bajo Aragón</title>
+    <title>Gestión de Aulas y Espacios - IES Bajo Aragón</title>
 </head>
-
 <body>
 
-    <div id="header"></div>
+<div id="header"></div>
 
-    <main class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Aulas y Espacios</h2>
-            <button class="btn btn-success" id="btnCrear">
-                <i class="bi bi-plus-circle"></i> Nuevo Espacio
-            </button>
-        </div>
-
-        <!-- Pestañas para cambiar entre vistas -->
-        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="aulas-tab" data-bs-toggle="tab" data-bs-target="#aulas" type="button" role="tab">
-                    <i class="bi bi-building"></i> Aulas
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="espacios-tab" data-bs-toggle="tab" data-bs-target="#espacios" type="button" role="tab">
-                    <i class="bi bi-door-open"></i> Otros Espacios
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos" type="button" role="tab">
-                    <i class="bi bi-grid-3x3-gap-fill"></i> Todos
-                </button>
-            </li>
-        </ul>
-
-        <!-- Contenido de las pestañas -->
-        <div class="tab-content" id="myTabContent">
-            <!-- Pestaña Aulas -->
-            <div class="tab-pane fade show active" id="aulas" role="tabpanel">
-                <h4 class="mb-3">Aulas</h4>
-                <div class="row g-4" id="contenedorAulas">
-                    <!-- Datos de aulas -->
-                </div>
+<main class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center">Gestión de Aulas y Espacios</h2>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            <i class="bi bi-plus-circle"></i> Crear espacio
+        </button>
+    </div>
+    
+    <div id="espaciosContainer" class="row">
+        <!-- Aquí se generarán las tarjetas dinámicamente -->
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
-
-            <!-- Pestaña Otros Espacios -->
-            <div class="tab-pane fade" id="espacios" role="tabpanel">
-                <h4 class="mb-3">Otros Espacios</h4>
-                <div class="row g-4" id="contenedorOtrosEspacios">
-                    <!-- Datos de otros espacios -->
-                </div>
-            </div>
-
-            <!-- Pestaña Todos -->
-            <div class="tab-pane fade" id="todos" role="tabpanel">
-                <h4 class="mb-3">Todos los Espacios</h4>
-                <div class="row g-4" id="contenedorTodos">
-                    <!-- Datos de todos los espacios -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Volver -->
-        <div class="divvolver container p-0 pb-3 mb-5 mt-4 text-end fs-5">
-            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light text-decoration-none">
-                <i class="bi bi-caret-left-fill"></i> Volver
-            </a>
-        </div>
-    </main>
-
-    <!-- Modal Crear/Editar Espacio -->
-    <div class="modal fade" id="modalEspacio" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">
-                        <i class="bi bi-plus-circle"></i> Nuevo Espacio
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEspacio">
-                        <input type="hidden" id="espacioId">
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">ID del espacio *</label>
-                                <input type="text" class="form-control" id="espacioId_recurso" 
-                                       placeholder="Ej. AULA101" required maxlength="10">
-                                <div class="form-text">Identificador único (máx. 10 caracteres)</div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Tipo de espacio *</label>
-                                <select class="form-select" id="espacioTipo" required>
-                                    <option value="">Seleccionar...</option>
-                                    <option value="aula">Aula</option>
-                                    <option value="espacio">Otro espacio</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Descripción *</label>
-                            <input type="text" class="form-control" id="espacioDescripcion" 
-                                   placeholder="Ej. Aula de informática" required maxlength="255">
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Edificio *</label>
-                                <select class="form-select" id="espacioEdificio" required>
-                                    <option value="">Seleccionar edificio...</option>
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Planta *</label>
-                                <select class="form-select" id="espacioPlanta" required>
-                                    <option value="">Seleccionar planta...</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="espacioActivo" checked>
-                                    <label class="form-check-label" for="espacioActivo">
-                                        Espacio activo
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="espacioEspecial">
-                                    <label class="form-check-label" for="espacioEspecial">
-                                        Espacio especial
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formEspacio" class="btn btn-primary" id="btnGuardar">
-                        <i class="bi bi-check2"></i> Guardar
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                </div>
-            </div>
+            <p class="mt-2">Cargando espacios...</p>
         </div>
     </div>
 
-    <!-- Modal Confirmar Eliminación -->
-    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
-                        <p class="fs-5">
-                            ¿Estás seguro de eliminar el espacio "<span id="espacioEliminarNombre" class="fw-bold"></span>"?
-                        </p>
-                        <p class="text-muted">Esta acción no se puede deshacer.</p>
+    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+        <a href="../../menuadministrador.html" class="btn btn-primary rounded-pill px-4">
+            <i class="bi bi-caret-left-fill"></i> Volver
+        </a>
+    </div>
+</main>
+
+<!-- MODAL CREAR -->
+<div class="modal fade" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear nuevo espacio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrearEspacio">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ID del espacio</label>
+                            <input type="text" class="form-control" id="crearId" placeholder="Ej: A101" required>
+                            <small class="text-muted">Identificador único</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="crearDescripcion" placeholder="Ej: Aula de informática" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Edificio</label>
+                            <select class="form-select" id="crearEdificio" required>
+                                <option value="">Seleccionar edificio...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Planta</label>
+                            <select class="form-select" id="crearPlanta" required>
+                                <option value="">Seleccionar planta...</option>
+                                <option value="0">Planta baja</option>
+                                <option value="1">Primera planta</option>
+                                <option value="2">Segunda planta</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" id="crearTipo" required>
+                                <option value="1">Aula</option>
+                                <option value="0">Otro espacio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="crearEstado" required>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
                     </div>
-                    <input type="hidden" id="espacioEliminarId">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                        <i class="bi bi-trash"></i> Sí, Eliminar
-                    </button>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formCrearEspacio" class="btn btn-primary">
+                    <i class="bi bi-check-lg"></i> Crear
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <footer id="footer"></footer>
-</body>
+<!-- MODAL EDITAR -->
+<div class="modal fade" id="modalEditar" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar espacio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarEspacio">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">ID del espacio</label>
+                            <input type="text" class="form-control" id="editIdDisplay" disabled>
+                            <small class="text-muted">El ID no se puede modificar</small>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editDescripcion" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Edificio</label>
+                            <select class="form-select" id="editEdificio" required>
+                                <option value="">Seleccionar edificio...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Planta</label>
+                            <select class="form-select" id="editPlanta" required>
+                                <option value="">Seleccionar planta...</option>
+                                <option value="0">Planta baja</option>
+                                <option value="1">Primera planta</option>
+                                <option value="2">Segunda planta</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" id="editTipo" required>
+                                <option value="1">Aula</option>
+                                <option value="0">Otro espacio</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="editEstado" required>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formEditarEspacio" class="btn btn-warning">
+                    <i class="bi bi-check-lg"></i> Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ELIMINAR -->
+<div class="modal fade" id="modalEliminar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-trash"></i> Eliminar espacio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-5 fw-bold text-danger">¿Seguro que desea eliminar este espacio?</p>
+                <p class="text-muted mb-3">Esta acción no se puede deshacer.</p>
+                
+                <form id="formEliminarEspacio">
+                    <input type="hidden" id="deleteId">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Espacio</label>
+                        <input type="text" class="form-control" id="deleteEspacio" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="deleteDescripcion" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" form="formEliminarEspacio" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VER DETALLES -->
+<div class="modal fade" id="modalVer" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detalles del espacio</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="verId"></span></p>
+                <p><strong>Descripción:</strong> <span id="verDescripcion"></span></p>
+                <p><strong>Edificio:</strong> <span id="verEdificio"></span></p>
+                <p><strong>Planta:</strong> <span id="verPlanta"></span></p>
+                <p><strong>Tipo:</strong> <span id="verTipo"></span></p>
+                <p><strong>Estado:</strong> <span id="verEstado"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-warning" id="btnEditarDesdeVer" data-id="">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer id="footer"></footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script principal -->
 <script type="module" src="../../../javascript/aulasyespacios/aulasyespacios.js"></script>
 
+</body>
 </html>
