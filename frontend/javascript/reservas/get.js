@@ -73,17 +73,22 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
 
 
 function mostrarDatosModal(reserva){
+    console.log(reserva);
     let selectNecesidades = document.getElementById("reserva_necesidades");
   
     if(reserva.tipo == "Reserva_espacio"){
-        reserva.necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+        let necesidades=[];
+
+        if(typeof reserva.necesidades === "string"){
+            necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+        }
 
         for (let i = 0; i < selectNecesidades.options.length; i++) {
             selectNecesidades.options[i].selected = false;
             selectNecesidades.options[i].classList.remove("border", "border-primary");
         }
 
-        reserva.necesidades.forEach(nec => {
+        necesidades.forEach(nec => {
             for (let i = 0; i < selectNecesidades.options.length; i++) {
                 if (selectNecesidades.options[i].value === nec) {
                     selectNecesidades.options[i].selected = true;
