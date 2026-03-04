@@ -32,11 +32,12 @@ class ReservaEspacioModel
                     r.fin,
                     re.actividad,
                     re.id_espacio,
-                    n.nombre AS necesidad
+                    GROUP_CONCAT(n.nombre) AS necesidades
                 FROM Reserva r
                 JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                 LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
                 LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
+                GROUP BY r.id_reserva
                 ORDER BY r.inicio;
             ")
             ->fetchAll();
@@ -59,12 +60,13 @@ class ReservaEspacioModel
                         r.fin,
                         re.actividad,
                         re.id_espacio,
-                        n.nombre AS necesidad
+                        GROUP_CONCAT(n.nombre) AS necesidades
                     FROM Reserva r
                     JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
                     WHERE re.id_reserva=:id
+                    GROUP BY r.id_reserva
                     ORDER BY r.inicio;
                 ")
                 ->bind(':id', $id)
@@ -91,12 +93,13 @@ class ReservaEspacioModel
                         r.fin,
                         re.actividad,
                         re.id_espacio,
-                        n.nombre AS necesidad
+                        GROUP_CONCAT(n.nombre) AS necesidades
                     FROM Reserva r
                     JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
                     WHERE re.id_espacio=:espacio
+                    GROUP BY r.id_reserva
                     ORDER BY r.inicio;
                 ")
                 ->bind(':espacio', $idEspacio)

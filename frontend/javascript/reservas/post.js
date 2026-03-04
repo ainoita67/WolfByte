@@ -134,7 +134,6 @@ function activarEditarTarjetasReserva() {
         let modal = bootstrap.Modal.getInstance(
             document.getElementById("modalReserva")
         );
-        console.log(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal);
         modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal);
     });
 }
@@ -142,13 +141,13 @@ function activarEditarTarjetasReserva() {
 
 
 //API Editar reservas
-function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
+async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
     if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
         resultado=0;
         if(tipo=="Reserva_espacio"){
-            resultado=modificarReservaEspacio(id, id_recurso, actividad, necesidades);
+            resultado=await modificarReservaEspacio(id, id_recurso, actividad, necesidades);
         }else if(tipo=="Reserva_portatil"){
-            resultado=modificarReservaPortatil(id, id_recurso, unidades, espacio_uso);
+            resultado=await modificarReservaPortatil(id, id_recurso, unidades, espacio_uso);
         }
         if(resultado!=1){
             mostrarToast("Error al actualizar la reserva", 'danger');
@@ -191,45 +190,52 @@ function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_r
 
 
 //API Editar reservas de tipo espacio
-function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
-    fetch(window.location.origin+"/API/reservaEspacio/"+id, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({id_recurso: id_recurso, actividad: actividad, necesidades: necesidades})
-    })
-    .then(res => res.json())
-    .then(response => {
-        if (response.status === "success") {
+async function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
+    try{
+        let arraynecesidades = necesidades.map(id => ({ id_necesidad: id }));
+        let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades})
+        })
+        let response = await res.json();
+        
+        if (response.status == "success"){
             return 1;
-        } else {
+        }else{
             return -1;
         }
-    })
-    .catch(err => console.error("Error al actualizar la reserva:", err));
+    }catch(err){
+        console.error("Error al actualizar la reserva:", err);
+        return -1;
+    }
 }
 
 
 
 //API Editar reservas de tipo portátil
-function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso){
-    fetch(window.location.origin+"/API/reservas/"+id, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso})
-    })
-    .then(res => res.json())
-    .then(response => {
-        if (response.status === "success") {
+async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso){
+    try{
+        let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso})
+        })
+        let response = await res.json();
+        
+        if (response.status == "success") {
             return 1;
         } else {
             return -1;
         }
-    })
-    .catch(err => console.error("Error al actualizar la reserva:", err));
+    }catch(err){
+        console.error("Error al actualizar la reserva:", err);
+        return -1;
+    }
 }
 
 
@@ -249,16 +255,13 @@ function formatearFecha(fecha){
 
 
 
-function mostrarToast(mensaje, tipo = 'success') {
-    console.log('Toast:', mensaje, tipo);
-    
+function mostrarToast(mensaje, tipo = 'success') {    
     let toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
         toastContainer.style.zIndex = '9999';
         document.body.appendChild(toastContainer);
-        console.log('Contenedor de toasts creado');
     }
     
     const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);

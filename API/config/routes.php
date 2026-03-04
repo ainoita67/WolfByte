@@ -126,6 +126,15 @@ $router->get('/reservaEspacio/espacio/{id_espacio}','Controllers\\ReservaEspacio
 $router->put('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@update'); // Cambia los datos de una reserva de espacio (comprobar disponibilidad)
 $router->patch('/reservaEspacio/{id}','Controllers\\ReservaEspacioController@cambiarFechas'); // Cambia el rango de fechas de una reserva de espacio (comprobar disponibilidad)
 
+// RESERVAS PORTÁTILES
+$router->get('/reservaPortatil','Controllers\\ReservaPortatilController@index'); // Devuelve todas las reservas de tipo “portátil”
+$router->get('/mis-reservas-portatil','Controllers\\ReservaPortatilController@misReservas'); // Devuelve todas las reservas de portátil de un usuario autenticado
+$router->post('/reservaPortatil','Controllers\\ReservaPortatilController@store'); // Añade una nueva reserva de un portátil
+$router->get('/reservaPortatil/{id}','Controllers\\ReservaPortatilController@show'); // Devuelve informacion de una reserva de portátil por ID de reserva
+$router->get('/reservaPortatil/portatil/{id_portatil}','Controllers\\ReservaPortatilController@showPortatil'); // Devuelve las reservas de un portátil específico por ID de portátil
+$router->put('/reservaPortatil/{id}','Controllers\\ReservaPortatilController@update'); // Cambia los datos de una reserva de portátil (comprobar disponibilidad)
+$router->patch('/reservaPortatil/{id}','Controllers\\ReservaPortatilController@cambiarFechas'); // Cambia el rango de fechas de una reserva de portátil (comprobar disponibilidad)
+
 // RESERVAS PERMANENTES
 $router->get('/reservas_permanentes', 'Controllers\\ReservaPermanenteController@index'); //consultar todas las reservas permanentes activas
 $router->get('/reservas_permanentes/recurso/{id_recurso}', 'Controllers\\ReservaPermanenteController@showActivasRecurso'); //consultar todas las reservas permanentes activas de un recurso
@@ -175,6 +184,7 @@ $router->put('/portatiles/reservas/{id}',              'Controllers\\PortatilCon
 $router->patch('/portatiles/reservas/{id}',            'Controllers\\PortatilController@patchReserva'); // Actualizar parcialmente
 $router->patch('/portatiles/reservas/{id}/unidades',   'Controllers\\PortatilController@patchUnidades'); // Actualizar unidades
 $router->delete('/portatiles/reservas/{id}',           'Controllers\\PortatilController@deleteReserva'); // Eliminar reserva
+
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
 $router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción de todos los recursos activos que estén en la base de datos

@@ -53,21 +53,25 @@ class NecesidadReservaService
         return $resultados;
     }
 
-    public function updateNecesidad(int $id, array $data): array
+    public function updateNecesidad(int $id, array $input): array
     {
         $resultados=[];
-        foreach ($data['necesidades'] as $n) {
-            if (!isset($n['id_necesidad'])) {
-                throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+        if($input==null){
+            $this->model->delete($id, $input);
+        }else{
+            foreach ($input['necesidades'] as $n) {
+                if (!isset($n['id_necesidad'])) {
+                    throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+                }
             }
-        }
-        $this->model->delete($id, $data);
-        foreach ($data['necesidades'] as $necesidad) {
-            $insertData = [
-                'id_reserva_espacio' => $id,
-                'id_necesidad' => $necesidad['id_necesidad']
-            ];
-            $resultados = $this->model->create($insertData);
+            $this->model->delete($id, $input);
+            foreach ($input['necesidades'] as $necesidad) {
+                $data = [
+                    'id_reserva_espacio' => (int)$id,
+                    'id_necesidad' => (int)$necesidad['id_necesidad']
+                ];
+                $resultados = $this->model->create($data);
+            }
         }
         return $resultados;
     }

@@ -63,56 +63,7 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
             `;
 
             divReserva.addEventListener("click", function(){
-                let autorizada='Denegada';
-                if(reserva.autorizada==null){
-                    autorizada='Pendiente';
-                }else if(reserva.autorizada==1){
-                    autorizada='Autorizada';
-                }
-                document.getElementById("reserva_autorizada").value = reserva.autorizada;
-                document.getElementById("reserva_id").value = reserva.id_reserva;
-                document.getElementById("reserva_f_creacion").value = reserva.f_creacion;
-                document.getElementById("reserva_inicio").value = reserva.inicio;
-                document.getElementById("reserva_fin").value = reserva.fin;
-                document.getElementById("reserva_tipo").value = reserva.tipo;
-                document.getElementById("reserva_espacio_portatil").value = reserva.id_recurso;
-                document.getElementById("reserva_asignatura").value = reserva.asignatura;
-                document.getElementById("reserva_grupo").value = reserva.grupo;
-                document.getElementById("reserva_profesor").value = reserva.profesor;
-                document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
-                document.getElementById("reserva_usuario").value = reserva.nombreusuario;
-                
-                document.getElementById("reserva_unidades").value = reserva.unidades;
-                document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;
-                document.getElementById("reserva_actividad").value = reserva.actividad;
-                document.getElementById("reserva_necesidades").value = reserva.necesidades;
-                document.getElementById("reserva_observaciones").value = reserva.observaciones;
-                                
-                if (reserva.tipo == 'Reserva_espacio') {
-                    document.getElementById("div_reserva_usuario").classList.add('col-lg-6');
-                    document.getElementById("div_reserva_unidades").classList.add('d-none');
-                    document.getElementById("reserva_unidades").required = false;
-                    document.getElementById("div_reserva_espacio_uso").classList.add('d-none');
-                    document.getElementById("reserva_espacio_uso").required = false;
-                    document.getElementById("div_reserva_actividad").classList.remove('d-none');
-                    document.getElementById("reserva_actividad").required = true;
-                    document.getElementById("div_reserva_necesidades").classList.remove('d-none');
-                } else {
-                    document.getElementById("div_reserva_usuario").classList.remove('col-lg-6');
-                    document.getElementById("div_reserva_unidades").classList.remove('d-none');
-                    document.getElementById("reserva_unidades").required = true;
-                    document.getElementById("div_reserva_espacio_uso").classList.remove('d-none');
-                    document.getElementById("reserva_espacio_uso").required = true;
-                    document.getElementById("div_reserva_actividad").classList.add('d-none');
-                    document.getElementById("reserva_actividad").required = false;
-                    document.getElementById("div_reserva_necesidades").classList.add('d-none');
-                }
-
-                if(reserva.autorizada!=null){
-                    document.getElementById("div_botones_autorizar").classList.add('d-none');
-                }else{
-                    document.getElementById("div_botones_autorizar").classList.remove('d-none');
-                }
+                mostrarDatosModal(reserva);
             });
 
             tarjetasReservas.appendChild(divReserva);
@@ -120,6 +71,78 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
     }
 }
 
+
+function mostrarDatosModal(reserva){
+    let selectNecesidades = document.getElementById("reserva_necesidades");
+  
+    if(reserva.tipo == "Reserva_espacio"){
+        reserva.necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+
+        for (let i = 0; i < selectNecesidades.options.length; i++) {
+            selectNecesidades.options[i].selected = false;
+            selectNecesidades.options[i].classList.remove("border", "border-primary");
+        }
+
+        reserva.necesidades.forEach(nec => {
+            for (let i = 0; i < selectNecesidades.options.length; i++) {
+                if (selectNecesidades.options[i].value === nec) {
+                    selectNecesidades.options[i].selected = true;
+                    selectNecesidades.options[i].classList.add("border", "border-primary");
+                }
+            }
+        });
+    }
+
+    let autorizada='Denegada';
+    if(reserva.autorizada==null){
+        autorizada='Pendiente';
+    }else if(reserva.autorizada==1){
+        autorizada='Autorizada';
+    }
+    document.getElementById("reserva_autorizada").value = autorizada;
+    document.getElementById("reserva_id").value = reserva.id_reserva;
+    document.getElementById("reserva_f_creacion").value = reserva.f_creacion;
+    document.getElementById("reserva_inicio").value = reserva.inicio;
+    document.getElementById("reserva_fin").value = reserva.fin;
+    document.getElementById("reserva_tipo").value = reserva.tipo;
+    document.getElementById("reserva_espacio_portatil").value = reserva.id_recurso;
+    document.getElementById("reserva_asignatura").value = reserva.asignatura;
+    document.getElementById("reserva_grupo").value = reserva.grupo;
+    document.getElementById("reserva_profesor").value = reserva.profesor;
+    document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
+    document.getElementById("reserva_usuario").value = reserva.nombreusuario;
+    
+    document.getElementById("reserva_unidades").value = reserva.unidades;
+    document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;
+    document.getElementById("reserva_actividad").value = reserva.actividad;
+    document.getElementById("reserva_observaciones").value = reserva.observaciones;
+                    
+    if (reserva.tipo == 'Reserva_espacio') {
+        document.getElementById("div_reserva_usuario").classList.add('col-lg-6');
+        document.getElementById("div_reserva_unidades").classList.add('d-none');
+        document.getElementById("reserva_unidades").required = false;
+        document.getElementById("div_reserva_espacio_uso").classList.add('d-none');
+        document.getElementById("reserva_espacio_uso").required = false;
+        document.getElementById("div_reserva_actividad").classList.remove('d-none');
+        document.getElementById("reserva_actividad").required = true;
+        document.getElementById("div_reserva_necesidades").classList.remove('d-none');
+    } else {
+        document.getElementById("div_reserva_usuario").classList.remove('col-lg-6');
+        document.getElementById("div_reserva_unidades").classList.remove('d-none');
+        document.getElementById("reserva_unidades").required = true;
+        document.getElementById("div_reserva_espacio_uso").classList.remove('d-none');
+        document.getElementById("reserva_espacio_uso").required = true;
+        document.getElementById("div_reserva_actividad").classList.add('d-none');
+        document.getElementById("reserva_actividad").required = false;
+        document.getElementById("div_reserva_necesidades").classList.add('d-none');
+    }
+
+    if(reserva.autorizada!=null){
+        document.getElementById("div_botones_autorizar").classList.add('d-none');
+    }else{
+        document.getElementById("div_botones_autorizar").classList.remove('d-none');
+    }
+}
 
 
 //API Obtener reservas para filtrarlas
