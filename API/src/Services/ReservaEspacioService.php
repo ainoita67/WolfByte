@@ -60,16 +60,21 @@ class ReservaEspacioService
     // Crea una nueva reserva
     public function createReserva(array $data): array
     {
-        $this->validateReservaData($data);
-        return $this->model->create($data);
+        if($this->model->getReservaFecha($data)<=0){
+            $this->validateReservaData($data, false);
+            return $this->model->create($data);
+        }
+        throw new \Exception("Ya hay una reserva entre esas horas");
     }
 
     // Actualiza una reserva existente
     public function updateReserva(int $id, array $data): array
     {
-        $this->getReservaById($id);
-        $this->validateReservaData($data, false);
-        return $this->model->update($id, $data);
+        if($this->model->getReservaFecha($data)<=0&&count($this->model->findById($id))>0){
+            $this->validateReservaData($data, false);
+            return $this->model->update($id, $data);
+        }
+        throw new \Exception("Ya hay una reserva entre esas horas");
     }
 
     // Valida los datos de la reserva
@@ -83,6 +88,14 @@ class ReservaEspacioService
 
         if (!isset($data['id_espacio']) || is_numeric($data['id_espacio'])) {
             $errors['id_espacio'] = "El ID del espacio es obligatorio y debe ser texto";
+        }
+
+        if (!isset($data['inicio']) || is_numeric($data['inicio'])) {
+            $errors['inicio'] = "La fecha de inicio es obligatoria y debe ser texto";
+        }
+
+        if (!isset($data['fin']) || is_numeric($data['fin'])) {
+            $errors['fin'] = "La fecha de fin es obligatoria y debe ser texto";
         }
 
         if (!empty($errors)) {

@@ -152,4 +152,29 @@ class ReservaEspacioModel
             throw new \Exception("Error al actualizar reservas del espacio");
         }
     }
+
+    public function getReservaFecha(array $data): int
+    {
+        try{
+            $filas=$this->db
+                ->query("
+                    SELECT
+                        COUNT(IFNULL(r.id_reserva,0)) AS total
+                    FROM Reserva r JOIN Reserva_espacio re ON r.id_reserva=re.id_reserva
+                    WHERE (r.inicio>:inicio1 AND r.fin<:inicio2) OR (r.inicio>:fin1 AND r.fin<:fin2) OR (r.inicio<=:inicio3 AND r.fin>=:fin3)
+                    AND re.id_espacio!=:espacio
+                ")
+                ->bind(':inicio1', $data['inicio'])
+                ->bind(':fin1', $data['fin'])
+                ->bind(':inicio2', $data['inicio'])
+                ->bind(':fin2', $data['fin'])
+                ->bind(':inicio3', $data['inicio'])
+                ->bind(':fin3', $data['fin'])
+                ->bind(':espacio', $data['id_espacio'])
+                ->fetch();
+            return (int) $filas['total'];
+        } catch (PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

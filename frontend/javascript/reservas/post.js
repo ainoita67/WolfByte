@@ -145,9 +145,9 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
     if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
         resultado=0;
         if(tipo=="Reserva_espacio"){
-            resultado=await modificarReservaEspacio(id, id_recurso, actividad, necesidades);
+            resultado=await modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin);
         }else if(tipo=="Reserva_portatil"){
-            resultado=await modificarReservaPortatil(id, id_recurso, unidades, espacio_uso);
+            resultado=await modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin);
         }
         if(resultado!=1){
             mostrarToast("Error al actualizar la reserva", 'danger');
@@ -190,7 +190,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 
 
 //API Editar reservas de tipo espacio
-async function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
+async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin){
     try{
         let arraynecesidades = necesidades.map(id => ({ id_necesidad: id }));
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
@@ -198,7 +198,7 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades})
+            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades, inicio: inicio, fin: fin})
         })
         let response = await res.json();
         
@@ -216,14 +216,14 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades){
 
 
 //API Editar reservas de tipo portátil
-async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso){
+async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin){
     try{
         let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso})
+            body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso, inicio: inicio, fin: fin})
         })
         let response = await res.json();
         

@@ -150,6 +150,7 @@ function mostrarDatosModal(reserva){
 }
 
 
+
 //API Obtener reservas para filtrarlas
 function activarFiltrarReservasAutorizar(){
     let formfiltrar = document.getElementById("formFiltrarReservasAutorizar");
