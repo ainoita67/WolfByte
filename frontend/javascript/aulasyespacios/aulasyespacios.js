@@ -221,7 +221,7 @@ function mostrarEspacios(espacios) {
             
             for (const espacio of espaciosOrdenados) {
                 const esAula = espacio.es_aula === 1 || espacio.es_aula === true;
-                const btnColor = esAula ? 'primary' : 'success';
+                const btnColor = esAula ? 'blue' : 'success';
                 const tipoTexto = esAula ? 'Aula' : 'Espacio';
                 
                 html += `
