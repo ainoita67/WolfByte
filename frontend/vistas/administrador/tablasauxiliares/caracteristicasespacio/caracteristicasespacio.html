@@ -118,7 +118,7 @@
     <div class="modal fade" id="modalEditarCaracteristica" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
+                <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="bi bi-pencil-square"></i> Editar Característica
                     </h5>
@@ -136,48 +136,18 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary text-white">
+                        <i class="bi bi-check2"></i> Guardar cambios
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg"></i> Cancelar
                     </button>
-                    <button type="submit" form="formEditarCaracteristica" class="btn btn-warning text-white">
-                        <i class="bi bi-check2"></i> Guardar cambios
-                    </button>
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Confirmar Eliminación -->
-    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
-                        <p class="fs-5">
-                            ¿Estás seguro de eliminar la característica "<span id="nombreCaracteristicaEliminar" class="fw-bold"></span>"?
-                        </p>
-                        <p class="text-muted">Esta acción no se puede deshacer.</p>
-                    </div>
-                    <input type="hidden" id="idCaracteristicaEliminar">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                        <i class="bi bi-trash"></i> Sí, Eliminar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer id="footer"></footer>
 </body>
