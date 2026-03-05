@@ -35,7 +35,8 @@
 <main class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-center">Gestión de Aulas y Espacios</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+        <!-- CAMBIO IMPORTANTE: onclick en lugar de data-bs-toggle -->
+        <button class="btn btn-success" onclick="window.abrirModalCrear()">
             <i class="bi bi-plus-circle"></i> Crear espacio
         </button>
     </div>
@@ -61,7 +62,7 @@
 <div class="modal fade" id="modalCrear" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear nuevo espacio</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -115,10 +116,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="formCrearEspacio" class="btn btn-primary">
+                <button type="submit" form="formCrearEspacio" class="btn bg-blue text-white">
                     <i class="bi bi-check-lg"></i> Crear
                 </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -128,7 +129,7 @@
 <div class="modal fade" id="modalEditar" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-warning">
+            <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar espacio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -184,46 +185,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="submit" form="formEditarEspacio" class="btn btn-warning">
                     <i class="bi bi-check-lg"></i> Actualizar
                 </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL ELIMINAR -->
-<div class="modal fade" id="modalEliminar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title"><i class="bi bi-trash"></i> Eliminar espacio</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="fs-5 fw-bold text-danger">¿Seguro que desea eliminar este espacio?</p>
-                <p class="text-muted mb-3">Esta acción no se puede deshacer.</p>
-                
-                <form id="formEliminarEspacio">
-                    <input type="hidden" id="deleteId">
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Espacio</label>
-                        <input type="text" class="form-control" id="deleteEspacio" readonly>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Descripción</label>
-                        <input type="text" class="form-control" id="deleteDescripcion" readonly>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="formEliminarEspacio" class="btn btn-danger">
-                    <i class="bi bi-trash"></i> Eliminar
-                </button>
             </div>
         </div>
     </div>
@@ -233,7 +198,7 @@
 <div class="modal fade" id="modalVer" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
+            <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-info-circle"></i> Detalles del espacio</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -246,8 +211,8 @@
                 <p><strong>Estado:</strong> <span id="verEstado"></span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-warning" id="btnEditarDesdeVer" data-id="">Editar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -4,7 +4,6 @@ const DOMAIN = "http://192.168.13.202:83/API";
 // Variables globales
 let edificios = [];
 let espaciosGlobal = [];
-let edificiosMap = new Map(); // Mapa para acceder rápidamente a los nombres de edificios
 
 // ************  OBTENER DATOS ****************** //
 
@@ -12,7 +11,7 @@ async function getEspacios() {
     const URL = DOMAIN + "/espacios";
 
     try {
-        console.log("Obteniendo espacios de:", URL);
+        console.log("🔍 Obteniendo espacios de:", URL);
         
         const response = await fetch(URL, {
             method: "GET",
@@ -27,18 +26,20 @@ async function getEspacios() {
 
         const jsonData = await response.json();
         
+        let espacios = [];
         if (jsonData.data && Array.isArray(jsonData.data)) {
-            console.log(`${jsonData.data.length} espacios encontrados`);
-            espaciosGlobal = jsonData.data;
-            return espaciosGlobal;
+            espacios = jsonData.data;
         } else if (Array.isArray(jsonData)) {
-            console.log(`${jsonData.length} espacios encontrados`);
-            espaciosGlobal = jsonData;
-            return espaciosGlobal;
-        } else {
-            console.warn("Formato inesperado:", jsonData);
-            return [];
+            espacios = jsonData;
         }
+        
+        console.log(`${espacios.length} espacios encontrados`);
+        if (espacios.length > 0) {
+            console.log("Primer espacio:", espacios[0]);
+        }
+        espaciosGlobal = espacios;
+        return espacios;
+        
     } catch (error) {
         console.error("Error obteniendo espacios:", error);
         throw error;
@@ -49,6 +50,8 @@ async function getEdificios() {
     const URL = DOMAIN + "/edificios";
 
     try {
+        console.log("🔍 Obteniendo edificios de:", URL);
+        
         const response = await fetch(URL, {
             method: "GET",
             headers: {
@@ -70,15 +73,7 @@ async function getEdificios() {
             edificios = [];
         }
         
-        // Crear mapa para acceso rápido
-        edificiosMap.clear();
-        edificios.forEach(edificio => {
-            edificiosMap.set(edificio.id_edificio, edificio.nombre_edificio);
-        });
-        
-        console.log("Edificios cargados:", edificios);
-        console.log("Mapa de edificios:", edificiosMap);
-        
+        console.log(`${edificios.length} edificios encontrados:`, edificios);
         return edificios;
         
     } catch (error) {
@@ -87,76 +82,61 @@ async function getEdificios() {
     }
 }
 
-// ************  CARGAR SELECTORES ****************** //
-
-function cargarSelectEdificios(selectId, valorSeleccionado = null) {
-    const select = document.getElementById(selectId);
-    if (!select) return;
-    
-    select.innerHTML = '<option value="">Seleccionar edificio...</option>';
-    
-    edificios.forEach(edificio => {
-        const option = document.createElement('option');
-        option.value = edificio.id_edificio;
-        option.textContent = edificio.nombre_edificio;
-        select.appendChild(option);
-    });
-    
-    if (valorSeleccionado !== null) {
-        select.value = String(valorSeleccionado);
-    }
-}
-
-// ************  OBTENER NOMBRE DE EDIFICIO ****************** //
-
-function getNombreEdificio(idEdificio) {
-    if (!idEdificio) return 'Sin edificio';
-    return edificiosMap.get(idEdificio) || `Edificio ${idEdificio}`;
-}
-
 // ************  OBTENER NOMBRE DE PLANTA ****************** //
 
 function getNombrePlanta(numeroPlanta) {
     const plantas = {
         0: 'Planta baja',
         1: 'Primera planta',
-        2: 'Segunda planta',
-        3: 'Tercera planta'
+        2: 'Segunda planta'
     };
     return plantas[numeroPlanta] || `Planta ${numeroPlanta}`;
 }
 
-// ************  ORGANIZAR ESPACIOS POR EDIFICIO Y PLANTA ****************** //
+// ************  CARGAR SELECTORES ****************** //
 
-function organizarEspacios(espacios) {
-    const organizado = {};
+async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
+    const select = document.getElementById(selectId);
+    if (!select) {
+        console.error(`No se encontró el select con id: ${selectId}`);
+        return;
+    }
     
-    espacios.forEach(espacio => {
-        const edificioId = espacio.id_edificio;
-        const edificioNombre = getNombreEdificio(edificioId);
-        const planta = espacio.numero_planta ?? 0;
-        const nombrePlanta = espacio.nombre_planta || getNombrePlanta(planta);
+    select.innerHTML = '<option value="">Seleccionar edificio...</option>';
+    
+    if (!edificios || edificios.length === 0) {
+        console.warn("No hay edificios cargados, intentando cargarlos...");
+        await getEdificios();
+    }
+    
+    if (!edificios || edificios.length === 0) {
+        console.error("No se pudieron cargar los edificios");
+        return;
+    }
+    
+    console.log(`Cargando ${edificios.length} edificios en select ${selectId}`);
+    console.log("Valor a seleccionar:", valorSeleccionado);
+    
+    edificios.forEach(edificio => {
+        const option = document.createElement('option');
+        option.value = edificio.id_edificio;
+        option.textContent = edificio.nombre_edificio;
         
-        // Usar el nombre del edificio como clave para agrupar
-        if (!organizado[edificioNombre]) {
-            organizado[edificioNombre] = {
-                id: edificioId,
-                nombre: edificioNombre.toUpperCase(),
-                plantas: {}
-            };
+        // Comparar correctamente los valores
+        if (valorSeleccionado !== null && String(edificio.id_edificio) === String(valorSeleccionado)) {
+            option.selected = true;
+            console.log(`✅ Edificio seleccionado: ${edificio.nombre_edificio} (ID: ${edificio.id_edificio})`);
         }
         
-        if (!organizado[edificioNombre].plantas[planta]) {
-            organizado[edificioNombre].plantas[planta] = {
-                nombre: nombrePlanta,
-                espacios: []
-            };
-        }
-        
-        organizado[edificioNombre].plantas[planta].espacios.push(espacio);
+        select.appendChild(option);
     });
     
-    return organizado;
+    // Respaldo: también intentar con select.value
+    if (valorSeleccionado !== null && select.value !== String(valorSeleccionado)) {
+        console.log("Intentando seleccionar con select.value...");
+        select.value = String(valorSeleccionado);
+        console.log(`Valor después de select.value: ${select.value}`);
+    }
 }
 
 // ************  MOSTRAR ESPACIOS ****************** //
@@ -165,7 +145,7 @@ function mostrarEspacios(espacios) {
     const contenedor = document.getElementById('espaciosContainer');
     if (!contenedor) return;
     
-    contenedor.innerHTML = ''; // Limpiar contenedor
+    contenedor.innerHTML = '';
     
     if (!espacios || espacios.length === 0) {
         contenedor.innerHTML = `
@@ -180,36 +160,55 @@ function mostrarEspacios(espacios) {
         return;
     }
     
-    const organizado = organizarEspacios(espacios);
-    console.log("Espacios organizados por edificio:", organizado);
+    // Agrupar espacios por edificio y planta
+    const espaciosPorEdificio = {};
     
-    // Ordenar edificios por nombre
-    const edificiosOrdenados = Object.keys(organizado).sort((a, b) => 
-        a.localeCompare(b)
-    );
-    
-    for (const edificioNombre of edificiosOrdenados) {
-        const edificioData = organizado[edificioNombre];
+    espacios.forEach(espacio => {
+        const edificio = espacio.nombre_edificio || 'SIN EDIFICIO';
+        const planta = espacio.numero_planta ?? 0;
+        const nombrePlanta = espacio.nombre_planta || getNombrePlanta(planta);
         
-        // Tarjeta de edificio
+        if (!espaciosPorEdificio[edificio]) {
+            espaciosPorEdificio[edificio] = {};
+        }
+        
+        if (!espaciosPorEdificio[edificio][planta]) {
+            espaciosPorEdificio[edificio][planta] = {
+                nombre: nombrePlanta,
+                espacios: []
+            };
+        }
+        
+        espaciosPorEdificio[edificio][planta].espacios.push(espacio);
+    });
+    
+    console.log("Espacios organizados:", espaciosPorEdificio);
+    
+    // Ordenar edificios
+    const edificiosOrdenados = Object.keys(espaciosPorEdificio).sort();
+    
+    for (const edificio of edificiosOrdenados) {
+        // Crear tarjeta de edificio
         const edificioCol = document.createElement('div');
         edificioCol.className = 'col-12 mb-4';
         
-        let edificioHtml = `
-            <div class="card border-primary">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="h4 mb-0">${edificioData.nombre}</h3>
+        let html = `
+            <div class="card shadow-sm">
+                <div class="card-header bg-blue text-white">
+                    <h3 class="h4 mb-0">${edificio}</h3>
                 </div>
                 <div class="card-body">
         `;
         
         // Ordenar plantas por número
-        const plantasOrdenadas = Object.entries(edificioData.plantas).sort((a, b) => 
-            parseInt(a[0]) - parseInt(b[0])
-        );
+        const plantasOrdenadas = Object.keys(espaciosPorEdificio[edificio])
+            .map(Number)
+            .sort((a, b) => a - b);
         
-        for (const [plantaNum, plantaData] of plantasOrdenadas) {
-            edificioHtml += `
+        for (const plantaNum of plantasOrdenadas) {
+            const plantaData = espaciosPorEdificio[edificio][plantaNum];
+            
+            html += `
                 <div class="mb-4">
                     <h4 class="h5 text-success border-start border-success border-4 ps-2 mb-3">${plantaData.nombre}</h4>
                     <div class="d-flex flex-wrap gap-2">
@@ -217,39 +216,33 @@ function mostrarEspacios(espacios) {
             
             // Ordenar espacios por ID
             const espaciosOrdenados = plantaData.espacios.sort((a, b) => 
-                a.id_recurso.localeCompare(b.id_recurso)
+                (a.id_recurso || '').localeCompare(b.id_recurso || '')
             );
             
             for (const espacio of espaciosOrdenados) {
-                // Diferentes colores según tipo: azul para aula, verde para otros espacios
-                const btnColor = espacio.es_aula ? 'btn-primary' : 'btn-success';
-                const tipoTexto = espacio.es_aula ? 'Aula' : 'Espacio';
-                const estadoBadge = espacio.activo ? 
-                    '<span class="badge bg-success">Activo</span>' : 
-                    '<span class="badge bg-secondary">Inactivo</span>';
+                const esAula = espacio.es_aula === 1 || espacio.es_aula === true;
+                const btnColor = esAula ? 'primary' : 'success';
+                const tipoTexto = esAula ? 'Aula' : 'Espacio';
                 
-                edificioHtml += `
-                    <div class="position-relative" style="width: 180px;">
-                        <div class="card">
-                            <div class="card-header bg-${btnColor.replace('btn-', '')} text-white py-2">
-                                <span class="badge bg-light text-dark float-end">${tipoTexto}</span>
-                                <h6 class="mb-0">${espacio.id_recurso}</h6>
-                            </div>
-                            <div class="card-body p-2">
-                                <small class="d-block text-muted">${espacio.descripcion || 'Sin descripción'}</small>
-                                <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <span class="badge ${espacio.activo ? 'bg-success' : 'bg-secondary'}">${espacio.activo ? 'Activo' : 'Inactivo'}</span>
-                                    <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-info btn-ver" data-id="${espacio.id_recurso}" title="Ver detalles">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-outline-warning btn-editar" data-id="${espacio.id_recurso}" title="Editar">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-outline-danger btn-eliminar" data-id="${espacio.id_recurso}" title="Eliminar">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
+                html += `
+                    <div class="card" style="width: 180px;">
+                        <div class="card-header bg-${btnColor} text-white py-2">
+                            <span class="badge bg-light text-dark float-end">${tipoTexto}</span>
+                            <h6 class="mb-0">${espacio.id_recurso}</h6>
+                        </div>
+                        <div class="card-body p-2">
+                            <small class="d-block text-muted">${espacio.descripcion || 'Sin descripción'}</small>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="badge ${espacio.activo ? 'bg-success' : 'bg-secondary'}">
+                                    ${espacio.activo ? 'Activo' : 'Inactivo'}
+                                </span>
+                                <div>
+                                    <button class="btn btn-sm btn-primary btn-ver" data-id="${espacio.id_recurso}" title="Ver">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning btn-editar" data-id="${espacio.id_recurso}" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -257,15 +250,15 @@ function mostrarEspacios(espacios) {
                 `;
             }
             
-            edificioHtml += `</div></div>`;
+            html += `</div></div>`;
         }
         
-        edificioHtml += `</div></div>`;
-        edificioCol.innerHTML = edificioHtml;
+        html += `</div></div>`;
+        edificioCol.innerHTML = html;
         contenedor.appendChild(edificioCol);
     }
     
-    // Añadir event listeners a los botones
+    // Event listeners
     document.querySelectorAll('.btn-ver').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -284,46 +277,92 @@ function mostrarEspacios(espacios) {
         });
     });
     
-    document.querySelectorAll('.btn-eliminar').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const id = btn.dataset.id;
-            const espacio = espaciosGlobal.find(e => e.id_recurso === id);
-            const nombre = espacio ? espacio.descripcion || id : id;
-            confirmarEliminar(id, nombre);
-        });
-    });
 }
 
-// ************  FUNCIONES PARA ESPACIOS ****************** //
+// ************  FUNCIONES CRUD ****************** //
 
-function abrirModalCrear() {
-    document.getElementById('formCrearEspacio').reset();
-    document.getElementById('crearEstado').value = "1";
-    document.getElementById('crearTipo').value = "1";
+async function abrirModalCrear() {
+    console.log("Abriendo modal crear");
     
-    cargarSelectEdificios('crearEdificio');
+    // Asegurar que los edificios están cargados
+    if (edificios.length === 0) {
+        console.log("Cargando edificios...");
+        await getEdificios();
+    }
     
-    const modal = new bootstrap.Modal(document.getElementById('modalCrear'));
+    console.log("Edificios cargados:", edificios);
+    
+    // Resetear formulario - TODOS LOS CAMPOS VACÍOS
+    const form = document.getElementById('formCrearEspacio');
+    if (form) form.reset();
+    
+    // Cargar select de edificios (SIN valor seleccionado)
+    await cargarSelectEdificios('crearEdificio');
+    
+    // Mostrar modal
+    const modalElement = document.getElementById('modalCrear');
+    if (!modalElement) {
+        console.error("No se encontró el modal con id 'modalCrear'");
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
     modal.show();
 }
 
-function abrirModalEditar(id) {
+async function abrirModalEditar(id) {
+    console.log("Abriendo modal editar para ID:", id);
+    
     const espacio = espaciosGlobal.find(e => e.id_recurso === id);
     if (!espacio) {
         mostrarAlerta("Error: No se encontraron los datos del espacio", "danger");
         return;
     }
     
+    console.log("Espacio encontrado:", espacio);
+    console.log("ID Edificio a seleccionar:", espacio.id_edificio);
+    console.log("Tipo de dato:", typeof espacio.id_edificio);
+    
+    // Asegurar que los edificios están cargados
+    if (edificios.length === 0) {
+        console.log("Cargando edificios...");
+        await getEdificios();
+    }
+    
+    // Rellenar el formulario - TODOS LOS DATOS DEL ESPACIO
     document.getElementById('editId').value = espacio.id_recurso;
     document.getElementById('editIdDisplay').value = espacio.id_recurso;
     document.getElementById('editDescripcion').value = espacio.descripcion || '';
-    document.getElementById('editEstado').value = espacio.activo ? "1" : "0";
-    document.getElementById('editTipo').value = espacio.es_aula ? "1" : "0";
     
-    cargarSelectEdificios('editEdificio', espacio.id_edificio);
-    document.getElementById('editPlanta').value = espacio.numero_planta ?? '';
+    // Estado: activo/inactivo
+    const estadoSelect = document.getElementById('editEstado');
+    if (estadoSelect) {
+        estadoSelect.value = espacio.activo ? "1" : "0";
+        console.log("Estado seleccionado:", estadoSelect.value);
+    }
+    
+    // Tipo: aula u otro espacio
+    const tipoSelect = document.getElementById('editTipo');
+    if (tipoSelect) {
+        tipoSelect.value = espacio.es_aula ? "1" : "0";
+        console.log("Tipo seleccionado:", tipoSelect.value);
+    }
+    
+    // Cargar select de edificios CON el valor seleccionado
+    console.log("Cargando select de edificios con valor:", espacio.id_edificio);
+    await cargarSelectEdificios('editEdificio', espacio.id_edificio);
+    
+    // Cargar planta
+    const plantaSelect = document.getElementById('editPlanta');
+    if (plantaSelect) {
+        console.log("Valor planta a seleccionar:", espacio.numero_planta);
+        if (espacio.numero_planta !== undefined && espacio.numero_planta !== null) {
+            plantaSelect.value = String(espacio.numero_planta);
+            console.log("Planta seleccionada:", plantaSelect.value);
+        } else {
+            plantaSelect.value = "";
+        }
+    }
     
     const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
     modal.show();
@@ -333,7 +372,7 @@ function verEspacio(id) {
     const espacio = espaciosGlobal.find(e => e.id_recurso === id);
     if (!espacio) return;
     
-    const nombreEdificio = getNombreEdificio(espacio.id_edificio);
+    const nombreEdificio = espacio.nombre_edificio || 'Sin edificio';
     const nombrePlanta = espacio.nombre_planta || getNombrePlanta(espacio.numero_planta);
     
     document.getElementById('verId').textContent = espacio.id_recurso;
@@ -343,7 +382,6 @@ function verEspacio(id) {
     document.getElementById('verTipo').textContent = espacio.es_aula ? 'Aula' : 'Otro espacio';
     document.getElementById('verEstado').textContent = espacio.activo ? 'Activo' : 'Inactivo';
     
-    // Configurar botón de editar desde el modal de ver
     const btnEditar = document.getElementById('btnEditarDesdeVer');
     btnEditar.dataset.id = id;
     btnEditar.onclick = () => {
@@ -356,15 +394,6 @@ function verEspacio(id) {
     modal.show();
 }
 
-function confirmarEliminar(id, nombre) {
-    document.getElementById('deleteId').value = id;
-    document.getElementById('deleteEspacio').value = id;
-    document.getElementById('deleteDescripcion').value = nombre;
-    
-    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-    modal.show();
-}
-
 async function guardarEspacio(evento) {
     evento.preventDefault();
     
@@ -373,26 +402,27 @@ async function guardarEspacio(evento) {
     let id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, es_aula;
     
     if (esCreacion) {
-        id_recurso = document.getElementById('crearId').value;
-        descripcion = document.getElementById('crearDescripcion').value.trim();
-        tipo = document.getElementById('crearTipo').value;
-        id_edificio = document.getElementById('crearEdificio').value;
-        numero_planta = document.getElementById('crearPlanta').value;
-        activo = document.getElementById('crearEstado').value === "1";
+        id_recurso = document.getElementById('crearId')?.value;
+        descripcion = document.getElementById('crearDescripcion')?.value.trim();
+        tipo = document.getElementById('crearTipo')?.value;
+        id_edificio = document.getElementById('crearEdificio')?.value;
+        numero_planta = document.getElementById('crearPlanta')?.value;
+        activo = document.getElementById('crearEstado')?.value === "1";
         id = null;
+        console.log("CREANDO - Datos del formulario:", {id_recurso, descripcion, tipo, id_edificio, numero_planta, activo});
     } else {
-        id = document.getElementById('editId').value;
-        id_recurso = document.getElementById('editIdDisplay').value;
-        descripcion = document.getElementById('editDescripcion').value.trim();
-        tipo = document.getElementById('editTipo').value;
-        id_edificio = document.getElementById('editEdificio').value;
-        numero_planta = document.getElementById('editPlanta').value;
-        activo = document.getElementById('editEstado').value === "1";
+        id = document.getElementById('editId')?.value;
+        id_recurso = document.getElementById('editIdDisplay')?.value;
+        descripcion = document.getElementById('editDescripcion')?.value.trim();
+        tipo = document.getElementById('editTipo')?.value;
+        id_edificio = document.getElementById('editEdificio')?.value;
+        numero_planta = document.getElementById('editPlanta')?.value;
+        activo = document.getElementById('editEstado')?.value === "1";
+        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo});
     }
     
     es_aula = tipo === "1";
     
-    // Validaciones básicas
     if (!id_recurso || !descripcion || !id_edificio || numero_planta === '') {
         mostrarAlerta("Por favor, complete todos los campos requeridos", "warning");
         return;
@@ -408,12 +438,15 @@ async function guardarEspacio(evento) {
         es_aula: es_aula ? 1 : 0
     };
     
+    console.log("Enviando datos:", datos);
+    
     try {
         let response;
         let url;
         
         if (!esCreacion && id) {
             url = `${DOMAIN}/espacios/${id}`;
+            console.log("Actualizando espacio en:", url);
             response = await fetch(url, {
                 method: "PUT",
                 headers: {
@@ -424,6 +457,7 @@ async function guardarEspacio(evento) {
             });
         } else {
             url = `${DOMAIN}/espacios`;
+            console.log("Creando espacio en:", url);
             response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -434,8 +468,9 @@ async function guardarEspacio(evento) {
             });
         }
         
+        console.log("Respuesta status:", response.status);
         const result = await response.json();
-        console.log("Respuesta guardar:", result);
+        console.log("Respuesta del servidor:", result);
         
         if (!response.ok) {
             if (result.errors) {
@@ -451,12 +486,10 @@ async function guardarEspacio(evento) {
             "success"
         );
         
-        // Cerrar modal
         const modalId = esCreacion ? 'modalCrear' : 'modalEditar';
         const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
         if (modal) modal.hide();
         
-        // Recargar datos
         await cargarTodosLosDatos();
         
     } catch (error) {
@@ -465,54 +498,12 @@ async function guardarEspacio(evento) {
     }
 }
 
-async function eliminarEspacio() {
-    const id = document.getElementById('deleteId').value;
-    
-    if (!id) return;
-    
-    try {
-        const url = `${DOMAIN}/espacios/${id}`;
-        console.log("Eliminando espacio en:", url);
-        
-        const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-                "Accept": "application/json"
-            }
-        });
-        
-        if (response.status === 204) {
-            mostrarAlerta("Espacio eliminado correctamente", "success");
-        } else {
-            const result = await response.json();
-            console.log("Respuesta eliminar:", result);
-            if (!response.ok) {
-                if (response.status === 409) {
-                    throw new Error("No se puede eliminar: el espacio está siendo utilizado en reservas");
-                } else {
-                    throw new Error(result.message || `Error ${response.status}`);
-                }
-            }
-            mostrarAlerta("Espacio eliminado correctamente", "success");
-        }
-        
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalEliminar'));
-        if (modal) modal.hide();
-        
-        // Recargar datos
-        await cargarTodosLosDatos();
-        
-    } catch (error) {
-        console.error("Error eliminando espacio:", error);
-        mostrarAlerta(error.message, "danger");
-    }
-}
-
-// ************  CARGAR TODOS LOS DATOS ****************** //
+// ************  CARGAR DATOS ****************** //
 
 async function cargarTodosLosDatos() {
     try {
-        // Mostrar loading
+        console.log("Iniciando carga de datos...");
+        
         const contenedor = document.getElementById('espaciosContainer');
         if (contenedor) {
             contenedor.innerHTML = `
@@ -525,21 +516,14 @@ async function cargarTodosLosDatos() {
             `;
         }
         
-        // Cargar edificios primero
         await getEdificios();
-        console.log("Edificios cargados:", edificios);
-        console.log("Mapa de edificios:", edificiosMap);
-        
-        // Cargar espacios
         const espacios = await getEspacios();
-        console.log("Espacios cargados:", espacios);
-        
-        // Mostrar espacios
         mostrarEspacios(espacios);
         
+        console.log("Carga completada");
+        
     } catch (error) {
-        console.error("Error cargando datos:", error);
-        mostrarAlerta("Error al cargar los espacios", "danger");
+        console.error("Error en carga:", error);
         
         const contenedor = document.getElementById('espaciosContainer');
         if (contenedor) {
@@ -610,48 +594,34 @@ function mostrarAlerta(mensaje, tipo = "info") {
 
 // ************  INICIALIZACIÓN ****************** //
 
-document.addEventListener("DOMContentLoaded", async function () {
-    console.log("Inicializando gestor de espacios...");
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM cargado, iniciando...");
+    cargarTodosLosDatos();
     
-    try {
-        // Cargar datos
-        await cargarTodosLosDatos();
-        
-        // Botón crear
-        const btnCrear = document.querySelector('[data-bs-target="#modalCrear"]');
-        if (btnCrear) {
-            btnCrear.addEventListener('click', abrirModalCrear);
-        }
-        
-        // Formularios
-        const formCrear = document.getElementById('formCrearEspacio');
-        if (formCrear) formCrear.addEventListener('submit', guardarEspacio);
-        
-        const formEditar = document.getElementById('formEditarEspacio');
-        if (formEditar) formEditar.addEventListener('submit', guardarEspacio);
-        
-        const formEliminar = document.getElementById('formEliminarEspacio');
-        if (formEliminar) {
-            formEliminar.addEventListener('submit', (e) => {
-                e.preventDefault();
-                eliminarEspacio();
-            });
-        }
-        
-        // Limpiar backdrops cuando se cierren modales
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('hidden.bs.modal', limpiarBackdrops);
-        });
-        
-        console.log("Inicialización completada");
-        
-    } catch (error) {
-        console.error("Error en inicialización:", error);
-        mostrarAlerta("Error al inicializar la página", "danger");
+    const formCrear = document.getElementById('formCrearEspacio');
+    if (formCrear) {
+        formCrear.addEventListener('submit', guardarEspacio);
     }
+    
+    const formEditar = document.getElementById('formEditarEspacio');
+    if (formEditar) {
+        formEditar.addEventListener('submit', guardarEspacio);
+    }
+    
+    const formEliminar = document.getElementById('formEliminarEspacio');
+    if (formEliminar) {
+        formEliminar.addEventListener('submit', (e) => {
+            e.preventDefault();
+            eliminarEspacio();
+        });
+    }
+    
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', limpiarBackdrops);
+    });
 });
 
-// Exportar funciones necesarias para uso global
+// Exportar funciones para uso global
 window.abrirModalCrear = abrirModalCrear;
 window.abrirModalEditar = abrirModalEditar;
 window.verEspacio = verEspacio;
