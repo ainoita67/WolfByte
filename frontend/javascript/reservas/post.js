@@ -142,11 +142,11 @@ function activarEditarTarjetasReserva() {
 
 //API Editar reservas
 async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
-    if(tipo=="Reserva_espacio"||tipo=="Reserva_portatil"){
-        resultado=0;
+    if(tipo=="Reserva_espacio"||tipo=="Reserva_material"){
+        let resultado=0;
         if(tipo=="Reserva_espacio"){
             resultado=await modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin);
-        }else if(tipo=="Reserva_portatil"){
+        }else if(tipo=="Reserva_material"&&unidades>0){
             resultado=await modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin);
         }
         if(resultado!=1){
@@ -205,6 +205,7 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, i
         if (response.status == "success"){
             return 1;
         }else{
+            mostrarToast("Ya hay una reserva entre esas horas", tipo = 'warning')
             return -1;
         }
     }catch(err){
@@ -218,18 +219,22 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, i
 //API Editar reservas de tipo portátil
 async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin){
     try{
-        let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
+        console.log("Modificar portátil");
+        let res = await fetch(window.location.origin+"/API/reservaPortatil/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_recurso: id_recurso, unidades: unidades, espacio_uso: espacio_uso, inicio: inicio, fin: fin})
+            body: JSON.stringify({id_material: id_recurso, unidades: unidades, usaenespacio: espacio_uso, inicio: inicio, fin: fin})
         })
+        console.log("API hecha");
         let response = await res.json();
         
+        console.log("Respuesta "+response);
         if (response.status == "success") {
             return 1;
         } else {
+            mostrarToast("Ya hay una reserva entre esas horas", tipo = 'warning')
             return -1;
         }
     }catch(err){
@@ -267,17 +272,19 @@ function mostrarToast(mensaje, tipo = 'success') {
     const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     
     let bgClass = 'bg-success';
+    let textColor = 'text-white';
     
     if (tipo === 'error'||tipo === 'danger') {
         bgClass = 'bg-danger';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
+        textColor = 'text-black';
     } else if (tipo === 'info') {
         bgClass = 'bg-info';
     }
     
     const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     ${mensaje}

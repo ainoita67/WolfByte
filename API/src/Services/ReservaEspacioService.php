@@ -60,7 +60,7 @@ class ReservaEspacioService
     // Crea una nueva reserva
     public function createReserva(array $data): array
     {
-        if($this->model->getReservaFecha($data)<=0){
+        if($this->model->getReservaFecha(-1, $data)<=0){
             $this->validateReservaData($data, false);
             return $this->model->create($data);
         }
@@ -70,7 +70,7 @@ class ReservaEspacioService
     // Actualiza una reserva existente
     public function updateReserva(int $id, array $data): array
     {
-        if($this->model->getReservaFecha($data)<=0&&count($this->model->findById($id))>0){
+        if($this->model->getReservaFecha($id, $data)<=0&&count($this->model->findById($id))>0){
             $this->validateReservaData($data, false);
             return $this->model->update($id, $data);
         }

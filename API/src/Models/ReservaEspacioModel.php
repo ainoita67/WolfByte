@@ -153,7 +153,7 @@ class ReservaEspacioModel
         }
     }
 
-    public function getReservaFecha(array $data): int
+    public function getReservaFecha(int $id, array $data): int
     {
         try{
             $filas=$this->db
@@ -162,7 +162,7 @@ class ReservaEspacioModel
                         COUNT(IFNULL(r.id_reserva,0)) AS total
                     FROM Reserva r JOIN Reserva_espacio re ON r.id_reserva=re.id_reserva
                     WHERE (r.inicio>:inicio1 AND r.fin<:inicio2) OR (r.inicio>:fin1 AND r.fin<:fin2) OR (r.inicio<=:inicio3 AND r.fin>=:fin3)
-                    AND re.id_espacio!=:espacio
+                    AND re.id_espacio=:espacio AND r.id_reserva!=:id
                 ")
                 ->bind(':inicio1', $data['inicio'])
                 ->bind(':fin1', $data['fin'])
@@ -171,10 +171,11 @@ class ReservaEspacioModel
                 ->bind(':inicio3', $data['inicio'])
                 ->bind(':fin3', $data['fin'])
                 ->bind(':espacio', $data['id_espacio'])
+                ->bind(':id', $id)
                 ->fetch();
             return (int) $filas['total'];
         } catch (PDOException $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception("Error al crear o actualizar reservas del espacio");
         }
     }
 }
