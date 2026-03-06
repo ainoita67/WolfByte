@@ -140,9 +140,6 @@ function activarFiltrarIncidencia(tipo, limite=5){
 }
 
 
-
-
-
 // CREAR INCIDENCIA
 
 //API Obtener recursos activos para crear incidencia
