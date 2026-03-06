@@ -181,6 +181,7 @@ $router->delete('/portatiles/reservas/{id}',           'Controllers\\PortatilCon
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
 $router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción de todos los recursos activos que estén en la base de datos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
+$router->get('/recurso/{id}', 'Controllers\\RecursoController@show'); //Nos devuelve la información del recurso que pasemos por id
 
 // LIBERACIÓN PUNTUAL
 $router->get('/liberaciones', 'Controllers\\LiberacionPuntualController@index'); //Consultar todas las liberaciones puntuales

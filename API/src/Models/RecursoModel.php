@@ -48,20 +48,23 @@ class RecursoModel
      */
     public function findById(string $id): array
     {
-        try {
-            $result = $this->db
-                ->query("SELECT * FROM Recurso WHERE id_recurso = :id")
-                ->bind(':id', $id)
-                ->fetch();
+        $result = $this->db
+            ->query("SELECT r.id_recurso, r.descripcion, r.tipo, r.activo, r.especial, r.numero_planta, p.nombre_planta, r.id_edificio, ed.nombre_edificio, e.es_aula, m.unidades
+                FROM Recurso r
+                LEFT JOIN Espacio e ON r.id_recurso = e.id_espacio
+                LEFT JOIN Material m ON m.id_material = r.id_recurso
+                LEFT JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
+                LEFT JOIN Edificio ed on r.id_edificio = ed.id_edificio
+                WHERE r.id_recurso = :id")
+            ->bind(':id', $id)
+            ->fetch();
 
-            if (!$result) {
-                throw new \Exception("Recurso no encontrado");
-            }
-
-            return $result;
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener recurso por ID");
+        if (!$result) {
+            throw new \Exception("Recurso no encontrado");
         }
+
+        return $result;
+
     }
 
     /**
@@ -107,4 +110,5 @@ class RecursoModel
             throw new \Exception("Error al cambiar estado de activo del recurso");
         }
     }
+
 }

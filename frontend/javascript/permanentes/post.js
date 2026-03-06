@@ -1,17 +1,22 @@
 // /frontend/javascript/gestion_usuarios/post.js
-import { Usuario } from "../clases/Usuario.js";
 
-export async function insertUser(user) {
+export async function createPermanente(reserva) {
   try {
-    // Acepta Usuario o un objeto normal
-    const body = user.toJSONcreate();
-
+    const body = {
+        dia_semana: reserva.dia_semana,
+        inicio: reserva.inicio,
+        fin: reserva.fin,
+        comentario: reserva.comentario?.trim() || null,
+        recurso: reserva.recurso,
+        unidades: reserva.unidades != null ? Number(reserva.unidades) : null
+    };
+    
     // Validación mínima antes de enviar
-    if (!body.nombre || !body.correo || !body.contrasena || !body.id_rol) {
-      throw new Error("insertUser: faltan campos obligatorios (nombre, correo, contrasena, id_rol)");
+    if (!body.dia_semana || !body.inicio || !body.fin || !body.recurso) {
+      throw new Error("createPermanente: faltan campos obligatorios (dia_semana, inicio, fin, recurso)");
     }
 
-    const response = await fetch(`${API}/user`, {
+    const response = await fetch(`${API}/reserva`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +40,7 @@ export async function insertUser(user) {
 
     return json;
   } catch (error) {
-    console.error("insertUser:", error);
+    console.error("createPermanente:", error);
     throw error;
   }
 }

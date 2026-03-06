@@ -19,9 +19,9 @@ export async function getReservas() {
         dia_semana: r.dia_semana,
         inicio: r.inicio,
         fin: r.fin,
-        comentario: r.comentario,
+        comentario: r.comentario?.trim() || " - ",
         recurso: r.id_recurso,
-        unidades: r.unidades
+        unidades: r.unidades != null ? Number(r.unidades) : " - "
       });
     });
 
@@ -52,9 +52,9 @@ export async function getReservasRecurso(id_recurso) {
         dia_semana: r.dia_semana,
         inicio: r.inicio,
         fin: r.fin,
-        comentario: r.comentario,
+        comentario: r.comentario?.trim() || " - ",
         recurso: r.id_recurso,
-        unidades: r.unidades
+        unidades: r.unidades != null ? Number(r.unidades) : " - "
       });
     });
 

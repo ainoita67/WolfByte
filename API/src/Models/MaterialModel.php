@@ -379,4 +379,32 @@ class MaterialModel
             ->bind(':rp_fin2', $hora_fin)
             ->fetchAll();
     }
+
+    public function esCarrito(string $id_recurso): bool
+    {
+        try {
+            $result = $this->db
+                ->query("SELECT tipo FROM Recurso WHERE id_recurso = :id")
+                ->bind(':id', $id_recurso)
+                ->fetch();
+
+            return $result['tipo'] === 'Material';
+        } catch (PDOException $e) {
+            throw new \Exception("Error al verificar si el recurso es un carrito: " . $e->getMessage());
+        }
+    }
+
+    public function getUnidades(string $id_recurso): int
+    {
+        try {
+            $result = $this->db
+                ->query("SELECT unidades FROM Material WHERE id_material = :id")
+                ->bind(':id', $id_recurso)
+                ->fetch();
+
+            return (int)$result['unidades'];
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener unidades del material: " . $e->getMessage());
+        }
+    }
 }
