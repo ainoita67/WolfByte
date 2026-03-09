@@ -3,58 +3,43 @@
 
 <head>
     <meta charset="utf-8">
+    <!-- PRIMERO: Definir BASE -->
     <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
 
+    <!-- Cargar authGuard PRIMERO -->
+    <script src="../../../javascript/sesion/authGuard.js"></script>
+
+    <!-- En menuadministrador.html y otras páginas de admin -->
     <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-                generarPagina("admin", "admin");
-            };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
+        setTimeout(function() {
+            const rol = Number(sessionStorage.getItem("rol"));
+            console.log('Rol después de authGuard:', rol);
+            
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol !== 30 && rol !== 40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.href = '../../menu.html'; // REDIRIGE AL MENÚ PRINCIPAL
+            } else {
+                // Cargar la página normalmente
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("menu", "admin");
+                    };
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+        }, 100);
     </script>
 
     <title>Características - IES Bajo Aragón</title>
-    <style>
-        #alert-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            max-width: 350px;
-        }
-        .alert {
-            margin-bottom: 10px;
-            animation: slideIn 0.3s ease-in-out;
-        }
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        .bg-azul {
-            background-color: #0d6efd;
-        }
-        .card-head {
-            background-color: #0d6efd;
-        }
-        .modal-backdrop {
-            z-index: 1040 !important;
-        }
-        .modal {
-            z-index: 1050 !important;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -118,7 +103,7 @@
     <div class="modal fade" id="modalEditarCaracteristica" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning text-white">
+                <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="bi bi-pencil-square"></i> Editar Característica
                     </h5>
@@ -136,48 +121,18 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary text-white">
+                        <i class="bi bi-check2"></i> Guardar cambios
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg"></i> Cancelar
                     </button>
-                    <button type="submit" form="formEditarCaracteristica" class="btn btn-warning text-white">
-                        <i class="bi bi-check2"></i> Guardar cambios
-                    </button>
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Confirmar Eliminación -->
-    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
-                        <p class="fs-5">
-                            ¿Estás seguro de eliminar la característica "<span id="nombreCaracteristicaEliminar" class="fw-bold"></span>"?
-                        </p>
-                        <p class="text-muted">Esta acción no se puede deshacer.</p>
-                    </div>
-                    <input type="hidden" id="idCaracteristicaEliminar">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                        <i class="bi bi-trash"></i> Sí, Eliminar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <footer id="footer"></footer>
 </body>

@@ -86,8 +86,6 @@ class EspacioModel
                 ->bind(':es_aula', $data['es_aula'])
                 ->execute();
 
-
-
             $this->db->commit();
             return 1; // Retorna 1 para indicar éxito
 
@@ -95,6 +93,116 @@ class EspacioModel
             $this->db->rollback();
             error_log("Error al crear espacio: " . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Actualizar un espacio existente
+     */
+    public function update(string $id, array $data): int
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // Actualizar Recurso
+            $this->db
+                ->query("UPDATE Recurso 
+                        SET descripcion = :descripcion, 
+                            activo = :activo, 
+                            especial = :especial, 
+                            numero_planta = :numero_planta, 
+                            id_edificio = :id_edificio
+                        WHERE id_recurso = :id_recurso AND tipo = 'Espacio'")
+                ->bind(':id_recurso', $id)
+                ->bind(':descripcion', $data['descripcion'])
+                ->bind(':activo', $data['activo'])
+                ->bind(':especial', $data['especial'])
+                ->bind(':numero_planta', $data['numero_planta'])
+                ->bind(':id_edificio', $data['id_edificio'])
+                ->execute();
+
+            // Actualizar Espacio
+            $this->db
+                ->query("UPDATE Espacio 
+                        SET es_aula = :es_aula
+                        WHERE id_espacio = :id_espacio")
+                ->bind(':id_espacio', $id)
+                ->bind(':es_aula', $data['es_aula'])
+                ->execute();
+
+            $this->db->commit();
+            
+            // Verificar si hubo cambios
+            $afectados = $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
+            return $afectados > 0 ? $afectados : 0;
+
+        } catch (PDOException $e) {
+            $this->db->rollback();
+            error_log("Error al actualizar espacio: " . $e->getMessage());
+            
+            // Verificar si es error de clave foránea
+            if ($e->getCode() == 23000) {
+                return -1;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Eliminar un espacio
+     */
+    public function delete(string $id): int
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // Verificar si el espacio tiene reservas
+            $tieneReservas = $this->db
+                ->query("SELECT COUNT(*) as total FROM Reserva_espacio WHERE id_espacio = :id")
+                ->bind(':id', $id)
+                ->fetch();
+
+            if ($tieneReservas['total'] > 0) {
+                $this->db->rollback();
+                return -1; // Está siendo usado
+            }
+
+            // Verificar si tiene características asignadas
+            $tieneCaracteristicas = $this->db
+                ->query("SELECT COUNT(*) as total FROM Caracteristica_Espacio WHERE id_espacio = :id")
+                ->bind(':id', $id)
+                ->fetch();
+
+            if ($tieneCaracteristicas['total'] > 0) {
+                $this->db->rollback();
+                return -1; // Está siendo usado
+            }
+
+            // Eliminar de Espacio primero (por la FK)
+            $this->db
+                ->query("DELETE FROM Espacio WHERE id_espacio = :id")
+                ->bind(':id', $id)
+                ->execute();
+
+            // Eliminar de Recurso
+            $this->db
+                ->query("DELETE FROM Recurso WHERE id_recurso = :id AND tipo = 'Espacio'")
+                ->bind(':id', $id)
+                ->execute();
+
+            $this->db->commit();
+            
+            $afectados = $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
+            return $afectados;
+
+        } catch (PDOException $e) {
+            $this->db->rollback();
+            error_log("Error al eliminar espacio: " . $e->getMessage());
+            
+            if ($e->getCode() == 23000) {
+                return -1; // Error de FK
+            }
+            throw $e;
         }
     }
 
