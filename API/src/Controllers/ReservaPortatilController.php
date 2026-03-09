@@ -5,23 +5,20 @@ namespace Controllers;
 
 use Core\Request;
 use Core\Response;
-use Services\ReservaEspacioService;
-use Services\NecesidadReservaService;
+use Services\ReservaPortatilService;
 use Throwable;
 use Validation\ValidationException;
 
-class ReservaEspacioController
+class ReservaPortatilController
 {
-    private ReservaEspacioService $service;
-    private NecesidadReservaService $serviceNecesidad;
+    private ReservaPortatilService $service;
 
     public function __construct()
     {
-        $this->service = new ReservaEspacioService();
-        $this->serviceNecesidad = new NecesidadReservaService();
+        $this->service = new ReservaPortatilService();
     }
 
-    // Devuelve todas las reservas de espacios
+    // Devuelve todas las reservas de portátiles
     public function index(Request $req, Response $res): void
     {
         try {
@@ -32,11 +29,11 @@ class ReservaEspacioController
         }
     }
 
-    // Devuelve todas las reservas de un espacio específico
-    public function showEspacio(Request $req, Response $res, string $id): void
+    // Devuelve todas las reservas de un portátil específico
+    public function showPortatil(Request $req, Response $res, string $id): void
     {
         try {
-            $data = $this->service->getReservasPorEspacio($id);
+            $data = $this->service->getReservasPorPortatil($id);
             $res->status(200)->json($data);
         } catch (ValidationException $e) {
             $res->status(404)->json(['error' => $e->getMessage()]);
@@ -105,7 +102,6 @@ class ReservaEspacioController
         try {
             $data = $req->getBody();
             $reserva = $this->service->updateReserva((int)$id, $data);
-            $this->serviceNecesidad->updateNecesidad((int)$id, $data);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getErrors(), 422);

@@ -18,9 +18,11 @@ function activarCrearIncidencia() {
         let descripcion = document.getElementById("createDescripcionIncidencia").value;
         let prioridad = 'Media';
         let estado = 'Abierta';
-        let usuario=2;
+        let usuario = sessionStorage.getItem("id_usuario");
+        
         if (!titulo) return;
         titulo = capitalizar(titulo);
+
         fetch(window.location.origin+"/API/incidencias/", {
             method: "POST",
             headers: {
@@ -69,7 +71,7 @@ function activarEditarIncidencia() {
         let id_recurso = document.getElementById("editRecurso").value;
         let titulo = document.getElementById("editTitulo").value;
         let descripcion = document.getElementById("editDescripcion").value;
-        let usuario = 2;
+        let usuario = document.getElementById("editUsuario").value;
         let prioridad = document.getElementById("editPrioridad").value;
         let estado = document.getElementById("editEstado").value;
         if (!id) return;
@@ -125,16 +127,66 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
             // Limpiar input
             formeditar.reset();
 
-            alert("Incidencia actualizada correctamente");
+            mostrarToast("Incidencia actualizada correctamente", "success");
+
             // Recargar
-            window.location.reload();
+            obtenerVerIncidencias();
         } else {
-            if(response.message){
-                alert(response.message.trim());
-            }else{
-                alert("Error al actualizar la incidencia");
-            }
+            mostrarToast("Error al actualizar la incidencia", "danger");
         }
     })
     .catch(err => console.error("Error al actualizar la incidencia:", err));
+}
+
+
+
+function mostrarToast(mensaje, tipo = 'success') {
+    console.log('Toast:', mensaje, tipo);
+    
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+        console.log('Contenedor de toasts creado');
+    }
+    
+    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    let bgClass = 'bg-success';
+    
+    if (tipo === 'error'||tipo === 'danger') {
+        bgClass = 'bg-danger';
+    } else if (tipo === 'warning') {
+        bgClass = 'bg-warning';
+    } else if (tipo === 'info') {
+        bgClass = 'bg-info';
+    }
+    
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${mensaje}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, {
+        animation: true,
+        autohide: true,
+        delay: 3000
+    });
+    
+    toast.show();
+    
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
 }

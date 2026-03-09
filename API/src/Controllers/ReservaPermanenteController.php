@@ -86,14 +86,15 @@ class ReservaPermanenteController
      * PUT /reservas_permanentes/{id}
      * Modifica totalmente una reserva permanente por ID
      */
-    public function update(Request $req, Response $res): void
+    public function update(Request $req, Response $res, string $id): void
     {
         try {
-            $data = $req->getBody();
-            $reserva = $this->service->updateReservaPermanente($data);
+            $reserva = $this->service->updateReservaPermanente((int)$id, $req->json());
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->errorJson($e->getMessage(), 422, [
+                'errors' => $e->getErrors()
+            ]);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }
@@ -106,12 +107,13 @@ class ReservaPermanenteController
     public function activate(Request $req, Response $res, string $id): void
     {
         try {
-            $reserva = $this->service->activarReservaPermanente($id);
-            $res->status(201)->json($reserva);
+            $result = $this->service->toggleActiveStatus((int)$id);
+            $res->status(200)->json([], $result['message']);
+
         } catch (ValidationException $e) {
-            $res->errorJson($e->getMessage(), 422);
+            $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
         }
     }
 

@@ -95,6 +95,9 @@
                     <form id="formEditarIncidencia">
                         <div class="modal-body">
                             <div class="row g-3">
+                                <!-- ID Usuario-->
+                                <input type="hidden" id="editUsuario" name="editUsuario" readonly required>
+
                                 <!-- Fecha -->
                                 <div class="col-md-4">
                                     <label class="form-label" for="editFecha">Fecha</label>
@@ -254,8 +257,9 @@
                 document.getElementById("verEstado").textContent = estado;
             }
 
-            function editarIncidencia(id, titulo, descripcion, prioridad, estado, fecha, id_recurso) {
+            function editarIncidencia(id, titulo, descripcion, prioridad, estado, fecha, id_recurso, usuario) {
                 let fechaFormateada = fecha.replace(" ", "T");
+                document.getElementById("editUsuario").value = usuario;
                 document.getElementById("editId").value = id;
                 document.getElementById("editRecurso").value = id_recurso;
                 document.getElementById("editFecha").value = fechaFormateada;

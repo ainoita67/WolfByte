@@ -82,7 +82,7 @@ class ReservaModel
                     NULL AS unidades,
                     NULL AS usaenespacio,
                     re.actividad,
-                    n.nombre AS necesidades,
+                    GROUP_CONCAT(n.id_necesidad) AS necesidades,
                     r.observaciones,
                     u.id_usuario,
                     u.nombre AS nombreusuario
@@ -93,6 +93,7 @@ class ReservaModel
                 LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
                 WHERE r.tipo = 'Reserva_espacio' AND r.autorizada IS NULL
+                GROUP BY r.id_reserva
 
                 UNION ALL
 
@@ -148,7 +149,7 @@ class ReservaModel
                         NULL AS unidades,
                         NULL AS usaenespacio,
                         re.actividad,
-                        n.nombre AS necesidades,
+                        GROUP_CONCAT(n.id_necesidad) AS necesidades,
                         r.observaciones,
                         u.id_usuario,
                         u.nombre AS nombreusuario
@@ -159,6 +160,7 @@ class ReservaModel
                     LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
                     WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada=1
+                    GROUP BY r.id_reserva
 
                     UNION ALL
 

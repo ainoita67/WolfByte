@@ -64,7 +64,7 @@ function mostrarIncidencias(incidencias){
                     <button class="btn btn-sm bg-warning text-black"
                             data-bs-toggle="modal"
                             data-bs-target="#modalEditar"
-                            onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
+                            onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}', '${incidencia.id_usuario}')">
                         <i class="bi bi-pencil"></i> Editar
                     </button>
                 </td>
@@ -138,6 +138,9 @@ function activarFiltrarIncidencia(tipo, limite=5){
         });
     });
 }
+
+
+
 
 
 // CREAR INCIDENCIA

@@ -8,7 +8,15 @@ const MENSAJE_CREACION_CORRECTA = "Característica creada correctamente";
 const MENSAJE_CREACION_ERROR = "Error al crear la característica";
 const MENSAJE_EDICION_CORRECTA = "Característica editada correctamente";
 const MENSAJE_EDICION_ERROR = "Error al editar la característica";
+const MENSAJE_ELIMINACION_CORRECTA = "Característica eliminada correctamente";
+const MENSAJE_ELIMINACION_ERROR = "Error al eliminar la característica";
 const REGEX_LETRAS_NUM_ESPACIOS = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\-]+$/;
+
+// Variables globales
+let caracteristicaAEliminar = {
+    id: null,
+    nombre: null
+};
 
 // ************  VALIDACIONES ****************** //
 
@@ -199,6 +207,66 @@ async function editarCaracteristica(id, nombre) {
     }
 }
 
+// ************  ELIMINAR CARACTERISTICA ****************** //
+
+function abrirModalConfirmarEliminacion(id, nombre) {
+    caracteristicaAEliminar.id = id;
+    caracteristicaAEliminar.nombre = nombre;
+    
+    const nombreSpan = document.getElementById('nombreCaracteristicaEliminar');
+    const idInput = document.getElementById('idCaracteristicaEliminar');
+    
+    if (nombreSpan) nombreSpan.textContent = nombre;
+    if (idInput) idInput.value = id;
+    
+    const modalElement = document.getElementById('modalConfirmarEliminar');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+}
+
+async function eliminarCaracteristica(id, nombre) {
+    const URL = DOMAIN + `/caracteristicas/${id}`;
+
+    try {
+        const response = await fetch(URL, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 409) {
+                throw new Error("No se puede eliminar: la característica está siendo utilizada");
+            } else if (response.status === 404) {
+                throw new Error("La característica no existe");
+            } else {
+                throw new Error(result.message || `Error ${response.status}`);
+            }
+        }
+
+        mostrarAlerta(`${nombre} - ${MENSAJE_ELIMINACION_CORRECTA}`, 'success');
+        
+        // Cerrar modal
+        const modalElement = document.getElementById('modalConfirmarEliminar');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+            limpiarBackdrops();
+        }
+        
+        // Recargar lista
+        await cargarCaracteristicas();
+        
+    } catch (error) {
+        console.error("Error eliminando:", error);
+        mostrarAlerta(`${error.message || MENSAJE_ELIMINACION_ERROR}`, 'danger');
+    }
+}
 
 // ************  MOSTRAR CARACTERISTICAS ****************** //
 
@@ -257,9 +325,10 @@ function mostrarCaracteristicas(caracteristicas) {
                 </div>
                 <div class="card-body d-flex flex-column">
                     <div class="flex-grow-1">
+                        <i class="bi bi-star-fill text-warning fs-1"></i>
                         <p class="fs-5 card-title mt-3 fw-bold">${nombre}</p>
                     </div>
-                    <div class="d-flex justify-content-end gap-2 mt-3">
+                    <div class="d-flex justify-content-center gap-2 mt-3">
                         <button class="btn btn-sm btn-warning btn-editar"
                                 data-id="${id}"
                                 data-nombre="${nombre}">
@@ -283,6 +352,15 @@ function mostrarCaracteristicas(caracteristicas) {
         });
     });
     
+    // Eventos para botones de eliminar
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
+            abrirModalConfirmarEliminacion(id, nombre);
+        });
+    });
 }
 
 // ************  CARGAR CARACTERISTICAS ****************** //
@@ -390,6 +468,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
     
+    // Botón de confirmación de eliminación
+    const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+    if (btnConfirmarEliminar) {
+        btnConfirmarEliminar.addEventListener('click', async function() {
+            const id = caracteristicaAEliminar.id;
+            const nombre = caracteristicaAEliminar.nombre;
+            
+            if (id && nombre) {
+                await eliminarCaracteristica(id, nombre);
+                caracteristicaAEliminar.id = null;
+                caracteristicaAEliminar.nombre = null;
+            }
+        });
+    }
     
     // Limpiar backdrops cuando se cierren modales
     document.querySelectorAll('.modal').forEach(modal => {

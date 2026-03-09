@@ -707,3 +707,50 @@ form.login{
 .carro-metrica.libres .carro-metrica-num {
     color: #198754; /* verde Bootstrap */
 }
+
+
+.card-modern {
+    background: linear-gradient(135deg, #d7dff5, #ffffff);
+    border-radius: 15px;
+    padding: 30px 20px;
+    padding-bottom: 0px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    
+    /* NUEVO: altura mínima y flex para distribuir contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 240px; /* altura uniforme */
+}
+
+.card-modern i {
+    color: #274C9C;
+    transition: transform 0.3s ease, color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.card-modern h5 {
+    font-weight: 700;
+    color: #274C9C;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* evita que el título se comprima */
+}
+
+.card-modern p {
+    font-size: 0.85rem;
+    color: #555;
+    flex-grow: 1; /* hace que el párrafo ocupe el espacio restante */
+}
+
+.card-modern:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #c3d1f0, #ffffff);
+}
+
+.card-modern:hover i {
+    transform: scale(1.15);
+    color: #2a457e;
+}

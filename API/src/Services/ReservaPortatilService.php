@@ -3,35 +3,35 @@ declare(strict_types=1);
 
 namespace Services;
 
-use Models\ReservaEspacioModel;
+use Models\ReservaPortatilModel;
 use Validation\Validator;
 use Validation\ValidationException;
 use Throwable;
 
-class ReservaEspacioService
+class ReservaPortatilService
 {
-    private ReservaEspacioModel $model;
+    private ReservaPortatilModel $model;
 
     public function __construct()
     {
-        $this->model = new ReservaEspacioModel();
+        $this->model = new ReservaPortatilModel();
     }
 
-    // Devuelve todas las reservas de espacios
+    // Devuelve todas las reservas de portatils
     public function getAllReservas(): array
     {
         return $this->model->getAll();
     }
 
-    // Devuelve todas las reservas de un espacio específico
-    public function getReservasPorEspacio(string $idEspacio): array
+    // Devuelve todas las reservas de un portatil específico
+    public function getReservasPorPortatil(string $idPortatil): array
     {
-        Validator::validate(['id' => $idEspacio], [
+        Validator::validate(['id' => $idPortatil], [
             'id' => 'required|string|min:1'
         ]);
 
         try {
-            $reservas = $this->model->getByEspacio($idEspacio);
+            $reservas = $this->model->getByPortatil($idPortatil);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
@@ -82,12 +82,16 @@ class ReservaEspacioService
     {
         $errors = [];
 
-        if (empty($data['actividad'])) {
-            $errors['actividad'] = "La actividad es obligatoria";
+        if (empty($data['unidades'])) {
+            $errors['unidades'] = "Las unidades son obligatorias";
         }
 
-        if (!isset($data['id_espacio']) || is_numeric($data['id_espacio'])) {
-            $errors['id_espacio'] = "El ID del espacio es obligatorio y debe ser texto";
+        if (empty($data['usaenespacio'])) {
+            $errors['usaenespacio'] = "El espacio de uso es obligatorio";
+        }
+
+        if (!isset($data['id_material']) || is_numeric($data['id_material'])) {
+            $errors['id_material'] = "El ID del portátil es obligatorio y debe ser texto";
         }
 
         if (!isset($data['inicio']) || is_numeric($data['inicio'])) {
