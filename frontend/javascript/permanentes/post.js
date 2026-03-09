@@ -7,16 +7,16 @@ export async function createPermanente(reserva) {
         inicio: reserva.inicio,
         fin: reserva.fin,
         comentario: reserva.comentario?.trim() || null,
-        recurso: reserva.recurso,
+        id_recurso: reserva.recurso,
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null
     };
     
     // Validación mínima antes de enviar
-    if (!body.dia_semana || !body.inicio || !body.fin || !body.recurso) {
+    if (!body.dia_semana || !body.inicio || !body.fin || !body.id_recurso) {
       throw new Error("createPermanente: faltan campos obligatorios (dia_semana, inicio, fin, recurso)");
     }
 
-    const response = await fetch(`${API}/reserva`, {
+    const response = await fetch(`${API}/reservas_permanentes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

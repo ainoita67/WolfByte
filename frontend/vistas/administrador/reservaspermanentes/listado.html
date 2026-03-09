@@ -74,25 +74,25 @@
                 <div class="d-none d-lg-block" style="height: 4.5rem;"></div>
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title" id="info-id">Aula</h5>
+                        <h5 class="card-title" id="info-id">Recusrso</h5>
                         <hr>
 
-                        <p><strong>Descripción:</strong></p>
+                        <p><strong>Descripción: </strong></p>
                         <p id="info-descripcion" class="text-muted small"></p>
 
-                        <p id="infoTipo"><strong>Tipo:</strong> <span id="info-tipo"></span></p>
+                        <p id="infoTipo"><strong>Tipo: </strong> <span id="info-tipo"></span></p>
 
-                        <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
-                        <p><strong>Planta:</strong> <span id="info-planta"></span></p>
+                        <p><strong>Edificio: </strong> <span id="info-edificio"></span></p>
+                        <p><strong>Planta: </strong> <span id="info-planta"></span></p>
 
-                        <p><strong>Características:</strong></p>
+                        <p id="infoCaracteristicas"><strong>Características:</strong></p>
                         <ul id="info-caracteristicas" class="small"></ul>
 
-                        <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
+                        <p><strong>Requiere autorización: </strong> <span id="info-especial"></span></p>
 
-                        <p id="infoUnidades"><strong>Unidades:</strong> <span id="info-unidades"></span></p>
+                        <p id="infoUnidades"><strong>Unidades: </strong> <span id="info-unidades"></span></p>
 
-                        <p id="infoEsAula"><strong>Es un aula:</strong> <span id="info-es-aula"></span></p>
+                        <p id="infoEsAula"><strong>Es un aula: </strong> <span id="info-es-aula"></span></p>
 
 
 
@@ -157,9 +157,9 @@
             <input type="text" class="form-control" id="comentarioEditar">
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" id="unidadesEditar">
             <label class="form-label">Unidades</label>
-            <input type="number" class="form-control" id="unidadesEditar">
+            <input type="number" class="form-control">
           </div>
 
           <div class="col-md-6"></div>
@@ -224,9 +224,9 @@
             <input type="text" class="form-control" id="comentarioCrear">
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6"  id="unidadesCrear">
             <label class="form-label">Unidades</label>
-            <input type="number" class="form-control" id="unidadesCrear">
+            <input type="number" class="form-control">
             </div>
 
             <div class="col-md-6"></div>
@@ -272,10 +272,10 @@ const diasSemana = {
 let reservas = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
-    reservas = await getReservasRecurso(
-    
-    idRecurso);
+    reservas = await getReservasRecurso(idRecurso);
     rellenarTablaReservas(reservas);
+
+    cargarInfo(idRecurso);
 
     // Listener para abrir modal
     document.getElementById("modalEditar").addEventListener("show.bs.modal", async (e) => {
@@ -442,7 +442,7 @@ document.addEventListener("click", async (e) => {
     }
 });
 
-import { getInfoRecurso } from "/frontend/javascript/recursos/recursos.js";
+import { getInfoRecurso } from "/frontend/javascript/recursos/get.js";
 
 async function cargarInfo(id) {
     const recurso = await getInfoRecurso(id);
@@ -462,11 +462,29 @@ async function cargarInfo(id) {
 
         //mostrar si es aula o no
         const infoEsAula = document.getElementById("infoEsAula");
-        infoEsAula.textContent = recurso.es_aula ? "Sí" : "No";
         infoEsAula.style.display = "block";
+        const spanEsAula = document.getElementById("info-es-aula");
+        spanEsAula.textContent = recurso.es_aula ? "Sí" : "No";
+
+        //Características
+        const infoCaracteristicas = document.getElementById("infoCaracteristicas");
+        const infoCaracteristicasUl = document.getElementById("info-caracteristicas");
+        if (recurso.caracteristicas.length > 0) {
+            infoCaracteristicas.style.display = "block";
+            infoCaracteristicasUl.style.display = "block";
+            infoCaracteristicasUl.textContent = "";
+            recurso.caracteristicas.forEach(caracteristica => {
+                const li = document.createElement('li');
+                li.textContent = caracteristica;
+                infoCaracteristicasUl.appendChild(li);
+            });
+        } else {
+            infoCaracteristicas.style.display = "none";
+            infoCaracteristicasUl.style.display = "none";
+        }
 
         //mostrar tipo
-        const infoTipo = document.getElementById("infoTipo");
+        const infoTipo = document.getElementById("info-tipo");
         infoTipo.textContent = recurso.tipo;
 
     } else if (recurso.tipo === "Material") {
@@ -474,18 +492,25 @@ async function cargarInfo(id) {
         const infoUnidades = document.getElementById("infoUnidades");
         const editarUnidades = document.getElementById("unidadesEditar");
         const crearUnidades = document.getElementById("unidadesCrear");
+        const infoUnidadesSpan = document.getElementById("info-unidades");
         infoUnidades.style.display = "block";
-        infoUnidades.textContent = recurso.unidades;
         editarUnidades.style.display = "block";
         crearUnidades.style.display = "block";
-
+        infoUnidadesSpan.textContent = recurso.unidades !== null ? recurso.unidades : "N/A";
+        
+        //Características
+        const infoCaracteristicas = document.getElementById("infoCaracteristicas");
+        const infoCaracteristicasUl = document.getElementById("info-caracteristicas");
+        infoCaracteristicas.style.display = "none";
+        infoCaracteristicasUl.style.display = "none";
+        
         //ocultar si es aula o no
         const infoEsAula = document.getElementById("infoEsAula");
         infoEsAula.style.display = "none";
 
         //mostrar tipo
-        const infoTipo = document.getElementById("infoTipo");
-        infoTipo.textContent = "Carrito de prtátiles";
+        const infoTipo = document.getElementById("info-tipo");
+        infoTipo.textContent = "Carrito de portátiles";
     }
 
     document.getElementById("info-id").textContent = 'Recurso ' + recurso.id;
@@ -493,18 +518,10 @@ async function cargarInfo(id) {
     document.getElementById("info-edificio").textContent = recurso.nombre_edificio;
     document.getElementById("info-planta").textContent = recurso.nombre_planta;
 
-    const cont = document.getElementById("info-caracteristicas");
-    cont.textContent = "";
-    recurso.caracteristicas.forEach(caracteristica => {
-        const li = document.createElement('li');
-        li.textContent = caracteristica;
-        cont.appendChild(li);
-    });
+
 
     document.getElementById("info-especial").textContent =
     recurso.especial ? "Sí" : "No";
-
-        tipo: json.data.tipo,
 
 }
 </script>

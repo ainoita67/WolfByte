@@ -43,7 +43,7 @@ export async function getInfoRecurso(id_recurso) {
 
     const json = await response.json();
 
-    recurso = {
+    const recurso = {
         id: json.data.id_recurso,
         descripcion: json.data.descripcion,
         tipo: json.data.tipo,
@@ -54,7 +54,8 @@ export async function getInfoRecurso(id_recurso) {
         id_edificio: json.data.id_edificio,
         nombre_edificio: json.data.nombre_edificio,
         es_aula: json.data.es_aula === 1,
-        unidades: json.data.unidades
+        unidades: json.data.unidades,
+        caracteristicas: json.data.caracteristicas || []
     }
 
     return recurso;

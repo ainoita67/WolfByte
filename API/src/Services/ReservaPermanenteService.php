@@ -78,7 +78,7 @@ class ReservaPermanenteService
             'inicio'        => 'required|string',
             'fin'           => 'required|string',
             'comentario'    => 'string',
-            'recurso'       => 'required|string',
+            'id_recurso'       => 'required|string',
             'dia_semana'    => 'required|int|min:0|max:7',
             'unidades'      => 'int'
         ]);
