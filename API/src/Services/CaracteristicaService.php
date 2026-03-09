@@ -20,10 +20,8 @@ class CaracteristicaService
     public function getAllCaracteristicas(): array
     {
         try {
-            // Solicita al modelo todos los registros de Caracteristica
             return $this->model->getAll();
         } catch (Throwable $e) {
-            // Captura cualquier error de base de datos y lo transforma en un error interno controlado
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
     }
@@ -50,7 +48,9 @@ class CaracteristicaService
     public function createCaracteristica(array $input): array
     {
         $data = Validator::validate($input, [
-            'nombre' => 'required|string|min:3|max:30',
+            'nombre' => 'required|string|min:3|max:30|regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/',
+        ], [
+            'nombre.regex' => 'El nombre solo puede contener letras, números y espacios'
         ]);
 
         try {
@@ -60,7 +60,7 @@ class CaracteristicaService
         }
 
         if (!$id) {
-            throw new \Exception("No se pudo crear la caracteristica");
+            throw new \Exception("Ya existe una característica con ese nombre", 409);
         }
 
         return ['id' => $id];
@@ -73,7 +73,9 @@ class CaracteristicaService
         ]);
 
         $data = Validator::validate($input, [
-            'nombre' => 'required|string|min:3|max:30',
+            'nombre' => 'required|string|min:3|max:30|regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/',
+        ], [
+            'nombre.regex' => 'El nombre solo puede contener letras, números y espacios'
         ]);
 
         try {
@@ -86,7 +88,7 @@ class CaracteristicaService
             $exists = $this->model->findById($id);
 
             if (!$exists) {
-                throw new \Exception("Caracteristica no encontrado", 404);
+                throw new \Exception("Caracteristica no encontrada", 404);
             }
 
             return [
@@ -96,7 +98,7 @@ class CaracteristicaService
         }
 
         if ($result === -1) {
-            throw new \Exception("No se pudo actualizar la caracteristica: conflicto con restricciones", 409);
+            throw new \Exception("Ya existe otra característica con ese nombre", 409);
         }
 
         return [
@@ -107,30 +109,72 @@ class CaracteristicaService
 
     public function deleteCaracteristica(int $id): void
     {
-        // Validar ID
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
         try {
-            //ejecuta el delete en el modelo
             $result = $this->model->delete($id);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        // devuelve los resultados
         if ($result === 0) {
-            // No existe el registro
             throw new \Exception("Caracteristica no encontrada", 404);
         }
 
         if ($result === -1) {
-            // Conflicto por FK u otra restricción
-            throw new \Exception("No se puede eliminar la caracteristica: el registro está en uso", 409);
+            throw new \Exception("No se puede eliminar la caracteristica porque está siendo utilizada por uno o más espacios", 409);
         }
-
-        // Eliminación exitosa → no retorna nada
     }
 
+    /**
+     * Obtener características de un espacio
+     */
+    public function getCaracteristicasByEspacio(string $idEspacio): array
+    {
+        Validator::validate(['id_espacio' => $idEspacio], [
+            'id_espacio' => 'required|string|min:1|max:10'
+        ]);
+
+        try {
+            return $this->model->getByEspacio($idEspacio);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * Asignar característica a espacio
+     */
+    public function asignarCaracteristicaAEspacio(string $idEspacio, int $idCaracteristica): array
+    {
+        Validator::validate([
+            'id_espacio' => $idEspacio,
+            'id_caracteristica' => $idCaracteristica
+        ], [
+            'id_espacio' => 'required|string|min:1|max:10',
+            'id_caracteristica' => 'required|int|min:1'
+        ]);
+
+        try {
+            // Verificar que la característica existe
+            $caracteristica = $this->model->findById($idCaracteristica);
+            if (!$caracteristica) {
+                throw new \Exception("Característica no encontrada", 404);
+            }
+
+            $resultado = $this->model->asignarAEspacio($idEspacio, $idCaracteristica);
+
+            if (!$resultado) {
+                throw new \Exception("La característica ya está asignada a este espacio", 409);
+            }
+
+            return $caracteristica;
+        } catch (\Exception $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
 }

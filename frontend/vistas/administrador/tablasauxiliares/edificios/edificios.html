@@ -1,111 +1,149 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
+<head>
+    <meta charset="utf-8">
+    <!-- PRIMERO: Definir BASE -->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
 
-        
+    <!-- Cargar authGuard PRIMERO -->
+    <script src="../../../javascript/sesion/authGuard.js"></script>
 
-        <script>const BASE = window.location.origin + "/frontend";</script>
-        <script>
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
-                    generarPagina("admin", "admin");
+    <!-- En menuadministrador.html y otras páginas de admin -->
+    <script>
+        setTimeout(function() {
+            const rol = Number(sessionStorage.getItem("rol"));
+            console.log('Rol después de authGuard:', rol);
+            
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol !== 30 && rol !== 40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.href = '../../menu.html'; // REDIRIGE AL MENÚ PRINCIPAL
+            } else {
+                // Cargar la página normalmente
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("menu", "admin");
+                    };
+                    document.head.appendChild(script2);
                 };
-                document.head.appendChild(script2);
-            };
-        document.head.appendChild(script1);
+                document.head.appendChild(script1);
+            }
+        }, 100);
     </script>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <title>Edificios - IES Bajo Aragón</title>
+</head>
+<body>
 
+<div id="header"></div>
 
-        <title>Edificios - IES Bajo Aragón</title>
-    </head>
-    <body>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Edificios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear edificio
+<main class="container mt-5">
+    <!-- CABECERA - exactamente igual que portatiles -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Edificios</h2>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+            <i class="bi bi-plus-circle"></i> Crear edificio
+        </button>
+    </div>
+
+    <!-- CONTENEDOR DE TARJETAS -->
+    <div id="contenedorTarjetas" class="row g-4">
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando edificios...</p>
+        </div>
+    </div>
+
+    <!-- VOLVER -->
+    <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
+        <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+            <i class="bi bi-caret-left-fill"></i> Volver
+        </a>
+    </div>
+</main>
+
+<!-- MODAL CREAR - exactamente igual que portatiles -->
+<div class="modal fade" id="modalCrear" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Crear edificio
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCrear">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del edificio</label>
+                        <input type="text" class="form-control" id="crearNombre" placeholder="Ej: Edificio principal" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="formCrear" class="btn btn-success">
+                    <i class="bi bi-check-lg me-1"></i> Crear edificio
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
                 </button>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row g-4" id="contenedorTarjetas"></div>
-
-            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                <a href="../tablasauxiliares.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+<!-- MODAL EDITAR - exactamente igual que portatiles -->
+<div class="modal fade" id="modalEditar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Editar edificio
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditar">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre del edificio</label>
+                        <input type="text" class="form-control" id="editNombre" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="formEditar" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i> Actualizar edificio
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i> Cancelar
+                </button>
             </div>
         </div>
-
-    </div>
-
-
-</main>
-
-<!-- MODAL CREAR -->
-<div class="modal fade" id="modalCrear" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <form id="formCrear">
-                <div class="modal-header">
-                    <h5 class="modal-title">Crear edificio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <label class="form-label">Nombre del edificio</label>
-                    <input type="text" class="form-control" id="crearNombre" required>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-success" type="submit">Crear</button>
-                </div>
-            </form>
-
-        </div>
     </div>
 </div>
 
-
-<!-- MODAL EDITAR -->
-<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <form id="formEditar">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Editar edificio</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <input type="hidden" id="editId">
-
-                    <label class="form-label">Nombre del edificio</label>
-                    <input type="text" class="form-control" id="editNombre" required>
-                </div>
-
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" type="submit">Guardar cambios</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
 
 <footer id="footer"></footer>
 
-</body>
-<script src="/frontend/javascript/sesion/api.js"></script>
-<script src="/frontend/javascript/sesion/authGuard.js"></script>
-<script src="/frontend/javascript/edificios/edificios.js" defer></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- Script de edificios -->
+<script src="../../../../javascript/edificios/edificios.js"></script>
+
+</body>
 </html>

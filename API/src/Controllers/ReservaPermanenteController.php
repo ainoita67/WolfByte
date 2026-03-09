@@ -50,13 +50,13 @@ class ReservaPermanenteController
     }
 
     /**
-     * GET /reservas_permanentes/{id_recurso}
+     * GET /reservas_permanentes/recurso/{id_recurso}
      * Muestra todas las reservas permanentes activas por recurso
      */
-    public function showActivas(Request $req, Response $res, string $id): void
+    public function showActivasRecurso(Request $req, Response $res, string $id): void
     {
         try {
-            $reserva = $this->service->getReservaPermanenteById($id);
+            $reserva = $this->service->getReservaPermanenteRecurso($id);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 404);

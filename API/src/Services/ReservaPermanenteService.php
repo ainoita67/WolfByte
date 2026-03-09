@@ -49,7 +49,7 @@ class ReservaPermanenteService
     /**
      * Obtener reserva permanente por ID de recurso
      */
-    public function getReservaPermanenteByIdRecurso(string $id_recurso): array
+    public function getReservaPermanenteRecurso(string $id_recurso): array
     {
         $data = Validator::validate(['id_recurso' => $id_recurso], [
             'id_recurso' => 'required|string|min:1'

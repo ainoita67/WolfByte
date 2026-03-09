@@ -14,7 +14,7 @@ Theme Designer Version: 2025.12.31.41986
 	--dp-calendar-colheader-horizontal-align: center;
 	--dp-calendar-rowheader-padding: 2px;
 	--dp-calendar-cell-bg-color: #f9f9f9;
-	--dp-calendar-cell-business-bg-color: #ffffff;
+	--dp-calendar-cell-business-bg-color: #f9f9f9;
 	--dp-calendar-cell-border-color: #eeeeee;
 	--dp-calendar-allday-event-color: #ffffff;
 	--dp-calendar-allday-event-border-color: #578047;
@@ -32,7 +32,7 @@ Theme Designer Version: 2025.12.31.41986
 	--dp-calendar-event-bar-bottom: 0px;
 	--dp-calendar-event-bar-top: 0px;
 	--dp-calendar-event-bar-display: block;
-	--dp-calendar-event-padding: 2px;
+	--dp-calendar-event-padding: 3px;
 	--dp-calendar-event-padding-left: 8px;
 	--dp-calendar-message-bg-color: #ffa216;
 	--dp-calendar-message-color: #ffffff;

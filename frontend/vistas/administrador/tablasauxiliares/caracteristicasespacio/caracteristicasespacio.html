@@ -3,23 +3,43 @@
 
 <head>
     <meta charset="utf-8">
+    <!-- PRIMERO: Definir BASE -->
     <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
 
+    <!-- Cargar authGuard PRIMERO -->
+    <script src="../../../javascript/sesion/authGuard.js"></script>
+
+    <!-- En menuadministrador.html y otras páginas de admin -->
     <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-                generarPagina("admin", "admin");
-            };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
+        setTimeout(function() {
+            const rol = Number(sessionStorage.getItem("rol"));
+            console.log('Rol después de authGuard:', rol);
+            
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol !== 30 && rol !== 40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.href = '../../menu.html'; // REDIRIGE AL MENÚ PRINCIPAL
+            } else {
+                // Cargar la página normalmente
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("menu", "admin");
+                    };
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+        }, 100);
     </script>
 
     <title>Características - IES Bajo Aragón</title>
+    
 </head>
 
 <body>
@@ -28,67 +48,65 @@
 
     <main class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Característica</h2>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearCaracteristica">
+            <h2>Características</h2>
+            <button class="btn btn-success" id="btnCrear">
                 <i class="bi bi-plus-circle"></i> Crear Característica
             </button>
         </div>
 
-
-        <!-- Tarjetas -->
-
-        <div class="row g-4" id="contenedorTarjetas">
-
-            <!-- Datos  -->
-
-        </div>
-        <!-- Modal Crear -->
-        <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crear nueva caracteristica</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="formCrearCaracteristica">
-                            <div class="mb-3">
-                                <label class="form-label">Nombre de la caracteristica</label>
-                                <input type="text" id="nombreCaracteristica" class="form-control"
-                                    placeholder="Ej. Proyector" required>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
-                        <button type="submit" form="formCrearCaracteristica"
-                            class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
-                            <i class="bi bi-check2"></i> Crear
-                        </button>
-                        <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3"
-                            data-bs-dismiss="modal">
-                            <i class="bi bi-x-lg"></i> Cancelar
-                        </button>
-                    </div>
-
-                </div>
-            </div>
+        <!-- Tarjetas de características -->
+        <div class="row g-4" id="contenedorCaracteristicas">
+            <!-- Datos -->
         </div>
 
-        <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+        <!-- Volver -->
+        <div class="divvolver container p-0 pb-3 mb-5 mt-4 text-end fs-5">
+            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light text-decoration-none">
                 <i class="bi bi-caret-left-fill"></i> Volver
             </a>
         </div>
     </main>
-    <!-- Modal Editar -->
-    <div class="modal fade" id="modalEditar" tabindex="-1">
+
+    <!-- Modal Crear Característica -->
+    <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Editar característica</h5>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle"></i> Crear Característica
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCrearCaracteristica">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la característica</label>
+                            <input type="text" class="form-control" id="crearNombre" 
+                                   placeholder="Ej. Proyector HD" required maxlength="100">
+                            <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="submit" form="formCrearCaracteristica" class="btn btn-success">
+                        <i class="bi bi-check2"></i> Crear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Característica -->
+    <div class="modal fade" id="modalEditarCaracteristica" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square"></i> Editar Característica
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -96,51 +114,28 @@
                         <input type="hidden" id="editId">
                         <div class="mb-3">
                             <label class="form-label">Nombre de la característica</label>
-                            <input type="text" class="form-control" id="editNombre" required>
+                            <input type="text" class="form-control" id="editNombre" 
+                                   placeholder="Ej. Proyector HD" required maxlength="100">
+                            <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary">Guardar
-                        cambios</button>
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary text-white">
+                        <i class="bi bi-check2"></i> Guardar cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Eliminar -->
-    <div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Confirmar Eliminación</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <i class="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
-                        <p class="fs-5" id="mensajeEliminacion">
-                            ¿Estás seguro de eliminar la característica "<span
-                                id="nombreCaracteristicaEliminar"></span>"?
-                        </p>
-                        <p class="text-muted">Esta acción no se puede deshacer.</p>
-                    </div>
-                    <input type="hidden" id="idCaracteristicaEliminar">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                        <i class="bi bi-trash"></i> Sí, Eliminar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <footer id="footer"></footer>
 </body>
-<script type="module" src="../../../../javascript/caracteristicas.js"></script>
+<script type="module" src="../../../../javascript/espaiciocaracteristicas/espaciocaracteristicas.js"></script>
 
 </html>
