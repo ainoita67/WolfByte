@@ -162,6 +162,8 @@ function mostrarEspacios(espacios) {
     
     // Agrupar espacios por edificio y planta
     const espaciosPorEdificio = {};
+
+  
     
     espacios.forEach(espacio => {
         const edificio = espacio.nombre_edificio || 'SIN EDIFICIO';

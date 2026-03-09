@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
     if (btnAbrirCrear) {
-        console.log('✅ Botón de crear encontrado:', {
+        console.log('Botón de crear encontrado:', {
             texto: btnAbrirCrear.textContent.trim(),
             id: btnAbrirCrear.id,
             clases: btnAbrirCrear.className,
@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Verificar que tenga los atributos correctos de Bootstrap
         if (!btnAbrirCrear.hasAttribute('data-bs-toggle') && !btnAbrirCrear.hasAttribute('data-toggle')) {
-            console.log('⚠️ Botón no tiene atributo data-bs-toggle, agregándolo manualmente');
+            console.log('Botón no tiene atributo data-bs-toggle, agregándolo manualmente');
             btnAbrirCrear.setAttribute('data-bs-toggle', 'modal');
             btnAbrirCrear.setAttribute('data-bs-target', '#modalCrear');
         }
