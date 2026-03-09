@@ -214,7 +214,7 @@ class EspacioModel
                 JOIN Espacio e ON r.id_recurso=e.id_espacio 
                 LEFT JOIN Planta p ON r.numero_planta=p.numero_planta AND r.id_edificio=p.id_edificio
                 LEFT JOIN Edificio ed on ed.id_edificio=r.id_edificio 
-                WHERE r.tipo = 'Espacio' AND e.es_aula=true AND r.activo=true
+                WHERE r.tipo = 'Espacio' AND e.es_aula=true AND r.activo=true 
                 ORDER BY r.numero_planta, r.id_recurso; ")
             ->fetchAll();
     }
@@ -297,7 +297,8 @@ class EspacioModel
                         AND lp.inicio < :lp_fin
                         AND lp.fin > :lp_inicio
                     )
-                )
+                ) 
+                AND res.autorizada = 1 OR res.autorizada IS NULL
 
             GROUP BY 
                 r.id_recurso,

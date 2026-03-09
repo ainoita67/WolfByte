@@ -3,136 +3,241 @@
     <head>
         <meta charset="utf-8">
         <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
-
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
         <!--
         AÑADE:
-            <script src="/ALEX/frontend/javascript/includes.js"></script>
-            <script src="/ALEX/frontend/javascript/menu.js"></script>
+            <script src="/frontend/javascript/includes.js"></script>
+            <script src="/frontend/javascript/menu.js"></script>
         QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
         -->
         <script>
+            const rol = sessionStorage.getItem("rol");
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("menu", "admin");
+                generarPagina("aulas", rol);
                 };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
+
+            // authGuard
+            const scriptAuth = document.createElement('script');
+            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
+            document.head.appendChild(scriptAuth);
         </script>
+        <title>Menú principal - IES Bajo Aragón</title>
 
+    <!-- DayPilot -->
+    <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+    <link rel="stylesheet" href="../../../assets/css/calendar_green.css" />
+    <style>
+.cursor-pointer {
+    cursor: pointer !important;
+}
+</style>
+</head>
 
-        <title>Salón de Actos - IES Bajo Aragón</title>
-    </head>
-    <body>
+<body>
 
-        <div id="header"></div>
+<div id="header"></div>
 
-        <main>
-            <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
-            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
-            
-            <div class="container my-5">
-                <div id="dp"></div>
-            </div>
+<main>
 
-            <!-- Modal editar reserva -->
-<div class="modal fade" id="modalEditarReserva" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Reserva</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form id="formEditarReserva" class="px-3">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="asignatura">Asignatura</label>
-                            <input type="text" class="form-control" id="asignatura" disabled>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="grupo">Grupo</label>
-                            <input type="text" class="form-control" id="grupo" disabled>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="profesor">Profesor</label>
-                            <input type="text" class="form-control" id="profesor" disabled>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="actividad">Actividad</label>
-                            <input type="text" class="form-control" id="actividad" disabled>
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="start">Inicio</label>
-                            <input type="datetime-local" class="form-control" id="start">
-                        </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label" for="end">Fin</label>
-                            <input type="datetime-local" class="form-control" id="end">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer d-flex justify-content-between">
-                    <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar</button>
-                    <button type="button" class="col-3 btn bg-danger border rounded-pill text-light" id="btnEliminarReserva"><i class="bi bi-trash"></i> Eliminar</button>
-                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
-                </div>
-            </form>
-        </div>
+    <!-- BOTÓN VOLVER -->
+    <div class="container mt-3 text-end">
+        <button id="btnVolver" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Volver al listado
+        </button>
     </div>
-</div>
 
- 
+    <!-- CONTENEDOR CALENDARIO -->
+    <div class="container my-4 d-flex flex-column" style="height: 65vh;">
+
+        <!-- NAVEGACIÓN SEMANAL -->
+        <div class="row d-flex justify-content-between align-items-center mb-3">
+
+            <button id="prevWeek"
+                    type="button"
+                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                    style="width: 2.5rem; height: 2.5rem;">
+                <i class="bi bi-arrow-left-circle fs-2"></i>
+            </button>
+
+            <button id="nextWeek"
+                    type="button"
+                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                    style="width: 2.5rem; height: 2.5rem;">
+                <i class="bi bi-arrow-right-circle fs-2"></i>
+            </button>
+
+        </div>
+
+        <!-- CALENDARIO -->
+        <div id="dp" class="flex-grow-1"></div>
+
+    </div>
+
+</main>
+
+<footer id="footer"></footer>
 
 
-            
+<!-- ============================= -->
+<!-- SCRIPT PRINCIPAL DEL CALENDARIO -->
+<!-- ============================= -->
+
 <script type="module">
-import { generarEventos } from "/frontend/javascript/reservas/crud.js";
-// cojer id de la url
-const params = new URLSearchParams(window.location.search);
-const idAula = params.get("id");
+
+import { generarEventosSegunRecurso } from "/frontend/javascript/salon-actos/crud.js";
+
+const idRecurso = "salon";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const dp = new DayPilot.Calendar("dp", {
-        viewType: "WorkWeek",
-        theme: "calendar_green",
-        startDate: DayPilot.Date.today(),
 
-        locale: "es-es",            // formato europeo
-        headerDateFormat: "dd/MM/yyyy",
-        weekStarts: 1,
-
-        cellDuration: 5,
-        cellHeight: 8, 
-        businessBeginsHour: 8,
-        businessEndsHour: 22,
-        eventDeleteHandling: "Disabled",
-        heightSpec: "BusinessHoursNoScroll"
-
-    });
-
-    const eventos = await generarEventos(idAula);
-
-    dp.events.list = eventos;
-    dp.init();
-    dp.onEventClick = function(args) {
-
-    if (args.e.data.bloqueBase) {
-        abrirModalCrear(args.e.data.start, args.e.data.end);
-    } else {
-        abrirModalEditar(args.e.data);
+    if (!idRecurso) {
+        console.error("No se ha recibido id del recurso en la URL");
+        return;
     }
 
-};
+   const dp = new DayPilot.Calendar("dp", {
 
+    viewType: "WorkWeek",
+    theme: "calendar_green",
+    startDate: DayPilot.Date.today(),
 
-    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    locale: "es-es",
+    headerDateFormat: "dd/MM/yyyy",
+    weekStarts: 1,
+
+    cellDuration: 5,
+    cellHeight: 8,
+    businessBeginsHour: 8,
+    businessEndsHour: 22,
+
+    eventDeleteHandling: "Disabled",
+    heightSpec: "BusinessHoursNoScroll",
+
+    // 🎨 Cambiar cursor según tipo
+    onBeforeEventRender: function(args) {
+        args.data.cssClass = "cursor-pointer";
+    },
+
+    // 🧠 CLICK EN EVENTO
+    onEventClick: async function(args) {
+
+        const evento = args.e.data;
+
+        // =============================
+        // 🟢 CREAR RESERVA (Disponible)
+        // =============================
+
+        if (evento.bloqueBase) {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" }
+    ]);
+
+    if (!modal.result) return;
+    const idusuario = sessionStorage.getItem("id_usuario");
+
+    const response = await fetch(`${API}/reservaEspacio`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            observaciones: modal.result.observaciones,
+            inicio: evento.start.replace("T", " "),
+            fin: evento.end.replace("T", " "),
+            actividad: modal.result.actividad,
+            id_espacio: idRecurso,
+            id_usuario: idusuario
+        })
+    });
+
+    if (!response.ok) {
+        alert("Error creando la reserva");
+        return;
+    }
+
+    const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+
+        // =============================
+        // 🔵 EDITAR RESERVA
+        // =============================
+else {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" }
+    ], {
+        asignatura: evento.asignatura,
+        grupo: evento.grupo,
+        profesor: evento.profesor,
+        actividad: evento.actividad,
+        observaciones: evento.observaciones
+    });
+    
+    if (!modal.result) return;
+
+    const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            actividad: modal.result.actividad,
+            observaciones: modal.result.observaciones
+        })
+    });
+
+    if (!response.ok) {
+        alert("Error actualizando la reserva");
+        return;
+    }
+
+    const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+    }
+
+});
+
+    try {
+        const eventos = await generarEventosSegunRecurso(idRecurso);
+        dp.events.list = eventos;
+        dp.init();
+    } catch (error) {
+        console.error("Error cargando eventos:", error);
+    }
+
+    // ====== NAVEGACIÓN SEMANAL ======
+
     document.getElementById("prevWeek").addEventListener("click", () => {
         dp.startDate = dp.startDate.addDays(-7);
         dp.update();
@@ -143,47 +248,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
-
 });
+
+// ====== BOTÓN VOLVER ======
 
 document.getElementById("btnVolver").addEventListener("click", () => {
-    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+    window.location.href = `${BASE}/vistas/menu.html    `;
 });
-
-function abrirModalEditar(evento) {
-
-    document.getElementById("asignatura").value = evento.asignatura;
-    document.getElementById("grupo").value = evento.grupo;
-    document.getElementById("profesor").value = evento.profesor;
-    document.getElementById("actividad").value = evento.actividad;
-
-    document.getElementById("start").value = evento.start.substring(0,16);
-    document.getElementById("end").value = evento.end.substring(0,16);
-
-    const modal = new bootstrap.Modal(document.getElementById("modalEditarReserva"));
-    modal.show();
-}
-
-function abrirModalCrear(start, end) {
-
-    document.getElementById("asignatura").value = "";
-    document.getElementById("grupo").value = "";
-    document.getElementById("profesor").value = "";
-    document.getElementById("actividad").value = "";
-
-    document.getElementById("start").value = start.substring(0,16);
-    document.getElementById("end").value = end.substring(0,16);
-
-    const modal = new bootstrap.Modal(document.getElementById("modalEditarReserva"));
-    modal.show();
-}
-
 
 </script>
 
-
-
-        </main>
-        <footer id="footer"></footer>
-    </body>
+</body>
 </html>

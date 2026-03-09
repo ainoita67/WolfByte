@@ -34,7 +34,7 @@ class AuthController
         $payload = [
             'iat' => time(),
             'exp' => time() + JWT_EXPIRE,
-            'sub' => $user['id_usuario'],
+            'id_usuario' => $user['id_usuario'],
             'rol' => $user['id_rol'],
             'nombre' => $user['nombre'],
             'email' => $user['correo']

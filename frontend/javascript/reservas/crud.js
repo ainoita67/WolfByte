@@ -32,7 +32,14 @@ export async function cargarReservas(idRecurso) {
             id: r.id_reserva,
             text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
             start: r.inicio.replace(" ", "T"),
-            end: r.fin.replace(" ", "T")
+            end: r.fin.replace(" ", "T"),
+                
+            asignatura: r.asignatura,
+            grupo: r.grupo,
+            profesor: r.profesor,
+            actividad: r.actividad,
+            autorizada: r.autorizada,
+            observaciones: r.observaciones
         }));
 
         return eventos; // array de eventos para el calendario
@@ -57,3 +64,4 @@ export async function generarEventos(idRecurso) {
 
     return eventoscombinados;
 }
+
