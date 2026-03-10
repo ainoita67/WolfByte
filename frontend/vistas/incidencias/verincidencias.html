@@ -3,20 +3,26 @@
     <head>
         <meta charset="utf-8">
         <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
         <script>
+            const rol = sessionStorage.getItem("rol");
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("incidencias", "admin");
+                generarPagina("incidencias", rol);
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
-        </script>
 
+            // authGuard
+            const scriptAuth = document.createElement('script');
+            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
+            document.head.appendChild(scriptAuth);
+        </script>
         <title>Ver incidencias - IES Bajo Aragón</title>
     </head>
     <body>

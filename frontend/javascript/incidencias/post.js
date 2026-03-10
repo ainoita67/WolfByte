@@ -42,15 +42,13 @@ function activarCrearIncidencia() {
                 // Limpiar input
                 document.getElementById("formCrearIncidencia").reset();
 
-                alert("Incidencia creada correctamente");
+                mostrarToast("Incidencia creada correctamente", "success");
                 // Recargar
-                window.location.reload();
+                let checktodos = document.getElementById("todos");
+                if (checktodos) checktodos.checked = true;
+                obtenerRecursos();
             } else {
-                if(response.message){
-                    alert(response.message.trim());
-                }else{
-                    alert("Error al crear la incidencia");
-                }
+                mostrarToast("Error al crear la incidencia", "danger");
             }
         })
         .catch(err => console.error("Error al crear la incidencia:", err));
