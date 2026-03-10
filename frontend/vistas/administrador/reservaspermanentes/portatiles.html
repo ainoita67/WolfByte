@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Reservas Portátiles - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-center">Portátiles disponibles</h2>
+                </div>
+                <div class="row g-4 contenedor-carros">
+                    <!-- Aquí se insertarán las tarjetas de los carritos -->
+                </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module">
+import { getCarritos } from "/frontend/javascript/portatiles/get.js";
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const data = await getCarritos();
+    crearTarjetas(data);
+
+});
+
+function crearTarjetas(carros) {
+    const contenedor = document.querySelector(".contenedor-carros");
+    contenedor.innerHTML = "";
+
+    carros.forEach(carro => {
+
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-6 col-lg-4";
+
+        /* CARD */
+        const card = document.createElement("div");
+        card.className = "carro-card h-100 d-flex flex-column";
+
+            /* TÍTULO */
+            const h3 = document.createElement("h3");
+            h3.textContent = `${carro.id} - ${carro.descripcion}`;
+
+            /* BODY */
+            const body = document.createElement("div");
+            body.className = "carro-body";
+
+                /* INFO */
+                const info = document.createElement("div");
+                info.className = "carro-info";
+                    const strong = document.createElement("strong");
+                    strong.textContent = carro.edificio;
+                    info.appendChild(strong);
+                    info.append(` ${carro.planta}`);                
+                const info2 = document.createElement("div");
+                info2.className = "carro-info";
+                    const strong2 = document.createElement("strong");
+                    strong2.textContent = carro.totales;
+                    info2.append(`Portátiles: `);
+                    info2.appendChild(strong2);
+
+                body.appendChild(info);
+                body.appendChild(info2);
+            /* FOOTER */
+            const footer = document.createElement("div");
+            footer.className = "carro-footer";
+
+                const btn = document.createElement("button");
+                btn.className = "btn bg-azul text-light w-100 btn-reservar";
+                btn.innerHTML = `<i class="bi bi-calendar-check"></i> Reservas Permanentes`;
+
+                /* REDIRECCIÓN */
+                btn.addEventListener("click", () => {
+                    const id = carro.id;
+                    window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                });
+                footer.appendChild(btn);
+
+            card.appendChild(h3);
+            card.appendChild(body);
+            card.appendChild(footer);
+        col.appendChild(card);
+        contenedor.appendChild(col);
+    });
+}
+        </script>
+        <footer id="footer"></footer>
+    </body>
+</html>

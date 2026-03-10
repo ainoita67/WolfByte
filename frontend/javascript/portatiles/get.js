@@ -72,4 +72,44 @@ export async function getCarritosDisponibles(fecha, hora_inicio, hora_fin) {
     console.error(error);
     return [];
   }
+
+}
+
+export async function getCarritos() {
+  try {
+    const response = await fetch(`${API}/portatiles/disponibles`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      //horas fijas para mostrar la disponibilidad total de portátiles, sin importar la hora real
+      body: JSON.stringify({
+        fecha: "2000-01-01",
+        hora_inicio: "08:50",
+        hora_fin: "9:45"
+      })
+    });
+    if (!response.ok) throw new Error("Error al obtener aulas disponibles");
+
+    const json = await response.json();
+
+    return json.data.map(item => {
+      const portatiles = parseInt(item.portatiles, 10) || 0;
+
+      return {
+        id: item.id_recurso,
+        descripcion: item.descripcion || "",
+        edificio: item.edificio || "Sin edificio",
+        planta: item.planta || "Sin planta",
+        totales: portatiles,
+      };
+    });
+
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+
+  
 }

@@ -6,6 +6,7 @@ namespace Services;
 use Core\Request;
 use Core\Response;
 use Models\RecursoModel;
+use Models\EspacioModel;
 use Throwable;
 use Validation\Validator;
 use Validation\ValidationException;
@@ -13,10 +14,12 @@ use Validation\ValidationException;
 class RecursoService
 {
     private RecursoModel $model;
+    private EspacioModel $espacioModel;
 
     public function __construct()
     {
         $this->model = new RecursoModel();
+        $this->espacioModel = new EspacioModel();
     }
 
     /**
@@ -46,6 +49,8 @@ class RecursoService
 
         try {
             $recurso = $this->model->findById($id);
+            $caracteristicas = $this->espacioModel->getCaracteristicasEspacio($recurso['id_recurso']) ?? [];
+            $recurso['caracteristicas'] = $caracteristicas;
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
