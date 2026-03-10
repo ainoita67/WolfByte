@@ -59,7 +59,7 @@ export async function updatePermanente(reserva) {
 
 export async function desactivePermanente(id) {
   try {
-    if (!id) throw new Error("desactiveUser: falta id_reserva_permanente");
+    if (!id) throw new Error("desactivePermanente: falta id_reserva_permanente");
 
     const response = await fetch(`${API}/reservas_permanentes/${id}/activar`, {
       method: "PATCH",
@@ -75,13 +75,40 @@ export async function desactivePermanente(id) {
       const msg =
         formatted ||
         json?.message ||
-        `Error al desactivar usuario (HTTP ${response.status})`;
+        `Error al desactivar reserva (HTTP ${response.status})`;
       throw new Error(msg);
     }
 
     return json;
   } catch (error) {
-    console.error("updateUserPassword:", error);
+    console.error("desactivePermanente:", error);
+    throw error;
+  }
+}
+
+export async function desactivarTodo() {
+  try {
+    const response = await fetch(`${API}/reservas_permanentes/desactivar_todo`, {
+      method: "PATCH",
+      headers: {
+        "Accept": "application/json"
+      },
+    });
+
+    const json = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      const formatted = formatErrors(json?.data?.errors);
+      const msg =
+        formatted ||
+        json?.message ||
+        `Error al desactivar reserva (HTTP ${response.status})`;
+      throw new Error(msg);
+    }
+
+    return json;
+  } catch (error) {
+    console.error("desactivarTodo:", error);
     throw error;
   }
 }

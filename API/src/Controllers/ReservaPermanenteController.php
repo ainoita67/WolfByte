@@ -32,7 +32,19 @@ class ReservaPermanenteController
             $res->errorJson($e->getMessage(), 500);
         }
     }
-
+    /**
+     * GET /reservas_permanentes/inactivas
+     * Devuelve todas las reservas permanentes inactivas
+     */
+    public function indexInactivas(Request $req, Response $res): void
+    {
+        try {
+            $reservas = $this->service->getAllReservasPermanentesInactivas();
+            $res->status(200)->json($reservas);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
     /**
      * GET /reservas_permanentes/{id}
      * Devuelve una reserva permanente por ID
@@ -124,7 +136,7 @@ class ReservaPermanenteController
     public function deactivate(Request $req, Response $res): void
     {
         try {
-            $reserva = $this->service->desactivarReservasPermanentes();
+            $reserva = $this->service->desactivarTodo();
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
