@@ -116,6 +116,7 @@ function mostrarDatosModal(reserva){
     document.getElementById("reserva_profesor").value = reserva.profesor;
     document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
     document.getElementById("reserva_usuario").value = reserva.nombreusuario;
+    document.getElementById("reserva_id_usuario_autoriza").value = reserva.id_usuario_autoriza;
     
     document.getElementById("reserva_unidades").value = reserva.unidades;
     document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;

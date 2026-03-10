@@ -70,6 +70,7 @@ class ReservaModel
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.id_usuario_autoriza,
                     r.tipo,
                     r.f_creacion,
                     r.inicio,
@@ -100,6 +101,7 @@ class ReservaModel
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.id_usuario_autoriza,
                     r.tipo,
                     r.f_creacion,
                     r.inicio,
@@ -137,6 +139,7 @@ class ReservaModel
                     SELECT
                         r.id_reserva,
                         r.autorizada,
+                        r.id_usuario_autoriza,
                         r.tipo,
                         r.f_creacion,
                         r.inicio,
@@ -167,6 +170,7 @@ class ReservaModel
                     SELECT
                         r.id_reserva,
                         r.autorizada,
+                        r.id_usuario_autoriza,
                         r.tipo,
                         r.f_creacion,
                         r.inicio,

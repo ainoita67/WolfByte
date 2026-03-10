@@ -91,7 +91,7 @@ function activarEditarTarjetasReserva() {
     formeditar.addEventListener("submit", function (e) {
         e.preventDefault();
         let reserva=obtenerDatosReserva();
-
+console.log(reserva);
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario){
             mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
@@ -104,10 +104,13 @@ function activarEditarTarjetasReserva() {
         modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
     });
 
+    let btnAutorizar = document.getElementById("btnAutorizarReserva");
+    let btnDenegar = document.getElementById("btnDenegarReserva");
+
     //AUTORIZAR
-    formeditar.addEventListener("button", function (e) {
+    btnAutorizar.addEventListener("click", function (e) {
         e.preventDefault();
-        let reserva=obtenerDatosReserva();
+        let reserva=obtenerDatosReserva(sessionStorage.getItem("id_usuario"));
         console.log("Reserva "+JSON.stringify(reserva, null, 2));
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario||!reserva.usuarioautoriza){
             mostrarToast("Error al autorizar los datos. Campos obligatorios no rellenados.", 'danger');
@@ -121,11 +124,29 @@ function activarEditarTarjetasReserva() {
         reserva.autorizada=1;
         modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
     });
+
+    //DENEGAR
+    btnDenegar.addEventListener("click", function (e) {
+        e.preventDefault();
+        let reserva=obtenerDatosReserva(sessionStorage.getItem("id_usuario"));
+        console.log("Reserva "+JSON.stringify(reserva, null, 2));
+        if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario||!reserva.usuarioautoriza){
+            mostrarToast("Error al autorizar los datos. Campos obligatorios no rellenados.", 'danger');
+            return;
+        }
+
+        let modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalReserva")
+        );
+        
+        reserva.autorizada=0;
+        modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
+    });
 }
 
 
 
-function obtenerDatosReserva(){
+function obtenerDatosReserva(usuarioautoriza=null){
     let id = document.getElementById("reserva_id").value;
     let autorizada = document.getElementById("reserva_autorizada").value.trim()||null;;
     if(autorizada=="Pendiente"){
@@ -144,10 +165,8 @@ function obtenerDatosReserva(){
     let grupo = document.getElementById("reserva_grupo").value;
     let profesor = document.getElementById("reserva_profesor").value;
     let usuario = document.getElementById("reserva_id_usuario").value;
-    let usuarioautoriza=null;
-    if(autorizada==1||autorizada==0){
-        console.log("Usuario "+sessionStorage.getItem("id_usuario"));
-        usuarioautoriza = sessionStorage.getItem("id_usuario");
+    if(!usuarioautoriza||usuarioautoriza==null){
+        usuarioautoriza = document.getElementById("reserva_id_usuario_autoriza").value;
     }
     if(autorizada!=null&&(!usuarioautoriza||usuarioautoriza==null)){
         mostrarToast("Error al actualizar los datos", 'danger');
