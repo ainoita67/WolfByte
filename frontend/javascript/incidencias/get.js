@@ -609,7 +609,8 @@ function formatearFecha(stringFecha){
 
 //MIS INCIDENCIAS
 
-function obtenerMisIncidencias(usuario){
+function obtenerMisIncidencias(){
+    usuario=sessionStorage.getItem("id_usuario");
     fetch(window.location.origin+"/API/incidencias/usuario/"+usuario)
     .then(res => res.json())
     .then(response => {
