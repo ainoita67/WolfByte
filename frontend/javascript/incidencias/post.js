@@ -77,6 +77,7 @@ function activarEditarIncidencia() {
             document.getElementById("modalEditar")
         );
         modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario, prioridad, estado, formeditar, modal);
+        obtenerVerIncidencias();
     });
 }
 
@@ -102,6 +103,38 @@ function activarEditarTarjetasIncidencia() {
             document.getElementById("modalincidencia")
         );
         modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario, prioridad, estado, formeditar, modal);
+        obtenerIncidenciasTarjetas();
+    });
+}
+
+
+
+//Editar incidencias menú administrador
+function activarEditarMisIncidencias(){
+    let formeditar = document.getElementById("formincidencia");
+    if(!formeditar) return;
+    formeditar.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let id = document.getElementById("incidencia_id").value;
+        let fecha = document.getElementById("incidencia_fecha").value;
+        let id_recurso = document.getElementById("incidencia_recurso").value;
+        let titulo = document.getElementById("incidencia_titulo").value;
+        let descripcion = document.getElementById("incidencia_descripcion").value;
+        let usuario = document.getElementById("incidencia_id_usuario").value;
+        let prioridad = document.getElementById("incidencia_prioridad").value;
+        let estado = document.getElementById("incidencia_estado").value;
+        if (!id) return;
+        let modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalincidencia")
+        );
+        modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario, prioridad, estado, formeditar, modal);
+
+        // Permite que la página vuelva a interactuar
+        document.querySelectorAll('.modal-backdrop').forEach(elemento => elemento.remove());
+        document.body.classList.remove('modal-open');
+        
+        obtenerMisIncidencias();
     });
 }
 
@@ -126,9 +159,6 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
             formeditar.reset();
 
             mostrarToast("Incidencia actualizada correctamente", "success");
-
-            // Recargar
-            obtenerVerIncidencias();
         } else {
             mostrarToast("Error al actualizar la incidencia", "danger");
         }
