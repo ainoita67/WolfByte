@@ -565,7 +565,11 @@
             const scriptgetrecursos = document.createElement("script");
             scriptgetrecursos.src = BASE + "/javascript/recursos/get.js";
             document.head.appendChild(scriptgetrecursos);
-            
+
+            scriptgetrecursos.onload = () => {
+                obtenerRecursosSelect();
+            };
+
             const scriptgetnecesidades = document.createElement("script");
             scriptgetnecesidades.src = BASE + "/javascript/necesidades/get.js";
             document.head.appendChild(scriptgetnecesidades);
