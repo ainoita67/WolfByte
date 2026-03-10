@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("menu", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+			const id_usuario=2;
+        </script>
+
+
+        <title>Mis incidencias - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main class="container mt-5">
+            <h2 class="text-center mb-4">Mis incidencias</h2>
+            <!-- Tarjeta -->
+			<div class="row g-4 mt-4 d-flex" id="tarjetasIncidencias">
+			</div>
+
+			<!-- MODAL incidencia -->
+			<div class="modal fade" id="modalincidencia" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalincidenciaTitulo">Incidencia</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+						</div>
+
+						<form id="formincidencia" method="post" action="#">
+							<div class="modal-body container-fluid">
+								<div class="row g-3">
+
+									<!-- ID -->
+									<div class="col-md-4">
+										<label class="form-label" for="incidencia_id">ID</label>
+										<input type="number" class="form-control" id="incidencia_id" name="id" readonly required>
+									</div>
+
+									<!-- Fecha -->
+									<div class="col-md-8">
+										<label class="form-label" for="incidencia_fecha">Fecha</label>
+										<input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+									</div>
+
+									<!-- Titulo -->
+									<div class="col-12">
+										<label class="form-label" for="incidencia_titulo">Título</label>
+										<input type="text" class="form-control" id="incidencia_titulo" name="titulo" required>
+									</div>
+
+									<!-- Descripcion -->
+									<div class="col-12">
+										<label class="form-label" for="incidencia_descripcion">Descripción</label>
+										<textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3" required></textarea>
+									</div>
+
+									<!-- Usuario -->
+									<div class="col-md-6">
+										<input type="hidden" class="form-control" id="incidencia_id_usuario" name="idusuario" readonly required>
+										<label class="form-label" for="incidencia_usuario">Usuario</label>
+										<input type="text" class="form-control" id="incidencia_usuario" name="usuario" readonly required>
+									</div>
+
+									<!-- Recurso -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_recurso">Recurso</label>
+										<input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
+									</div>
+
+									<!-- Estado -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_estado">Estado</label>
+										<input type="text" class="form-control" id="incidencia_estado" name="estado" readonly required>
+									</div>
+
+									<!-- Prioridad -->
+									<div class="col-md-6">
+										<label class="form-label" for="incidencia_prioridad">Prioridad</label>
+										<input type="text" class="form-control" id="incidencia_prioridad" name="prioridad" readonly required>
+									</div>
+								</div>
+								<div class="modal-footer d-flex justify-content-between">
+									<button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar cambios</button>
+									<button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+		<script>		
+			const scriptgetincidencias = document.createElement("script");
+			scriptgetincidencias.src = BASE + "/javascript/incidencias/get.js";
+			document.head.appendChild(scriptgetincidencias);
+
+			const scriptpostincidencias = document.createElement("script");
+			scriptpostincidencias.src = BASE + "/javascript/incidencias/post.js";
+			document.head.appendChild(scriptpostincidencias);
+
+			scriptgetincidencias.onload = () => {
+				obtenerMisIncidencias(id_usuario);
+			};
+
+			scriptpostincidencias.onload = () => {
+				activarEditarTarjetasIncidencia();
+			};
+		</script>
+        </main>
+        <footer id="footer"></footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    </body>
+    <!-- Bootstrap JS -->
+
+</html>
+

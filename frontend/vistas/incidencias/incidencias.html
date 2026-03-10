@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>
+            const rol="admin"
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("incidencias", rol);
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+        <title>Incidencias - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Incidencias</h2>
+                <a href="verincidencias.html" id="btn-verincidencias">
+                    <button class="btn btn-success">
+                        <i class="bi bi-eye"></i> Ver incidencias
+                    </button>
+                </a>
+            </div>
+            <div class="pt-4 row">
+                <div class="col-lg-6">
+                    <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
+
+                    <div class="mb-3 espacio">
+                        <input type="radio" name="tipo" id="espacio">
+                        <label for="espacio" class="me-3">Espacio</label>
+                        <input type="radio" name="tipo" id="portatiles">
+                        <label for="portatiles" class="me-3">Portátiles</label>
+                        <input type="radio" name="tipo" id="todos" checked>
+                        <label for="todos">Todos</label>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-5 d-none" id="divedificio">
+                            <label class="form-label" for="selectedificio">Edificio</label>
+                            <select class="form-select" name="selectedificio" id="selectedificio">
+                            </select>
+                        </div>
+                        <div class="col-md-5 mt-4 mt-md-0 d-none" id="divplanta">
+                            <label class="form-label" for="selectplanta">Planta</label>
+                            <select class="form-select" name="selectplanta" id="selectplanta">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-3 mt-md-0">
+                    <table class="rounded-1 overflow-hidden table-striped col-12 mb-5" id="tablaincidencias">
+                    </table>
+                </div>
+            </div>
+
+            <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                <a href="../menu.html" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            </div>
+        </main>
+        <footer id="footer"></footer>
+
+        <!--MODAL INCIDENCIA-->
+        <div class="modal fade" id="modalIncidencia" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalIncidenciaTitulo">Incidencia</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <form id="formCrearIncidencia">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <!-- Fecha -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Fecha</label>
+                                    <input type="datetime-local" step="1" class="form-control" id="createFecha" name="fecha" readonly required>
+                                </div>
+
+                                <!-- ID -->
+                                <div class="col-md-4">
+                                    <label class="form-label">ID del recurso</label>
+                                    <input type="text" class="form-control" id="createIdRecurso" name="id" readonly required>
+                                </div>
+
+                                <!-- Recurso -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Nombre del recurso</label>
+                                    <input type="text" class="form-control" id="createRecurso" name="recurso" readonly required>
+                                </div>
+
+                                <!-- Titulo -->
+                                <div class="col-12">
+                                    <label class="form-label">Título</label>
+                                    <input type="text" class="form-control" id="createTitulo" name="titulo" required>
+                                </div>
+
+                                <!-- Descripcion -->
+                                <div class="col-12">
+                                    <label class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="createDescripcionIncidencia" name="descripcion" rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Reportar incidencia</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- RELLENAR MODAL -->
+
+        <script>
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/incidencias/get.js";
+            document.head.appendChild(scriptget);
+
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/incidencias/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerRecursos();
+                obtenerEdificios();
+            };
+
+            scriptpost.onload = () => {
+                activarCrearIncidencia();
+            };
+
+            let incidenciaSeleccionadaId = null;
+        
+            const btnverincidencias = document.getElementById("btn-verincidencias");
+            if(rol!=="admin"){
+                btnverincidencias.classList.add("d-none");
+            }
+
+            const espacio = document.getElementById("espacio");
+            const divedificio = document.getElementById("divedificio");
+            const selectedificio = document.getElementById("selectedificio");
+            const divplanta = document.getElementById("divplanta");
+            const selectplanta = document.getElementById("selectplanta");
+
+            // Cuando se cambia cualquier radio
+            document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+                radio.addEventListener("change", () => {
+                    if (espacio.checked) {
+                        divedificio.classList.remove("d-none");
+                        actualizarEdificio()
+                        obtenerEspacios();
+                    } else {
+                        divedificio.classList.add("d-none");
+                        divplanta.classList.add("d-none");
+                        selectedificio.value = "";
+                        selectplanta.value = "";
+                        if(portatiles.checked){
+                            obtenerPortatiles();
+                        }else{
+                            obtenerRecursos();
+                        }
+                    }
+                });
+            });
+
+            // Cuando cambia el primer select
+            function actualizarEdificio(){
+                obtenerEspaciosPorEdificio(selectedificio.value);
+                obtenerPlantas(selectedificio.value);
+            }
+            function actualizarPlanta(){
+                obtenerEspaciosPorPlanta(selectedificio.value, selectplanta.value);
+            }
+
+            selectedificio.addEventListener("change", actualizarEdificio);
+            selectplanta.addEventListener("change", actualizarPlanta);
+        </script>
+    </body>
+</html>

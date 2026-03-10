@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../javascript/sesion/authGuard.js"></script>
+        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+        <!--
+        AÑADE:
+            <script src="/ALEX/frontend/javascript/includes.js"></script>
+            <script src="/ALEX/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+        <script>
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("otros", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+
+
+        <title>Otros Espacios - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main>
+            <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
+            
+            <div class="container mt-3 text-end">
+                <button id="btnVolver" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left"></i> Volver al listado
+                </button>
+            </div>
+
+            <div class="container-fluid p-4">
+                <div class="row g-4">
+
+                    <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
+                    
+                    <!-- CALENDARIO -->
+                    <section class="col-12 col-lg-8 d-flex flex-column mb-2 mb-lg-5">
+
+                        <div class="row d-flex justify-content-between align-items-center mb-3">
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+                        </div>
+
+                        <div id="dp" class="shadow-sm rounded-3 p-1"></div>
+
+                    </section>
+
+                    <!-- ASIDE INFORMACIÓN -->
+                    <aside class="col-12 col-lg-2 mb-4">
+                        <div class="d-none d-lg-block" style="height: 3.5rem;"></div>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title" id="info-id">Espacio</h5>
+                                <hr>
+
+                                <p><strong>Descripción:</strong></p>
+                                <p id="info-descripcion" class="text-muted small"></p>
+
+                                <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
+                                <p><strong>Planta:</strong> <span id="info-planta"></span></p>
+
+                                <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
+
+
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+
+
+<script type="module">
+import { generarEventos } from "/frontend/javascript/reservas/crud.js";
+// cojer id de la url
+const params = new URLSearchParams(window.location.search);
+const idAula = params.get("id");
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "WorkWeek",
+        theme: "calendar_green",
+        startDate: DayPilot.Date.today(),
+
+        locale: "es-es",            // formato europeo
+        headerDateFormat: "dd/MM/yyyy",
+        weekStarts: 1,
+
+        cellDuration: 5,
+        cellHeight: 8, 
+        businessBeginsHour: 8,
+        businessEndsHour: 22,
+        eventDeleteHandling: "Disabled",
+        heightSpec: "BusinessHoursNoScroll"
+
+    });
+    cargarInfoAula(idAula);
+    const eventos = await generarEventos(idAula);
+
+    dp.events.list = eventos;
+    dp.init();
+
+
+    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    document.getElementById("prevWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(-7);
+        dp.update();
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(7);
+        dp.update();
+    });
+
+
+});
+
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/otrosespacios/espacios.html`;
+});
+
+import { getEspacio } from "/frontend/javascript/espacio/espacios.js";
+
+async function cargarInfoAula(id) {
+    const aula = await getEspacio(id);
+
+    if (!aula) return;
+
+    document.getElementById("info-id").textContent = aula.id;
+    document.getElementById("info-descripcion").textContent = aula.descripcion;
+    document.getElementById("info-edificio").textContent = aula.edificio;
+    document.getElementById("info-planta").textContent = aula.planta;
+    document.getElementById("info-especial").textContent =
+    aula.autorizacion ? "Sí" : "No";
+
+}
+
+</script>
+
+        </main>
+        <footer id="footer"></footer>
+    </body>
+</html>
