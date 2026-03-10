@@ -1,49 +1,72 @@
-// javascript/incidencias/misincidencias.js
+// javascript/misincidencias/misincidencias.js
 console.log('misincidencias.js cargado');
 
-// Función para obtener incidencias del usuario actual
+// Variable global para almacenar la incidencia seleccionada
+let incidenciaSeleccionada = null;
+
+// ============================================
+// FUNCIÓN PARA MOSTRAR TOASTS
+// ============================================
+function mostrarToast(mensaje, tipo = 'success') {
+    console.log('Toast:', mensaje, tipo);
+    
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+    }
+    
+    const toastId = 'toast-' + Date.now();
+    
+    let bgClass = 'bg-success';
+    if (tipo === 'error') bgClass = 'bg-danger';
+    else if (tipo === 'warning') bgClass = 'bg-warning';
+    else if (tipo === 'info') bgClass = 'bg-info';
+    
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">${mensaje}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    const toast = new bootstrap.Toast(document.getElementById(toastId));
+    toast.show();
+}
+
+// ============================================
+// OBTENER INCIDENCIAS DEL USUARIO
+// ============================================
 function obtenerMisIncidencias() {
     console.log('obtenerMisIncidencias llamado');
     
-    // Obtener ID del usuario de sessionStorage
-    const usuario = sessionStorage.getItem("id_usuario");
-    console.log('ID Usuario:', usuario);
+    let usuario = null;
+    try {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            usuario = payload.sub;
+            console.log('ID del token (sub):', usuario);
+            
+            if (usuario) {
+                sessionStorage.setItem("id_usuario", usuario);
+            }
+        }
+    } catch (e) {
+        console.error('Error al leer token:', e);
+    }
     
     if (!usuario) {
         console.error('No hay ID de usuario');
-        mostrarMensajeError('Usuario no identificado');
+        mostrarMensajeVacio();
         return;
     }
 
-    console.log('ID Usuario:', usuario);
-// AÑADE ESTO:
-console.log('Token:', localStorage.getItem('token') ? 'Presente' : 'No presente');
-
-// Y modifica el fetch para ver la respuesta exacta:
-fetch(window.location.origin + "/API/incidencias/usuario/" + usuario, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-})
-.then(res => {
-    console.log('Status:', res.status);
-    console.log('Status text:', res.statusText);
-    return res.text(); // Cambia a text() para ver la respuesta cruda
-})
-.then(text => {
-    console.log('Respuesta cruda:', text);
-    try {
-        const data = JSON.parse(text);
-        console.log('JSON parseado:', data);
-        // Resto del código...
-    } catch(e) {
-        console.error('No es JSON válido:', e);
-    }
-})
-
-    // Mostrar loading
     const contenedor = document.getElementById('tarjetasIncidencias');
     if (contenedor) {
         contenedor.innerHTML = `
@@ -56,21 +79,15 @@ fetch(window.location.origin + "/API/incidencias/usuario/" + usuario, {
         `;
     }
 
-    // Llamar a la API
-    fetch(window.location.origin + "/API/incidencias/usuario/" + usuario, {
+    const API_BASE = window.location.origin;
+    
+    fetch(`${API_BASE}/API/incidencias/usuario/${usuario}`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
     })
-    .then(res => {
-        console.log('Status respuesta:', res.status);
-        if (!res.ok) {
-            throw new Error(`Error HTTP: ${res.status}`);
-        }
-        return res.json();
-    })
+    .then(res => res.json())
     .then(response => {
         console.log('Datos recibidos:', response);
         
@@ -90,182 +107,308 @@ fetch(window.location.origin + "/API/incidencias/usuario/" + usuario, {
     });
 }
 
-// Función para mostrar incidencias en tarjetas
+// ============================================
+// MOSTRAR INCIDENCIAS CON BOTONES EN EL FOOTER
+// ============================================
 function mostrarIncidencias(incidencias) {
+    console.log('Mostrando', incidencias.length, 'incidencias');
+    
     const contenedor = document.getElementById('tarjetasIncidencias');
     if (!contenedor) return;
 
     contenedor.innerHTML = '';
 
     incidencias.forEach(incidencia => {
-        const fecha = formatearFecha(incidencia.fecha);
-        const prioridadClass = getPrioridadClass(incidencia.prioridad);
-        const estadoClass = getEstadoClass(incidencia.estado);
-
         const col = document.createElement('div');
-        col.className = 'col-lg-3 col-6';
+        col.className = 'col-lg-3 col-md-4 col-6 mb-3';
         
         const card = document.createElement('div');
         card.className = 'card h-100 shadow-sm incidencia-card';
-        card.setAttribute('data-id', incidencia.id_incidencia);
-        card.setAttribute('role', 'button');
-        card.setAttribute('data-bs-toggle', 'modal');
-        card.setAttribute('data-bs-target', '#modalincidencia');
+        
+        // Formatear fecha
+        let fechaFormateada = 'Fecha no disponible';
+        try {
+            fechaFormateada = new Date(incidencia.fecha).toLocaleDateString();
+        } catch(e) {
+            console.error('Error formateando fecha:', e);
+        }
+        
+        // Determinar clases de badges
+        let prioridadClass = 'bg-secondary';
+        if (incidencia.prioridad === 'Alta') prioridadClass = 'bg-danger';
+        else if (incidencia.prioridad === 'Media') prioridadClass = 'bg-warning';
+        else if (incidencia.prioridad === 'Baja') prioridadClass = 'bg-success';
+        
+        let estadoClass = 'bg-secondary';
+        if (incidencia.estado === 'Abierta') estadoClass = 'bg-primary';
+        else if (incidencia.estado === 'En proceso') estadoClass = 'bg-warning';
+        else if (incidencia.estado === 'Resuelta') estadoClass = 'bg-success';
         
         card.innerHTML = `
-            <div class="card-body bg-secondary-subtle">
-                <p class="fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
-                <p class="fw-bold mb-0">${incidencia.titulo}</p>
-                <p class="mb-0"><span class="fw-bold">Fecha: </span>${fecha}</p>
-                <p class="mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
-                <p class="mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
-                <p class="mb-0"><span class="fw-bold">Recurso: </span>${incidencia.id_recurso}</p>
+            <div class="card-body">
+                <h6 class="card-title fw-bold">${incidencia.titulo || 'Sin título'}</h6>
+                <p class="card-text small">${incidencia.descripcion ? (incidencia.descripcion.substring(0, 50) + (incidencia.descripcion.length > 50 ? '...' : '')) : 'Sin descripción'}</p>
+                <p class="mb-1 small"><strong>Recurso:</strong> ${incidencia.id_recurso || 'N/A'}</p>
+                <p class="mb-1 small"><strong>Fecha:</strong> ${fechaFormateada}</p>
+                <div class="mt-2">
+                    <span class="badge ${prioridadClass} me-1">${incidencia.prioridad || 'Media'}</span>
+                    <span class="badge ${estadoClass}">${incidencia.estado || 'Abierta'}</span>
+                </div>
+            </div>
+            <div class="card-footer-actions">
+                <button class="btn-footer-action btn-footer-edit" onclick="event.stopPropagation(); editarIncidencia(${incidencia.id_incidencia})">
+                    <i class="bi bi-pencil"></i> Editar
+                </button>
+                <button class="btn-footer-action btn-footer-delete" onclick="event.stopPropagation(); confirmarEliminarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo.replace(/'/g, "\\'")}')">
+                    <i class="bi bi-trash"></i> Eliminar
+                </button>
             </div>
         `;
-        
-        // Añadir indicador de color según estado
-        if (incidencia.estado === "Abierta") {
-            card.innerHTML += '<div class="estado-incidencia abierta"></div>';
-        } else if (incidencia.estado === "Resuelta") {
-            card.innerHTML += '<div class="estado-incidencia resuelta"></div>';
-        } else {
-            card.innerHTML += '<div class="estado-incidencia proceso"></div>';
-        }
 
-        // Evento para abrir modal con detalles
-        card.addEventListener('click', function() {
-            cargarDetalleIncidencia(incidencia);
+        // Hacer toda la tarjeta clickeable para ver detalles (excepto los botones)
+        card.addEventListener('click', function(e) {
+            // Si el click no fue en un botón, abrir vista de detalles
+            if (!e.target.closest('button')) {
+                verIncidencia(incidencia);
+            }
         });
-
+        
         col.appendChild(card);
         contenedor.appendChild(col);
     });
 }
 
-// Función para cargar detalles en el modal
-function cargarDetalleIncidencia(incidencia) {
-    // Obtener datos del usuario que creó la incidencia
-    fetch(window.location.origin + "/API/user/" + incidencia.id_usuario)
+// ============================================
+// VER INCIDENCIA (solo lectura)
+// ============================================
+function verIncidencia(incidencia) {
+    console.log('Ver incidencia:', incidencia.id_incidencia);
+    
+    document.getElementById('incidencia_id').value = incidencia.id_incidencia || '';
+    document.getElementById('incidencia_id_display').value = incidencia.id_incidencia || '';
+    document.getElementById('incidencia_titulo').value = incidencia.titulo || '';
+    document.getElementById('incidencia_descripcion').value = incidencia.descripcion || '';
+    document.getElementById('incidencia_estado').value = incidencia.estado || '';
+    document.getElementById('incidencia_prioridad').value = incidencia.prioridad || '';
+    document.getElementById('incidencia_id_usuario').value = incidencia.id_usuario || '';
+    document.getElementById('incidencia_usuario').value = 'Usuario ID: ' + (incidencia.id_usuario || '');
+    document.getElementById('incidencia_recurso').value = incidencia.id_recurso || '';
+    
+    // Formatear fecha
+    if (incidencia.fecha) {
+        try {
+            const fecha = new Date(incidencia.fecha);
+            if (!isNaN(fecha.getTime())) {
+                const anyo = fecha.getFullYear();
+                const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                const dia = String(fecha.getDate()).padStart(2, '0');
+                const hh = String(fecha.getHours()).padStart(2, '0');
+                const mm = String(fecha.getMinutes()).padStart(2, '0');
+                const fechaFormateada = `${anyo}-${mes}-${dia}T${hh}:${mm}`;
+                document.getElementById('incidencia_fecha').value = fechaFormateada;
+            }
+        } catch(e) {
+            console.error('Error formateando fecha:', e);
+        }
+    }
+    
+    // Configurar modo solo lectura
+    document.getElementById('incidencia_titulo').readOnly = true;
+    document.getElementById('incidencia_descripcion').readOnly = true;
+    document.getElementById('incidencia_estado').disabled = true;
+    document.getElementById('incidencia_prioridad').disabled = true;
+    document.getElementById('btnGuardarCambios').classList.add('d-none');
+    document.getElementById('btnEliminarModal').classList.remove('d-none');
+    
+    incidenciaSeleccionada = incidencia;
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalincidencia'));
+    modal.show();
+}
+
+// ============================================
+// EDITAR INCIDENCIA
+// ============================================
+function editarIncidencia(id) {
+    console.log('Editar incidencia:', id);
+    
+    // Obtener datos completos de la incidencia
+    fetch(`${window.location.origin}/API/incidencias/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
-        const usuario = response.data || { nombre: 'Desconocido' };
-        
-        document.getElementById("incidencia_id").value = incidencia.id_incidencia;
-        document.getElementById("incidencia_titulo").value = incidencia.titulo;
-        document.getElementById("incidencia_descripcion").value = incidencia.descripcion || '';
-        document.getElementById("incidencia_estado").value = capitalizar(incidencia.estado);
-        document.getElementById("incidencia_prioridad").value = capitalizar(incidencia.prioridad);
-        document.getElementById("incidencia_id_usuario").value = incidencia.id_usuario;
-        document.getElementById("incidencia_usuario").value = usuario.nombre || 'Desconocido';
-        document.getElementById("incidencia_recurso").value = incidencia.id_recurso;
-        
-        // Formatear fecha para input datetime-local
-        const fechaObj = new Date(incidencia.fecha);
-        const fechaFormateada = fechaObj.toISOString().slice(0, 16);
-        document.getElementById("incidencia_fecha").value = fechaFormateada;
-        
-        // Configurar botones según estado
-        configurarBotonesModal(incidencia);
+        if (response.status === 'success' && response.data) {
+            const incidencia = response.data;
+            
+            document.getElementById('incidencia_id').value = incidencia.id_incidencia || '';
+            document.getElementById('incidencia_id_display').value = incidencia.id_incidencia || '';
+            document.getElementById('incidencia_titulo').value = incidencia.titulo || '';
+            document.getElementById('incidencia_descripcion').value = incidencia.descripcion || '';
+            document.getElementById('incidencia_estado').value = incidencia.estado || '';
+            document.getElementById('incidencia_prioridad').value = incidencia.prioridad || '';
+            document.getElementById('incidencia_id_usuario').value = incidencia.id_usuario || '';
+            document.getElementById('incidencia_usuario').value = 'Usuario ID: ' + (incidencia.id_usuario || '');
+            document.getElementById('incidencia_recurso').value = incidencia.id_recurso || '';
+            
+            // Formatear fecha
+            if (incidencia.fecha) {
+                try {
+                    const fecha = new Date(incidencia.fecha);
+                    if (!isNaN(fecha.getTime())) {
+                        const anyo = fecha.getFullYear();
+                        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                        const dia = String(fecha.getDate()).padStart(2, '0');
+                        const hh = String(fecha.getHours()).padStart(2, '0');
+                        const mm = String(fecha.getMinutes()).padStart(2, '0');
+                        const fechaFormateada = `${anyo}-${mes}-${dia}T${hh}:${mm}`;
+                        document.getElementById('incidencia_fecha').value = fechaFormateada;
+                    }
+                } catch(e) {
+                    console.error('Error formateando fecha:', e);
+                }
+            }
+            
+            // Configurar modo edición
+            document.getElementById('incidencia_titulo').readOnly = false;
+            document.getElementById('incidencia_descripcion').readOnly = false;
+            document.getElementById('incidencia_estado').disabled = false;
+            document.getElementById('incidencia_prioridad').disabled = false;
+            document.getElementById('btnGuardarCambios').classList.remove('d-none');
+            document.getElementById('btnEliminarModal').classList.add('d-none');
+            
+            incidenciaSeleccionada = incidencia;
+            
+            const modal = new bootstrap.Modal(document.getElementById('modalincidencia'));
+            modal.show();
+        } else {
+            mostrarToast('Error al cargar la incidencia', 'error');
+        }
     })
     .catch(error => {
-        console.error('Error al cargar usuario:', error);
-        alert('Error al cargar detalles de la incidencia');
+        console.error('Error:', error);
+        mostrarToast('Error de conexión', 'error');
     });
 }
 
-// Función para configurar botones del modal
-function configurarBotonesModal(incidencia) {
-    const btnGuardar = document.getElementById('btnGuardarCambios');
+// ============================================
+// CONFIRMAR ELIMINACIÓN
+// ============================================
+function confirmarEliminarIncidencia(id, titulo) {
+    console.log('Confirmar eliminar incidencia:', id);
     
-    // Si la incidencia está resuelta, no permitir edición
-    if (incidencia.estado === 'Resuelta') {
-        document.getElementById('incidencia_titulo').readOnly = true;
-        document.getElementById('incidencia_descripcion').readOnly = true;
-        if (btnGuardar) btnGuardar.classList.add('d-none');
-    } else {
-        document.getElementById('incidencia_titulo').readOnly = false;
-        document.getElementById('incidencia_descripcion').readOnly = false;
-        if (btnGuardar) btnGuardar.classList.remove('d-none');
-    }
+    document.getElementById('incidenciaTituloEliminar').textContent = titulo;
+    incidenciaSeleccionada = { id_incidencia: id };
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
+    modal.show();
 }
 
-// Función para guardar cambios
-async function guardarCambiosIncidencia(event) {
+// ============================================
+// ELIMINAR INCIDENCIA
+// ============================================
+function eliminarIncidencia() {
+    if (!incidenciaSeleccionada || !incidenciaSeleccionada.id_incidencia) {
+        mostrarToast('No se ha seleccionado ninguna incidencia', 'error');
+        return;
+    }
+    
+    const id = incidenciaSeleccionada.id_incidencia;
+    console.log('Eliminando incidencia:', id);
+    
+    fetch(`${window.location.origin}/API/incidencias/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Respuesta eliminación:', data);
+        
+        if (data.status === 'success') {
+            mostrarToast('Incidencia eliminada correctamente', 'success');
+            
+            // Cerrar modales
+            bootstrap.Modal.getInstance(document.getElementById('modalConfirmarEliminar')).hide();
+            const modalIncidencia = bootstrap.Modal.getInstance(document.getElementById('modalincidencia'));
+            if (modalIncidencia) modalIncidencia.hide();
+            
+            // Recargar lista
+            obtenerMisIncidencias();
+        } else {
+            mostrarToast(data.message || 'Error al eliminar', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarToast('Error de conexión', 'error');
+    });
+}
+
+// ============================================
+// GUARDAR CAMBIOS
+// ============================================
+function guardarCambiosIncidencia(event) {
     event.preventDefault();
+    console.log('Guardando cambios...');
     
     const id = document.getElementById('incidencia_id').value;
     const titulo = document.getElementById('incidencia_titulo').value;
     const descripcion = document.getElementById('incidencia_descripcion').value;
+    const estado = document.getElementById('incidencia_estado').value;
+    const prioridad = document.getElementById('incidencia_prioridad').value;
     
-    if (!titulo.trim()) {
-        alert('El título no puede estar vacío');
+    if (!titulo || !titulo.trim()) {
+        mostrarToast('El título no puede estar vacío', 'warning');
         return;
     }
     
-    try {
-        const response = await fetch(`${API}/incidencias/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({
-                titulo: titulo,
-                descripcion: descripcion
-            })
-        });
-
-        const data = await response.json();
+    const token = localStorage.getItem('token');
+    if (!token) {
+        mostrarToast('Sesión no válida', 'error');
+        return;
+    }
+    
+    fetch(`${window.location.origin}/API/incidencias/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ 
+            titulo: titulo.trim(), 
+            descripcion: descripcion || '',
+            estado: estado,
+            prioridad: prioridad
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log('Respuesta:', data);
         
-        if (response.ok && data.status === 'success') {
-            alert('Incidencia actualizada correctamente');
-            bootstrap.Modal.getInstance(document.getElementById('modalincidencia')).hide();
-            obtenerMisIncidencias(); // Recargar lista
+        if (data.status === 'success') {
+            mostrarToast('Incidencia actualizada correctamente', 'success');
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalincidencia'));
+            if (modal) modal.hide();
+            
+            obtenerMisIncidencias();
         } else {
-            alert('Error al actualizar: ' + (data.message || 'Error desconocido'));
+            mostrarToast(data.message || 'Error al actualizar', 'error');
         }
-
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error:', error);
-        alert('Error al conectar con el servidor');
-    }
+        mostrarToast('Error de conexión', 'error');
+    });
 }
 
-// Funciones auxiliares
-function getPrioridadClass(prioridad) {
-    switch(prioridad?.toLowerCase()) {
-        case 'alta': return 'bg-danger';
-        case 'media': return 'bg-warning';
-        case 'baja': return 'bg-success';
-        default: return 'bg-secondary';
-    }
-}
-
-function getEstadoClass(estado) {
-    switch(estado?.toLowerCase()) {
-        case 'abierta': return 'bg-primary';
-        case 'en proceso': return 'bg-warning text-dark';
-        case 'resuelta': return 'bg-success';
-        default: return 'bg-secondary';
-    }
-}
-
-function formatearFecha(stringFecha) {
-    if (!stringFecha) return '';
-    let fecha = new Date(stringFecha);
-    let anyo = fecha.getFullYear();
-    let mes = String(fecha.getMonth() + 1).padStart(2, '0');
-    let dia = String(fecha.getDate()).padStart(2, '0');
-    let hh = String(fecha.getHours()).padStart(2, '0');
-    let mm = String(fecha.getMinutes()).padStart(2, '0');
-    return `${dia}/${mes}/${anyo} ${hh}:${mm}`;
-}
-
-function capitalizar(string) {
-    if (!string) return '';
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
-
+// ============================================
+// FUNCIONES DE MENSAJES
+// ============================================
 function mostrarMensajeVacio() {
     const contenedor = document.getElementById('tarjetasIncidencias');
     if (contenedor) {
@@ -281,13 +424,13 @@ function mostrarMensajeVacio() {
     }
 }
 
-function mostrarMensajeError(mensaje = 'Error al cargar las incidencias') {
+function mostrarMensajeError(mensaje) {
     const contenedor = document.getElementById('tarjetasIncidencias');
     if (contenedor) {
         contenedor.innerHTML = `
             <div class="col-12 text-center py-5">
                 <i class="bi bi-exclamation-triangle display-1 text-danger"></i>
-                <p class="mt-3 fs-5 text-danger">${mensaje}</p>
+                <p class="mt-3 fs-5 text-danger">${mensaje || 'Error al cargar las incidencias'}</p>
                 <button class="btn btn-primary mt-3" onclick="obtenerMisIncidencias()">
                     <i class="bi bi-arrow-clockwise"></i> Reintentar
                 </button>
@@ -296,12 +439,57 @@ function mostrarMensajeError(mensaje = 'Error al cargar las incidencias') {
     }
 }
 
+// ============================================
+// INICIALIZACIÓN
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM cargado - Inicializando mis incidencias');
+    
+    // Configurar formulario
+    const form = document.getElementById('formincidencia');
+    if (form) {
+        const nuevoForm = form.cloneNode(true);
+        form.parentNode.replaceChild(nuevoForm, form);
+        nuevoForm.addEventListener('submit', guardarCambiosIncidencia);
+    }
+    
+    // Botón eliminar en modal
+    const btnEliminar = document.getElementById('btnEliminarModal');
+    if (btnEliminar) {
+        btnEliminar.addEventListener('click', function() {
+            bootstrap.Modal.getInstance(document.getElementById('modalincidencia')).hide();
+            setTimeout(() => {
+                confirmarEliminarIncidencia(
+                    incidenciaSeleccionada?.id_incidencia,
+                    incidenciaSeleccionada?.titulo || 'esta incidencia'
+                );
+            }, 300);
+        });
+    }
+    
+    // Botón confirmar eliminar
+    const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+    if (btnConfirmarEliminar) {
+        btnConfirmarEliminar.addEventListener('click', eliminarIncidencia);
+    }
+    
+    // Sincronizar IDs
+    const idHidden = document.getElementById('incidencia_id');
+    const idDisplay = document.getElementById('incidencia_id_display');
+    if (idHidden && idDisplay) {
+        idHidden.addEventListener('change', () => {
+            idDisplay.value = idHidden.value;
+        });
+    }
+    
+    // Cargar incidencias
+    setTimeout(obtenerMisIncidencias, 500);
+});
+
 // Hacer funciones globales
 window.obtenerMisIncidencias = obtenerMisIncidencias;
 window.guardarCambiosIncidencia = guardarCambiosIncidencia;
-
-// Inicializar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM cargado, esperando 500ms para obtener incidencias...');
-    setTimeout(obtenerMisIncidencias, 500);
-});
+window.mostrarToast = mostrarToast;
+window.editarIncidencia = editarIncidencia;
+window.confirmarEliminarIncidencia = confirmarEliminarIncidencia;
+window.verIncidencia = verIncidencia;

@@ -12,12 +12,13 @@ if (!token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
         console.log('Payload JWT:', payload);
         
-        // Guardar datos en sessionStorage - asegurar que se guardan correctamente
+        // El ID está en 'sub' - asegurarse de guardarlo como número, no como string "undefined"
+        const idUsuario = payload.sub;  // ← directamente de sub que es 43
+        
         sessionStorage.setItem("correo", payload.email || '');
         sessionStorage.setItem("rol", payload.rol || '');
-        sessionStorage.setItem("id_usuario", payload.id_usuario || payload.sub || payload.user_id || '');
+        sessionStorage.setItem("id_usuario", idUsuario);  // ← ahora es 43, no "undefined"
         
-        // Verificar que se guardaron
         console.log('Datos guardados en sessionStorage:', {
             correo: sessionStorage.getItem('correo'),
             rol: sessionStorage.getItem('rol'),

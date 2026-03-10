@@ -18,7 +18,7 @@ function activarCrearIncidencia() {
         let descripcion = document.getElementById("createDescripcionIncidencia").value;
         let prioridad = 'Media';
         let estado = 'Abierta';
-        let usuario= sessionStorage.getItem("id_usuario");
+        let usuario= 43;
         if (!titulo) return;
         titulo = capitalizar(titulo);
         fetch(window.location.origin+"/API/incidencias/", {
@@ -69,7 +69,7 @@ function activarEditarIncidencia() {
         let id_recurso = document.getElementById("editRecurso").value;
         let titulo = document.getElementById("editTitulo").value;
         let descripcion = document.getElementById("editDescripcion").value;
-        let usuario = sessionStorage.getItem("id_usuario");
+        let usuario = 43;
         let prioridad = document.getElementById("editPrioridad").value;
         let estado = document.getElementById("editEstado").value;
         if (!id) return;

@@ -1,22 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="utf-8">
-    <script>const BASE = window.location.origin + "/frontend";</script>
-    <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-            generarPagina("admin", "admin");
-            };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
-    </script>
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";
+        const API = window.location.origin + "/API";</script>
 
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="../../../javascript/sesion/authGuard.js"></script>
+
+        <!-- Verificación de acceso y carga de la página -->
+        <script>
+            setTimeout(function() {
+                const rol = Number(sessionStorage.getItem("rol"));
+                console.log('Rol después de authGuard:', rol);
+                
+                // Admin (30) y super-admin (40) pueden acceder
+                if (rol !== 30 && rol !== 40) {
+                    console.warn('Acceso denegado - Rol:', rol);
+                    alert('No tienes permisos para acceder al panel de administrador');
+                    window.location.href = '../menu.html';
+                } else {
+                    // Guardar el rol para usarlo después
+                    window.rolAdmin = rol;
+                    
+                    // Cargar la página normalmente
+                    const script1 = document.createElement("script");
+                    script1.src = BASE + "/javascript/includes.js";
+                    script1.onload = () => {
+                        const script2 = document.createElement("script");
+                        script2.src = BASE + "/javascript/menu.js";
+                        script2.onload = () => {
+                            generarPagina("menu", "admin");
+                            
+                            // Ocultar el botón de usuarios para admin (rol 30)
+                            setTimeout(function() {
+                                if (window.rolAdmin === 30) {
+                                    
+                                    // Ocultar en el aside desktop
+                                    const enlaceUsuariosAside = document.querySelector('aside a[href="usuarios/usuarios.html"]');
+                                    if (enlaceUsuariosAside) {
+                                        enlaceUsuariosAside.closest('li').style.display = 'none';
+                                    }
+                                    
+                                    // Ocultar en el offcanvas móvil
+                                    const enlaceUsuariosOffcanvas = document.querySelector('.offcanvas-body a[href="usuarios/usuarios.html"]');
+                                    if (enlaceUsuariosOffcanvas) {
+                                        enlaceUsuariosOffcanvas.closest('li').style.display = 'none';
+                                    }
+                                } else {
+                                    console.log('Mostrando botón de usuarios para super-admin');
+                                }
+                            }, 200);
+                        };
+                        document.head.appendChild(script2);
+                    };
+                    document.head.appendChild(script1);
+                }
+            }, 100);
+
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("admin", "admin");
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+            
+            const scriptAuth = document.createElement('script');
+            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
+            document.head.appendChild(scriptAuth);
+        </script>
 
         <title>Menú Administrador - IES Bajo Aragón</title>
     </head>
@@ -32,7 +89,7 @@
                         <li class="nav-item"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="portatiles/portatiles.html">Portátiles</a></li>
-                        <li class="nav-item"><a class="nav-link text-white" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="reservaspermanentes/menu.html">Reservas Permanentes</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="logacciones/logacciones.html">Log de Acciones</a></li>
                         <hr class="my-3">
                         <h6 class="text-white">Tablas auxiliares</h6>
@@ -46,7 +103,7 @@
                 </aside>
 
                 <!-- CONTENIDO -->
-                <section class="flex-grow-1 p-3 p-lg-4">
+                <section class="flex-grow-1 p-3 p-lg-4 pt-5">
 
                     <!-- Botón menú SOLO en móvil/tablet -->
                     <div class="d-lg-none mb-3">
@@ -71,7 +128,7 @@
                                 <li class="nav-item"><a class="nav-link text-black" href="usuarios/usuarios.html">Usuarios</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="portatiles/portatiles.html">Portátiles</a></li>
-                                <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/reservaspermanentes.html">Reservas Permanentes</a></li>
+                                <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/menu.html">Reservas Permanentes</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
                                 <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
@@ -301,15 +358,17 @@
                             <form id="formReserva">
                                 <div class="modal-body container-fluid">
                                     <div class="row g-3">
-                                        <div class="row mt-4 mb-3 ps-4" id="div_botones_autorizar">
-                                            <div class="col-6 p-1">
-                                                <button type="button" class="col-12 btn btn-success border rounded-pill text-light fs-5"><i class="bi bi-check2"></i> Autorizar</button>
+                                        <div id="div_botones_autorizar">
+                                            <div class="row mt-3 mb-4">
+                                                <div class="col-6 p-1">
+                                                    <button type="button" class="col-12 btn btn-success border rounded-pill text-light fs-5"><i class="bi bi-check2"></i> Autorizar</button>
+                                                </div>
+                                                <div class="col-6 p-1">
+                                                    <button type="button" class="col-12 btn btn-danger border rounded-pill text-light fs-5" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Denegar</button>
+                                                </div>
                                             </div>
-                                            <div class="col-6 p-1">
-                                                <button type="button" class="col-12 btn btn-danger border rounded-pill text-light fs-5" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
-                                            </div>
+                                            <p class="fs-5 mb-0">Editar reserva</p>
                                         </div>
-                                        <p class="fs-5 mb-0">Editar reserva</p>
                                         <input type="hidden" id="reserva_autorizada" name="autorizada">
                                         <!-- ID reserva -->
                                         <div class="col-lg-6">
@@ -376,7 +435,8 @@
                                         <!-- Espacio en el que se usa -->
                                         <div class="col-lg-6" id="div_reserva_espacio_uso">
                                             <label class="form-label">Espacio en el que se usa</label>
-                                            <input type="text" class="form-control" id="reserva_espacio_uso" name="espacio_uso" required>
+                                            <select class="form-select selectEspacio" id="reserva_espacio_uso" name="espacio_uso" required>
+                                            </select>
                                         </div>
 
                                         <!-- Actividad -->
@@ -546,14 +606,18 @@
                 activarEditarTarjetasReserva();
             };
 
+            const scriptgetespacios = document.createElement("script");
+            scriptgetespacios.src = BASE + "/javascript/espacio/get.js";
+            document.head.appendChild(scriptgetespacios);
+            
+            scriptgetespacios.onload = () => {
+                obtenerEspaciosSelect();
+            };
+
             const scriptgetrecursos = document.createElement("script");
             scriptgetrecursos.src = BASE + "/javascript/recursos/get.js";
             document.head.appendChild(scriptgetrecursos);
             
-            scriptgetrecursos.onload = () => {
-                obtenerRecursosSelect();
-            };
-
             const scriptgetnecesidades = document.createElement("script");
             scriptgetnecesidades.src = BASE + "/javascript/necesidades/get.js";
             document.head.appendChild(scriptgetnecesidades);
