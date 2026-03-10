@@ -31,6 +31,14 @@ class ReservaPermanenteService
     }
 
     /**
+     * Obtener todas las reservas permanentes inactivas
+     */
+    public function getAllReservasPermanentesInactivas(): array
+    {
+        return $this->model->getAllInactivas();
+    }
+
+    /**
      * Obtener reserva permanente por ID
      */
     public function getReservaPermanenteById(string $id): array
@@ -184,8 +192,25 @@ class ReservaPermanenteService
     /**
      * Desactivar todas las reservas permanentes
      */
-    public function desactivarReservasPermanentes(): array
+    public function desactivarTodo(): array
     {
-        return $this->model->desactivar();
-    }
+        try {
+            $result = $this->model->desactivarTodo();
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$result) {
+            $this->ensureUserExists($id);
+            return [
+                'status'  => 'no_changes',
+                'message' => 'No hubo cambios en el estado de las reservas permanentes'
+            ];
+        }
+
+        return [
+            'status'  => 'updated',
+            'message' => 'Estado de las reservas permanentes actualizado correctamente'
+        ];
+    }    
 }

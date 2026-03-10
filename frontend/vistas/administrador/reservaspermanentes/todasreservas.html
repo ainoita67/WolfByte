@@ -36,10 +36,12 @@
     <body>
         <div id="header"></div>
         <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Reservas permanentes</h2>
-
-            </div>
+                <div class="d-flex justify-content-between align-items-center my-4">
+                    <h2>Reservas permanentes</h2>
+                    <button class="btn btn-danger btn-sm btn-eliminar" id="btnDesactivarTodo">
+                        <i class="bi bi-trash"></i></i> Desactivar Todas las Reservas Permanentes
+                    </button>
+                </div>
 
         <div class="table-responsive">
         <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
@@ -58,6 +60,9 @@
 
             </tbody>
         </table>
+    </div>
+    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+        <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
     </div>
 </main>
 
@@ -139,7 +144,7 @@
 
 <script type="module">
 import { getReservas } from "/frontend/javascript/permanentes/get.js";
-import { updatePermanente, desactivePermanente } from "/frontend/javascript/permanentes/put.js";
+import { updatePermanente, desactivePermanente, desactivarTodo } from "/frontend/javascript/permanentes/put.js";
 
 // Map numérico → día
 const diasSemana = {
@@ -167,6 +172,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("formEditarReserva").addEventListener("submit", async (e) => {
         e.preventDefault();
         await guardarCambiosReserva();
+    });
+
+    // Listener para desactivar todas las reservas permanentes
+    document.getElementById("btnDesactivarTodo").addEventListener("click", async () => {
+        const ok = confirm("¿Seguro que deseas desactivar todas las reservas permanentes?");
+        if (!ok) return;
+        await desactivarTodo();
+        reservas = await getReservas();
+        rellenarTablaReservas(reservas);
     });
 });
 
@@ -268,6 +282,7 @@ document.addEventListener("click", async (e) => {
         alert(err?.message ?? "Error al eliminar la reserva");
     }
 });
+
 </script>
 </body>
 </html>
