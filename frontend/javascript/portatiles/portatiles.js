@@ -1,8 +1,8 @@
 // portatiles.js
-const API_BASE = 'http://192.168.13.202:83';
-const API_PORTATILES_MATERIALES = `${API_BASE}/API/portatiles/materiales`;
-const API_EDIFICIOS = `${API_BASE}/API/edificios`;
-const API_PLANTAS = `${API_BASE}/API/plantas`;
+const API_BASE = `${API}`;
+const API_PORTATILES_MATERIALES = `${API_BASE}/portatiles/materiales`;
+const API_EDIFICIOS = `${API_BASE}/edificios`;
+const API_PLANTAS = `${API_BASE}/planta`;
 
 // Variable para almacenar los edificios obtenidos de la API
 let edificios = {};
@@ -635,13 +635,13 @@ ready(function() {
                 console.log('Verificando planta:', { idEdificio, numeroPlanta });
                 
                 // Intentar obtener la planta directamente
-                const plantaCheckResponse = await fetch(`${API_BASE}/API/plantas/${idEdificio}?numero_planta=${numeroPlanta}`);
+                const plantaCheckResponse = await fetch(`${API_BASE}/planta/${idEdificio}?numero_planta=${numeroPlanta}`);
                 
                 if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
                     console.log('Planta no encontrada, creándola...');
                     
                     // Crear la planta
-                    const crearPlantaResponse = await fetch(`${API_BASE}/API/plantas/${idEdificio}`, {
+                    const crearPlantaResponse = await fetch(`${API_BASE}/planta/${idEdificio}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
