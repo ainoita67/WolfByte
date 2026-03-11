@@ -28,6 +28,19 @@ function obtenerReservasProximas(){
     });
 }
 
+function obtenerMisReservas(){
+    usuario=sessionStorage.getItem("id_usuario");
+    console.log(window.location.origin+"/API/mis-reservas/"+usuario);
+    fetch(window.location.origin+"/API/mis-reservas/"+usuario)
+    .then(res => res.json())
+    .then(response => {
+        let reservas = response.data;
+        let tarjetasReservas = document.getElementById("misReservasTarjetas");
+        if(!tarjetasReservas) return;
+        mostrarMisReservas(reservas, tarjetasReservas);
+    });
+}
+
 function mostrarReservasTarjetas(reservas, tarjetasReservas){
     tarjetasReservas.innerHTML = "";
     if(!reservas||reservas.length === 0){
@@ -67,6 +80,59 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
             });
 
             tarjetasReservas.appendChild(divReserva);
+        });
+    }
+}
+
+function mostrarMisReservas(reservas, tarjetasReservas){
+    tarjetasReservas.innerHTML = "";
+    if(!reservas||reservas.length === 0){
+        let card = document.createElement("div");
+        card.className = "card h-100 p-0 mb-4 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body bg-secondary-subtle">No se han encontrado reservas</div>
+        `;
+        tarjetasReservas.appendChild(card);
+    }else{
+        reservas.forEach(reserva => {
+            let div = document.createElement("div");
+            div.className="col-lg-3 col-6";
+            let divReserva = document.createElement("div");
+            divReserva.className="card h-100 p-0 mb-4 reserva-card";
+            divReserva.setAttribute("role", "button");
+            divReserva.setAttribute("data-bs-toggle", "modal");
+            divReserva.setAttribute("data-bs-target", "#modalReserva");
+            divReserva.setAttribute("data-id", reserva.id_reserva);
+            divReserva.setAttribute("data-titulo", reserva.titulo);
+
+            let tipo='Portátil';                
+            if(reserva.tipo == 'Reserva_espacio'){
+                tipo='Espacio';
+            }
+
+            divReserva.innerHTML = `
+                <div class="card-body bg-secondary-subtle">
+                    <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
+                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
+                    <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
+                    <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
+                    ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
+                </div>
+            `;
+            if(reserva.autorizada=="1"){
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado aceptado"></div>';
+            }else if(reserva.autorizada=="0"){
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado"></div>';
+            }else{
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado"></div>';
+            }
+
+            divReserva.addEventListener("click", function(){
+                mostrarDatosModal(reserva);
+            });
+
+            div.appendChild(divReserva);
+            tarjetasReservas.appendChild(div);
         });
     }
 }

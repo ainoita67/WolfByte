@@ -6,6 +6,10 @@
         <script>const API = window.location.origin + "/API";</script>
         <script>
             const rol = sessionStorage.getItem("rol");
+            if(rol<30){
+                alert("No tiene los suficientes permisos para acceder");
+                window.location.href = BASE+"/vistas/menu.html";
+            }
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {

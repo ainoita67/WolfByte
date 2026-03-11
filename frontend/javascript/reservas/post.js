@@ -91,7 +91,6 @@ function activarEditarTarjetasReserva() {
     formeditar.addEventListener("submit", function (e) {
         e.preventDefault();
         let reserva=obtenerDatosReserva();
-console.log(reserva);
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario){
             mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
