@@ -35,10 +35,16 @@
             <a href="incidencias/verincidencias.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5" id="incidencias">Incidencias</a>
             <a href="liberar/liberar.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Liberar aula</a>
             <!--Superadministrador-->
-            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-            <a class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></a>
-            <a href="administrador/menuadministrador.html" class="menuadministrador col-3 mt-1 mb-5 text-center d-none d-lg-block p-5 p-menu fs-5 text-light">Ir al menú de administrador</a>
-            <a href="administrador/menuadministrador.html" class="menuadministrador d-lg-none p-5 fs-5 mb-3">Ir al menú de administrador</a>
+            <div class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></div>
+            <div class="col-lg-3 mx-lg-5 d-none d-lg-block m-0 p-5 fs-5"></div>
+            <a href="administrador/menuadministrador.html" class="menuadministrador d-none col-3 mt-1 mb-5 text-center p-5 p-menu fs-5 text-light" id="menuadministradorordenador">Ir al menú de administrador</a>
+            <a href="administrador/menuadministrador.html" class="menuadministrador d-none d-lg-none p-5 fs-4 mb-3" id="menuadministradormovil">Ir al menú de administrador</a>
+            <script>
+                if(rol>=30){
+                    document.getElementById("menuadministradorordenador").classList.add("d-lg-block");
+                    document.getElementById("menuadministradormovil").classList.remove("d-none");
+                }
+            </script>
         </main>
         <footer id="footer"></footer>
         <!-- EL SCRIPT DE VISIBILIDAD AHORA ESTÁ DENTRO DEL onload DE menu.js -->
