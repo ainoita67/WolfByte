@@ -1,7 +1,7 @@
 // plantas/plantas.js
-const API_BASE = 'http://192.168.13.202:83';
-const API_PLANTAS = `${API_BASE}/API/plantas`;
-const API_EDIFICIOS = `${API_BASE}/API/edificios`;
+const API_BASE = `${API}`;
+const API_PLANTAS = `${API_BASE}/plantas`;
+const API_EDIFICIOS = `${API_BASE}/edificios`;
 
 // Variable para almacenar los edificios obtenidos de la API
 let edificios = {};

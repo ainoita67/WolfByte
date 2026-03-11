@@ -22,13 +22,25 @@ class ReservaPermanenteModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE activo=1")
+                ->query("SELECT * FROM Reserva_permanente WHERE activo=1 ORDER BY dia_semana, inicio")
                 ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas permanentes");
         }
     }
-
+    /**
+     * Obtener todas las reservas permanentes inactivas
+     */
+    public function getAllInactivas(): array
+    {
+        try {
+            return $this->db
+                ->query("SELECT * FROM Reserva_permanente WHERE activo=0 ORDER BY dia_semana, inicio")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas permanentes");
+        }
+    }
     /**
      * Obtener reserva permanente por ID
      */
@@ -51,7 +63,7 @@ class ReservaPermanenteModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE id_recurso = :id_recurso AND activo=1")
+                ->query("SELECT * FROM Reserva_permanente WHERE id_recurso = :id_recurso AND activo=1 ORDER BY dia_semana, inicio")
                 ->bind(':id_recurso', $id_recurso)
                 ->fetchAll();
         } catch (PDOException $e) {
@@ -179,7 +191,7 @@ class ReservaPermanenteModel
         /**
      * Desactivar todas las reservas permanentes
      */
-    public function desactivar(int $id): bool
+    public function desactivarTodo(): bool
     {
         $this->db
             ->query("UPDATE Reserva_permanente SET activo = false")

@@ -59,6 +59,9 @@
             </tbody>
         </table>
     </div>
+        <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+        <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
+    </div>
 </main>
 
 
@@ -138,7 +141,7 @@
 
 
 <script type="module">
-import { getReservas } from "/frontend/javascript/permanentes/get.js";
+import { getReservasInactivas } from "/frontend/javascript/permanentes/get.js";
 import { updatePermanente, desactivePermanente } from "/frontend/javascript/permanentes/put.js";
 
 // Map numérico → día
@@ -155,7 +158,7 @@ const diasSemana = {
 let reservas = [];
 
 document.addEventListener("DOMContentLoaded", async () => {
-    reservas = await getReservas();
+    reservas = await getReservasInactivas();
     rellenarTablaReservas(reservas);
 
     // Listener para abrir modal
@@ -236,7 +239,7 @@ async function guardarCambiosReserva() {
         await updatePermanente(reservaActualizada);
 
         // Actualizar array local
-        reservas = await getReservas();
+        reservas = await getReservasInactivas();
         rellenarTablaReservas(reservas);
 
         // Cerrar modal
@@ -264,7 +267,7 @@ document.addEventListener("click", async (e) => {
         await desactivePermanente(reserva.id);
 
         // Actualizar array local
-        reservas = await getReservas();
+        reservas = await getReservasInactivas();
         rellenarTablaReservas(reservas);
         alert("Reserva restaurada correctamente");
     } catch (err) {
