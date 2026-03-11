@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+TOASTSdocument.addEventListener('DOMContentLoaded', () => {
     console.log('DOM cargado - Iniciando script de edificios');
     
     const contenedor = document.getElementById('contenedorTarjetas');

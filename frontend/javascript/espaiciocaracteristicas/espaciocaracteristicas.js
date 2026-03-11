@@ -1,7 +1,7 @@
 // caracteristicas.js
 import { Validator } from "../clases/Validator.js";
 
-const DOMAIN = "http://192.168.13.202:83/API";
+const API_BASE = `${API}`;
 
 // Mensajes
 const MENSAJE_CREACION_CORRECTA = "Característica creada correctamente";
@@ -54,7 +54,7 @@ function validarNombreCaracteristica(nombre) {
 // ************  OBTENER CARACTERISTICAS ****************** //
 
 async function getCaracteristicas() {
-    const URL = DOMAIN + "/caracteristicas";
+    const URL = API_BASE + "/caracteristicas";
 
     try {
         console.log("Obteniendo características de:", URL);
@@ -92,7 +92,7 @@ async function getCaracteristicas() {
 // ************  CREAR CARACTERISTICA ****************** //
 
 async function crearCaracteristica(nombre) {
-    const URL = DOMAIN + "/caracteristicas";
+    const URL = API_BASE + "/caracteristicas";
 
     try {
         const response = await fetch(URL, {
@@ -157,7 +157,7 @@ function abrirModalEdicion(id, nombre) {
 }
 
 async function editarCaracteristica(id, nombre) {
-    const URL = DOMAIN + `/caracteristicas/${id}`;
+    const URL = API_BASE + `/caracteristicas/${id}`;
 
     try {
         const response = await fetch(URL, {
@@ -227,7 +227,7 @@ function abrirModalConfirmarEliminacion(id, nombre) {
 }
 
 async function eliminarCaracteristica(id, nombre) {
-    const URL = DOMAIN + `/caracteristicas/${id}`;
+    const URL = API_BASE + `/caracteristicas/${id}`;
 
     try {
         const response = await fetch(URL, {
