@@ -1,103 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <script src="../../../javascript/sesion/authGuard.js"></script>
-        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
-        <script>const BASE = window.location.origin + "/frontend";</script>
-        <script>const API = window.location.origin + "/API";</script>
-        <!--
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../../javascript/sesion/authGuard.js"></script>
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
+    <!--
         AÑADE:
             <script src="/ALEX/frontend/javascript/includes.js"></script>
             <script src="/ALEX/frontend/javascript/menu.js"></script>
         QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
         -->
-        <script>
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
+    <script>
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
                 generarPagina("menu", "admin");
-                };
-                document.head.appendChild(script2);
             };
-            document.head.appendChild(script1);
-        </script>
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+    </script>
 
 
-        <title>Reservas Portátiles - IES Bajo Aragón</title>
-    </head>
-    <body>
+    <title>Reservas Portátiles - IES Bajo Aragón</title>
+</head>
 
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="container">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="text-center">Portátiles disponibles</h2>
+<body>
+
+    <div id="header"></div>
+
+    <main class="container-fluid w-100 row p-0">
+        <div class="d-flex h-100">
+            <!-- ASIDE (desktop fijo) -->
+            <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="./../logacciones/logacciones.html">Log
+                            de Acciones</a></li>
+                    <hr class="my-3">
+                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                de Reservas</a></li>
+                    </ul>
+                </ul>
+            </aside>
+
+            <!-- CONTENIDO -->
+            <section class="flex-grow-1 p-3 p-lg-4 pt-5">
+
+                <!-- Botón menú SOLO en móvil/tablet -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                        <i class="bi bi-list"></i> Menú Admin
+                    </button>
                 </div>
-                <div class="row g-4 contenedor-carros">
-                    <!-- Aquí se insertarán las tarjetas de los carritos -->
+
+                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                    aria-labelledby="adminOffcanvasLabel">
+                    <div class="offcanvas-header mb-0 pb-1">
+                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="offcanvas-body mt-0 pt-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../usuarios/usuarios.html">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../portatiles/portatiles.html">Portátiles</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../logacciones/logacciones.html">Log de Acciones</a></li>
+                            <hr class="my-3">
+                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                        de Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                        de Reservas</a></li>
+                            </ul>
+                        </ul>
+                    </div>
                 </div>
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="text-center">Portátiles disponibles</h2>
+                    </div>
+                    <div class="row g-4 contenedor-carros">
+                        <!-- Aquí se insertarán las tarjetas de los carritos -->
+                    </div>
 
-    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-        <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
-    </div>        </main>
+                    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                        <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i
+                                class="bi bi-caret-left-fill"></i> Volver</button>
+                    </div>
+                </div>
+            </section>
+    </main>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script type="module">
-import { getCarritos } from "/frontend/javascript/portatiles/get.js";
+    <script type="module">
+        import { getCarritos } from "/frontend/javascript/portatiles/get.js";
 
 
-document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", async () => {
 
-    const data = await getCarritos();
-    crearTarjetas(data);
+            const data = await getCarritos();
+            crearTarjetas(data);
 
-});
+        });
 
-function crearTarjetas(carros) {
-    const contenedor = document.querySelector(".contenedor-carros");
-    contenedor.innerHTML = "";
+        function crearTarjetas(carros) {
+            const contenedor = document.querySelector(".contenedor-carros");
+            contenedor.innerHTML = "";
 
-    carros.forEach(carro => {
+            carros.forEach(carro => {
 
-        const col = document.createElement("div");
-        col.className = "col-12 col-md-6 col-lg-4";
+                const col = document.createElement("div");
+                col.className = "col-12 col-md-6 col-lg-4";
 
-        /* CARD */
-        const card = document.createElement("div");
-        card.className = "carro-card h-100 d-flex flex-column";
+                /* CARD */
+                const card = document.createElement("div");
+                card.className = "carro-card h-100 d-flex flex-column";
 
-            /* TÍTULO */
-            const h3 = document.createElement("h3");
-            h3.textContent = `${carro.id} - ${carro.descripcion}`;
+                /* TÍTULO */
+                const h3 = document.createElement("h3");
+                h3.textContent = `${carro.id} - ${carro.descripcion}`;
 
-            /* BODY */
-            const body = document.createElement("div");
-            body.className = "carro-body";
+                /* BODY */
+                const body = document.createElement("div");
+                body.className = "carro-body";
 
                 /* INFO */
                 const info = document.createElement("div");
                 info.className = "carro-info";
-                    const strong = document.createElement("strong");
-                    strong.textContent = carro.edificio;
-                    info.appendChild(strong);
-                    info.append(` ${carro.planta}`);                
+                const strong = document.createElement("strong");
+                strong.textContent = carro.edificio;
+                info.appendChild(strong);
+                info.append(` ${carro.planta}`);
                 const info2 = document.createElement("div");
                 info2.className = "carro-info";
-                    const strong2 = document.createElement("strong");
-                    strong2.textContent = carro.totales;
-                    info2.append(`Portátiles: `);
-                    info2.appendChild(strong2);
+                const strong2 = document.createElement("strong");
+                strong2.textContent = carro.totales;
+                info2.append(`Portátiles: `);
+                info2.appendChild(strong2);
 
                 body.appendChild(info);
                 body.appendChild(info2);
-            /* FOOTER */
-            const footer = document.createElement("div");
-            footer.className = "carro-footer";
+                /* FOOTER */
+                const footer = document.createElement("div");
+                footer.className = "carro-footer";
 
                 const btn = document.createElement("button");
                 btn.className = "btn bg-azul text-light w-100 btn-reservar";
@@ -110,14 +198,15 @@ function crearTarjetas(carros) {
                 });
                 footer.appendChild(btn);
 
-            card.appendChild(h3);
-            card.appendChild(body);
-            card.appendChild(footer);
-        col.appendChild(card);
-        contenedor.appendChild(col);
-    });
-}
-        </script>
-        <footer id="footer"></footer>
-    </body>
+                card.appendChild(h3);
+                card.appendChild(body);
+                card.appendChild(footer);
+                col.appendChild(card);
+                contenedor.appendChild(col);
+            });
+        }
+    </script>
+    <footer id="footer"></footer>
+</body>
+
 </html>
