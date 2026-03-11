@@ -1,426 +1,298 @@
-TOASTSdocument.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM cargado - Iniciando script de edificios');
+// edificios.js
+console.log('edificios.js cargado');
+
+const API_BASE = window.location.origin;
+
+// ============================================
+// SISTEMA DE TOASTS CON BOOTSTRAP (IGUAL QUE EN PORTÁTILES)
+// ============================================
+function mostrarToast(mensaje, tipo = 'success') {
+    console.log('Toast:', mensaje, tipo);
+    
+    // Crear contenedor de toasts si no existe
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+    }
+    
+    // Crear ID único para el toast
+    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    
+    // Determinar color según el tipo
+    let bgClass = 'bg-success';
+    if (tipo === 'error') bgClass = 'bg-danger';
+    else if (tipo === 'warning') bgClass = 'bg-warning';
+    else if (tipo === 'info') bgClass = 'bg-info';
+    
+    const toastHTML = `
+        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+            <div class="d-flex">
+                <div class="toast-body">${mensaje}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+    
+    const toastElement = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastElement, {
+        animation: true,
+        autohide: true,
+        delay: 3000
+    });
+    
+    toast.show();
+    
+    toastElement.addEventListener('hidden.bs.toast', function() {
+        this.remove();
+    });
+}
+
+// ============================================
+// FUNCIÓN PARA LIMPIAR BACKDROPS (IGUAL QUE EN PORTÁTILES)
+// ============================================
+function limpiarBackdrops() {
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+}
+
+// ============================================
+// CARGAR EDIFICIOS
+// ============================================
+async function cargarEdificios() {
+    console.log('Iniciando carga de edificios...');
     
     const contenedor = document.getElementById('contenedorTarjetas');
-    console.log('Contenedor encontrado:', contenedor);
+    if (!contenedor) {
+        console.error('Contenedor no encontrado');
+        return;
+    }
     
-    const API_BASE = window.location.origin;
-    console.log('API Base:', API_BASE);
-
-    // ============================================
-    // FUNCIÓN PARA MOSTRAR TOASTS
-    // ============================================
-    function mostrarToast(mensaje, tipo = 'success') {
-        console.log('Toast:', mensaje, tipo);
-        
-        let toastContainer = document.querySelector('.toast-container');
-        if (!toastContainer) {
-            toastContainer = document.createElement('div');
-            toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-            toastContainer.style.zIndex = '9999';
-            document.body.appendChild(toastContainer);
-            console.log('Contenedor de toasts creado');
-        }
-        
-        const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        
-        let bgClass = 'bg-success';
-        
-        if (tipo === 'error') {
-            bgClass = 'bg-danger';
-        } else if (tipo === 'warning') {
-            bgClass = 'bg-warning';
-        } else if (tipo === 'info') {
-            bgClass = 'bg-info';
-        }
-        
-        const toastHTML = `
-            <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        ${mensaje}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
+    contenedor.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
-        `;
-        
-        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-        
-        const toastElement = document.getElementById(toastId);
-        const toast = new bootstrap.Toast(toastElement, {
-            animation: true,
-            autohide: true,
-            delay: 3000
-        });
-        
-        toast.show();
-        
-        toastElement.addEventListener('hidden.bs.toast', function() {
-            this.remove();
-        });
-    }
-
-    // ============================================
-    // FUNCIÓN PARA CERRAR MODAL CORRECTAMENTE
-    // ============================================
-    function cerrarModal(modalId) {
-        console.log('Cerrando modal:', modalId);
-        const modalElement = document.getElementById(modalId);
-        
-        if (modalElement) {
-            // Quitar clases y estilos del modal
-            modalElement.classList.remove('show');
-            modalElement.style.display = 'none';
-            modalElement.setAttribute('aria-hidden', 'true');
-            modalElement.removeAttribute('aria-modal');
-            modalElement.removeAttribute('role');
-            
-            // Quitar el backdrop
-            const backdrops = document.querySelectorAll('.modal-backdrop');
-            backdrops.forEach(backdrop => backdrop.remove());
-            
-            // Quitar clase modal-open del body
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            
-            // Si hay instancia de Bootstrap, destruirla
-            try {
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance) {
-                    modalInstance.hide();
-                    // Forzar dispose
-                    if (modalInstance.dispose) {
-                        modalInstance.dispose();
-                    }
-                }
-            } catch (e) {
-                console.log('Error al obtener instancia modal:', e);
+            <p class="mt-2">Cargando edificios...</p>
+        </div>
+    `;
+    
+    try {
+        const res = await fetch(`${API_BASE}/API/edificios`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
             }
+        });
+        
+        console.log('Respuesta status:', res.status);
+        
+        if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status}`);
         }
-    }
-
-    // ============================================
-    // CARGAR EDIFICIOS
-    // ============================================
-    async function cargarEdificios() {
-        console.log('Iniciando carga de edificios...');
         
-        try {
-            console.log('Fetching:', `${API_BASE}/API/edificios`);
-            
-            const res = await fetch(`${API_BASE}/API/edificios`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            console.log('Respuesta status:', res.status);
-            
-            if (!res.ok) {
-                throw new Error(`Error HTTP: ${res.status}`);
-            }
-            
-            const data = await res.json();
-            console.log('Datos recibidos:', data);
+        const data = await res.json();
+        console.log('Datos recibidos:', data);
 
-            const edificios = data.data || data;
-            console.log('Edificios procesados:', edificios);
+        const edificios = data.data || data;
+        console.log('Edificios procesados:', edificios);
 
-            if (!edificios || edificios.length === 0) {
-                console.log('No hay edificios');
-                contenedor.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <p class="text-muted mt-3">No hay edificios registrados</p>
-                    </div>
-                `;
-                return;
-            }
-
-            console.log('Mostrando', edificios.length, 'edificios');
-            contenedor.innerHTML = '';
-
-            edificios.forEach((edificio, index) => {
-                console.log('Edificio', index + 1, ':', edificio);
-                
-                const tarjeta = document.createElement('div');
-                tarjeta.classList.add('col-12', 'col-md-6', 'col-lg-4', 'mb-4');
-
-                tarjeta.innerHTML = `
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-blue text-white">
-                            <h5 class="card-title mb-0">${edificio.nombre_edificio}</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <strong>ID:</strong> ${edificio.id_edificio}
-                            </p>
-                            <div class="d-flex justify-content-end gap-2 mt-3">
-                                <button class="btn btn-warning btn-sm btnEditar"
-                                    data-id="${edificio.id_edificio}"
-                                    data-nombre="${edificio.nombre_edificio}">
-                                    Editar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                contenedor.appendChild(tarjeta);
-            });
-
-            console.log('Asignando eventos a botones de editar...');
-            asignarEventosBotones();
-            console.log('Eventos de editar asignados');
-
-        } catch (err) {
-            console.error('Error al cargar edificios:', err);
+        if (!edificios || edificios.length === 0) {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
-                    <h5 class="mt-3 text-danger">Error al cargar edificios</h5>
-                    <p class="text-muted">${err.message}</p>
-                    <button class="btn btn-primary mt-3" onclick="location.reload()">
-                        Reintentar
+                    <i class="bi bi-building fs-1 text-muted"></i>
+                    <p class="text-muted mt-3">No hay edificios registrados</p>
+                    <button class="btn btn-success mt-2" onclick="abrirModalCrear()">
+                        <i class="bi bi-plus-circle"></i> Crear primer edificio
                     </button>
                 </div>
             `;
+            return;
         }
-    }
 
-    // ============================================
-    // ASIGNAR EVENTOS A BOTONES DE EDITAR
-    // ============================================
-    function asignarEventosBotones() {
-        console.log('Buscando botones de editar...');
-        const editBtns = document.querySelectorAll('.btnEditar');
-        console.log('Encontrados', editBtns.length, 'botones de editar');
-        
-        editBtns.forEach((btn, index) => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Click en boton editar', index + 1, ':', btn.dataset);
-                
-                const id = btn.dataset.id;
-                const nombre = btn.dataset.nombre;
+        contenedor.innerHTML = '';
 
-                console.log('Editando ID:', id, 'Nombre:', nombre);
-                
-                document.getElementById('editId').value = id;
-                document.getElementById('editNombre').value = nombre;
+        edificios.forEach(edificio => {
+            const tarjeta = document.createElement('div');
+            tarjeta.classList.add('col-12', 'col-md-6', 'col-lg-4', 'mb-4');
 
-                const modalElement = document.getElementById('modalEditar');
-                console.log('Modal editar encontrado:', modalElement);
-                
-                // Asegurar que no haya backdrops previos
-                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-                document.body.classList.remove('modal-open');
-                
-                const modal = new bootstrap.Modal(modalElement);
-                modal.show();
-                console.log('Modal editar mostrado');
-            });
+            tarjeta.innerHTML = `
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-blue text-white">
+                        <h5 class="card-title mb-0">${edificio.nombre_edificio}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>ID:</strong> ${edificio.id_edificio}
+                        </p>
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button class="btn btn-warning btn-sm btn-editar"
+                                data-id="${edificio.id_edificio}"
+                                data-nombre="${edificio.nombre_edificio}">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            contenedor.appendChild(tarjeta);
         });
+
+        configurarBotonesEditar();
+
+    } catch (err) {
+        console.error('Error al cargar edificios:', err);
+        contenedor.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+                <h5 class="mt-3 text-danger">Error de conexión</h5>
+                <p class="text-muted">${err.message}</p>
+                <button class="btn btn-primary mt-3" onclick="cargarEdificios()">
+                    <i class="bi bi-arrow-clockwise"></i> Reintentar
+                </button>
+            </div>
+        `;
+        mostrarToast('Error al cargar edificios: ' + err.message, 'error');
     }
+}
 
-    // ============================================
-    // VERIFICAR QUE EXISTEN LOS ELEMENTOS DEL DOM
-    // ============================================
-    console.log('Verificando elementos del DOM:');
-    
-    const modalCrear = document.getElementById('modalCrear');
-    console.log('modalCrear:', modalCrear ? 'OK' : 'NO ENCONTRADO');
-    
-    const modalEditar = document.getElementById('modalEditar');
-    console.log('modalEditar:', modalEditar ? 'OK' : 'NO ENCONTRADO');
-    
-    const formCrearElem = document.getElementById('formCrear');
-    console.log('formCrear:', formCrearElem ? 'OK' : 'NO ENCONTRADO');
-    
-    const formEditarElem = document.getElementById('formEditar');
-    console.log('formEditar:', formEditarElem ? 'OK' : 'NO ENCONTRADO');
-
-    // ============================================
-    // SOLUCIÓN: VERIFICAR Y ASEGURAR FUNCIONAMIENTO DEL BOTÓN CREAR
-    // ============================================
-    console.log('============================================');
-    console.log('VERIFICANDO BOTÓN DE CREAR...');
-    console.log('============================================');
-
-    // Buscar el botón que abre el modal de crear por diferentes métodos
-    const btnAbrirCrear = 
-        document.querySelector('[data-bs-target="#modalCrear"]') || 
-        document.querySelector('[data-target="#modalCrear"]') ||
-        document.getElementById('btnCrearEdificio') ||
-        document.querySelector('.btn-primary:not(.btnEditar)') ||
-        Array.from(document.querySelectorAll('button')).find(btn => 
-            btn.textContent.includes('Crear') || 
-            btn.textContent.includes('Nuevo') ||
-            btn.textContent.includes('Agregar')
-        );
-
-    if (btnAbrirCrear) {
-        console.log('✅ Botón de crear encontrado:', {
-            texto: btnAbrirCrear.textContent.trim(),
-            id: btnAbrirCrear.id,
-            clases: btnAbrirCrear.className,
-            dataset: btnAbrirCrear.dataset
-        });
+// ============================================
+// CONFIGURAR BOTONES DE EDITAR (MANUALMENTE, IGUAL QUE EN PORTÁTILES)
+// ============================================
+function configurarBotonesEditar() {
+    document.querySelectorAll(".btn-editar").forEach(boton => {
+        // Quitar cualquier atributo data-bs-toggle que pueda interferir
+        boton.removeAttribute('data-bs-toggle');
+        boton.removeAttribute('data-bs-target');
         
-        // Verificar que tenga los atributos correctos de Bootstrap
-        if (!btnAbrirCrear.hasAttribute('data-bs-toggle') && !btnAbrirCrear.hasAttribute('data-toggle')) {
-            console.log('⚠️ Botón no tiene atributo data-bs-toggle, agregándolo manualmente');
-            btnAbrirCrear.setAttribute('data-bs-toggle', 'modal');
-            btnAbrirCrear.setAttribute('data-bs-target', '#modalCrear');
-        }
-        
-        // Remover event listeners anteriores para evitar duplicados
-        const nuevoBoton = btnAbrirCrear.cloneNode(true);
-        btnAbrirCrear.parentNode.replaceChild(nuevoBoton, btnAbrirCrear);
-        
-        // Agregar event listener al nuevo botón
-        nuevoBoton.addEventListener('click', (e) => {
+        boton.addEventListener("click", function(e) {
             e.preventDefault();
-            console.log('🖱️ Click en botón crear - Abriendo modal');
             
-            // Limpiar backdrops residuales antes de abrir
-            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-            document.body.classList.remove('modal-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
+            const id = this.dataset.id;
+            const nombre = this.dataset.nombre;
             
-            // Verificar que el modal existe
-            const modalElement = document.getElementById('modalCrear');
+            console.log('Editando edificio:', id, nombre);
+            
+            // Rellenar el formulario
+            document.getElementById('editId').value = id;
+            document.getElementById('editNombre').value = nombre;
+            
+            // Limpiar backdrops residuales
+            limpiarBackdrops();
+            
+            // Abrir modal MANUALMENTE
+            const modalElement = document.getElementById('modalEditar');
             if (modalElement) {
-                console.log('✅ Modal crear encontrado, abriendo...');
-                try {
-                    // Reiniciar el modal completamente
-                    modalElement.classList.remove('show');
-                    modalElement.style.display = 'none';
-                    
-                    const modal = new bootstrap.Modal(modalElement, {
-                        backdrop: true,
-                        keyboard: true,
-                        focus: true
-                    });
-                    
-                    // Limpiar el formulario cuando se abre el modal
-                    const form = modalElement.querySelector('form');
-                    if (form) {
-                        form.reset();
-                    }
-                    
-                    modal.show();
-                    console.log('Modal mostrar llamado');
-                } catch (error) {
-                    console.error('Error al abrir modal:', error);
-                    mostrarToast('Error al abrir el modal', 'error');
-                }
-            } else {
-                console.error('❌ Modal crear NO encontrado en el DOM');
-                mostrarToast('Error: No se encontró el modal de creación', 'error');
+                const modal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                modal.show();
             }
         });
-        
-        console.log('✅ Event listener del botón crear configurado correctamente');
-    } else {
-        console.error('❌ No se encontró el botón de crear');
-        
-        // Listar todos los botones para debug
-        console.log('Botones disponibles en la página:');
-        document.querySelectorAll('button, .btn').forEach((btn, i) => {
-            console.log(`Botón ${i + 1}:`, {
-                texto: btn.textContent?.trim() || 'sin texto',
-                clases: btn.className,
-                id: btn.id || 'sin id',
-                tipo: btn.tagName
-            });
-        });
-        
-        // Crear un botón de crear si no existe (solución de emergencia)
-        console.log('⚠️ Creando botón de crear automáticamente...');
-        const toolbar = document.querySelector('.toolbar, .btn-toolbar, .mb-3, .mt-3') || contenedor?.parentNode;
-        
-        if (toolbar) {
-            const nuevoBotonEmergencia = document.createElement('button');
-            nuevoBotonEmergencia.className = 'btn btn-primary mb-3';
-            nuevoBotonEmergencia.textContent = '➕ Crear Edificio';
-            nuevoBotonEmergencia.id = 'btnCrearEdificioEmergencia';
-            
-            nuevoBotonEmergencia.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Click en botón crear de emergencia');
-                
-                // Limpiar backdrops residuales
-                document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
-                document.body.classList.remove('modal-open');
-                
-                const modalElement = document.getElementById('modalCrear');
-                if (modalElement) {
-                    const modal = new bootstrap.Modal(modalElement);
-                    modal.show();
-                }
-            });
-            
-            toolbar.insertBefore(nuevoBotonEmergencia, toolbar.firstChild);
-            console.log('✅ Botón de crear de emergencia creado');
-        }
-    }
+    });
+}
 
-    // Verificar que el modal de crear existe
-    console.log('============================================');
-    console.log('VERIFICANDO MODAL DE CREAR...');
-    console.log('============================================');
+// ============================================
+// FUNCIÓN PARA ABRIR MODAL DE CREAR
+// ============================================
+function abrirModalCrear() {
+    console.log('Abriendo modal de crear');
     
-    const modalCrearElement = document.getElementById('modalCrear');
-    if (modalCrearElement) {
-        console.log('✅ Modal crear encontrado en el DOM');
-        
-        // Verificar que el formulario dentro del modal existe
-        const formCrear = modalCrearElement.querySelector('form');
-        if (formCrear) {
-            console.log('✅ Formulario de crear encontrado dentro del modal');
-            console.log('Form ID:', formCrear.id);
-            console.log('Form action:', formCrear.action);
-        } else {
-            console.error('❌ No se encontró formulario dentro del modal crear');
-        }
-        
-        // Verificar los campos del formulario
-        const inputNombre = document.getElementById('crearNombre');
-        if (inputNombre) {
-            console.log('✅ Input nombre encontrado:', inputNombre);
-        } else {
-            console.error('❌ Input nombre NO encontrado');
-        }
-        
+    // Limpiar backdrops residuales
+    limpiarBackdrops();
+    
+    // Limpiar formulario
+    const inputNombre = document.getElementById('crearNombre');
+    if (inputNombre) inputNombre.value = '';
+    
+    // Abrir modal MANUALMENTE
+    const modalElement = document.getElementById('modalCrear');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: false
+        });
+        modal.show();
     } else {
-        console.error('❌ Modal crear NO encontrado en el DOM');
+        console.error('Modal crear no encontrado');
+        mostrarToast('Error: No se encontró el modal de creación', 'error');
     }
+}
 
-    console.log('============================================');
-    console.log('VERIFICACIÓN COMPLETADA');
-    console.log('============================================');
-
+// ============================================
+// INICIALIZACIÓN
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM cargado - Inicializando edificios.js');
+    
+    // Verificar elementos del DOM
+    const contenedor = document.getElementById('contenedorTarjetas');
+    console.log('Contenedor encontrado:', contenedor);
+    
+    const modalCrear = document.getElementById('modalCrear');
+    const modalEditar = document.getElementById('modalEditar');
+    const formCrear = document.getElementById('formCrear');
+    const formEditar = document.getElementById('formEditar');
+    
+    console.log('modalCrear:', modalCrear ? 'OK' : 'NO ENCONTRADO');
+    console.log('modalEditar:', modalEditar ? 'OK' : 'NO ENCONTRADO');
+    console.log('formCrear:', formCrear ? 'OK' : 'NO ENCONTRADO');
+    console.log('formEditar:', formEditar ? 'OK' : 'NO ENCONTRADO');
+    
+    // Configurar botón de crear (si existe por defecto)
+    const btnCrear = document.querySelector('[data-bs-target="#modalCrear"]') || 
+                     document.getElementById('btnCrearEdificio');
+    
+    if (btnCrear) {
+        console.log('Botón crear encontrado, configurando...');
+        btnCrear.removeAttribute('data-bs-toggle');
+        btnCrear.removeAttribute('data-bs-target');
+        btnCrear.addEventListener('click', (e) => {
+            e.preventDefault();
+            abrirModalCrear();
+        });
+    } else {
+        console.log('No se encontró botón crear por defecto, buscando en toolbar...');
+        // Buscar en el toolbar o crear uno nuevo
+        const toolbar = document.querySelector('.d-flex.justify-content-between');
+        if (toolbar) {
+            const nuevoBoton = document.createElement('button');
+            nuevoBoton.className = 'btn btn-success';
+            nuevoBoton.innerHTML = '<i class="bi bi-plus-circle"></i> Crear edificio';
+            nuevoBoton.addEventListener('click', abrirModalCrear);
+            toolbar.appendChild(nuevoBoton);
+            console.log('Botón crear añadido manualmente');
+        }
+    }
+    
     // ============================================
-    // CREAR EDIFICIO
+    // FORMULARIO CREAR EDIFICIO
     // ============================================
-    if (formCrearElem) {
-        console.log('✅ Formulario crear encontrado, añadiendo evento submit...');
+    if (formCrear) {
+        console.log('✅ Formulario crear encontrado');
         
-        // Remover event listeners anteriores para evitar duplicados
-        const nuevoFormCrear = formCrearElem.cloneNode(true);
-        formCrearElem.parentNode.replaceChild(nuevoFormCrear, formCrearElem);
+        // Remover event listeners anteriores
+        const nuevoFormCrear = formCrear.cloneNode(true);
+        formCrear.parentNode.replaceChild(nuevoFormCrear, formCrear);
         
         nuevoFormCrear.addEventListener('submit', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('✅ Submit formulario crear');
+            
+            console.log('Submit formulario crear');
             
             const nombreInput = document.getElementById('crearNombre');
             if (!nombreInput) {
-                console.error('❌ Input nombre no encontrado');
+                console.error('Input nombre no encontrado');
                 mostrarToast('Error en el formulario', 'error');
                 return;
             }
@@ -429,7 +301,6 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
             console.log('Nombre ingresado:', nombre);
             
             if (!nombre) {
-                console.log('Nombre vacio');
                 mostrarToast('El nombre del edificio es obligatorio', 'warning');
                 return;
             }
@@ -455,23 +326,46 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
                 });
 
                 console.log('Respuesta status:', res.status);
-                const data = await res.json();
-                console.log('Respuesta data:', data);
+                
+                let data;
+                let mensajeError;
+                
+                try {
+                    data = await res.json();
+                    console.log('Respuesta data:', data);
+                } catch {
+                    mensajeError = 'Error al procesar la respuesta del servidor';
+                    throw new Error(mensajeError);
+                }
 
                 if (!res.ok) {
-                    throw new Error(data.message || `Error ${res.status}`);
+                    mensajeError = data.message || data.error || `Error ${res.status}`;
+                    
+                    // Personalizar mensajes comunes
+                    if (mensajeError.includes('Duplicate') || mensajeError.includes('duplicado')) {
+                        mensajeError = `Ya existe un edificio con el nombre "${nombre}"`;
+                    }
+                    
+                    throw new Error(mensajeError);
                 }
 
                 console.log('✅ Edificio creado correctamente');
                 mostrarToast('Edificio creado correctamente', 'success');
                 
-                // CERRAR MODAL CORRECTAMENTE usando la función especializada
-                cerrarModal('modalCrear');
+                // Cerrar modal
+                const modalElement = document.getElementById('modalCrear');
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+                
+                // Limpiar backdrop
+                limpiarBackdrops();
                 
                 // Limpiar formulario
                 nombreInput.value = '';
                 
-                console.log('Recargando edificios...');
+                // Recargar edificios
                 await cargarEdificios();
                 
             } catch (err) {
@@ -487,29 +381,30 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
         
         console.log('✅ Event listener del formulario crear configurado');
     } else {
-        console.error('❌ No se encontro el formulario de crear');
+        console.error('❌ No se encontró el formulario de crear');
     }
 
     // ============================================
-    // EDITAR EDIFICIO
+    // FORMULARIO EDITAR EDIFICIO
     // ============================================
-    if (formEditarElem) {
-        console.log('✅ Formulario editar encontrado, añadiendo evento submit...');
+    if (formEditar) {
+        console.log('✅ Formulario editar encontrado');
         
         // Remover event listeners anteriores
-        const nuevoFormEditar = formEditarElem.cloneNode(true);
-        formEditarElem.parentNode.replaceChild(nuevoFormEditar, formEditarElem);
+        const nuevoFormEditar = formEditar.cloneNode(true);
+        formEditar.parentNode.replaceChild(nuevoFormEditar, formEditar);
         
         nuevoFormEditar.addEventListener('submit', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('✅ Submit formulario editar');
+            
+            console.log('Submit formulario editar');
 
             const idInput = document.getElementById('editId');
             const nombreInput = document.getElementById('editNombre');
             
             if (!idInput || !nombreInput) {
-                console.error('❌ Inputs no encontrados');
+                console.error('Inputs no encontrados');
                 mostrarToast('Error en el formulario', 'error');
                 return;
             }
@@ -520,7 +415,6 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
             console.log('ID:', id, 'Nombre:', nombre);
             
             if (!nombre) {
-                console.log('Nombre vacio');
                 mostrarToast('El nombre del edificio es obligatorio', 'warning');
                 return;
             }
@@ -546,20 +440,45 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
                 });
 
                 console.log('Respuesta status:', res.status);
-                const data = await res.json();
-                console.log('Respuesta data:', data);
+                
+                let data;
+                let mensajeError;
+                
+                try {
+                    data = await res.json();
+                    console.log('Respuesta data:', data);
+                } catch {
+                    mensajeError = 'Error al procesar la respuesta del servidor';
+                    throw new Error(mensajeError);
+                }
 
                 if (!res.ok) {
-                    throw new Error(data.message || `Error ${res.status}`);
+                    mensajeError = data.message || data.error || `Error ${res.status}`;
+                    
+                    // Personalizar mensajes comunes
+                    if (mensajeError.includes('Duplicate') || mensajeError.includes('duplicado')) {
+                        mensajeError = `Ya existe un edificio con el nombre "${nombre}"`;
+                    } else if (mensajeError.includes('not found') || mensajeError.includes('no encontrado')) {
+                        mensajeError = 'El edificio que intentas actualizar no existe';
+                    }
+                    
+                    throw new Error(mensajeError);
                 }
 
                 console.log('✅ Edificio actualizado correctamente');
                 mostrarToast('Edificio actualizado correctamente', 'success');
                 
-                // CERRAR MODAL CORRECTAMENTE usando la función especializada
-                cerrarModal('modalEditar');
+                // Cerrar modal
+                const modalElement = document.getElementById('modalEditar');
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
                 
-                console.log('Recargando edificios...');
+                // Limpiar backdrop
+                limpiarBackdrops();
+                
+                // Recargar edificios
                 await cargarEdificios();
                 
             } catch (err) {
@@ -575,7 +494,7 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
         
         console.log('✅ Event listener del formulario editar configurado');
     } else {
-        console.error('❌ No se encontro el formulario de editar');
+        console.error('❌ No se encontró el formulario de editar');
     }
 
     // ============================================
@@ -585,9 +504,8 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
     modales.forEach(id => {
         const modal = document.getElementById(id);
         if (modal) {
-            // Usar nuestro método de cierre personalizado en lugar del de Bootstrap
             modal.addEventListener('hidden.bs.modal', function() {
-                console.log('Modal', id, 'cerrado por Bootstrap, limpiando...');
+                console.log('Modal', id, 'cerrado, limpiando...');
                 const form = this.querySelector('form');
                 if (form) {
                     form.reset();
@@ -596,10 +514,7 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
                         if (editId) editId.value = '';
                     }
                 }
-            });
-            
-            modal.addEventListener('show.bs.modal', function() {
-                console.log('Modal', id, 'abriéndose');
+                limpiarBackdrops();
             });
         }
     });
@@ -607,8 +522,13 @@ TOASTSdocument.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // INICIAR CARGA
     // ============================================
-    console.log('============================================');
     console.log('Iniciando carga de edificios...');
-    console.log('============================================');
-    cargarEdificios();
+    setTimeout(() => {
+        cargarEdificios();
+    }, 500);
 });
+
+// Hacer funciones globales
+window.cargarEdificios = cargarEdificios;
+window.abrirModalCrear = abrirModalCrear;
+window.mostrarToast = mostrarToast;
