@@ -31,7 +31,7 @@ public function login(string $email, string $password): array
         throw new \Exception("Error interno en la base de datos", 500);
     }
 
-    if (!$user || $password !== $user['contrasena']) {
+    if (!$user || !password_verify($password, $user['contrasena'])) {
         throw new \Exception("Credenciales incorrectas", 401);
     }
 

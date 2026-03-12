@@ -5,7 +5,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('clave').value;
 
     try {
-        const response = await fetch('http://192.168.13.202/API/login', {
+        const response = await fetch(`${API}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -19,12 +19,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         console.log('Respuesta login:', data);
 
-        // 👇 AQUÍ ESTÁ LA CLAVE
         localStorage.setItem('token', data.data.token);
 
         window.location.href = '/frontend/vistas/menu.html';
 
     } catch (error) {
-        mostrarError(error.message);
+        alert(error.message);
     }
 });

@@ -32,8 +32,13 @@ main{
 main div.divvolver{
     bottom: 0 !important;
     position: fixed !important;
-    width: 100%;
+    width: 100% !important;
     z-index: 1030 !important;
+    pointer-events: none !important;
+}
+
+main div.divvolver *{
+    pointer-events: auto !important;
 }
 
 footer{
@@ -63,13 +68,15 @@ a{
 
 
 
+
+
 /*MENÚ NAV*/
 
 nav ul li{
     list-style: none;
-    height: min-content;
     vertical-align: middle;
     align-self: center;
+    padding: 0.5em 1em !important;
 }
 
 nav ul{
@@ -83,38 +90,6 @@ nav{
     max-width: 101% !important;
 }
 
-nav:nth-child(1) ul li:not(:last-child){
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-nav:nth-child(1) ul li:not(:last-child) a{
-    padding: 1.5em 0 !important;
-    margin: 0 !important;
-}
-
-nav:nth-child(1) ul li:last-child{
-    padding: 2em 2em 1.3em 2em !important;
-    margin-left: -1em !important;
-}
-
-nav:nth-child(1) ul li:last-child a i{
-    padding: 1.5em 0 !important;
-    margin-top: 1.7em !important;
-}
-
-nav:nth-child(1) ul li:nth-child(1){
-    margin-left: 1.5em !important;
-}
-
-nav:nth-child(1) ul li:nth-child(1) a img{
-    margin-top: -0.2em !important;
-}
-
-nav ul li:not(:first-child) a:hover{
-    background-color: #90a300 !important;
-}
-
 nav *{
     color: white !important;
     text-decoration: none !important;
@@ -124,109 +99,49 @@ nav ul li a img{
     height: 4em;
 }
 
+nav ul li a{
+    font-size: 1em !important;
+    font-weight: 400;
+}
 
+nav ul li a:hover{
+    font-size: 1.01em !important;
+    font-weight: 500;
+}
 
 
 
 /*MENÚ NAV PERFIL*/
 
-#perfil:hover > ul{
+.desplegablemenu:hover > ul{
     display: block !important;
     height: max-content !important;
 }
 
-#perfil ul li:hover{
+.desplegablemenu ul li:hover{
     background-color: #90a300 !important;
     color: white !important;
 }
 
-#menuordenador ul #perfil ul li a{
-    text-decoration: none !important;
-    padding: 0.25em 0 !important;
-}
 
-#perfil ul li{
+.desplegablemenu ul li{
     margin: 0 !important;
     width: 100%;
 }
 
-#perfil ul li:hover *{
+.desplegablemenu ul li:hover *{
     color: white !important;
+    background-color: #90a300 !important;
 }
 
-#perfil ul li *{
+.desplegablemenu ul li *{
     padding: 0.5em !important;
     text-align: center !important;
     margin-left: 0 !important;
 }
 
-#perfil ul li a{
+.desplegablemenu ul li a{
     color: black !important;
-}
-
-
-
-
-
-/*MENÚ NAV MÓVIL*/
-
-#menumovillogin ul{
-    height: 3em;
-    padding-left: 7.5% !important;
-}
-
-#menumovil ul li a img, #menumovillogin ul li a img{
-    height: 3em;
-}
-
-#menumovil ul{
-    height: 3em;
-    padding-left: -10% !important;
-}
-
-#menumovil ul li:nth-child(3), #menumovil ul li:nth-child(4){
-    padding-left: 1em !important;
-    padding-right: 1em !important;
-    margin: 0 !important;
-}
-
-#menumovil ul li:nth-child(3):hover, #menumovil ul li:nth-child(3):active,
-#menumovil ul li:nth-child(4):hover, #menumovil ul li:nth-child(4):active{
-    background-color: #90a300;
-}
-
-
-
-
-
-/*MENÚ NAV ORDENADOR*/
-
-#menuordenador ul li:not(:last-child) a{
-    padding: 1.7em !important;
-    width: 100% !important;
-}
-
-#menuordenador ul li:not(:last-child){
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-#menuordenador ul li:last-child{
-    margin-right: 1em;
-}
-
-#menuordenador ul li:not(:first-child) a:hover{
-    background-color: #90a300;
-}
-
-#menuordenador ul li:last-child:hover{
-    background-color: #90a300;
-}
-
-.dropdown-menu{
-    right: 0;
-    background-color: white !important;
-    border: 1px solid white !important;
 }
 
 
@@ -243,7 +158,7 @@ main.menu, div.menu{
     vertical-align: middle;
 }
 
-main.menu, div.menu, #mainmenu {
+main.menu, div.menu, #mainmenu{
     background-color: rgba(0,0,0,0) !important;
 }
 
@@ -359,7 +274,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
 
 
 
-/* ACCESIBILIDAD */
+/*ACCESIBILIDAD*/
 #accesibilidad{
     top: 44%;
     left: 0;
@@ -368,6 +283,8 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     flex-direction: column;
     background-color: #274C9C;
     border-radius: 0 0.5em 0.5em 0;
+    border: 1px solid #E6F5F0 !important;
+    color: white !important;
     z-index: 1030;
     margin-left: -2.25% !important;
     position: fixed;
@@ -382,7 +299,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     background-color: #274C9C;
 }
 
-/* Siempre mostrar el primer botón */
+/*Siempre mostrar el primer botón*/
 #accesibilidad button:not(:first-child){
     display: none;
 }
@@ -391,7 +308,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     display: none !important;
 }
 
-/* Al pasar el mouse por el contenedor, mostrar los botones */
+/*Al pasar el mouse por el contenedor, mostrar los botones*/
 #accesibilidad:hover button:not(:first-child), #accesibilidad:active button:not(:first-child){
     display: block !important;
 }
@@ -401,7 +318,7 @@ input:hover, input:active, select:hover, select:active, textarea:hover, textarea
     border-radius: 25px;
 }
 
-/* Efecto de hover individual */
+/*Efecto de hover individual*/
 #accesibilidad button:hover{
     background-color: #0051ff;
 }
@@ -554,62 +471,66 @@ form.login{
 
 /*ESTILOS MIS RESERVAS*/
 
-.reserva-card {
+.reserva-card{
     border-radius: 12px;
     overflow: hidden;
     background: #fff;
 }
 
-.reserva-body {
+.reserva-body{
     padding: 16px;
 }
 
-.reserva-estado {
+.reserva-estado{
     height: 15px;
     width: 100%;
 }
 
-.estado-verde {
+.estado-verde{
     background: #28a745;
 }
 
-.estado-rojo {
+.estado-rojo{
     background: #dc3545;
 }
 
-.aceptado-rechazado {
+.aceptado-rechazado{
     height: 45px;
     border-radius: 0 0 .375rem .375rem;
     background-color: gray;
 }
-.aceptado {
+
+.aceptado{
     background-color: #7a8f00;
 }
-.rechazado {
+
+.rechazado{
     background-color: #ea6b6b;
 }
 
-.estado-incidencia-abierta {
+.estado-incidencia-abierta{
     height: 45px;
     border-radius: 0 0 .375rem .375rem;
     background-color: #ea6b6b;
 }
-.resuelta {
+.resuelta{
     background-color: #7a8f00;
 }
-.proceso {
+.proceso{
     background-color: #cea141;
 }
 
+
+
 /* MENU ADMINISTRADOR */
-#aside-admin {
+#aside-admin{
     border-color: #2a457e;
-    width: 260px; 
-    min-height: 80vh;
+    width: 260px;
     border-bottom:#2a457eb6 solid 2px;
     border-right:#2a457eb6 solid 2px;
     border-bottom-right-radius: 10px;
 }
+
 #aside-admin ul li a , #adminOffcanvas ul li a{
     color: #2a457e;
     font-weight: 600;
@@ -618,4 +539,218 @@ form.login{
 #aside-admin ul li a:hover , #adminOffcanvas ul li a:hover{
     color: #0051ff;
     font-weight: 700;
+}
+
+
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+
+.contenedor-aulas {
+    max-width: 900px;
+    margin: auto;
+    display: grid;
+    gap: 20px;
+}
+
+/* Tarjeta edificio */
+.edificio-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.edificio-card h3 {
+    margin-bottom: 15px;
+    color: #274C9C;
+    font-weight: 700;
+}
+
+/* Planta */
+.planta {
+    margin-bottom: 15px;
+}
+
+.planta-titulo {
+    font-weight: 600;
+    font-size: 14px;
+    color: #666;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Contenedor aulas */
+.aulas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Botón aula */
+.aula {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #d0d7e2;
+    background: #f7f9fc;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.aula:hover {
+    background: #e6ecff;
+    border-color: #2f4f9f;
+}
+
+.aula.ocupada {
+    background-color: #ce6a5d;
+}
+
+.aula.no-cumple {
+    border: 2px solid #dc3545 !important;
+}
+
+
+.carro-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e6eaf2;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.carro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+}
+
+/* Cabecera tipo tarjeta administrativa */
+.carro-card h3 {
+    margin: 0;
+    padding: 12px 16px;
+    background: #f5f7fb;
+    color: #274C9C;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-bottom: 1px solid #c4cbd1;
+}
+
+/* Contenido */
+.carro-body {
+    padding: 14px 16px;
+}
+
+.carro-info {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: black;
+}
+
+.carro-info strong {
+    color: #274C9C;
+    font-weight: 650;
+}
+
+/* Pie */
+.carro-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #c4cbd1;
+    background: #fafbfe;
+}
+
+/* Botón más integrado */
+.carro-footer .btn {
+    font-weight: 500;
+}
+
+/* Contenedor de métricas */
+.carro-metricas {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Caja de cada métrica */
+.carro-metrica {
+    flex: 1;
+    background: #f5f7fb;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #e6eaf2;
+}
+
+/* Número grande */
+.carro-metrica-num {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #274C9C;
+    line-height: 1;
+}
+
+/* Texto pequeño */
+.carro-metrica-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Variantes de estado */
+.carro-metrica.ocupados .carro-metrica-num {
+    color: #dc3545; /* rojo Bootstrap */
+}
+
+.carro-metrica.libres .carro-metrica-num {
+    color: #198754; /* verde Bootstrap */
+}
+
+
+.card-modern {
+    background: linear-gradient(135deg, #d7dff5, #ffffff);
+    border-radius: 15px;
+    padding: 30px 20px;
+    padding-bottom: 0px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    
+    /* NUEVO: altura mínima y flex para distribuir contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 240px; /* altura uniforme */
+}
+
+.card-modern i {
+    color: #274C9C;
+    transition: transform 0.3s ease, color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.card-modern h5 {
+    font-weight: 700;
+    color: #274C9C;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* evita que el título se comprima */
+}
+
+.card-modern p {
+    font-size: 0.85rem;
+    color: #555;
+    flex-grow: 1; /* hace que el párrafo ocupe el espacio restante */
+}
+
+.card-modern:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #c3d1f0, #ffffff);
+}
+
+.card-modern:hover i {
+    transform: scale(1.15);
+    color: #2a457e;
 }

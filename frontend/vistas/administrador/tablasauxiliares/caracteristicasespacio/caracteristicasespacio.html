@@ -1,261 +1,225 @@
 <!DOCTYPE html>
 <html lang="es">
-<<<<<<< HEAD
+
 <head>
     <meta charset="utf-8">
+    <!-- PRIMERO: Definir BASE -->
     <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
 
+    <!-- Cargar authGuard PRIMERO -->
+    <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+    <!-- En menuadministrador.html y otras páginas de admin -->
     <script>
-        const script1 = document.createElement("script");
-        script1.src = BASE + "/javascript/includes.js";
-        script1.onload = () => {
-            const script2 = document.createElement("script");
-            script2.src = BASE + "/javascript/menu.js";
-            script2.onload = () => {
-                generarPagina("admin", "admin");
-            };
-            document.head.appendChild(script2);
-        };
-        document.head.appendChild(script1);
+        setTimeout(function () {
+            const rol = Number(sessionStorage.getItem("rol"));
+            console.log('Rol después de authGuard:', rol);
+
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol !== 30 && rol !== 40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.href = '../../menu.html'; // REDIRIGE AL MENÚ PRINCIPAL
+            } else {
+                // Cargar la página normalmente
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("menu", "admin");
+                    };
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+        }, 100);
     </script>
 
     <title>Características - IES Bajo Aragón</title>
+
 </head>
 
 <body>
 
     <div id="header"></div>
 
-    <main class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Caracteristicas</h2>
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrearNecesidad">
-                <i class="bi bi-plus-circle"></i> Crear Característica
-            </button>
-        </div>
+    <main class="container-fluid w-100 row p-0">
+        <div class="d-flex h-100">
+            <!-- ASIDE (desktop fijo) -->
+            <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../../usuarios/usuarios.html">Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../../portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="./../../logacciones/logacciones.html">Log
+                            de Acciones</a></li>
+                    <hr class="my-3">
+                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                de Reservas</a></li>
+                    </ul>
+                </ul>
+            </aside>
 
+            <!-- CONTENIDO -->
+            <section class="flex-grow-1 p-3 p-lg-4 pt-5">
 
-        <!-- Tarjetas -->
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 1</p>
+                <!-- Botón menú SOLO en móvil/tablet -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                        <i class="bi bi-list"></i> Menú Admin
+                    </button>
+                </div>
+
+                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                    aria-labelledby="adminOffcanvasLabel">
+                    <div class="offcanvas-header mb-0 pb-1">
+                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Cerrar"></button>
                     </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Grande</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
+
+                    <div class="offcanvas-body mt-0 pt-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../../usuarios/usuarios.html">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../../portatiles/portatiles.html">Portátiles</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../../logacciones/logacciones.html">Log de Acciones</a></li>
+                            <hr class="my-3">
+                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                        de Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                        de Reservas</a></li>
+                            </ul>
+                        </ul>
                     </div>
                 </div>
-            </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 2</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Pizarra digital</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Características</h2>
+                    <button class="btn btn-success" id="btnCrear">
+                        <i class="bi bi-plus-circle"></i> Crear Característica
+                    </button>
                 </div>
-            </div>
 
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card text-center shadow-sm overflow-hidden h-100">
-                    <div class="bg-azul card-head rounded-top">
-                        <p class="fs-6 text-light m-0 py-2">ID: 3</p>
-                    </div>
-                    <div class="card-body">
-                        <p class="fs-5 card-title">Impresora</p>
-                        <div class="card-footer text-end">
-                            <button class="btn btn-sm bg-azul text-light" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                <i class="bi bi-pencil"></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
-                        </div>
-                    </div>
+                <!-- Tarjetas de características -->
+                <div class="row g-4" id="contenedorCaracteristicas">
+                    <!-- Datos -->
                 </div>
-            </div>
-        </div>
 
-        <div class="modal fade" id="modalCrearNecesidad" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    
-                    <div class="modal-header">
-                        <h5 class="modal-title">Crear nueva caracteristica</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="formCrearNecesidad">
-                            <div class="mb-3">
-                                <label class="form-label">Nombre de la caracteristica</label>
-                                <input type="text" class="form-control" placeholder="Ej. Proyector" required>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row mt-4 text-center d-flex justify-content-center modal-footer">
-                        <button type="submit" form="formCrearNecesidad" class="btn rounded-pill bg-azul text-light col-5 mx-3 mb-3">
-                            <i class="bi bi-check2"></i> Crear
-                        </button>
-                        <button type="button" class="btn bg-lightgrey text-dark col-5 mx-3 mb-3" data-bs-dismiss="modal">
-                            <i class="bi bi-x-lg"></i> Cancelar
-                        </button>
-                    </div>
-
+                <!-- Volver -->
+                <div class="divvolver container p-0 pb-3 mb-5 mt-4 text-end fs-5">
+                    <a href="../../menuadministrador.html"
+                        class="bg-azul rounded-pill p-2 px-3 text-light text-decoration-none">
+                        <i class="bi bi-caret-left-fill"></i> Volver
+                    </a>
                 </div>
-            </div>
-        </div>
-
-        <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-            <a href="../../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
-                <i class="bi bi-caret-left-fill"></i> Volver
-            </a>
         </div>
     </main>
 
-<div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Editar planta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Edificio</label>
-                    <select class="form-select">
-                        <option selected>Loscos</option>
-                        <option>Ram</option>
-                    </select>
+    <!-- Modal Crear Característica -->
+    <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle"></i> Crear Característica
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Planta</label>
-                    <input type="text" class="form-control" value="Planta 0">
+                <div class="modal-body">
+                    <form id="formCrearCaracteristica">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la característica</label>
+                            <input type="text" class="form-control" id="crearNombre" placeholder="Ej. Proyector HD"
+                                required maxlength="100">
+                            <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Número de aulas</label>
-                    <input type="number" class="form-control" value="6">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Espacios especiales</label>
-                    <textarea class="form-control" rows="3">Secretaría, Conserjería</textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="submit" form="formCrearCaracteristica" class="btn btn-success">
+                        <i class="bi bi-check2"></i> Crear
+                    </button>
                 </div>
             </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-primary">Guardar cambios</button>
-            </div>
-
         </div>
     </div>
-</div>
-        <footer id="footer"></footer>
-    </body>
+
+    <!-- Modal Editar Característica -->
+    <div class="modal fade" id="modalEditarCaracteristica" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square"></i> Editar Característica
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarCaracteristica">
+                        <input type="hidden" id="editId">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la característica</label>
+                            <input type="text" class="form-control" id="editNombre" placeholder="Ej. Proyector HD"
+                                required maxlength="100">
+                            <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary text-white">
+                        <i class="bi bi-check2"></i> Guardar cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer id="footer"></footer>
+</body>
+<script type="module" src="/frontend/javascript/espaiciocaracteristicas/espaciocaracteristicas.js"></script>
+
 </html>
-=======
-    <head>
-        <meta charset="UTF-8">
-        <script src="/frontend/javascript/includes.js"></script>
-        <script src="/frontend/javascript/menu.js"></script>
-        <title>Características de espacio - IES Bajo Aragón</title>
-    </head>
-    <body>
-        <script>
-            const menu = "admin";
-            const rol = "admin";
-            generarPagina(menu, rol);
-        </script>
-        <div id="header"></div>
-        <main class="container mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2>Características de espacios</h2>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-                    <i class="bi bi-plus-circle"></i> Crear espacio
-                </button>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
-                    <thead>
-                        <tr>
-                            <th>Necesidad</th>
-                            <th>Descripción</th>
-                            <th>Fecha</th>
-                            <th>Horario</th>
-                            <th>Prioridad</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Clase Matemáticas</td>
-                            <td>Aula con proyector para clase teórica</td>
-                            <td>15/02/2026</td>
-                            <td>08:00 - 10:00</td>
-                            <td><span class="badge bg-danger">Alta</span></td>
-                            <td><span class="badge bg-success">Aprobada</span></td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>Práctica Informática</td>
-                            <td>Sala con 20 ordenadores</td>
-                            <td>18/02/2026</td>
-                            <td>10:00 - 12:00</td>
-                            <td><span class="badge bg-warning text-dark">Media</span></td>
-                            <td><span class="badge bg-secondary">Pendiente</span></td>
-                            <td>
-                                <button class="btn btn-warning btn-sm btn-editar" data-bs-toggle="modal" data-bs-target="#modalEditar">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-5 container-fluid text-end">
-                <a href="../tablasauxiliares.html" class="volver p-2 px-4 text-dark">Volver al menú principal</a>
-            </div>
-        </main>
-        <footer id="footer"></footer>
-    </body>
-</html>
->>>>>>> clases

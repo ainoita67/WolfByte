@@ -7,205 +7,80 @@ function generateHeaderNav(menuactivo, role) {
     const header = document.getElementById('header');
     
     //crear los 2 navs vacios ordenador y movil
-    const navd = document.createElement('nav');
-        navd.classList.add("row");
-        navd.id = "menuordenador";
-    const navm = document.createElement('nav');
-        navm.classList.add("row");
-        navm.id = "menumovil";
+    const nav = document.createElement('nav');
+        nav.classList.add("row");
+        nav.id = "menu";
 
-    header.appendChild(navd);
-    header.appendChild(navm);
+    header.appendChild(nav);
 
     //si no hay usuario cargar menus vacios
     if (!role){
-        navd.classList.add("row", "d-none", "d-lg-grid");
-        navd.innerHTML = 
-            `<ul class="col-7 d-none d-lg-grid text-center fs-5 pt-3 pe-1">
+        nav.classList.add("row", "d-xl-grid");
+        nav.innerHTML = 
+            `<ul class="col-7 d-grid d-xl-grid text-center fs-5 pt-3 pe-1">
                 <li class="col-12 ps-2 pe-5">
-<<<<<<< HEAD
-                    <a href="#"><img src="/frontend/assets/img/ieslogo.png" alt="Logo"></a>
-=======
                     <a href="#"><img src="${BASE}/assets/img/ieslogo.png" alt="Logo"></a>
->>>>>>> origin/main
                 </li>
                 <li></li>
             </ul>
             `;
-        
-        navm.classList.add("row", "mt-0", "d-lg-none");
-        navm.innerHTML = 
-            `<ul class="col-7 d-grid d-lg-none text-center fs-5 pt-2">
-                <li class="col-12 ps-2 pe-5">
-<<<<<<< HEAD
-                    <a href="#"><img src="/frontend/assets/img/ieslogo.png" alt="Logo"></a>
-=======
-                    <a href="#"><img src="${BASE}/assets/img/ieslogo.png" alt="Logo"></a>
->>>>>>> origin/main
-                </li>
-                <li></li>
-            </ul>
-            `;
+
     } else {
         // si hay usuario llena los navs con los enlaces necesarios
 
         //apartados del menu, para reutilizarlos y bucles
-        const menus = [
-<<<<<<< HEAD
-            { texto: "Aulas", href: "/frontend/vistas/reservas/aulas/aulas.html", key: "aulas" },
-            { texto: "Salón de actos", href: "/frontend/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: "/frontend/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
-            { texto: "Otros espacios", href: "/frontend/vistas/reservas/espacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: "/frontend/vistas/reservas/incidencias/incidencias.html", key: "incidencias" },
-            { texto: "Liberar aulas", href: "/frontend/vistas/reservas/liberar/liberar.html", key: "liberar" }
-=======
-            { texto: "Aulas", href: BASE + "/vistas/reservas/aulas/aulas.php", key: "aulas" },
-            { texto: "Salón de actos", href: BASE + "/vistas/reservas/salondeactos/salondeactos.php", key: "salonactos" },
-            { texto: "Portátiles", href: BASE + "/vistas/reservas/portatiles/portatiles.php", key: "portatiles" },
-            { texto: "Otros espacios", href: BASE + "/vistas/reservas/espacios/espacios.php", key: "espacios" },
-            { texto: "Incidencias", href: BASE + "/vistas/reservas/incidencias/incidencias.php", key: "incidencias" },
-            { texto: "Liberar aulas", href: BASE + "/vistas/reservas/liberar/liberar.php", key: "liberar" }
->>>>>>> origin/main
+        let menus=[
+            { texto: "Aulas", href: "/vistas/reservas/aulas/aulas.html", key: "aulas" },
+            { texto: "Salón de actos", href: "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
+            { texto: "Portátiles", href: "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            { texto: "Otros espacios", href: "/vistas/reservas/otrosespacios/espacios.html", key: "espacios" },
+            { texto: "Incidencias", href: "/vistas/incidencias/verincidencias.html", key: "incidencias" },
+            { texto: "Liberar aulas", href: "/vistas/liberar/liberar.html", key: "liberar" }
         ];
+        console.log("Rol del usuario:", role); // DEBUG: Verificar el rol del usuario
+        if(role>=30){ // solo para admin
+            menus.push({ texto: "Administrador", href: "/vistas/administrador/menuadministrador.html", key: "administrador" });
+        }
 
-        //MENU DESKTOP
-        // crear ul y logo
-        const uld = document.createElement('ul');
-            uld.id = "menudesktop"
-            uld.classList.add("col-12", "d-none", "d-lg-grid", "text-center", "fs-5", "pt-3");
-            if(role=="admin"){
-                uld.innerHTML = 
-                `<li class="col-12">
-<<<<<<< HEAD
-                    <a href="/frontend/vistas/menu.html">
-                        <img src="/frontend/assets/img/ieslogo.png" alt="Logo">
-=======
-                    <a href="${BASE}/vistas/menu.php">
+        // UL PARA TODO Y LOGO
+        const ul = document.createElement('ul');
+            ul.classList.add("col-12", "d-flex", "justify-content-between", "d-xl-grid", "text-center", "fs-5", "py-2", "py-xl-4", "ps-4", "ps-xl-0", "mb-0");
+            ul.innerHTML = 
+                `<li class="col-xl-12 col-2">
+                    <a href="${BASE}/vistas/menu.html">
                         <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
->>>>>>> origin/main
                     </a>
                 </li>
+                <li class="d-block d-xl-none offset-4 offset-md-6 offset-lg-7"></li>
                 `;
-            }else{
-                uld.innerHTML = 
-                `<li class="col-12">
-<<<<<<< HEAD
-                    <a href="/frontend/vistas/menu.html">
-                        <img src="/frontend/assets/img/ieslogo.png" alt="Logo">
-=======
-                    <a href="${BASE}/vistas/menu.php">
-                        <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
->>>>>>> origin/main
-                    </a>
-                </li>
-                <li class="col-1"></li>
-                `;
-            }
-        navd.appendChild(uld);
 
-        // apartados menu desktop
+        nav.appendChild(ul);
+
+        // NAV DESKTOP
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("pt-5", "pb-5", "d-none", "d-lg-block", "ms-5");
+            li.classList.add("py-2", "d-none", "d-xl-block");
 
             const a = document.createElement('a');
-            a.href = menu.href;
+            a.href = `${BASE}${menu.href}`;
             a.textContent = menu.texto;
 
             if(menuactivo === menu.key){
-                a.classList.add("fw-bold", "text-lightgrey");
-                a.style.color = "grey";
+                a.style.fontWeight = "900";
             }
 
             li.appendChild(a);
-            uld.appendChild(li);
+            ul.appendChild(li);
         });
 
-        // administrador
-        if (role == "admin"){
-            const liadmin = document.createElement('li');
-            liadmin.classList.add("pt-4", "pb-4", "d-none", "d-lg-block", "ms-3");
+        // LI DESPLEGABLES PARA EL FLEX
 
-            const aa = document.createElement('a');
-<<<<<<< HEAD
-            aa.href = "/frontend/vistas/administrador/menuadministrador.html";
-=======
-            aa.href = BASE + "/vistas/administrador/menuadministrador.php";
->>>>>>> origin/main
-            aa.textContent = "Administrador";
+        const liDesplegable = document.createElement('li');
+            liDesplegable.classList.add("d-flex", "align-items-center","gap-4", "ms-auto", "me-4");
 
-            if(menuactivo === "admin"){
-                aa.classList.add("fw-bold", "text-lightgrey");
-                aa.style.color = "grey";
-            }
-
-            liadmin.appendChild(aa);
-            uld.appendChild(liadmin);
-        }
-        
-
-        // apartado perfil
-        const lipd = document.createElement('li');
-        uld.appendChild(lipd);
-        lipd.classList.add("list-group-item", "pt-5", "pb-5", "d-none", "d-lg-block");
-        lipd.id = "perfil";
-        lipd.innerHTML = 
-            `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle fs-1"></i>
-            </a>
-            <ul class="dropdown-menu" data-target="#perfildesktop" id="ulpd">
-                <li>
-<<<<<<< HEAD
-                    <a href="/frontend/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
-                </li>
-                <li>
-                    <a href="/frontend/vistas/perfil/reserva.html" class="dropdown-item">Mis reservas</a>
-                </li>
-                <li>
-                    <a href="/frontend/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
-                </li>
-                <li>
-                    <a href="/frontend/auth/logout.html" class="dropdown-item">Cerrar sesión</a>
-=======
-                    <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
-                </li>
-                <li>
-                    <a href="${BASE}/vistas/perfil/misreserva.html" class="dropdown-item">Mis reservas</a>
-                </li>
-                <li>
-                    <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
-                </li>
-                <li>
-                    <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
->>>>>>> origin/main
-                </li>
-            </ul>
-            `;
-
-        // MENU MOVIL
-        // Crear UL principal
-        const ulm = document.createElement('ul');
-        ulm.classList.add("col-12", "d-flex", "d-lg-none", "text-center", "fs-5", "pt-3", "ps-4");
-        // logo
-        ulm.innerHTML = 
-            `<li class="col-2">
-<<<<<<< HEAD
-                <a href="/frontend/vistas/menu.html">
-                    <img src="/frontend/assets/img/ieslogo.png" alt="Logo">
-=======
-                <a href="${BASE}/vistas/menu.php">
-                    <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
->>>>>>> origin/main
-                </a>
-            </li>
-            <li class="offset-6 offset-sm-7"></li>
-            `;
-        navm.appendChild(ulm);
-
-        // Menú hamburguesa
-        const liMenu = document.createElement('li');
-            liMenu.classList.add("mx-3", "list-group-item", "pt-5", "pb-5", "d-lg-none", "ms-5");
-            liMenu.id = "perfil";
+        // NAV MOVIL HAMBURGUESA
+        const divMenu = document.createElement('div');
+            divMenu.classList.add("list-group-item", "d-xl-none", "desplegablemenu");
 
             const aMenu = document.createElement('a');
                 aMenu.href = "#";
@@ -213,7 +88,7 @@ function generateHeaderNav(menuactivo, role) {
                 aMenu.setAttribute("data-bs-toggle", "dropdown");
                 aMenu.setAttribute("aria-expanded", "false");
                 aMenu.innerHTML = `<i class="bi bi-list fs-1"></i>`;
-            liMenu.appendChild(aMenu);
+            divMenu.appendChild(aMenu);
 
             // Crear UL del dropdown
             const dropdown = document.createElement('ul');
@@ -223,94 +98,41 @@ function generateHeaderNav(menuactivo, role) {
                 menus.forEach(menu => {
                     const li = document.createElement('li');
                         const a = document.createElement('a');
-                            a.href = menu.href;
+                            a.href = `${BASE}${menu.href}`;
                             a.textContent = menu.texto;
                             a.classList.add("dropdown-item");
                             li.appendChild(a);
                     dropdown.appendChild(li);
                 });
-                //administrador
-                if (role == "admin"){
-                    const liad = document.createElement('li');
-                        const aad = document.createElement('a');
-<<<<<<< HEAD
-                            aad.href = "/frontend/vistas/administrador/menuadministrador.html";
-=======
-                            aad.href = BASE + "/vistas/administrador/menuadministrador.php";
->>>>>>> origin/main
-                            aad.textContent = "Administrador";
-                            aad.classList.add("dropdown-item");
-                            liad.appendChild(aad);
-                    dropdown.appendChild(liad);
-                }
+                
+        divMenu.appendChild(dropdown);
+        liDesplegable.appendChild(divMenu);
 
-        liMenu.appendChild(dropdown);
-        ulm.appendChild(liMenu);
-
-        // apartado perfil
-        const lipm = document.createElement('li');
-        ulm.appendChild(lipm);
-        lipm.classList.add("list-group-item", "pt-5", "pb-5", "d-lg-none");
-        lipm.id = "perfil";
-        lipm.innerHTML = 
-        `<a href="#" id="perfilmovil" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-1"></i>
-        </a>
-        <ul class="dropdown-menu" data-target="#perfilmovil">
-            <li>
-<<<<<<< HEAD
-                <a href="/frontend/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
-            </li>
-            <li>
-                <a href="/frontend/vistas/perfil/reserva.html" class="dropdown-item">Mis reservas</a>
-            </li>
-            <li>
-                <a href="/frontend/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
-            </li>
-            <li>
-                <a href="/frontend/vistas/auth/logout.html" class="dropdown-item">Cerrar sesión</a>
-=======
-                <a href="${BASE}/vistas/perfil/datos.php" class="dropdown-item">Mis datos</a>
-            </li>
-            <li>
-                <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
-            </li>
-            <li>
-                <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
-            </li>
-            <li>
-                <a href="${BASE}/auth/logout.php" class="dropdown-item">Cerrar sesión</a>
->>>>>>> origin/main
-            </li>
-        </ul>
-        `;
+        // PERFIL COMUN PARA DESKTOP Y MOVIL
+        const divPerfil = document.createElement('div');
+        liDesplegable.appendChild(divPerfil);
+        divPerfil.classList.add("list-group-item", "pt-2", "pb-2", "desplegablemenu");
+        divPerfil.id = "perfil";
+        divPerfil.innerHTML = 
+            `<a href="#" id="perfildesktop" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-1"></i>
+            </a>
+            <ul class="dropdown-menu" data-target="#perfil" id="ulp">
+                <li>
+                    <a href="${BASE}/vistas/perfil/datos.html" class="dropdown-item">Mis datos</a>
+                </li>
+                <li>
+                    <a href="${BASE}/vistas/perfil/misreservas.html" class="dropdown-item">Mis reservas</a>
+                </li>
+                <li>
+                    <a href="${BASE}/vistas/perfil/misincidencias.html" class="dropdown-item">Mis incidencias</a>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-item" id="logoutBtn">Cerrar sesión</a>
+                </li>
+            </ul>
+            `;
+        ul.appendChild(liDesplegable);
     }
 }
 
-// Logout
-document.addEventListener('click', async (e) => {
-    if (e.target && e.target.id === 'logoutBtn') {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://192.168.13.202/API/frontend/logout', {
-                method: 'POST',           // tu API acepta POST
-                credentials: 'include',   // 🔑 permite enviar cookies de sesión
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Error al cerrar sesión');
-            }
-
-            console.log('Sesión cerrada:', data);
-            window.location.href = '/auth/login.html';  // Redirige al login
-
-        } catch (err) {
-            alert('Error al cerrar sesión: ' + err.message);
-        }
-    }
-});

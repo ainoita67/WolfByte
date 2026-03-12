@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
+    <!--
+        AÑADE:
+            <script src="/frontend/javascript/includes.js"></script>
+            <script src="/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+    <script>
+        const rol = sessionStorage.getItem("rol");
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
+                generarPagina("aulas", rol);
+            };
+            // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+
+        // authGuard
+        const scriptAuth = document.createElement('script');
+        scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
+        document.head.appendChild(scriptAuth);
+    </script>
+    <title>Reservas permanentes - IES Bajo Aragón</title>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main class="container-fluid w-100 row p-0">
+        <div class="d-flex h-100">
+            <!-- ASIDE (desktop fijo) -->
+            <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="./../logacciones/logacciones.html">Log
+                            de Acciones</a></li>
+                    <hr class="my-3">
+                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                de Reservas</a></li>
+                    </ul>
+                </ul>
+            </aside>
+
+            <!-- CONTENIDO -->
+            <section class="flex-grow-1 p-3 p-lg-4 pt-5">
+
+                <!-- Botón menú SOLO en móvil/tablet -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                        <i class="bi bi-list"></i> Menú Admin
+                    </button>
+                </div>
+
+                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                    aria-labelledby="adminOffcanvasLabel">
+                    <div class="offcanvas-header mb-0 pb-1">
+                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="offcanvas-body mt-0 pt-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../usuarios/usuarios.html">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../portatiles/portatiles.html">Portátiles</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../logacciones/logacciones.html">Log de Acciones</a></li>
+                            <hr class="my-3">
+                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                        de Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                        de Reservas</a></li>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="container-fluid p-4">
+                    <div class="row g-4">
+
+                        <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
+
+                        <section class="col-12 col-lg-8 d-flex flex-column mb-2 mb-lg-5">
+                            <div class="d-flex justify-content-between align-items-center my-4">
+                                <h2>Reservas permanentes</h2>
+                                <button class="btn btn-success btn-sm btn-crear" data-bs-toggle="modal"
+                                    data-bs-target="#modalCrear">
+                                    <i class="bi bi-plus"></i> Crear Reserva Permanente
+                                </button>
+                            </div>
+                            <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
+                                <thead>
+                                    <tr>
+                                        <th>Recurso</th>
+                                        <th>Día de la semana</th>
+                                        <th>Hora Inicio</th>
+                                        <th class="d-none d-md-table-cell">Hora Fin</th>
+                                        <th class="d-none d-md-table-cell">Comentario</th>
+                                        <th class="d-none d-md-table-cell">Unidades</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </section>
+                        <!-- ASIDE INFORMACIÓN -->
+                        <aside class="col-12 col-lg-2 mb-5">
+                            <div class="d-none d-lg-block" style="height: 4.5rem;"></div>
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title" id="info-id">Recusrso</h5>
+                                    <hr>
+
+                                    <p><strong>Descripción: </strong></p>
+                                    <p id="info-descripcion" class="text-muted small"></p>
+
+                                    <p id="infoTipo"><strong>Tipo: </strong> <span id="info-tipo"></span></p>
+
+                                    <p><strong>Edificio: </strong> <span id="info-edificio"></span></p>
+                                    <p><strong>Planta: </strong> <span id="info-planta"></span></p>
+
+                                    <p id="infoCaracteristicas"><strong>Características:</strong></p>
+                                    <ul id="info-caracteristicas" class="small"></ul>
+
+                                    <p><strong>Requiere autorización: </strong> <span id="info-especial"></span></p>
+
+                                    <p id="infoUnidades"><strong>Unidades: </strong> <span id="info-unidades"></span>
+                                    </p>
+
+                                    <p id="infoEsAula"><strong>Es un aula: </strong> <span id="info-es-aula"></span></p>
+
+
+
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+                <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                    <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i
+                            class="bi bi-caret-left-fill"></i> Volver</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+
+    <!-- MODAL EDITAR RESERVA -->
+    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h2 class="modal-title">Editar reserva</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- Body / Formulario -->
+                <div class="modal-body">
+                    <form class="row g-4" id="formEditarReserva">
+
+                        <div class="col-md-6">
+                            <label class="form-label">ID</label>
+                            <input type="text" class="form-control" id="idEditar" required readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Recurso</label>
+                            <input type="text" class="form-control" id="recursoEditar" required readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Día de la semana</label>
+                            <select name="diaEditar" id="diaEditar" class="form-select" required>
+                                <option value="" disabled>Seleccione un día</option>
+                                <option value="1">Lunes</option>
+                                <option value="2">Martes</option>
+                                <option value="3">Miércoles</option>
+                                <option value="4">Jueves</option>
+                                <option value="5">Viernes</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hora de Inicio</label>
+                            <select type="time" class="form-control" id="inicioEditar" required>
+                                <option value="1">08:50</option>
+                                <option value="2">09:45</option>
+                                <option value="3">10:40</option>
+                                <option value="4">11:30</option>
+                                <option value="5">12:00</option>
+                                <option value="6">12:55</option>
+                                <option value="7">13:50</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hora de Fin</label>
+                            <select type="time" class="form-control" id="finEditar" required>
+                                <option value="1">09:40</option>
+                                <option value="2">10:30</option>
+                                <option value="3">11:30</option>
+                                <option value="4">12:00</option>
+                                <option value="5">12:30</option>
+                                <option value="6">13:45</option>
+                                <option value="7">14:40</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Comentario</label>
+                            <input type="text" class="form-control" id="comentarioEditar">
+                        </div>
+
+                        <div class="col-md-6" id="unidadesEditar">
+                            <label class="form-label">Unidades</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-6">
+                            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <div id="editarUserErrors" class="alert alert-danger d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CREAR RESERVA -->
+    <div class="modal fade" id="modalCrear" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="modal-title">Crear reserva permanente</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form class="row g-4" id="formCrearReserva">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Recurso</label>
+                            <input type="text" class="form-control" id="recursoCrear" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Día de la semana</label>
+                            <select id="diaCrear" class="form-select" required>
+                                <option value="" disabled selected>Seleccione un día</option>
+                                <option value="1">Lunes</option>
+                                <option value="2">Martes</option>
+                                <option value="3">Miércoles</option>
+                                <option value="4">Jueves</option>
+                                <option value="5">Viernes</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hora inicio</label>
+                            <select type="time" class="form-control" id="inicioCrear" required>
+                                <option value="" disabled selected>Seleccione la hora de inicio</option>
+                                <option value="1">08:50</option>
+                                <option value="2">09:45</option>
+                                <option value="3">10:40</option>
+                                <option value="4">11:30</option>
+                                <option value="5">12:00</option>
+                                <option value="6">12:55</option>
+                                <option value="7">13:50</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hora fin</label>
+                            <select type="time" class="form-control" id="finCrear" required>
+                                <option value="" disabled selected>Seleccione la hora de fin</option>
+                                <option value="1">09:40</option>
+                                <option value="2">10:30</option>
+                                <option value="3">11:30</option>
+                                <option value="4">12:00</option>
+                                <option value="5">12:30</option>
+                                <option value="6">13:45</option>
+                                <option value="7">14:40</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label">Comentario</label>
+                            <input type="text" class="form-control" id="comentarioCrear">
+                        </div>
+
+                        <div class="col-md-6" id="unidadesCrear">
+                            <label class="form-label">Unidades</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-6">
+                            <button type="submit" class="enviar w-100 text-light p-2">
+                                Crear reserva
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <div id="crearReservaErrors" class="alert alert-danger d-none"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { getReservasRecurso } from "/frontend/javascript/permanentes/get.js";
+        import { updatePermanente, desactivePermanente } from "/frontend/javascript/permanentes/put.js";
+        import { createPermanente } from "/frontend/javascript/permanentes/post.js";
+
+        const params = new URLSearchParams(window.location.search);
+        const idRecurso = params.get("id");
+
+        const horaInicio = {
+            1: "08:50:00",
+            2: "09:45:00",
+            3: "10:40:00",
+            4: "11:30:00",
+            5: "12:00:00",
+            6: "12:55:00",
+            7: "13:50:00"
+        }
+
+        const horaFin = {
+            1: "09:40:00",
+            2: "10:30:00",
+            3: "11:30:00",
+            4: "12:00:00",
+            5: "12:30:00",
+            6: "13:45:00",
+            7: "14:40:00"
+        }
+
+        // Map numérico → día
+        const diasSemana = {
+            1: "Lunes",
+            2: "Martes",
+            3: "Miércoles",
+            4: "Jueves",
+            5: "Viernes",
+            6: "Sábado",
+            0: "Domingo"
+        };
+
+        let reservas = [];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            reservas = await getReservasRecurso(idRecurso);
+            rellenarTablaReservas(reservas);
+
+            cargarInfo(idRecurso);
+
+            // Listener para abrir modal
+            document.getElementById("modalEditar").addEventListener("show.bs.modal", async (e) => {
+                cargarModalEditar(e);
+            });
+
+            // Listener para guardar cambios
+            document.getElementById("formEditarReserva").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                await guardarCambiosReserva();
+            });
+
+            // Listener para abrir modal de creación
+            document.getElementById("modalCrear").addEventListener("show.bs.modal", () => {
+                document.getElementById("recursoCrear").value = idRecurso;
+            });
+
+            // Listener para crear reserva
+            document
+                .getElementById("formCrearReserva")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    await crearReserva();
+                });
+
+        });
+
+        function rellenarTablaReservas(reservas) {
+            const tbody = document.querySelector(".tabla-cabecera tbody");
+            tbody.innerHTML = "";
+
+            reservas.forEach(reserva => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+            <td>${reserva.recurso}</td>
+            <td>${diasSemana[reserva.dia_semana] || reserva.dia_semana}</td>
+
+            <td>${reserva.inicio}</td>
+            <td class="d-none d-md-table-cell">${reserva.fin}</td>
+
+            <td class="d-none d-md-table-cell">${reserva.comentario}</td>
+            <td class="d-none d-md-table-cell">${reserva.unidades}</td>
+            <td>
+                <button class="btn btn-warning btn-sm btn-editar"
+                    data-id="${reserva.id}"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalEditar">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-danger btn-sm btn-eliminar" data-id="${reserva.id}">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function cargarModalEditar(e) {
+
+            const horaToIndex = {
+                "08:50:00": 1,
+                "09:45:00": 2,
+                "10:40:00": 3,
+                "11:30:00": 4,
+                "12:00:00": 5,
+                "12:55:00": 6,
+                "13:50:00": 7
+            }
+
+            const finToIndex = {
+                "09:40:00": 1,
+                "10:30:00": 2,
+                "11:30:00": 3,
+                "12:00:00": 4,
+                "12:30:00": 5,
+                "13:45:00": 6,
+                "14:40:00": 7
+            }
+
+            const btn = e.relatedTarget;
+            if (!btn) return;
+
+            const id = Number(btn.dataset.id);
+            const reserva = reservas.find(r => Number(r.id) === id);
+            if (!reserva) return console.error("Reserva no encontrada");
+
+            // Rellenar modal
+            document.getElementById("idEditar").value = reserva.id;
+            document.getElementById("recursoEditar").value = reserva.recurso ?? "";
+            document.getElementById("diaEditar").value = reserva.dia_semana ?? "";
+
+            const inicioSelect = document.getElementById("inicioEditar");
+            if (inicioSelect) {
+                let valorInicio = reserva.inicio;
+                // Si el valor es una hora (08:50), convertir a índice
+                if (horaToIndex[valorInicio]) {
+                    valorInicio = horaToIndex[valorInicio];
+                }
+                inicioSelect.value = valorInicio ?? "";
+            }
+
+            // Para la hora de fin - convertir si es necesario
+            const finSelect = document.getElementById("finEditar");
+            if (finSelect) {
+                let valorFin = reserva.fin;
+                // Si el valor es una hora (09:40), convertir a índice
+                if (finToIndex[valorFin]) {
+                    valorFin = finToIndex[valorFin];
+                }
+                finSelect.value = valorFin ?? "";
+            }
+
+            document.getElementById("comentarioEditar").value = reserva.comentario !== " - " ? reserva.comentario : "";
+            document.getElementById("unidadesEditar").value = reserva.unidades !== " - " ? reserva.unidades : "";
+        }
+
+        async function guardarCambiosReserva() {
+
+            let id = Number(document.getElementById("idEditar").value);
+            let recurso = document.getElementById("recursoEditar").value;
+            let dia_semana = Number(document.getElementById("diaEditar").value);
+            let inicio = document.getElementById("inicioEditar").value;
+            let fin = document.getElementById("finEditar").value;
+            let comentario = document.getElementById("comentarioEditar").value.trim() || null;
+            let unidades = Number(document.getElementById("unidadesEditar").value) || null;
+
+            inicio = horaInicio[inicio];
+            fin = horaFin[fin];
+
+            const reservaActualizada = { id, recurso, dia_semana, inicio, fin, comentario, unidades };
+
+            try {
+
+                if (inicio >= fin) {
+                    alert("La hora de inicio debe ser anterior a la hora de fin");
+                    return; // Detener la ejecución
+                }
+                await updatePermanente(reservaActualizada);
+
+                // Actualizar array local
+                reservas = await getReservasRecurso(idRecurso);
+                rellenarTablaReservas(reservas);
+
+                // Cerrar modal
+                bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
+                alert("Reserva actualizada correctamente");
+            } catch (err) {
+                console.error(err);
+                alert(err?.message ?? "Error al actualizar la reserva");
+            }
+        }
+
+        async function crearReserva() {
+
+            let recurso = idRecurso;
+            let dia_semana = Number(document.getElementById("diaCrear").value);
+            let inicio = document.getElementById("inicioCrear").value;
+            let fin = document.getElementById("finCrear").value;
+            let comentario = document.getElementById("comentarioCrear").value.trim() || null;
+            let unidades = Number(document.getElementById("unidadesCrear").value) || null;
+
+            inicio = horaInicio[inicio];
+            fin = horaFin[fin];
+
+            const nuevaReserva = {
+                recurso,
+                dia_semana,
+                inicio,
+                fin,
+                comentario,
+                unidades
+            };
+
+            try {
+
+                if (inicio >= fin) {
+                    alert("La hora de inicio debe ser anterior a la hora de fin");
+                    return; // Detener la ejecución
+                }
+
+                await createPermanente(nuevaReserva);
+
+                reservas = await getReservasRecurso(idRecurso);
+                rellenarTablaReservas(reservas);
+
+                bootstrap.Modal.getInstance(document.getElementById("modalCrear")).hide();
+
+                document.getElementById("formCrearReserva").reset();
+
+                alert("Reserva creada correctamente");
+
+            } catch (err) {
+
+                console.error(err);
+                alert(err?.message ?? "Error al crear la reserva");
+
+            }
+
+        }
+
+        // Delegación de eventos para eliminar reservas
+        document.addEventListener("click", async (e) => {
+            const btn = e.target.closest(".btn-eliminar");
+            if (!btn) return;
+
+            const id = Number(btn.dataset.id);
+            const reserva = reservas.find(r => r.id === id);
+            if (!reserva) return alert("Reserva no encontrada");
+
+            const ok = confirm(`¿Seguro que deseas eliminar la reserva del recurso ${reserva.recurso}?`);
+            if (!ok) return;
+
+            try {
+                await desactivePermanente(reserva.id);
+
+                // Actualizar array local
+                reservas = await getReservasRecurso(idRecurso);
+                rellenarTablaReservas(reservas);
+                alert("Reserva eliminada correctamente");
+            } catch (err) {
+                console.error(err);
+                alert(err?.message ?? "Error al eliminar la reserva");
+            }
+        });
+
+        import { getInfoRecurso } from "/frontend/javascript/recursos/get.js";
+
+        async function cargarInfo(id) {
+            const recurso = await getInfoRecurso(id);
+
+            if (!recurso) return;
+
+            if (recurso.tipo === "Espacio") {
+                // Ocultar sección de unidades ten todos lados
+                const infoUnidades = document.getElementById("infoUnidades");
+                const editarUnidades = document.getElementById("unidadesEditar");
+                const crearUnidades = document.getElementById("unidadesCrear");
+                infoUnidades.style.display = "none";
+                editarUnidades.style.display = "none";
+                editarUnidades.value = null;
+                crearUnidades.style.display = "none";
+                crearUnidades.value = null;
+
+                //mostrar si es aula o no
+                const infoEsAula = document.getElementById("infoEsAula");
+                infoEsAula.style.display = "block";
+                const spanEsAula = document.getElementById("info-es-aula");
+                spanEsAula.textContent = recurso.es_aula ? "Sí" : "No";
+
+                //Características
+                const infoCaracteristicas = document.getElementById("infoCaracteristicas");
+                const infoCaracteristicasUl = document.getElementById("info-caracteristicas");
+                if (recurso.caracteristicas.length > 0) {
+                    infoCaracteristicas.style.display = "block";
+                    infoCaracteristicasUl.style.display = "block";
+                    infoCaracteristicasUl.textContent = "";
+                    recurso.caracteristicas.forEach(caracteristica => {
+                        const li = document.createElement('li');
+                        li.textContent = caracteristica;
+                        infoCaracteristicasUl.appendChild(li);
+                    });
+                } else {
+                    infoCaracteristicas.style.display = "none";
+                    infoCaracteristicasUl.style.display = "none";
+                }
+
+                //mostrar tipo
+                const infoTipo = document.getElementById("info-tipo");
+                infoTipo.textContent = recurso.tipo;
+
+            } else if (recurso.tipo === "Material") {
+                // mostrar sección de unidades ten todos lados
+                const infoUnidades = document.getElementById("infoUnidades");
+                const editarUnidades = document.getElementById("unidadesEditar");
+                const crearUnidades = document.getElementById("unidadesCrear");
+                const infoUnidadesSpan = document.getElementById("info-unidades");
+                infoUnidades.style.display = "block";
+                editarUnidades.style.display = "block";
+                crearUnidades.style.display = "block";
+                infoUnidadesSpan.textContent = recurso.unidades !== null ? recurso.unidades : "N/A";
+
+                //Características
+                const infoCaracteristicas = document.getElementById("infoCaracteristicas");
+                const infoCaracteristicasUl = document.getElementById("info-caracteristicas");
+                infoCaracteristicas.style.display = "none";
+                infoCaracteristicasUl.style.display = "none";
+
+                //ocultar si es aula o no
+                const infoEsAula = document.getElementById("infoEsAula");
+                infoEsAula.style.display = "none";
+
+                //mostrar tipo
+                const infoTipo = document.getElementById("info-tipo");
+                infoTipo.textContent = "Carrito de portátiles";
+            }
+
+            document.getElementById("info-id").textContent = 'Recurso ' + recurso.id;
+            document.getElementById("info-descripcion").textContent = recurso.descripcion;
+            document.getElementById("info-edificio").textContent = recurso.nombre_edificio;
+            document.getElementById("info-planta").textContent = recurso.nombre_planta;
+
+
+
+            document.getElementById("info-especial").textContent =
+                recurso.especial ? "Sí" : "No";
+
+        }
+    </script>
+</body>
+
+</html>

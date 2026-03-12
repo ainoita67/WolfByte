@@ -40,6 +40,22 @@ class IncidenciaController
         }
     }
 
+    /**
+     * GET /incidencia/usuario/{id_usuario}
+     * Devuelve una incidencia por ID de usuario
+     */
+    public function showByUsuario(Request $req, Response $res, string $id_usuario): void
+    {
+        try {
+            $incidencia = $this->service->getIncidenciasByUsuario($id_usuario);
+            $res->status(200)->json($incidencia);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 404);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
 
     /**
      * POST /incidencias
@@ -52,7 +68,7 @@ class IncidenciaController
 
             $res->status(201)->json(
                 ['id' => $result['id']],
-                "Incidencia creado correctamente"
+                "Incidencia creada correctamente"
             );
 
         } catch (ValidationException $e) {

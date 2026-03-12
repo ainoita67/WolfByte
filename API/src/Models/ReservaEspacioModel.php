@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Models;
 
 use Core\DB;
+use PDOException;
 
 class ReservaEspacioModel
 {
@@ -14,72 +15,169 @@ class ReservaEspacioModel
         $this->db = new DB();
     }
 
-    public function getAll(): array
+    public function getByEspacio(string $idEspacio): array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio ORDER BY id_reserva_espacio DESC")
-            ->fetchAll();
+        try {
+            $sql = "
+                SELECT r.id_reserva, r.asignatura, r.autorizada,
+                       r.observaciones, r.grupo, r.profesor,
+                       r.inicio, r.fin, re.actividad
+                FROM Reserva r
+                JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                WHERE re.id_espacio = :idEspacio AND (r.autorizada IS NULL OR r.autorizada = 1)
+                ORDER BY r.inicio ASC
+            ";
+
+    public function findById(int $id): array
+    {
+        try{
+            return $this->db
+                ->query("
+                    SELECT
+                        r.id_reserva,
+                        r.asignatura,
+                        r.profesor,
+                        r.grupo,
+                        r.inicio,
+                        r.fin,
+                        re.actividad,
+                        re.id_espacio,
+                        GROUP_CONCAT(n.nombre) AS necesidades
+                    FROM Reserva r
+                    JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                    LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
+                    LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
+                    WHERE re.id_reserva=:id
+                    GROUP BY r.id_reserva
+                    ORDER BY r.inicio;
+                ")
+                ->bind(':id', $id)
+                ->fetchAll();
+
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas espacio");
+        }
     }
 
-    public function getByEspacio($idEspacio): array
+    /**
+     * Obtener reservas de un espacio concreto
+     */
+    public function getByEspacio(string $idEspacio): array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio WHERE id_espacio = :id_espacio ORDER BY id_reserva_espacio DESC")
+        try{
+            return $this->db
+                ->query("
+                    SELECT
+                        r.id_reserva,
+                        r.asignatura,
+                        r.profesor,
+                        r.grupo,
+                        r.inicio,
+                        r.fin,
+                        re.actividad,
+                        re.id_espacio,
+                        GROUP_CONCAT(n.nombre) AS necesidades
+                    FROM Reserva r
+                    JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                    LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
+                    LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
+                    WHERE re.id_espacio=:espacio
+                    GROUP BY r.id_reserva
+                    ORDER BY r.inicio;
+                ")
+                ->bind(':espacio', $idEspacio)
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas del espacio");
+        }
+    }
+
+    public function createReserva(array $data): int
+    {
+        $this->db
+            ->query("
+                INSERT INTO Reserva (
+                    asignatura, autorizada, observaciones, grupo,
+                    profesor, f_creacion, inicio, fin,
+                    id_usuario, id_usuario_autoriza, tipo
+                )
+                VALUES (
+                    :asignatura, :autorizada, :observaciones, :grupo,
+                    :profesor, NOW(), :inicio, :fin,
+                    :id_usuario, NULL, 'Reserva_espacio'
+                )
+            ")
+            ->bind(':asignatura', $data['asignatura'])
+            ->bind(':observaciones', $data['observaciones'] ?? '')
+            ->bind(':grupo', $data['grupo'])
+            ->bind(':profesor', $data['profesor'])
+            ->bind(':inicio', $data['inicio'])
+            ->bind(':fin', $data['fin'])
+            ->bind(':id_usuario', $data['id_usuario'])
+            ->bind(':autorizada', $data['autorizada'] ?? null)
+            ->execute();
+
+        return (int) $this->db->lastId();
+    }
+
+    public function createReservaEspacio(
+        int $idReserva,
+        string $actividad,
+        string $idEspacio
+    ): void {
+        $this->db
+            ->query("
+                INSERT INTO Reserva_espacio (
+                    id_reserva, actividad, id_espacio
+                )
+                VALUES (
+                    :id_reserva, :actividad, :id_espacio
+                )
+            ")
+            ->bind(':id_reserva', $idReserva)
+            ->bind(':actividad', $actividad)
             ->bind(':id_espacio', $idEspacio)
-            ->fetchAll();
+            ->execute();
     }
 
-    public function findById(int $id): array|false
+    public function getById(int $id): ?array
     {
-        return $this->db
-            ->query("SELECT * FROM Reserva_espacio WHERE id_reserva_espacio = :id")
+        $sql = "SELECT * FROM Reserva WHERE id_reserva = :id";
+
+        $result = $this->db
+            ->query($sql)
             ->bind(':id', $id)
             ->fetch();
+
+        return $result ?: null;
     }
 
-    public function create(array $data): array
-    {
-        $this->db->query("
-            INSERT INTO Reserva_espacio (
-                id_reserva_espacio,
-                actividad,
-                id_espacio
-            ) VALUES (
-                :id_reserva_espacio,
-                :actividad,
-                :id_espacio
-            )
+    public function updateReserva(int $id, array $data): void
+{
+    $this->db
+        ->query("
+            UPDATE Reserva
+            SET asignatura = :asignatura,
+                observaciones = :observaciones,
+                grupo = :grupo,
+                profesor = :profesor
+            WHERE id_reserva = :id
         ")
-        ->bind(':id_reserva_espacio', $data['id_reserva_espacio'])
-        ->bind(':actividad', $data['actividad'])
-        ->bind(':id_espacio', $data['id_espacio'])
-        ->execute();
-
-        return $this->findById((int)$data['id_reserva_espacio']);
-    }
-
-
-    public function update(int $id, array $data): array
-    {
-        $this->db->query("
-            UPDATE Reserva_espacio
-            SET actividad = :actividad,
-                id_espacio = :id_espacio
-            WHERE id_reserva_espacio = :id
-        ")
-        ->bind(':actividad', $data['actividad'])
-        ->bind(':id_espacio', $data['id_espacio'])
+        ->bind(':asignatura', $data['asignatura'])
+        ->bind(':observaciones', $data['observaciones'] ?? '')
+        ->bind(':grupo', $data['grupo'])
+        ->bind(':profesor', $data['profesor'])
         ->bind(':id', $id)
         ->execute();
 
-        return $this->findById($id);
-    }
-
-    public function delete(int $id): void
-    {
-        $this->db
-            ->query("DELETE FROM Reserva_espacio WHERE id_reserva_espacio = :id")
-            ->bind(':id', $id)
-            ->execute();
-    }
+    $this->db
+        ->query("
+            UPDATE Reserva_espacio
+            SET actividad = :actividad
+            WHERE id_reserva = :id
+        ")
+        ->bind(':actividad', $data['actividad'])
+        ->bind(':id', $id)
+        ->execute();
+}
 }

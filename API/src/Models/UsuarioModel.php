@@ -57,45 +57,36 @@ class UsuarioModel
     }
 
     /**
-     * Obtener nombre por ID
+     * existe un usuario con el correo dado
      */
-    public function findNameById(int $id): string|false
-    {
-        $result = $this->db
-            ->query("SELECT nombre FROM Usuario WHERE id_usuario = :id")
-            ->bind(':id', $id)
-            ->fetch();
+    public function emailExists(string $email): bool
+        {
+            $result = $this->db
+                ->query("SELECT 1 FROM Usuario WHERE correo = :correo LIMIT 1")
+                ->bind(':correo', $email)
+                ->fetch();
 
-        return $result ? $result['nombre'] : false;
-    }
+            return $result !== false;
+        }
 
     /**
-     * Obtener correo por ID
+     * Comprobar si existe otro usuario con el mismo correo (excluyendo un ID)
      */
-    public function findEmailById(int $id): string|false
+    public function emailExistsForOtherUser(string $email, int $excludeId): bool
     {
         $result = $this->db
-            ->query("SELECT correo FROM Usuario WHERE id_usuario = :id")
-            ->bind(':id', $id)
+            ->query(
+                "SELECT 1 
+                FROM Usuario 
+                WHERE correo = :correo 
+                AND id_usuario != :id
+                LIMIT 1"
+            )
+            ->bind(':correo', $email)
+            ->bind(':id', $excludeId)
             ->fetch();
 
-        return $result ? $result['correo'] : false;
-    }
-
-    /**
-     * Obtener rol por ID
-     */
-    public function findRolById(int $id): array|false
-    {
-        $result = $this->db
-            ->query("SELECT r.id_rol, r.rol
-                     FROM Usuario u
-                     JOIN Rol r ON u.id_rol = r.id_rol
-                     WHERE u.id_usuario = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ? $result : false;
+        return $result !== false;
     }
 
     /**

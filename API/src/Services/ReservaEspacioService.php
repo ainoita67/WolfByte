@@ -15,75 +15,73 @@ class ReservaEspacioService
         $this->model = new ReservaEspacioModel();
     }
 
-    // Devuelve todas las reservas de espacios
-    public function getAllReservas(): array
+    public function getReservasPorEspacio(string $id): array
     {
-        return $this->model->getAll();
+        return $this->model->getByEspacio($id);
     }
 
-    // Devuelve todas las reservas de un espacio específico
-    public function getReservasByEspacio($idEspacio): array
-    {
-        if (!is_numeric($idEspacio)) {
-            throw new ValidationException([
-                "id_espacio" => "El ID del espacio debe ser numérico"
-            ]);
-        }
-
-        return $this->model->getByEspacio((int)$idEspacio);
-    }
-
-    // Devuelve una reserva por su ID
     public function getReservaById(int $id): array
     {
-        $reserva = $this->model->findById($id);
+        $reserva = $this->model->getById($id);
 
         if (!$reserva) {
-            throw new ValidationException([
-                "id_reserva_espacio" => "Reserva no encontrada"
-            ]);
+            throw new ValidationException("Reserva no encontrada");
         }
 
         return $reserva;
     }
 
-    // Crea una nueva reserva
     public function createReserva(array $data): array
     {
-        $this->validateReservaData($data);
-        return $this->model->create($data);
+        $required = ['asignatura','grupo','profesor','inicio','fin','id_usuario','actividad','id_espacio'];
+
+        foreach ($required as $field) {
+            if (empty($data[$field])) {
+                throw new ValidationException("El campo {$field} es obligatorio");
+            }
+        }
+
+        // 1️⃣ Crear reserva
+        $idReserva = $this->model->createReserva($data);
+
+        // 2️⃣ Crear relación con espacio
+        $this->model->createReservaEspacio(
+            $idReserva,
+            $data['actividad'],
+            $data['id_espacio']
+        );
+
+        // 3️⃣ Devolver objeto completo (NO el int)
+        return [
+            'id_reserva' => $idReserva,
+            'message' => 'Reserva creada correctamente'
+        ];
     }
 
-    // Actualiza una reserva existente
     public function updateReserva(int $id, array $data): array
-    {
-        $this->getReservaById($id);
-        $this->validateReservaData($data, false);
-        return $this->model->update($id, $data);
+{
+    // comprobar que existe
+    $reserva = $this->model->getById($id);
+
+    if (!$reserva) {
+        throw new ValidationException("Reserva no encontrada");
     }
 
-    // Elimina una reserva
-    public function deleteReserva(int $id): void
-    {
-        $this->getReservaById($id);
-        $this->model->delete($id);
-    }
+    // validar campos obligatorios
+    $required = ['asignatura','grupo','profesor','actividad'];
 
-    // Valida los datos de la reserva
-    private function validateReservaData(array $data, bool $isNew = true): void
-    {
-        $errors = [];
-
-        if (empty($data['actividad'])) {
-            $errors['actividad'] = "La actividad es obligatoria";
-        }
-
-        if (!isset($data['id_espacio']) || !is_numeric($data['id_espacio'])) {
-            $errors['id_espacio'] = "El ID del espacio es obligatorio y debe ser numérico";
-        }
-
-        if (!empty($errors)) {
-            throw new ValidationException($errors);
+    foreach ($required as $field) {
+        if (empty($data[$field])) {
+            throw new ValidationException("El campo {$field} es obligatorio");
         }
     }
+
+    // actualizar reserva
+    $this->model->updateReserva($id, $data);
+
+    return [
+        'id_reserva' => $id,
+        'message' => 'Reserva actualizada correctamente'
+    ];
+}
 }

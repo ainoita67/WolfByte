@@ -21,12 +21,27 @@ class RecursoController
 
     /**
      * GET /recurso
-     * Devuelve todos los recursos activos
+     * Devuelve todos los recursos
      */
     public function index(Request $req, Response $res): void
     {
         try {
             $recursos = $this->service->getAllRecursos();
+            $res->status(200)->json($recursos);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+
+    /**
+     * GET /recurso/activos
+     * Devuelve todos los recursos activos
+     */
+    public function indexActivos(Request $req, Response $res): void
+    {
+        try {
+            $recursos = $this->service->getAllRecursosActivos();
             $res->status(200)->json($recursos);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
@@ -48,4 +63,18 @@ class RecursoController
             $res->errorJson($e->getMessage(), 500);
         }
     }
+
+    // Mostrar recurso por ID
+    public function show(Request $req, Response $res, string $id): void
+    {
+        try {
+            $recurso = $this->service->getRecursoById($id);
+            $res->status(200)->json($recurso);
+        } catch (ValidationException $e) {
+            $res->status(422)->json(['errors' => $e->errors]);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
 }

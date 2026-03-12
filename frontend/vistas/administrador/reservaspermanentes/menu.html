@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+    <script>const BASE = window.location.origin + "/frontend";</script>
+    <script>const API = window.location.origin + "/API";</script>
+    <!--
+        AÑADE:
+            <script src="/frontend/javascript/includes.js"></script>
+            <script src="/frontend/javascript/menu.js"></script>
+        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
+        -->
+    <script>
+        const rol = sessionStorage.getItem("rol");
+        const script1 = document.createElement("script");
+        script1.src = BASE + "/javascript/includes.js";
+        script1.onload = () => {
+            const script2 = document.createElement("script");
+            script2.src = BASE + "/javascript/menu.js";
+            script2.onload = () => {
+                generarPagina("aulas", rol);
+            };
+            // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+            document.head.appendChild(script2);
+        };
+        document.head.appendChild(script1);
+
+        // authGuard
+        const scriptAuth = document.createElement('script');
+        scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
+        document.head.appendChild(scriptAuth);
+    </script>
+    <title>Menú principal - IES Bajo Aragón</title>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main class="container-fluid w-100 row p-0">
+        <div class="d-flex h-100">
+            <!-- ASIDE (desktop fijo) -->
+            <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="./../logacciones/logacciones.html">Log
+                            de Acciones</a></li>
+                    <hr class="my-3">
+                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                de Reservas</a></li>
+                    </ul>
+                </ul>
+            </aside>
+
+            <!-- CONTENIDO -->
+            <section class="flex-grow-1 p-3 p-lg-4 pt-5">
+
+                <!-- Botón menú SOLO en móvil/tablet -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                        <i class="bi bi-list"></i> Menú Admin
+                    </button>
+                </div>
+
+                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                    aria-labelledby="adminOffcanvasLabel">
+                    <div class="offcanvas-header mb-0 pb-1">
+                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="offcanvas-body mt-0 pt-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../usuarios/usuarios.html">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../portatiles/portatiles.html">Portátiles</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../logacciones/logacciones.html">Log de Acciones</a></li>
+                            <hr class="my-3">
+                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                        de Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                        de Reservas</a></li>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <h2 class="text-center mb-5" style="color:#274C9C;">Reservas Permanentes</h2>
+                    <div class="row g-4 justify-content-center">
+
+                        <!-- Todas las reservas -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-card-list display-3 mb-3"></i>
+                                <h5>Todas las reservas</h5>
+                                <p class="text-muted small">Visualiza y edita todas las reservas permanentes sin
+                                    filtros. Elimina todas las reservas de golpe.</p>
+                            </div>
+                        </div>
+
+                        <!-- Por aula -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-building display-3 mb-3"></i>
+                                <h5>Aulas</h5>
+                                <p class="text-muted small">Gestiona las reservas permanentes ordenadas por edificio,
+                                    planta y aula.</p>
+                            </div>
+                        </div>
+
+                        <!-- Carrito de portátiles -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-laptop display-3 mb-3"></i>
+                                <h5>Carrito de portátiles</h5>
+                                <p class="text-muted small">Gestiona las reservas permanentes de cada carrito.</p>
+                            </div>
+                        </div>
+
+                        <!-- Otros espacios -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-geo-alt display-3 mb-3"></i>
+                                <h5>Otros espacios</h5>
+                                <p class="text-muted small">Gestiona las reservas permanentes de otros espacios
+                                    disponibles.</p>
+                            </div>
+                        </div>
+
+                        <!-- Reservas desactivadas/eliminadas -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-trash display-3 mb-3"></i>
+                                <h5>Reservas eliminadas</h5>
+                                <p class="text-muted small">Consulta las reservas desactivadas o eliminadas.</p>
+                            </div>
+                        </div>
+
+                        <!-- Carga Masiva -->
+                        <div class="col-12 col-sm-6 col-xl-3">
+                            <div class="card-modern cursor-pointer">
+                                <i class="bi bi-file-earmark-arrow-up display-3 mb-3"></i>
+                                <h5>Carga Masiva</h5>
+                                <p class="text-muted small">Sube un CSV para importar reservas automáticamente</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                    <button onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i
+                            class="bi bi-caret-left-fill"></i> Volver</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Obtenemos todas las tarjetas
+        const tarjetas = document.querySelectorAll(".card-modern");
+
+        // Asignamos las rutas correspondientes
+        const rutas = [
+            "todasreservas.html",
+            "aulas.html",
+            "portatiles.html",
+            "otros.html",
+            "eliminadas.html",
+            "cargamasiva.html"
+        ];
+
+        tarjetas.forEach((tarjeta, index) => {
+            // Evita errores si hay más tarjetas de las rutas
+            if (rutas[index]) {
+                tarjeta.style.cursor = "pointer"; // asegura que se vea clickable
+                tarjeta.addEventListener("click", () => {
+                    window.location.href = rutas[index];
+                });
+            }
+        });
+    });
+</script>
+
+</html>

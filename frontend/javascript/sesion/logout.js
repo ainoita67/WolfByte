@@ -1,8 +1,13 @@
-document.getElementById('logoutBtn').addEventListener('click', async () => {
+document.addEventListener('click', async (e) => {
+
+    if (!e.target.closest('#logoutBtn')) return;
+
+    e.preventDefault();
+
     try {
-        const response = await fetch('http://192.168.13.202/API/logout', {
-            method: 'POST',      // O 'GET', tu API soporta ambos
-            credentials: 'include'  // Muy importante para enviar la cookie de sesión
+        const response = await fetch(`${API}/logout`, {
+            method: 'POST',
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -11,15 +16,15 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
             throw new Error(data.message || 'Error al cerrar sesión');
         }
 
-        console.log('Logout OK:', data);
+        // Limpiar almacenamiento
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('correo');
+        sessionStorage.removeItem('rol');
+        sessionStorage.removeItem('id_usuario');
 
-        // Redirige al login
-        window.location.href = '/frontend/auth/login.html';
+        window.location.href = `${BASE}/auth/login.html`;
 
     } catch (error) {
         alert(error.message);
     }
 });
-
-
-

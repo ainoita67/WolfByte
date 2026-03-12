@@ -22,10 +22,10 @@ class EdificioModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Edificio")
+                ->query("SELECT * FROM Edificio ORDER BY nombre_edificio")
                 ->fetchAll();
         } catch (PDOException $e) {
-            throw new \Exception("Error al obtener edificios");
+            throw new \Exception("Error al obtener edificios: " . $e->getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ class EdificioModel
                 ->bind(':id', $id)
                 ->fetch();
         } catch (PDOException $e) {
-            throw new \Exception("Error al buscar el edificio");
+            throw new \Exception("Error al buscar edificio: " . $e->getMessage());
         }
     }
 
@@ -51,16 +51,16 @@ class EdificioModel
     {
         try {
             $this->db
-                ->query("
-                    INSERT INTO Edificio (nombre_edificio)
-                    VALUES (:nombre)
-                ")
+                ->query("INSERT INTO Edificio (nombre_edificio) VALUES (:nombre)")
                 ->bind(':nombre', $data['nombre_edificio'])
                 ->execute();
 
-            return $this->findById((int)$this->db->lastId());
+            $id = (int)$this->db->lastId();
+            
+            return $this->findById($id);
+            
         } catch (PDOException $e) {
-            throw new \Exception("Error al crear el edificio");
+            throw new \Exception("Error al crear edificio: " . $e->getMessage());
         }
     }
 
@@ -71,18 +71,15 @@ class EdificioModel
     {
         try {
             $this->db
-                ->query("
-                    UPDATE Edificio
-                    SET nombre_edificio = :nombre
-                    WHERE id_edificio = :id
-                ")
+                ->query("UPDATE Edificio SET nombre_edificio = :nombre WHERE id_edificio = :id")
                 ->bind(':nombre', $data['nombre_edificio'])
                 ->bind(':id', $id)
                 ->execute();
 
             return $this->findById($id);
+            
         } catch (PDOException $e) {
-            throw new \Exception("Error al actualizar el edificio");
+            throw new \Exception("Error al actualizar edificio: " . $e->getMessage());
         }
     }
 
@@ -96,8 +93,9 @@ class EdificioModel
                 ->query("DELETE FROM Edificio WHERE id_edificio = :id")
                 ->bind(':id', $id)
                 ->execute();
+                
         } catch (PDOException $e) {
-            throw new \Exception("Error al eliminar el edificio");
+            throw new \Exception("Error al eliminar edificio: " . $e->getMessage());
         }
     }
 }

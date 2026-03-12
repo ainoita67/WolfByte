@@ -136,5 +136,8 @@ class Validator
 
         return $value;
     }
-
+    
+    public static function capitalizar(string $string){
+        return ucfirst(strtolower($string));
+    }
 }
