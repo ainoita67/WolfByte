@@ -33,7 +33,13 @@ export async function cargarReservas(idRecurso) {
             text: ` ${r.unidades} unidades - ${r.asignatura} - ${r.grupo} ${r.profesor}`,
             start: r.inicio.replace(" ", "T"),
             end: r.fin.replace(" ", "T"),
-            unidades: Number(r.unidades)
+            unidades: Number(r.unidades),
+            asignatura: r.asignatura,       // ✅ añadir
+            grupo: r.grupo,                 // ✅ añadir
+            profesor: r.profesor,           // ✅ añadir
+            actividad: r.actividad ?? "",   // ✅ añadir
+            observaciones: r.observaciones ?? "",  // ✅ añadir
+            autorizada: r.autorizada        // ✅ añadir (para el color naranja)
         }));
 
         return eventos; // array de eventos para el calendario
@@ -55,6 +61,7 @@ export async function generarEventos(idRecurso, unidadesRecurso) {
     const eventosReservas = await cargarReservas(idRecurso) || [];
     // Combinar eventos disponibles con reservas reales (reservas reales tienen prioridad)
     const eventoscombinados = combinarDisponiblesYReservas(eventosdisponibles, eventosReservas, unidadesRecurso);
-
     return eventoscombinados;
+    
+
 }
