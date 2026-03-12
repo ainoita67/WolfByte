@@ -59,7 +59,7 @@ class NecesidadReservaModel
                 ->bind(':necesidad', $data['id_necesidad'])
                 ->execute();
 
-            return $this->findById((int)$this->db->lastId());
+            return $this->findById((int)$data['id_reserva_espacio']);
         } catch (PDOException $e) {
             throw new \Exception("Error al crear la necesidad de reserva");
         }

@@ -28,6 +28,19 @@ function obtenerReservasProximas(){
     });
 }
 
+function obtenerMisReservas(){
+    usuario=sessionStorage.getItem("id_usuario");
+    console.log(window.location.origin+"/API/mis-reservas/"+usuario);
+    fetch(window.location.origin+"/API/mis-reservas/"+usuario)
+    .then(res => res.json())
+    .then(response => {
+        let reservas = response.data;
+        let tarjetasReservas = document.getElementById("misReservasTarjetas");
+        if(!tarjetasReservas) return;
+        mostrarMisReservas(reservas, tarjetasReservas);
+    });
+}
+
 function mostrarReservasTarjetas(reservas, tarjetasReservas){
     tarjetasReservas.innerHTML = "";
     if(!reservas||reservas.length === 0){
@@ -63,60 +76,143 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
             `;
 
             divReserva.addEventListener("click", function(){
-                let autorizada='Denegada';
-                if(reserva.autorizada==null){
-                    autorizada='Pendiente';
-                }else if(reserva.autorizada==1){
-                    autorizada='Autorizada';
-                }
-                document.getElementById("reserva_autorizada").value = reserva.autorizada;
-                document.getElementById("reserva_id").value = reserva.id_reserva;
-                document.getElementById("reserva_f_creacion").value = reserva.f_creacion;
-                document.getElementById("reserva_inicio").value = reserva.inicio;
-                document.getElementById("reserva_fin").value = reserva.fin;
-                document.getElementById("reserva_tipo").value = reserva.tipo;
-                document.getElementById("reserva_espacio_portatil").value = reserva.id_recurso;
-                document.getElementById("reserva_asignatura").value = reserva.asignatura;
-                document.getElementById("reserva_grupo").value = reserva.grupo;
-                document.getElementById("reserva_profesor").value = reserva.profesor;
-                document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
-                document.getElementById("reserva_usuario").value = reserva.nombreusuario;
-                
-                document.getElementById("reserva_unidades").value = reserva.unidades;
-                document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;
-                document.getElementById("reserva_actividad").value = reserva.actividad;
-                document.getElementById("reserva_necesidades").value = reserva.necesidades;
-                document.getElementById("reserva_observaciones").value = reserva.observaciones;
-                                
-                if (reserva.tipo == 'Reserva_espacio') {
-                    document.getElementById("div_reserva_usuario").classList.add('col-lg-6');
-                    document.getElementById("div_reserva_unidades").classList.add('d-none');
-                    document.getElementById("reserva_unidades").required = false;
-                    document.getElementById("div_reserva_espacio_uso").classList.add('d-none');
-                    document.getElementById("reserva_espacio_uso").required = false;
-                    document.getElementById("div_reserva_actividad").classList.remove('d-none');
-                    document.getElementById("reserva_actividad").required = true;
-                    document.getElementById("div_reserva_necesidades").classList.remove('d-none');
-                } else {
-                    document.getElementById("div_reserva_usuario").classList.remove('col-lg-6');
-                    document.getElementById("div_reserva_unidades").classList.remove('d-none');
-                    document.getElementById("reserva_unidades").required = true;
-                    document.getElementById("div_reserva_espacio_uso").classList.remove('d-none');
-                    document.getElementById("reserva_espacio_uso").required = true;
-                    document.getElementById("div_reserva_actividad").classList.add('d-none');
-                    document.getElementById("reserva_actividad").required = false;
-                    document.getElementById("div_reserva_necesidades").classList.add('d-none');
-                }
-
-                if(reserva.autorizada!=null){
-                    document.getElementById("div_botones_autorizar").classList.add('d-none');
-                }else{
-                    document.getElementById("div_botones_autorizar").classList.remove('d-none');
-                }
+                mostrarDatosModal(reserva);
             });
 
             tarjetasReservas.appendChild(divReserva);
         });
+    }
+}
+
+function mostrarMisReservas(reservas, tarjetasReservas){
+    tarjetasReservas.innerHTML = "";
+    if(!reservas||reservas.length === 0){
+        let card = document.createElement("div");
+        card.className = "card h-100 p-0 mb-4 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body bg-secondary-subtle">No se han encontrado reservas</div>
+        `;
+        tarjetasReservas.appendChild(card);
+    }else{
+        reservas.forEach(reserva => {
+            let div = document.createElement("div");
+            div.className="col-lg-3 col-6";
+            let divReserva = document.createElement("div");
+            divReserva.className="card h-100 p-0 mb-4 reserva-card";
+            divReserva.setAttribute("role", "button");
+            divReserva.setAttribute("data-bs-toggle", "modal");
+            divReserva.setAttribute("data-bs-target", "#modalReserva");
+            divReserva.setAttribute("data-id", reserva.id_reserva);
+            divReserva.setAttribute("data-titulo", reserva.titulo);
+
+            let tipo='Portátil';                
+            if(reserva.tipo == 'Reserva_espacio'){
+                tipo='Espacio';
+            }
+
+            divReserva.innerHTML = `
+                <div class="card-body bg-secondary-subtle">
+                    <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
+                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
+                    <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
+                    <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
+                    ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
+                </div>
+            `;
+            if(reserva.autorizada=="1"){
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado aceptado"></div>';
+            }else if(reserva.autorizada=="0"){
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado"></div>';
+            }else{
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado"></div>';
+            }
+
+            divReserva.addEventListener("click", function(){
+                mostrarDatosModal(reserva);
+            });
+
+            div.appendChild(divReserva);
+            tarjetasReservas.appendChild(div);
+        });
+    }
+}
+
+
+function mostrarDatosModal(reserva){
+    console.log(reserva);
+    let selectNecesidades = document.getElementById("reserva_necesidades");
+  
+    if(reserva.tipo == "Reserva_espacio"){
+        let necesidades=[];
+
+        if(typeof reserva.necesidades === "string"){
+            necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+        }
+
+        for (let i = 0; i < selectNecesidades.options.length; i++) {
+            selectNecesidades.options[i].selected = false;
+            selectNecesidades.options[i].classList.remove("border", "border-primary");
+        }
+
+        necesidades.forEach(nec => {
+            for (let i = 0; i < selectNecesidades.options.length; i++) {
+                if (selectNecesidades.options[i].value === nec) {
+                    selectNecesidades.options[i].selected = true;
+                    selectNecesidades.options[i].classList.add("border", "border-primary");
+                }
+            }
+        });
+    }
+
+    let autorizada='Denegada';
+    if(reserva.autorizada==null){
+        autorizada='Pendiente';
+    }else if(reserva.autorizada==1){
+        autorizada='Autorizada';
+    }
+    document.getElementById("reserva_autorizada").value = autorizada;
+    document.getElementById("reserva_id").value = reserva.id_reserva;
+    document.getElementById("reserva_f_creacion").value = reserva.f_creacion;
+    document.getElementById("reserva_inicio").value = reserva.inicio;
+    document.getElementById("reserva_fin").value = reserva.fin;
+    document.getElementById("reserva_tipo").value = reserva.tipo;
+    document.getElementById("reserva_espacio_portatil").value = reserva.id_recurso;
+    document.getElementById("reserva_asignatura").value = reserva.asignatura;
+    document.getElementById("reserva_grupo").value = reserva.grupo;
+    document.getElementById("reserva_profesor").value = reserva.profesor;
+    document.getElementById("reserva_id_usuario").value = reserva.id_usuario;
+    document.getElementById("reserva_usuario").value = reserva.nombreusuario;
+    document.getElementById("reserva_id_usuario_autoriza").value = reserva.id_usuario_autoriza;
+    
+    document.getElementById("reserva_unidades").value = reserva.unidades;
+    document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;
+    document.getElementById("reserva_actividad").value = reserva.actividad;
+    document.getElementById("reserva_observaciones").value = reserva.observaciones;
+                    
+    if (reserva.tipo == 'Reserva_espacio') {
+        document.getElementById("div_reserva_usuario").classList.add('col-lg-6');
+        document.getElementById("div_reserva_unidades").classList.add('d-none');
+        document.getElementById("reserva_unidades").required = false;
+        document.getElementById("div_reserva_espacio_uso").classList.add('d-none');
+        document.getElementById("reserva_espacio_uso").required = false;
+        document.getElementById("div_reserva_actividad").classList.remove('d-none');
+        document.getElementById("reserva_actividad").required = true;
+        document.getElementById("div_reserva_necesidades").classList.remove('d-none');
+    } else {
+        document.getElementById("div_reserva_usuario").classList.remove('col-lg-6');
+        document.getElementById("div_reserva_unidades").classList.remove('d-none');
+        document.getElementById("reserva_unidades").required = true;
+        document.getElementById("div_reserva_espacio_uso").classList.remove('d-none');
+        document.getElementById("reserva_espacio_uso").required = true;
+        document.getElementById("div_reserva_actividad").classList.add('d-none');
+        document.getElementById("reserva_actividad").required = false;
+        document.getElementById("div_reserva_necesidades").classList.add('d-none');
+    }
+
+    if(reserva.autorizada!=null){
+        document.getElementById("div_botones_autorizar").classList.add('d-none');
+    }else{
+        document.getElementById("div_botones_autorizar").classList.remove('d-none');
     }
 }
 

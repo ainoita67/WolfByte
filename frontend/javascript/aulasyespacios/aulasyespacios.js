@@ -1,5 +1,5 @@
 // aulasyespacios.js
-const DOMAIN = "http://192.168.13.202:83/API";
+const API_BASE = `${API}`;
 
 // Variables globales
 let edificios = [];
@@ -8,7 +8,7 @@ let espaciosGlobal = [];
 // ************  OBTENER DATOS ****************** //
 
 async function getEspacios() {
-    const URL = DOMAIN + "/espacios";
+    const URL = API_BASE + "/espacios";
 
     try {
         console.log("🔍 Obteniendo espacios de:", URL);
@@ -47,7 +47,7 @@ async function getEspacios() {
 }
 
 async function getEdificios() {
-    const URL = DOMAIN + "/edificios";
+    const URL = API_BASE + "/edificios";
 
     try {
         console.log("🔍 Obteniendo edificios de:", URL);

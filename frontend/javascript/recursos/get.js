@@ -35,3 +35,32 @@ function obtenerRecursosSelect(){
     })
     .catch(error => console.error("<p>Error al obtener recursos</p>", error));
 }
+
+export async function getInfoRecurso(id_recurso) {
+  try {
+    const response = await fetch(`${API}/recurso/${id_recurso}`);
+    if (!response.ok) throw new Error("Error al obtener informacion del recurso");
+
+    const json = await response.json();
+
+    const recurso = {
+        id: json.data.id_recurso,
+        descripcion: json.data.descripcion,
+        tipo: json.data.tipo,
+        activo: json.data.activo === 1,
+        especial: json.data.especial === 1,
+        numero_planta: json.data.numero_planta,
+        nombre_planta: json.data.nombre_planta,
+        id_edificio: json.data.id_edificio,
+        nombre_edificio: json.data.nombre_edificio,
+        es_aula: json.data.es_aula === 1,
+        unidades: json.data.unidades,
+        caracteristicas: json.data.caracteristicas || []
+    }
+
+    return recurso;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}

@@ -43,8 +43,12 @@ class NecesidadReservaController
     public function store(Request $req, Response $res): void
     {
         try {
-            $data = $req->getBody();
-            $necesidad = $this->service->createNecesidad($data);
+            $data = $req->getBody() ?? [];
+            if(!$data||empty($data)){
+                $necesidad = $this->service->createNecesidad(null);
+            }else{
+                $necesidad = $this->service->createNecesidad($data);
+            }
             $res->status(201)->json($necesidad);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
@@ -57,8 +61,12 @@ class NecesidadReservaController
     {
         try {
             $id = is_array($args) ? (int)$args['id'] : (int)$args;
-            $data = $req->getBody();
-            $necesidad = $this->service->updateNecesidad($id, $data);
+            $data = $req->getBody() ?? [];
+            if(!$data||empty($data)){
+                $necesidad = $this->service->updateNecesidad($id, null);
+            }else{
+                $necesidad = $this->service->updateNecesidad($id, $data);
+            }
             $res->status(200)->json($necesidad);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);

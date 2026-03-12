@@ -6,6 +6,7 @@ namespace Services;
 use Core\Request;
 use Core\Response;
 use Models\RecursoModel;
+use Models\EspacioModel;
 use Throwable;
 use Validation\Validator;
 use Validation\ValidationException;
@@ -13,10 +14,12 @@ use Validation\ValidationException;
 class RecursoService
 {
     private RecursoModel $model;
+    private EspacioModel $espacioModel;
 
     public function __construct()
     {
         $this->model = new RecursoModel();
+        $this->espacioModel = new EspacioModel();
     }
 
     /**
@@ -33,6 +36,30 @@ class RecursoService
     public function getAllRecursosActivos(): array
     {
         return $this->model->getAllActivos();
+    }
+
+    /**
+     * Obtener recurso por ID
+     */
+    public function getRecursoById(string $id): array
+    {
+        Validator::validate(['id' => $id], [
+            'id' => 'required|string|min:1'
+        ]);
+
+        try {
+            $recurso = $this->model->findById($id);
+            $caracteristicas = $this->espacioModel->getCaracteristicasEspacio($recurso['id_recurso']) ?? [];
+            $recurso['caracteristicas'] = $caracteristicas;
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+
+        if (!$recurso) {
+            throw new \Exception("Recurso no encontrado", 404);
+        }
+
+        return $recurso;
     }
 
     /**

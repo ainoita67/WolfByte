@@ -32,17 +32,91 @@ class ReservaModel
     /**
      * Obtener reservas por usuario
      */
+    // public function getByUsuario(int $idUsuario): array
+    // {
+    //     try {
+    //         return $this->db
+    //             ->query("
+    //                 SELECT *
+    //                 FROM Reserva
+    //                 WHERE id_usuario = :id_usuario
+    //                 ORDER BY inicio DESC
+    //             ")
+    //             ->bind(':id_usuario', $idUsuario)
+    //             ->fetchAll();
+    //     } catch (PDOException $e) {
+    //         throw new \Exception("Error al obtener reservas del usuario");
+    //     }
+    // }
+
+
     public function getByUsuario(int $idUsuario): array
     {
-        try {
+        try{
             return $this->db
                 ->query("
                     SELECT *
-                    FROM Reserva
-                    WHERE id_usuario = :id_usuario
-                    ORDER BY inicio DESC
+                    FROM(
+                        SELECT
+                            r.id_reserva,
+                            r.autorizada,
+                            r.id_usuario_autoriza,
+                            r.tipo,
+                            r.f_creacion,
+                            r.inicio,
+                            r.fin,
+                            rec.descripcion AS recurso,
+                            r.asignatura,
+                            r.grupo,
+                            r.profesor,
+                            rec.id_recurso,
+                            NULL AS unidades,
+                            NULL AS usaenespacio,
+                            re.actividad,
+                            GROUP_CONCAT(n.id_necesidad) AS necesidades,
+                            r.observaciones,
+                            u.id_usuario,
+                            u.nombre AS nombreusuario
+                        FROM Reserva r
+                        JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                        JOIN Recurso rec ON rec.id_recurso = re.id_espacio
+                        LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
+                        LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                        JOIN Usuario u ON r.id_usuario = u.id_usuario
+                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND u.id_usuario=:id_usuario1
+                        GROUP BY r.id_reserva
+
+                        UNION ALL
+
+                        SELECT
+                            r.id_reserva,
+                            r.autorizada,
+                            r.id_usuario_autoriza,
+                            r.tipo,
+                            r.f_creacion,
+                            r.inicio,
+                            r.fin,
+                            rec.descripcion AS recurso,
+                            r.asignatura,
+                            r.grupo,
+                            r.profesor,
+                            rec.id_recurso,
+                            rp.unidades,
+                            rp.usaenespacio,
+                            NULL AS actividad,
+                            NULL AS necesidades,
+                            r.observaciones,
+                            u.id_usuario,
+                            u.nombre AS nombreusuario
+                        FROM Reserva r
+                        JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                        JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                        JOIN Usuario u ON r.id_usuario = u.id_usuario
+                        WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND u.id_usuario=:id_usuario2
+                    ) union_result ORDER BY inicio, id_reserva;
                 ")
-                ->bind(':id_usuario', $idUsuario)
+                ->bind(':id_usuario1', $idUsuario)
+                ->bind(':id_usuario2', $idUsuario)
                 ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas del usuario");
@@ -70,6 +144,7 @@ class ReservaModel
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.id_usuario_autoriza,
                     r.tipo,
                     r.f_creacion,
                     r.inicio,
@@ -82,7 +157,7 @@ class ReservaModel
                     NULL AS unidades,
                     NULL AS usaenespacio,
                     re.actividad,
-                    n.nombre AS necesidades,
+                    GROUP_CONCAT(n.id_necesidad) AS necesidades,
                     r.observaciones,
                     u.id_usuario,
                     u.nombre AS nombreusuario
@@ -92,13 +167,15 @@ class ReservaModel
                 LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                 LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_espacio' AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada IS NULL
+                GROUP BY r.id_reserva
 
                 UNION ALL
 
                 SELECT
                     r.id_reserva,
                     r.autorizada,
+                    r.id_usuario_autoriza,
                     r.tipo,
                     r.f_creacion,
                     r.inicio,
@@ -119,7 +196,7 @@ class ReservaModel
                 JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                 JOIN Recurso rec ON rec.id_recurso = rp.id_material
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_material' AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND r.autorizada IS NULL
             ")
             ->fetchAll();
     }
@@ -136,6 +213,7 @@ class ReservaModel
                     SELECT
                         r.id_reserva,
                         r.autorizada,
+                        r.id_usuario_autoriza,
                         r.tipo,
                         r.f_creacion,
                         r.inicio,
@@ -148,7 +226,7 @@ class ReservaModel
                         NULL AS unidades,
                         NULL AS usaenespacio,
                         re.actividad,
-                        n.nombre AS necesidades,
+                        GROUP_CONCAT(n.id_necesidad) AS necesidades,
                         r.observaciones,
                         u.id_usuario,
                         u.nombre AS nombreusuario
@@ -159,12 +237,14 @@ class ReservaModel
                     LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
                     WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada=1
+                    GROUP BY r.id_reserva
 
                     UNION ALL
 
                     SELECT
                         r.id_reserva,
                         r.autorizada,
+                        r.id_usuario_autoriza,
                         r.tipo,
                         r.f_creacion,
                         r.inicio,

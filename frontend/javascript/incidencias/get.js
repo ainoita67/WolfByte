@@ -64,7 +64,7 @@ function mostrarIncidencias(incidencias){
                     <button class="btn btn-sm bg-warning text-black"
                             data-bs-toggle="modal"
                             data-bs-target="#modalEditar"
-                            onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}')">
+                            onclick="editarIncidencia(${incidencia.id_incidencia}, '${incidencia.titulo}', '${incidencia.descripcion}', '${incidencia.prioridad}', '${incidencia.estado}', '${incidencia.fecha}', '${incidencia.id_recurso}', '${incidencia.id_usuario}')">
                         <i class="bi bi-pencil"></i> Editar
                     </button>
                 </td>
@@ -138,6 +138,9 @@ function activarFiltrarIncidencia(tipo, limite=5){
         });
     });
 }
+
+
+
 
 
 // CREAR INCIDENCIA
@@ -606,7 +609,12 @@ function formatearFecha(stringFecha){
 
 //MIS INCIDENCIAS
 
-function obtenerMisIncidencias(usuario){
+let todasLasIncidencias = [];
+let paginaActual = 1;
+let itemsPorPagina = 8;
+
+function obtenerMisIncidencias(){
+    usuario=sessionStorage.getItem("id_usuario");
     fetch(window.location.origin+"/API/incidencias/usuario/"+usuario)
     .then(res => res.json())
     .then(response => {
@@ -620,18 +628,97 @@ function obtenerMisIncidencias(usuario){
                 <div class="card-body">No se han encontrado incidencias</div>
             `;
             tarjetasIncidencias.appendChild(card);
+            
+            // Eliminar paginación si existe
+            let paginacionExistente = document.getElementById("paginacionIncidencias");
+            if(paginacionExistente) paginacionExistente.remove();
         }else{
-            mostrarMisIncidencias(incidencias);
+            todasLasIncidencias = incidencias.reverse(); // Guardamos todas
+            paginaActual = 1;
+            mostrarPaginaActual();
+            crearControlesPaginacion();
         };
     });
 }
 
+function mostrarPaginaActual() {
+    const inicio = (paginaActual - 1) * itemsPorPagina;
+    const fin = inicio + itemsPorPagina;
+    const incidenciasPagina = todasLasIncidencias.slice(inicio, fin);
+    mostrarMisIncidencias(incidenciasPagina);
+}
 
+function crearControlesPaginacion() {
+    const totalPaginas = Math.ceil(todasLasIncidencias.length / itemsPorPagina);
+    if(totalPaginas <= 1) return; // No mostrar paginación si solo hay una página
+    
+    // Buscar o crear contenedor de paginación
+    let paginacionContainer = document.getElementById('paginacionIncidencias');
+    if (!paginacionContainer) {
+        paginacionContainer = document.createElement('div');
+        paginacionContainer.id = 'paginacionIncidencias';
+        paginacionContainer.className = 'd-flex justify-content-center mt-4';
+        
+        // Insertar después del contenedor de tarjetas
+        const tarjetasContainer = document.getElementById('tarjetasIncidencias').parentNode;
+        tarjetasContainer.appendChild(paginacionContainer);
+    }
+    
+    let paginacionHTML = `
+        <nav aria-label="Paginación de incidencias" style="padding: 0 !important; margin: 0 !important;" class="d-flex justify-content-center bg-transparent p-0">
+            <ul class="pagination m-0">
+                <li class="page-item ${paginaActual === 1 ? 'disabled' : ''}" style="padding: 0 !important; margin: 0 !important;">
+                    <a class="page-link bg-white text-dark border-primary" href="#" onclick="cambiarPagina(${paginaActual - 1}); return false;" style="padding: 6px 12px !important; margin: 0 !important;">Anterior</a>
+                </li>
+    `;
+    
+    // Mostrar máximo 5 números de página
+    let inicioPaginas = Math.max(1, paginaActual - 2);
+    let finPaginas = Math.min(totalPaginas, inicioPaginas + 4);
+    
+    if (finPaginas - inicioPaginas < 4 && inicioPaginas > 1) {
+        inicioPaginas = Math.max(1, finPaginas - 4);
+    }
+    
+    for (let i = inicioPaginas; i <= finPaginas; i++) {
+        paginacionHTML += `
+            <li class="page-item ${i === paginaActual ? 'active' : ''}" style="padding: 0 !important; margin: 0 !important;">
+                <a class="page-link ${i === paginaActual ? 'bg-blue' : 'bg-white text-dark border-primary'}" href="#" onclick="cambiarPagina(${i}); return false;" style="padding: 6px 12px !important; margin: 0 !important;">${i}</a>
+            </li>
+        `;
+    }
+    
+    paginacionHTML += `
+                <li class="page-item ${paginaActual === totalPaginas ? 'disabled' : ''}" style="padding: 0 !important; margin: 0 !important;">
+                    <a class="page-link bg-white text-dark border-primary" href="#" onclick="cambiarPagina(${paginaActual + 1}); return false;" style="padding: 6px 12px !important; margin: 0 !important;">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    `;
+    
+    paginacionContainer.innerHTML = paginacionHTML;
+}
+
+function cambiarPagina(nuevaPagina) {
+    const totalPaginas = Math.ceil(todasLasIncidencias.length / itemsPorPagina);
+    
+    if (nuevaPagina < 1 || nuevaPagina > totalPaginas) {
+        return;
+    }
+    
+    paginaActual = nuevaPagina;
+    mostrarPaginaActual();
+    crearControlesPaginacion();
+    
+    // Scroll suave hacia arriba
+    document.getElementById('tarjetasIncidencias').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 function mostrarMisIncidencias(incidencias){
     let tarjetasIncidencias = document.getElementById("tarjetasIncidencias");
     if(!tarjetasIncidencias) return;
     tarjetasIncidencias.innerHTML = "";
+    
     if(!incidencias||incidencias.length === 0){
         let card = document.createElement("div");
         card.className = "card bg-secondary-subtle h-100 reserva-card text-center";
@@ -640,7 +727,6 @@ function mostrarMisIncidencias(incidencias){
         `;
         tarjetasIncidencias.appendChild(card);
     }else{
-        incidencias=incidencias.reverse();
         incidencias.forEach(incidencia => {
             let div = document.createElement("div");
             div.className="col-lg-3 col-6";
@@ -663,13 +749,12 @@ function mostrarMisIncidencias(incidencias){
             if(incidencia.estado=="Abierta"){
                 divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta abierta cursor-pointer"></div>';
             }else if(incidencia.estado=="Resuelta"){
-                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta"></div>';
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta cursor-pointer"></div>';
             }else{
-                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso"></div>';
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso cursor-pointer"></div>';
             }
 
             divIncidencia.addEventListener("click", function(){
-
                 fetch(window.location.origin+"/API/user/"+incidencia.id_usuario)
                 .then(res => res.json())
                 .then(response => {
@@ -683,10 +768,8 @@ function mostrarMisIncidencias(incidencias){
                     document.getElementById("incidencia_id_usuario").value = incidencia.id_usuario;
                     document.getElementById("incidencia_usuario").value = usuario.nombre;
                     document.getElementById("incidencia_recurso").value = incidencia.id_recurso;
-
                     document.getElementById("incidencia_fecha").value = incidencia.fecha.replace(" ", "T");
                 });
-
             });
 
             div.appendChild(divIncidencia);

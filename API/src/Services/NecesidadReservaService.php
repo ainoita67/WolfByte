@@ -33,20 +33,47 @@ class NecesidadReservaService
 
     public function createNecesidad(array $data): array
     {
-        if (empty($data['id_reserva_espacio']) || empty($data['id_necesidad'])) {
+        if (empty($data['id_reserva_espacio']) || empty($data['necesidades'])) {
             throw new ValidationException("id_reserva_espacio y id_necesidad son obligatorios");
         }
-
-        return $this->model->create($data);
-    }
-
-    public function updateNecesidad(int $id, array $data): array
-    {
-        if (empty($data['id_necesidad'])) {
-            throw new ValidationException("id_necesidad es obligatorio");
+        $resultados=[];
+        foreach ($data['necesidades'] as $n) {
+            if (!isset($n['id_necesidad'])) {
+                throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+            }
+        }
+        foreach ($data['necesidades'] as $necesidad) {
+            $insertData = [
+                'id_reserva_espacio' => $data['id_reserva_espacio'],
+                'id_necesidad' => $necesidad['id_necesidad']
+            ];
+            $resultados = $this->model->create($insertData);
         }
 
-        return $this->model->update($id, $data);
+        return $resultados;
+    }
+
+    public function updateNecesidad(int $id, array $input): array
+    {
+        $resultados=[];
+        if($input==null){
+            $this->model->delete($id, $input);
+        }else{
+            foreach ($input['necesidades'] as $n) {
+                if (!isset($n['id_necesidad'])) {
+                    throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+                }
+            }
+            $this->model->delete($id, $input);
+            foreach ($input['necesidades'] as $necesidad) {
+                $data = [
+                    'id_reserva_espacio' => (int)$id,
+                    'id_necesidad' => (int)$necesidad['id_necesidad']
+                ];
+                $resultados = $this->model->create($data);
+            }
+        }
+        return $resultados;
     }
 
     public function deleteNecesidad(int $id): void
