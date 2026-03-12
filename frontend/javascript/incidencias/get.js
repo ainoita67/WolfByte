@@ -665,11 +665,11 @@ function mostrarMisIncidencias(incidencias){
                 </div>
             `;
             if(incidencia.estado=="Abierta"){
-                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta abierta cursor-pointer"></div>';
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta abierta"></div>';
             }else if(incidencia.estado=="Resuelta"){
-                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta cursor-pointer"></div>';
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta resuelta"></div>';
             }else{
-                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso cursor-pointer"></div>';
+                divIncidencia.innerHTML=divIncidencia.innerHTML+'<div class="estado-incidencia-abierta proceso"></div>';
             }
 
             divIncidencia.addEventListener("click", function(){
