@@ -98,7 +98,7 @@ function generateHeaderNav(menuactivo, role) {
                 menus.forEach(menu => {
                     const li = document.createElement('li');
                         const a = document.createElement('a');
-                            a.href = menu.href;
+                            a.href = `${BASE}${menu.href}`;
                             a.textContent = menu.texto;
                             a.classList.add("dropdown-item");
                             li.appendChild(a);
