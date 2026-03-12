@@ -32,24 +32,6 @@ class ReservaModel
     /**
      * Obtener reservas por usuario
      */
-    // public function getByUsuario(int $idUsuario): array
-    // {
-    //     try {
-    //         return $this->db
-    //             ->query("
-    //                 SELECT *
-    //                 FROM Reserva
-    //                 WHERE id_usuario = :id_usuario
-    //                 ORDER BY inicio DESC
-    //             ")
-    //             ->bind(':id_usuario', $idUsuario)
-    //             ->fetchAll();
-    //     } catch (PDOException $e) {
-    //         throw new \Exception("Error al obtener reservas del usuario");
-    //     }
-    // }
-
-
     public function getByUsuario(int $idUsuario): array
     {
         try{
