@@ -16,6 +16,7 @@ if (!token) {
         sessionStorage.setItem("rol", payload.rol);
         // guardar id_usuario en sessionStorage para usarlo en las reservas
         sessionStorage.setItem("id_usuario", payload.sub);
+        sessionStorage.setItem("nombre", payload.nombre);
 
         if (payload.exp && Date.now() >= payload.exp * 1000) {
             console.warn('Token expirado');
