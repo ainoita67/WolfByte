@@ -15,7 +15,9 @@ if (!token) {
         // Guardar datos en sessionStorage
         sessionStorage.setItem("correo", payload.email);
         sessionStorage.setItem("rol", payload.rol);
+        // guardar id_usuario en sessionStorage para usarlo en las reservas
         sessionStorage.setItem("id_usuario", payload.id_usuario);
+        sessionStorage.setItem("nombre", payload.nombre);
 
         // Verificar expiración
         if (payload.exp && Date.now() >= payload.exp * 1000) {
