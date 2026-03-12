@@ -194,7 +194,7 @@ if (!response.ok) {
 }
 
 const json = await response.json();
-const idReserva = json.data.id;
+const idReserva = json.data.id_reserva;
 
 const confirmar = await DayPilot.Modal.confirm("¿Quieres reservar un aula para esta reserva?");
 
