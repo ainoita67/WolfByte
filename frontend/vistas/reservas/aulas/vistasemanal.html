@@ -188,10 +188,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
     });
 
-    if (!response.ok) {
-        alert("Error creando la reserva");
-        return;
-    }
+if (!response.ok) {
+    alert("Error creando la reserva");
+    return;
+}
+
+const json = await response.json();
+const idReserva = json.data.id;
+
+const confirmar = await DayPilot.Modal.confirm("¿Quieres reservar un aula para esta reserva?");
+
+if (!confirmar.canceled) {
+
+    const inicio = evento.start;
+    const fin = evento.end;
+
+    window.location.href =
+        `${BASE}/vistas/liberar/liberar.html?id_reserva=${idReserva}&inicio=${inicio}&fin=${fin}`;
+
+    return;
+}
 
     const nuevosEventos = await generarEventos(idAula);
     dp.events.list = nuevosEventos;
