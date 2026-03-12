@@ -22,25 +22,13 @@ class ReservaPermanenteModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE activo=1 ORDER BY dia_semana, inicio")
+                ->query("SELECT * FROM Reserva_permanente WHERE activo=1")
                 ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas permanentes");
         }
     }
-    /**
-     * Obtener todas las reservas permanentes inactivas
-     */
-    public function getAllInactivas(): array
-    {
-        try {
-            return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE activo=0 ORDER BY dia_semana, inicio")
-                ->fetchAll();
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener reservas permanentes");
-        }
-    }
+
     /**
      * Obtener reserva permanente por ID
      */
@@ -63,7 +51,7 @@ class ReservaPermanenteModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE id_recurso = :id_recurso AND activo=1 ORDER BY dia_semana, inicio")
+                ->query("SELECT * FROM Reserva_permanente WHERE id_recurso = :id_recurso AND activo=1")
                 ->bind(':id_recurso', $id_recurso)
                 ->fetchAll();
         } catch (PDOException $e) {
@@ -79,15 +67,14 @@ class ReservaPermanenteModel
         try {
             $this->db
                 ->query("
-                    INSERT INTO Reserva_permanente (dia_semana, inicio, fin, comentario, activo, id_recurso, unidades)
-                    VALUES (:dia_semana, :inicio, :fin, :comentario, 1 , :id_recurso, :unidades)
+                    INSERT INTO Reserva_permanente (inicio, fin, comentario, activo, id_recurso)
+                    VALUES (:inicio, :fin, :comentario, :activo, :id_recurso)
                 ")
-                ->bind(':dia_semana',   $data['dia_semana'])
                 ->bind(':inicio',       $data['inicio'])
                 ->bind(':fin',          $data['fin'])
                 ->bind(':comentario',   $data['comentario'] ?? null)
+                ->bind(':activo',       $data['activo'])
                 ->bind(':id_recurso',   $data['id_recurso'])
-                ->bind(':unidades',     $data['unidades'])
                 ->execute();
 
             return $this->findById((int)$this->db->lastId());
@@ -101,102 +88,71 @@ class ReservaPermanenteModel
      */
     public function update(int $id, array $data): array
     {
-        $this->db
-            ->query("
-                UPDATE Reserva_permanente SET
-                    inicio = :inicio,
-                    fin = :fin,
-                    dia_semana = :dia_semana,
-                    comentario = :comentario,
-                    unidades = :unidades
-                WHERE id_reserva_permanente = :id
-            ")
-            ->bind(':id',           $id)
-            ->bind(':inicio',       $data['inicio'])
-            ->bind(':fin',          $data['fin'])
-            ->bind(':comentario',   $data['comentario'])
-            ->bind(':unidades',       $data['unidades'])
-            ->bind(':dia_semana',   $data['dia_semana'])
-            ->execute();
-
-        return $this->findById($id);
-    }
-
-
-    public function unidadesReservadas(string $id_recurso, int $dia_semana, string $inicio, string $fin): int
-    {
         try {
-            $result = $this->db
+            $this->db
                 ->query("
-                    SELECT SUM(unidades) as total_unidades
-                    FROM Reserva_permanente
-                    WHERE id_recurso = :id_recurso
-                    AND dia_semana = :dia_semana
-                    AND activo = 1
-                    AND (
-                        (inicio < :fin AND fin > :inicio)
-                    )
+                    UPDATE Reserva_permanente SET
+                        inicio = :inicio,
+                        fin = :fin,
+                        comentario = :comentario,
+                        activo = :activo,
+                        id_recurso = :id_recurso
+                    WHERE id_reserva_permanente = :id
                 ")
-                ->bind(':id_recurso',   $id_recurso)
-                ->bind(':dia_semana',   $dia_semana)
-                ->bind(':inicio',       $inicio)
-                ->bind(':fin',          $fin)
-                ->fetch();
+                ->bind(':id',           $id)
+                ->bind(':inicio',       $data['inicio'])
+                ->bind(':fin',          $data['fin'])
+                ->bind(':comentario',   $data['comentario'])
+                ->bind(':activo',       $data['activo'])
+                ->bind(':id_recurso',   $data['id_recurso'])
+                ->execute();
 
-            return (int)$result['total_unidades'];
+            return $this->findById($id);
         } catch (PDOException $e) {
-            throw new \Exception("Error al calcular las unidades reservadas");
+            throw new \Exception("Error al actualizar la reserva permanente");
         }
     }
 
-        /**
+    /**
      * Activar reserva permanente
      */
-    public function setActive(int $id): bool
+    public function activar(int $id): array
     {
-        $this->db
-            ->query("UPDATE Reserva_permanente SET activo = true WHERE id_reserva_permanente = :id")
-            ->bind(':id', $id)
-            ->execute();
+        try {
+            $this->db
+                ->query("
+                    UPDATE Reserva_permanente SET
+                        activo = :activo
+                    WHERE id_reserva_permanente = :id
+                ")
+                ->bind(':id',           $id)
+                ->bind(':activo',       1)
+                ->execute();
 
-        return $this->db->rowCount() > 0;
+            return $this->findById($id);
+        } catch (PDOException $e) {
+            throw new \Exception("Error al activar la reserva permanente");
+        }
     }
 
     /**
-     * Desactivar reserva permanente
-     */
-    public function setInactive(int $id): bool
-    {
-        $this->db
-            ->query("UPDATE Reserva_permanente SET activo = false WHERE id_reserva_permanente = :id")
-            ->bind(':id', $id)
-            ->execute();
-
-        return $this->db->rowCount() > 0;
-    }
-
-    /**
-     * Verificar si reserva permanente está activo
-     */
-    public function isActive(int $id): bool
-    {
-        $result = $this->db
-            ->query("SELECT activo FROM Reserva_permanente WHERE id_reserva_permanente = :id")
-            ->bind(':id', $id)
-            ->fetch();
-
-        return $result ? (bool) $result['activo'] : false;
-    }
-
-        /**
      * Desactivar todas las reservas permanentes
      */
-    public function desactivarTodo(): bool
+    public function desactivar(): array
     {
-        $this->db
-            ->query("UPDATE Reserva_permanente SET activo = false")
-            ->execute();
+        try {
+            $this->db
+                ->query("
+                    UPDATE Reserva_permanente SET
+                        activo = :activo
+                    WHERE activo = 1
+                ")
+                ->bind(':activo',   0)
+                ->execute();
 
-        return $this->db->rowCount() > 0;
+            return $this->getAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al desactivar las reservas permanentes");
+        }
     }
 }
