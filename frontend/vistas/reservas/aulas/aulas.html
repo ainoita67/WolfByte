@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             crearTarjetas(data, []);
         }, 0);
     });
+    
 
 });
 
@@ -233,7 +234,8 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
                     sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
 
                     const id = aula.id_recurso;
-                    window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}`;
+                    const especial = aula.autorizacion ? 1 : 0;
+                    window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}&especial=${encodeURIComponent(especial )}`;
                 });
                 aulasDiv.appendChild(btn);
             });

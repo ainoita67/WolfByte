@@ -142,6 +142,7 @@ export function aplicarLiberaciones(events, liberaciones) {
                     id: `lib-${idCounter++}`,
                     text: "Disponible (liberado)",
                     backColor: "#dcdcdc",
+                    bloqueBase: true,
                     borderColor: "#c3c3c3",
                     fontColor: "#212529",
                     barColor: "#2a457eb6",
