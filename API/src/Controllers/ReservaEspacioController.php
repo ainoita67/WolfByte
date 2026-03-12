@@ -6,19 +6,16 @@ namespace Controllers;
 use Core\Request;
 use Core\Response;
 use Services\ReservaEspacioService;
-use Services\NecesidadReservaService;
 use Throwable;
 use Validation\ValidationException;
 
 class ReservaEspacioController
 {
     private ReservaEspacioService $service;
-    private NecesidadReservaService $serviceNecesidad;
 
     public function __construct()
     {
         $this->service = new ReservaEspacioService();
-        $this->serviceNecesidad = new NecesidadReservaService();
     }
 
     public function index(Request $req, Response $res): void
@@ -63,22 +60,6 @@ class ReservaEspacioController
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
-        }
-        catch (Throwable $e) {
-            $res->errorJson($e->getMessage(), 500);
-        }
-    }
-
-    // Actualiza una reserva existente
-    public function update(Request $req, Response $res, string $id): void
-    {
-        try {
-            $data = $req->getBody();
-            $reserva = $this->service->updateReserva((int)$id, $data);
-            $this->serviceNecesidad->updateNecesidad((int)$id, $data);
-            $res->status(200)->json($reserva);
-        } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }

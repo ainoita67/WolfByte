@@ -28,65 +28,11 @@ class ReservaEspacioModel
                 ORDER BY r.inicio ASC
             ";
 
-    public function findById(int $id): array
-    {
-        try{
             return $this->db
-                ->query("
-                    SELECT
-                        r.id_reserva,
-                        r.asignatura,
-                        r.profesor,
-                        r.grupo,
-                        r.inicio,
-                        r.fin,
-                        re.actividad,
-                        re.id_espacio,
-                        GROUP_CONCAT(n.nombre) AS necesidades
-                    FROM Reserva r
-                    JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
-                    LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
-                    LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
-                    WHERE re.id_reserva=:id
-                    GROUP BY r.id_reserva
-                    ORDER BY r.inicio;
-                ")
-                ->bind(':id', $id)
+                ->query($sql)
+                ->bind(':idEspacio', $idEspacio)
                 ->fetchAll();
 
-        } catch (PDOException $e) {
-            throw new \Exception("Error al obtener reservas espacio");
-        }
-    }
-
-    /**
-     * Obtener reservas de un espacio concreto
-     */
-    public function getByEspacio(string $idEspacio): array
-    {
-        try{
-            return $this->db
-                ->query("
-                    SELECT
-                        r.id_reserva,
-                        r.asignatura,
-                        r.profesor,
-                        r.grupo,
-                        r.inicio,
-                        r.fin,
-                        re.actividad,
-                        re.id_espacio,
-                        GROUP_CONCAT(n.nombre) AS necesidades
-                    FROM Reserva r
-                    JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
-                    LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
-                    LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
-                    WHERE re.id_espacio=:espacio
-                    GROUP BY r.id_reserva
-                    ORDER BY r.inicio;
-                ")
-                ->bind(':espacio', $idEspacio)
-                ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas del espacio");
         }
