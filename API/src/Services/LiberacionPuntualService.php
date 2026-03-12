@@ -95,14 +95,26 @@ class LiberacionPuntualService
             'fin'                   => 'required|string',
             'comentario'            => 'string',
             'id_reserva'            => 'int',
-            'id_reserva_permanente' => 'required|int',
+            'id_recurso'            => 'required|int'
         ]);
-        
-        if (empty($data['id_reserva_permanente'])) {
-            throw new ValidationException(array("id_reserva_permanente es obligatorio"));
+
+        try {
+            $rPermanente = $this->model->findPermanenteLiberacion($data['id_recurso'], $data['inicio'], $data['fin']);
+            if (!$rPermanente) {
+                throw new \Exception("No se puede liberar porque no esta reservado", 422);
+            }
+
+            $id = $this->model->create($data, $rPermanente['id_reserva_permanente']);
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
 
-        return $this->model->create($data);
+        if (!$id) {
+            throw new \Exception("No se pudo crear la liberación puntual");
+        }
+
+        return ['id' => $id];
+
     }
 
     /**
