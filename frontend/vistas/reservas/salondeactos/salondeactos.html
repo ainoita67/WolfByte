@@ -19,7 +19,7 @@
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("aulas", rol);
+                generarPagina("salonactos", rol);
                 };
                 // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
                 document.head.appendChild(script2);
@@ -31,7 +31,7 @@
             scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
             document.head.appendChild(scriptAuth);
         </script>
-        <title>Menú principal - IES Bajo Aragón</title>
+        <title>Salón de actos - IES Bajo Aragón</title>
 
     <!-- DayPilot -->
     <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
@@ -48,19 +48,11 @@
 <div id="header"></div>
 
 <main>
-
-    <!-- BOTÓN VOLVER -->
-    <div class="container mt-3 text-end">
-        <button id="btnVolver" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left"></i> Volver al listado
-        </button>
-    </div>
-
     <!-- CONTENEDOR CALENDARIO -->
     <div class="container my-4 d-flex flex-column" style="height: 65vh;">
 
         <!-- NAVEGACIÓN SEMANAL -->
-        <div class="row d-flex justify-content-between align-items-center mb-3">
+        <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
 
             <button id="prevWeek"
                     type="button"
@@ -68,7 +60,7 @@
                     style="width: 2.5rem; height: 2.5rem;">
                 <i class="bi bi-arrow-left-circle fs-2"></i>
             </button>
-
+            <h2 class="col-auto">Salón de actos</h2>
             <button id="nextWeek"
                     type="button"
                     class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
@@ -83,6 +75,9 @@
 
     </div>
 
+    <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
+        <button id="btnVolver" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
+    </div>
 </main>
 
 <footer id="footer"></footer>
