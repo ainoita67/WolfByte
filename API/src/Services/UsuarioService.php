@@ -80,6 +80,10 @@ class UsuarioService
             if ($existe) {
                 throw new \Exception("Ya existe un usuario con ese correo", 422);
             }
+
+            // cifrar la contraseña antes de guardarla
+            $data['contrasena'] = password_hash($data['contrasena'], PASSWORD_DEFAULT);
+
             $id = $this->model->create($data);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
@@ -179,8 +183,11 @@ class UsuarioService
             'password' => 'required|string|min:6|max:255'
         ]);
 
+        // cifrar la contraseña antes de guardarla
+        $hashpassword = password_hash($password, PASSWORD_DEFAULT);
+
         try {
-            $result = $this->model->updatePassword($id, $password);
+            $result = $this->model->updatePassword($id, $hashpassword);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }

@@ -115,7 +115,7 @@
                                     <!-- Espacio en el que se usa -->
                                     <div class="col-lg-6" id="div_reserva_espacio_uso">
                                         <label class="form-label">Espacio en el que se usa</label>
-                                        <select class="form-select selectEspacio" id="reserva_espacio_uso" name="espacio_uso" required>
+                                        <select class="form-select selectEspacio filtrarRecurso" id="reserva_espacio_uso" name="espacio_uso" required>
                                         </select>
                                     </div>
 
@@ -150,6 +150,10 @@
             </div>
 
             <!-- RELLENAR MODAL -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+            <script type="module" src="/frontend/javascript/recursos/get.js"></script>
             <script>
                 const scriptgetreservas = document.createElement("script");
                 scriptgetreservas.src = BASE + "/javascript/misReservas.js";
@@ -157,8 +161,12 @@
 
                 scriptgetreservas.onload = () => {
                     obtenerMisReservas();
-                    activarEditarReserva();
+                    activarEditarMisReservas();
                 }
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    obtenerRecursosSelect();
+                });
                 
                 const scriptgetnecesidades = document.createElement("script");
                 scriptgetnecesidades.src = BASE + "/javascript/necesidades/get.js";

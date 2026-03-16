@@ -85,7 +85,7 @@ class UsuarioController
             $data = $req->json(); // Puede ser null o []
 
             // Si se envía contraseña → actualizar
-            if (isset($data['password']) && $data['password'] !== '') {
+            if (isset($data['password']) && trim($data['password']) !== '') {
                 $result = $this->service->updatePassword((int)$id, $data['password']);
                 $res->status(200)->json([], $result['message']);
                 return;

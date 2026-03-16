@@ -19,7 +19,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
         console.log('Respuesta login:', data);
 
-        // 👇 AQUÍ ESTÁ LA CLAVE
         localStorage.setItem('token', data.data.token);
 
         window.location.href = '/frontend/vistas/menu.html';

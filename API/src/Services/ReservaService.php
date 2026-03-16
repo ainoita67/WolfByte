@@ -27,13 +27,13 @@ class ReservaService
     /**
      * Reservas del usuario
      */
-    public function getReservasUsuario(int $idUsuario): array
+    public function getReservasUsuario(int $id_usuario): array
     {
-        if ($idUsuario <= 0) {
-            throw new ValidationException("Usuario no válido");
+        try {
+            return $this->model->findByUsuario($id_usuario);
+        } catch (Throwable $e) {
+            throw new \Exception("Error al obtener reservas del usuario: " . $e->getMessage(), 500);
         }
-
-        return $this->model->getByUsuario($idUsuario);
     }
 
     /**

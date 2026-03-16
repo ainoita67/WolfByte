@@ -80,7 +80,7 @@ class LiberacionPuntualModel
     /**
      * Crear liberación puntual
      */
-    public function create(array $data): array
+    public function create(array $data, int $id_reserva_permanente): array
     {
         try {
             $this->db
@@ -92,31 +92,7 @@ class LiberacionPuntualModel
                 ->bind(':fin',                      $data['fin'])
                 ->bind(':comentario',               $data['comentario'] ?? null)
                 ->bind(':id_reserva',               $data['id_reserva'] ?? null)
-                ->bind(':id_reserva_permanente',    $data['id_reserva_permanente'])
-                ->execute();
-
-            return $this->findById((int)$this->db->lastId());
-        } catch (PDOException $e) {
-            throw new \Exception("Error al crear la liberación puntual");
-        }
-    }
-
-    /**
-     * Crear liberación puntual por ID de reserva
-     */
-    public function createByReserva(int $id_reserva, array $data): array
-    {
-        try {
-            $this->db
-                ->query("
-                    INSERT INTO Liberacion_puntual (inicio, fin, comentario, id_reserva, id_reserva_permanente)
-                    VALUES (:inicio, :fin, :comentario, :id_reserva, :id_reserva_permanente)
-                ")
-                ->bind(':inicio',                   $data['inicio'])
-                ->bind(':fin',                      $data['fin'])
-                ->bind(':comentario',               $data['comentario'] ?? null)
-                ->bind(':id_reserva',               $id_reserva)
-                ->bind(':id_reserva_permanente',    $data['id_reserva_permanente'])
+                ->bind(':id_reserva_permanente',    $id_reserva_permanente)
                 ->execute();
 
             return $this->findById((int)$this->db->lastId());
@@ -174,6 +150,23 @@ class LiberacionPuntualModel
             }
         } catch (PDOException $e) {
             throw new \Exception("Error al eliminar la liberación puntual");
+        }
+    }
+
+    public function findPermanenteLiberacion(string $recurso, string $inicio, string $fin): array|false
+    {
+        try {
+            return $this->db
+                ->query("SELECT id_reserva_permanente, dia_semana, inicio, fin, comentario, activo, id_recurso, unidades
+                FROM  Reserva_permanente r 
+                WHERE r.id_recurso = :recurso AND l.inicio <= :fin AND l.fin >= :inicio
+                LIMIT 1")
+                ->bind(':recurso', $recurso)
+                ->bind(':inicio', $inicio)
+                ->bind(':fin', $fin)
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al buscar la liberación puntual");
         }
     }
 }

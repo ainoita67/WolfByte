@@ -36,6 +36,8 @@ function obtenerRecursosSelect(){
     .catch(error => console.error("<p>Error al obtener recursos</p>", error));
 }
 
+window.obtenerRecursosSelect = obtenerRecursosSelect;
+
 export async function getInfoRecurso(id_recurso) {
   try {
     const response = await fetch(`${API}/recurso/${id_recurso}`);

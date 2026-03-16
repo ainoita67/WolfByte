@@ -339,4 +339,12 @@ class ReservaModel
             throw new \Exception("Error al actualizar la reserva");
         }
     }
+    public function findByUsuario(int $id_usuario): array
+    {
+        return $this->db
+            ->query("SELECT * FROM Reserva WHERE id_usuario = :id_usuario")
+            ->bind(":id_usuario", $id_usuario)
+            ->fetchAll();
+    }
 }
+

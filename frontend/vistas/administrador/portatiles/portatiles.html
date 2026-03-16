@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <!-- PRIMERO: Definir BASE -->
@@ -7,14 +8,14 @@
     <script>const API = window.location.origin + "/API";</script>
 
     <!-- Cargar authGuard PRIMERO -->
-    <script src="../../../javascript/sesion/authGuard.js"></script>
+    <script src="/frontend/javascript/sesion/authGuard.js"></script>
 
     <!-- En menuadministrador.html y otras páginas de admin -->
     <script>
-        setTimeout(function() {
+        setTimeout(function () {
             const rol = Number(sessionStorage.getItem("rol"));
             console.log('Rol después de authGuard:', rol);
-            
+
             // Admin (30) y super-admin (40) pueden acceder
             if (rol !== 30 && rol !== 40) {
                 console.warn('Acceso denegado - Rol:', rol);
@@ -36,19 +37,22 @@
             }
         }, 100);
     </script>
-    
+
     <!-- Estilos adicionales por si acaso -->
     <style>
         .bg-azul {
             background-color: #0d6efd;
         }
+
         .bg-blue {
             background-color: #0d6efd;
         }
+
         /* Asegurar que los modales se vean correctamente */
         .modal-backdrop {
             z-index: 1040 !important;
         }
+
         .modal {
             z-index: 1050 !important;
         }
@@ -57,221 +61,317 @@
 
 <body>
 
-<div id="header"></div>
+    <div id="header"></div>
 
-<main class="container mt-5">
-    <!-- CABECERA -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Materiales (Carros de Portátiles)</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
-            <i class="bi bi-plus-circle"></i> Crear carro
-        </button>
-    </div>
+    <main class="container-fluid w-100 row p-0">
+        <div class="d-flex h-100">
+            <!-- ASIDE (desktop fijo) -->
+            <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <h5 class="mb-3">Menú Admin</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../portatiles/portatiles.html">Portátiles</a></li>
+                    <li class="nav-item"><a class="nav-link text-white"
+                            href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="./../logacciones/logacciones.html">Log
+                            de Acciones</a></li>
+                    <hr class="my-3">
+                    <h6 class="text-white">Tablas auxiliares</h6>
+                    <ul class="nav flex-column ps-3">
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                de Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                de Reservas</a></li>
+                    </ul>
+                </ul>
+            </aside>
 
-    <!-- CONTENEDOR DE TARJETAS -->
-    <div id="portatilesContainer" class="row g-4">
-        <div class="col-12 text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+            <!-- CONTENIDO -->
+            <section class="flex-grow-1 p-3 p-lg-4 pt-5">
+
+                <!-- Botón menú SOLO en móvil/tablet -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                        <i class="bi bi-list"></i> Menú Admin
+                    </button>
+                </div>
+
+                <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                    aria-labelledby="adminOffcanvasLabel">
+                    <div class="offcanvas-header mb-0 pb-1">
+                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                            aria-label="Cerrar"></button>
+                    </div>
+
+                    <div class="offcanvas-body mt-0 pt-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../usuarios/usuarios.html">Usuarios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../portatiles/portatiles.html">Portátiles</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                            <li class="nav-item"><a class="nav-link text-black"
+                                    href="./../logacciones/logacciones.html">Log de Acciones</a></li>
+                            <hr class="my-3">
+                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                        de Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                        de Reservas</a></li>
+                            </ul>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CABECERA -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Materiales (Carros de Portátiles)</h2>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                        <i class="bi bi-plus-circle"></i> Crear carro
+                    </button>
+                </div>
+
+                <!-- CONTENEDOR DE TARJETAS -->
+                <div id="portatilesContainer" class="row g-4">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="mt-2">Cargando materiales...</p>
+                    </div>
+                </div>
+
+                <!-- VOLVER -->
+                <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
+                    <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
+                        <i class="bi bi-caret-left-fill"></i> Volver
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- MODAL CREAR -->
+    <div class="modal fade" id="modalCrear" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Crear carro de portátiles
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCrearPortatil">
+                        <div class="mb-3">
+                            <label class="form-label">ID del carro</label>
+                            <input type="text" class="form-control" id="crearId" name="crearId" placeholder="Ej: P4"
+                                required>
+                            <small class="text-muted">Identificador único (ej: P1, P2, P3...)</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre del carro</label>
+                            <input type="text" class="form-control" id="crearCarro" name="crearCarro"
+                                placeholder="Ej: Carro 4" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Edificio</label>
+                            <select class="form-select" id="crearEdificio" name="crearEdificio" required>
+                                <option value="">Seleccionar edificio</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Planta</label>
+                            <select class="form-select" id="crearPlanta" name="crearPlanta" required>
+                                <option value="">Seleccionar planta</option>
+                                <option value="Planta baja">Planta baja</option>
+                                <option value="Primera planta">Primera planta</option>
+                                <option value="Segunda planta">Segunda planta</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Número de portátiles</label>
+                            <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="1"
+                                max="100" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="formCrearPortatil" class="btn btn-success">
+                        <i class="bi bi-check-lg me-1"></i> Crear carro
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i> Cancelar
+                    </button>
+                </div>
             </div>
-            <p class="mt-2">Cargando materiales...</p>
         </div>
     </div>
 
-    <!-- VOLVER -->
-    <div class="divvolver container p-0 pb-3 mb-5 mt-0 text-end fs-5">
-        <a href="../menuadministrador.html" class="bg-azul rounded-pill p-2 px-3 text-light">
-            <i class="bi bi-caret-left-fill"></i> Volver
-        </a>
-    </div>
+    <!-- MODAL EDITAR -->
+    <div class="modal fade" id="modalEditar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Editar carro de portátiles
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarPortatil">
+                        <input type="hidden" id="editId" name="editId">
+                        <input type="hidden" id="editIdEdificio" name="editIdEdificio">
+                        <input type="hidden" id="editNumeroPlanta" name="editNumeroPlanta">
 
-</main>
-
-<!-- MODAL CREAR -->
-<div class="modal fade" id="modalCrear" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-plus-circle me-2"></i>
-                    Crear carro de portátiles
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formCrearPortatil">
-                    <div class="mb-3">
-                        <label class="form-label">ID del carro</label>
-                        <input type="text" class="form-control" id="crearId" name="crearId" placeholder="Ej: P4" required>
-                        <small class="text-muted">Identificador único (ej: P1, P2, P3...)</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del carro</label>
-                        <input type="text" class="form-control" id="crearCarro" name="crearCarro" placeholder="Ej: Carro 4" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Edificio</label>
-                        <select class="form-select" id="crearEdificio" name="crearEdificio" required>
-                            <option value="">Seleccionar edificio</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Planta</label>
-                        <select class="form-select" id="crearPlanta" name="crearPlanta" required>
-                            <option value="">Seleccionar planta</option>
-                            <option value="Planta baja">Planta baja</option>
-                            <option value="Primera planta">Primera planta</option>
-                            <option value="Segunda planta">Segunda planta</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Número de portátiles</label>
-                        <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="1" max="100" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" form="formCrearPortatil" class="btn btn-success">
-                    <i class="bi bi-check-lg me-1"></i> Crear carro
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cancelar
-                </button>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre del carro</label>
+                            <input type="text" class="form-control" id="editCarro" name="editCarro" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Edificio</label>
+                            <input type="text" class="form-control" id="editEdificio" name="editEdificio" readonly
+                                disabled>
+                            <small class="text-muted">El edificio no se puede modificar</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Planta</label>
+                            <input type="text" class="form-control" id="editPlanta" name="editPlanta" readonly disabled>
+                            <small class="text-muted">La planta no se puede modificar</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Número de portátiles</label>
+                            <input type="number" class="form-control" id="editUnidades" name="editUnidades" min="1"
+                                max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Estado</label>
+                            <select class="form-select" id="editEstado" name="editEstado" required>
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" form="formEditarPortatil" class="btn btn-primary">
+                        <i class="bi bi-check-lg me-1"></i> Actualizar carro
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i> Cancelar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL EDITAR -->
-<div class="modal fade" id="modalEditar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-pencil-square me-2"></i>
-                    Editar carro de portátiles
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formEditarPortatil">
-                    <input type="hidden" id="editId" name="editId">
-                    <input type="hidden" id="editIdEdificio" name="editIdEdificio">
-                    <input type="hidden" id="editNumeroPlanta" name="editNumeroPlanta">
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Nombre del carro</label>
-                        <input type="text" class="form-control" id="editCarro" name="editCarro" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Edificio</label>
-                        <input type="text" class="form-control" id="editEdificio" name="editEdificio" readonly disabled>
-                        <small class="text-muted">El edificio no se puede modificar</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Planta</label>
-                        <input type="text" class="form-control" id="editPlanta" name="editPlanta" readonly disabled>
-                        <small class="text-muted">La planta no se puede modificar</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Número de portátiles</label>
-                        <input type="number" class="form-control" id="editUnidades" name="editUnidades" min="1" max="100" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Estado</label>
-                        <select class="form-select" id="editEstado" name="editEstado" required>
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" form="formEditarPortatil" class="btn btn-primary">
-                    <i class="bi bi-check-lg me-1"></i> Actualizar carro
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cancelar
-                </button>
+    <!-- MODAL ELIMINAR (CONFIRMACIÓN) -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Confirmar eliminación
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEliminarPortatil">
+                        <input type="hidden" id="deleteId" name="deleteId">
+
+                        <p class="fs-5 mb-3">¿Estás seguro de que quieres eliminar este carro?</p>
+                        <div class="alert alert-warning">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Esta acción no se puede deshacer.
+                        </div>
+                        <div class="bg-light p-3 rounded">
+                            <p class="mb-1"><strong>Carro:</strong> <span class="fw-normal" id="deleteCarro"></span></p>
+                            <p class="mb-1"><strong>Edificio:</strong> <span class="fw-normal"
+                                    id="deleteEdificio"></span></p>
+                            <p class="mb-1"><strong>Planta:</strong> <span class="fw-normal" id="deletePlanta"></span>
+                            </p>
+                            <p class="mb-0"><strong>Unidades:</strong> <span class="fw-normal"
+                                    id="deleteUnidades"></span></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i> Cancelar
+                    </button>
+                    <button type="submit" form="formEliminarPortatil" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i> Eliminar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- MODAL ELIMINAR (CONFIRMACIÓN) -->
-<div class="modal fade" id="modalEliminar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    Confirmar eliminación
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formEliminarPortatil">
-                    <input type="hidden" id="deleteId" name="deleteId">
-                    
-                    <p class="fs-5 mb-3">¿Estás seguro de que quieres eliminar este carro?</p>
-                    <div class="alert alert-warning">
+    <!-- MODAL MOSTRAR -->
+    <div class="modal fade" id="modalMostrar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">
                         <i class="bi bi-info-circle-fill me-2"></i>
-                        Esta acción no se puede deshacer.
-                    </div>
-                    <div class="bg-light p-3 rounded">
-                        <p class="mb-1"><strong>Carro:</strong> <span class="fw-normal" id="deleteCarro"></span></p>
-                        <p class="mb-1"><strong>Edificio:</strong> <span class="fw-normal" id="deleteEdificio"></span></p>
-                        <p class="mb-1"><strong>Planta:</strong> <span class="fw-normal" id="deletePlanta"></span></p>
-                        <p class="mb-0"><strong>Unidades:</strong> <span class="fw-normal" id="deleteUnidades"></span></p>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cancelar
-                </button>
-                <button type="submit" form="formEliminarPortatil" class="btn btn-danger">
-                    <i class="bi bi-trash me-1"></i> Eliminar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL MOSTRAR -->
-<div class="modal fade" id="modalMostrar" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-info-circle-fill me-2"></i>
-                    Detalles del carro
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
-                <p class="fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
-                <p class="fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
-                <p class="fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
-                <p class="fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i> Cerrar
-                </button>
+                        Detalles del carro
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
+                    <p class="fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
+                    <p class="fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
+                    <p class="fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
+                    <p class="fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i> Cerrar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<footer id="footer"></footer>
+    <footer id="footer"></footer>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Cargar el script de materiales -->
 <script src="/frontend/javascript/portatiles/portatiles.js"></script>
 
 </body>
+
 </html>

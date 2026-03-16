@@ -25,10 +25,13 @@ class EspacioModel
                             r.activo,
                             r.especial,
                             r.numero_planta,
+                            p.nombre_planta,
                             e.nombre_edificio,
+                            r.id_edificio,
                             es.es_aula
                         FROM Recurso r
                         LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
+                        LEFT JOIN Planta p ON p.numero_planta = r.numero_planta AND r.id_edificio = p.id_edificio
                         LEFT JOIN Espacio es ON r.id_recurso = es.id_espacio
                         WHERE r.tipo = 'Espacio'
                         ORDER BY r.id_recurso;")

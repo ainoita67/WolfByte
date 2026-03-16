@@ -226,6 +226,7 @@
                 </div>
             </div>
         </div>
+        <script type="module" src="/frontend/javascript/recursos/get.js"></script>
         <script>
             const scriptget = document.createElement("script");
             scriptget.src = BASE + "/javascript/incidencias/get.js";
@@ -235,13 +236,9 @@
             scriptpost.src = BASE + "/javascript/incidencias/post.js";
             document.head.appendChild(scriptpost);
 
-            const scriptgetrecursos = document.createElement("script");
-            scriptgetrecursos.src = BASE + "/javascript/recursos/get.js";
-            document.head.appendChild(scriptgetrecursos);
-            
-            scriptgetrecursos.onload = () => {
+            document.addEventListener("DOMContentLoaded", () => {
                 obtenerRecursosSelect();
-            };
+            });
             
             scriptget.onload = () => {
                 obtenerVerIncidencias();

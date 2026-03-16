@@ -57,31 +57,6 @@ function activarCrearReserva() {
 
 
 
-//Editar reservas
-function activarEditarReserva() {
-    let formeditar = document.getElementById("formEditarReserva");
-    if(!formeditar) return;
-    formeditar.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        let id = document.getElementById("editId").value;
-        let fecha = document.getElementById("editFecha").value;
-        let id_recurso = document.getElementById("editRecurso").value;
-        let titulo = document.getElementById("editTitulo").value;
-        let descripcion = document.getElementById("editDescripcion").value;
-        let usuario = 2;
-        let prioridad = document.getElementById("editPrioridad").value;
-        let estado = document.getElementById("editEstado").value;
-        if (!id) return;
-        let modal = bootstrap.Modal.getInstance(
-            document.getElementById("modalEditar")
-        );
-        modificarReserva(id, fecha, id_recurso, titulo, descripcion, usuario, prioridad, estado, formeditar, modal);
-    });
-}
-
-
-
 //Editar reservas menú administrador
 function activarEditarTarjetasReserva() {
     let formeditar = document.getElementById("formReserva");
@@ -91,7 +66,6 @@ function activarEditarTarjetasReserva() {
     formeditar.addEventListener("submit", function (e) {
         e.preventDefault();
         let reserva=obtenerDatosReserva();
-console.log(reserva);
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario){
             mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
@@ -111,7 +85,6 @@ console.log(reserva);
     btnAutorizar.addEventListener("click", function (e) {
         e.preventDefault();
         let reserva=obtenerDatosReserva(sessionStorage.getItem("id_usuario"));
-        console.log("Reserva "+JSON.stringify(reserva, null, 2));
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario||!reserva.usuarioautoriza){
             mostrarToast("Error al autorizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
@@ -129,7 +102,6 @@ console.log(reserva);
     btnDenegar.addEventListener("click", function (e) {
         e.preventDefault();
         let reserva=obtenerDatosReserva(sessionStorage.getItem("id_usuario"));
-        console.log("Reserva "+JSON.stringify(reserva, null, 2));
         if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario||!reserva.usuarioautoriza){
             mostrarToast("Error al autorizar los datos. Campos obligatorios no rellenados.", 'danger');
             return;
@@ -148,7 +120,7 @@ console.log(reserva);
 
 function obtenerDatosReserva(usuarioautoriza=null){
     let id = document.getElementById("reserva_id").value;
-    let autorizada = document.getElementById("reserva_autorizada").value.trim()||null;;
+    let autorizada = document.getElementById("reserva_autorizada").value.trim()||null;
     if(autorizada=="Pendiente"){
         autorizada=null;
     }else if(autorizada=="Denegada"){
@@ -261,7 +233,6 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, i
             body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades, inicio: inicio, fin: fin})
         })
         let response = await res.json();
-        console.log(response);
         if (response.status == "success"){
             return 1;
         }else{
@@ -279,7 +250,6 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, i
 //API Editar reservas de tipo portátil
 async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin){
     try{
-        console.log("Modificar portátil");
         let res = await fetch(window.location.origin+"/API/reservaPortatil/"+id, {
             method: "PUT",
             headers: {
@@ -287,10 +257,8 @@ async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, i
             },
             body: JSON.stringify({id_material: id_recurso, unidades: unidades, usaenespacio: espacio_uso, inicio: inicio, fin: fin})
         })
-        console.log("API hecha");
         let response = await res.json();
         
-        console.log("Respuesta "+response);
         if (response.status == "success") {
             return 1;
         } else {

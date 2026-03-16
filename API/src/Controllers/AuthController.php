@@ -26,7 +26,12 @@ class AuthController
         $userModel = new UsuarioModel();
         $user = $userModel->findByEmail($email);
 
-        if (!$user || $password !== $user['password']) {
+        if (!$user || !$user['usuario_activo']) {
+            $response->status(401)->json([], 'Credenciales incorrectas');
+            return;
+        }
+
+        if (!password_verify($password, $user['password'])) {
             $response->status(401)->json([], 'Credenciales incorrectas');
             return;
         }
@@ -34,7 +39,7 @@ class AuthController
         $payload = [
             'iat' => time(),
             'exp' => time() + JWT_EXPIRE,
-            'sub' => $user['id_usuario'],
+            'id_usuario' => $user['id_usuario'],
             'rol' => $user['id_rol'],
             'nombre' => $user['nombre'],
             'email' => $user['correo']
@@ -59,4 +64,3 @@ class AuthController
         $res->status(200)->json([], "Sesión cerrada correctamente");
     }
 }
-    

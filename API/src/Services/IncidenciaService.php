@@ -82,7 +82,7 @@ class IncidenciaService
         }
 
         if (!$id) {
-            throw new \Exception("No se pudo crear la Incidencia");
+            throw new \Exception("No se pudo crear la incidencia");
         }
 
         return ['id' => $id];
@@ -161,7 +161,7 @@ class IncidenciaService
 
         if ($result === -1) {
             // Conflicto por FK u otra restricción
-            throw new \Exception("No se puede eliminar la Incidencia: el registro está en uso", 409);
+            throw new \Exception("No se puede eliminar la incidencia: el registro está en uso", 409);
         }
 
         // Si llega aquí, la eliminación fue correcta

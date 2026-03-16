@@ -249,7 +249,6 @@ class PortatilService
         $reglas = [
             'id_material' => 'required|string|min:1|max:10',
             'id_usuario' => 'required|int|min:1',
-            'usaenespacio' => 'required|string|min:1|max:10',
             'unidades' => 'required|int|min:1',
             'inicio' => 'required|date',
             'fin' => 'required|date',
@@ -380,7 +379,6 @@ class PortatilService
         // Construir reglas de validación dinámicamente
         $reglas = [
             'id_material' => 'required|string|min:1|max:10',
-            'usaenespacio' => 'required|string|min:1|max:10',
             'unidades' => 'required|int|min:1',
             'inicio' => 'required|date',
             'fin' => 'required|date',
