@@ -76,6 +76,15 @@ class ReservaEspacioModel
         }
     }
 
+    public function getById(int $id): ?array
+    {
+        $result=$this->db
+            ->query("SELECT * FROM Reserva WHERE id_reserva=:id")
+            ->bind(':id', $id)
+            ->fetch();
+        return $result ?: null;
+    }
+
     /**
      * Obtener reservas de un espacio concreto
      */

@@ -63,6 +63,7 @@ export function generarHorarioRealEventos(horarioPermanente) {
                         end: `${dayStr}T${slot.end}:00`,
                         id: `slot-${idCounter++}`,
                         text: "Disponible",
+                        bloqueBase: true,
                         backColor: "#dcdcdc",
                         borderColor: "#c3c3c3",
                         fontColor: "#212529",

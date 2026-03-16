@@ -104,20 +104,144 @@ const idAula = params.get("id");
 
 document.addEventListener("DOMContentLoaded", async () => {
     const dp = new DayPilot.Calendar("dp", {
-        viewType: "WorkWeek",
-        theme: "calendar_green",
-        startDate: DayPilot.Date.today(),
+    viewType: "WorkWeek",
+    theme: "calendar_green",
+    startDate: DayPilot.Date.today(),
 
-        locale: "es-es",            // formato europeo
-        headerDateFormat: "dd/MM/yyyy",
-        weekStarts: 1,
+    locale: "es-es",
+    headerDateFormat: "dd/MM/yyyy",
+    weekStarts: 1,
 
-        cellDuration: 5,
-        cellHeight: 8, 
-        businessBeginsHour: 8,
-        businessEndsHour: 22,
-        eventDeleteHandling: "Disabled",
-        heightSpec: "BusinessHoursNoScroll"
+    cellDuration: 5,
+    cellHeight: 8,
+    businessBeginsHour: 8,
+    businessEndsHour: 22,
+
+    eventDeleteHandling: "Disabled",
+    heightSpec: "BusinessHoursNoScroll",
+
+    // 🎨 Cambiar cursor según tipo
+   onBeforeEventRender: function(args) {
+    args.data.cssClass = "cursor-pointer";
+
+    // Si la reserva no está autorizada, se pinta de naranja
+    if (args.data.autorizada === null) {
+        args.data.backColor = "#cc6c11"; // naranja
+        args.data.barColor = "#bb5c0f";
+    }
+},
+
+
+    // 🧠 CLICK EN EVENTO
+    onEventClick: async function(args) {
+
+        const evento = args.e.data;
+
+        // =============================
+        // 🟢 CREAR RESERVA (Disponible)
+        // =============================
+
+        if (evento.bloqueBase) {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" }
+    ]);
+
+    if (!modal.result) return;
+
+    const aula = await getEspacio(idAula);
+    const requiereAutorizacion = aula.autorizacion;
+            
+    const rol = parseInt(sessionStorage.getItem("rol"), 10);
+            
+    let autorizada;
+            
+    if (rol === 40 || rol === 30) {
+        autorizada = 1;
+    } else {
+        autorizada = requiereAutorizacion ? null : 1;
+    }       
+
+    const response = await fetch(`${API}/reservaEspacio`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            observaciones: modal.result.observaciones,
+            inicio: evento.start.replace("T", " "),
+            fin: evento.end.replace("T", " "), 
+            actividad: modal.result.actividad,
+            id_espacio: idAula,
+            id_usuario: sessionStorage.getItem("id_usuario"),
+            autorizada: autorizada
+        })
+    });
+
+    if (!response.ok) {
+        alert("Error creando la reserva");
+        return;
+    }
+
+    const nuevosEventos = await generarEventos(idAula);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+
+        // =============================
+        // 🔵 EDITAR RESERVA
+        // =============================
+else {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" }
+    ], {
+        asignatura: evento.asignatura,
+        grupo: evento.grupo,
+        profesor: evento.profesor,
+        actividad: evento.actividad,
+        observaciones: evento.observaciones
+    });
+    
+    if (!modal.result) return;
+
+    const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            actividad: modal.result.actividad,
+            observaciones: modal.result.observaciones
+        })
+    });
+
+    if (!response.ok) {
+        alert("Error actualizando la reserva");
+        return;
+    }
+
+    const nuevosEventos = await generarEventos(idAula);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+    }
 
     });
     cargarInfoAula(idAula);
@@ -138,11 +262,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
+    
+
 
 });
 
 document.getElementById("btnVolver").addEventListener("click", () => {
-    window.location.href = `${BASE}/vistas/reservas/otrosespacios/espacios.html`;
+    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
 });
 
 import { getEspacio } from "/frontend/javascript/espacio/espacios.js";
@@ -152,7 +278,7 @@ async function cargarInfoAula(id) {
 
     if (!aula) return;
 
-    document.getElementById("info-id").textContent = aula.id;
+    document.getElementById("info-id").textContent = 'Aula ' + aula.id;
     document.getElementById("info-descripcion").textContent = aula.descripcion;
     document.getElementById("info-edificio").textContent = aula.edificio;
     document.getElementById("info-planta").textContent = aula.planta;
@@ -160,6 +286,8 @@ async function cargarInfoAula(id) {
     aula.autorizacion ? "Sí" : "No";
 
 }
+
+
 
 </script>
 

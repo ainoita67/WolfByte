@@ -416,7 +416,7 @@ class PortatilModel
                 ->bind(':id_reserva', $idReserva)
                 ->bind(':unidades', $data['unidades'])
                 ->bind(':id_material', $data['id_material'])
-                ->bind(':usaenespacio', $data['usaenespacio'])
+                ->bind(':usaenespacio', $data['usaenespacio'] ?? null)
                 ->execute();
 
             $this->db->commit();
@@ -530,7 +530,7 @@ class PortatilModel
                 ")
                 ->bind(':unidades', $data['unidades'])
                 ->bind(':id_material', $data['id_material'])
-                ->bind(':usaenespacio', $data['usaenespacio'])
+                ->bind(':usaenespacio', $data['usaenespacio'] ?? null)
                 ->bind(':id_reserva', $id)
                 ->execute();
 

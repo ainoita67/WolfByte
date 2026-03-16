@@ -93,10 +93,10 @@
 
                 </div>
             </div>
-
 <script type="module">
+    
 import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";
-
+// cojer id de la url
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const idAula = params.get("id");
@@ -116,7 +116,141 @@ document.addEventListener("DOMContentLoaded", async () => {
         businessBeginsHour: 8,
         businessEndsHour: 15,
         eventDeleteHandling: "Disabled",
-        heightSpec: "BusinessHoursNoScroll"
+        heightSpec: "BusinessHoursNoScroll",
+
+    
+
+    // 🎨 Cambiar cursor según tipo
+   onBeforeEventRender: function(args) {
+    args.data.cssClass = "cursor-pointer";
+
+    // Si la reserva no está autorizada, se pinta de naranja
+    if (args.data.autorizada === null) {
+        args.data.backColor = "#cc6c11"; // naranja
+        args.data.barColor = "#bb5c0f";
+    }
+},
+
+
+    // 🧠 CLICK EN EVENTO
+    onEventClick: async function(args) {
+
+        const evento = args.e.data;
+        const maxDisponibles = evento.unidades_libres || 0;
+// 🟢 CREAR RESERVA (Disponible)
+if (evento.bloqueBase) {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" },
+        { 
+            name: `Cantidad de portátiles (máx ${maxDisponibles})`,
+            id: "unidades",
+            type: "number",
+            min: 1,
+            max: maxDisponibles
+        }
+    ]);
+
+    if (!modal.result) return;
+
+
+    const requiereAutorizacion = carrito.autorizacion;
+    const rol = parseInt(sessionStorage.getItem("rol"), 10);
+
+    let autorizada;
+    if (rol === 40 || rol === 30) {
+        autorizada = 1;
+    } else {
+        autorizada = requiereAutorizacion ? null : 1;
+    }
+
+    const response = await fetch(`${API}/portatiles/reservas`, {  // ✅ endpoint correcto
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            observaciones: modal.result.observaciones,
+            inicio: evento.start.replace("T", " "),
+            fin: evento.end.replace("T", " "),
+            unidades: parseInt(modal.result.unidades),
+            id_material: idAula,          // ✅ id del carrito
+            id_usuario: parseInt(sessionStorage.getItem("id_usuario")),
+            autorizada: autorizada
+        })
+    });
+
+if (!response.ok) {
+    const err = await response.json();
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
+    alert(mensaje);
+    return;
+}
+    const nuevosEventos = await generarEventos(idAula, carrito.unidades);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+
+// 🔵 EDITAR RESERVA
+else {
+
+    const modal = await DayPilot.Modal.form([
+        { name: "Asignatura", id: "asignatura", type: "text" },
+        { name: "Grupo", id: "grupo", type: "text" },
+        { name: "Profesor", id: "profesor", type: "text" },
+        { name: "Actividad", id: "actividad", type: "text" },
+        { name: "Observaciones", id: "observaciones", type: "textarea" },
+        { name: "Cantidad de portátiles", id: "unidades", type: "number" }
+    ], {
+        asignatura: evento.asignatura,
+        grupo: evento.grupo,
+        profesor: evento.profesor,
+        actividad: evento.actividad,
+        observaciones: evento.observaciones,
+        unidades: evento.unidades
+    });
+
+    if (!modal.result) return;
+
+    const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            asignatura: modal.result.asignatura,
+            grupo: modal.result.grupo,
+            profesor: modal.result.profesor,
+            actividad: modal.result.actividad,
+            observaciones: modal.result.observaciones,
+            unidades: parseInt(modal.result.unidades),
+            id_material: idAula,
+            inicio: evento.start.replace("T", " "),
+            fin: evento.end.replace("T", " ")
+        })
+    });
+
+if (!response.ok) {
+    const err = await response.json();
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
+    alert(mensaje);
+    return;
+}
+
+    const nuevosEventos = await generarEventos(idAula, carrito.unidades);
+    dp.events.list = nuevosEventos;
+    dp.update();
+}
+    }
 
     });
     cargarInfoCarrito(carrito);
@@ -137,12 +271,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         dp.update();
     });
 
+    
+
 
 });
 
 document.getElementById("btnVolver").addEventListener("click", () => {
     window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
 });
+
 
 import { getCarrito } from "/frontend/javascript/portatiles/get.js";
 
@@ -160,7 +297,10 @@ async function cargarInfoCarrito(carrito) {
 
 }
 
+
+
 </script>
+
 
         </main>
         <footer id="footer"></footer>

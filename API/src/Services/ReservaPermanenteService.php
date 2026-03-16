@@ -6,7 +6,6 @@ namespace Services;
 use Core\Request;
 use Core\Response;
 use Models\ReservaPermanenteModel;
-use Models\PortatilModel;
 use Throwable;
 use Validation\Validator;
 use Validation\ValidationException;
@@ -14,12 +13,10 @@ use Validation\ValidationException;
 class ReservaPermanenteService
 {
     private ReservaPermanenteModel $model;
-    private PortatilModel $portatilModel;
 
     public function __construct()
     {
         $this->model = new ReservaPermanenteModel();
-        $this->portatilModel = new PortatilModel();
     }
 
     /**
@@ -28,14 +25,6 @@ class ReservaPermanenteService
     public function getAllReservasPermanentes(): array
     {
         return $this->model->getAll();
-    }
-
-    /**
-     * Obtener todas las reservas permanentes inactivas
-     */
-    public function getAllReservasPermanentesInactivas(): array
-    {
-        return $this->model->getAllInactivas();
     }
 
     /**
@@ -81,136 +70,78 @@ class ReservaPermanenteService
      */
     public function createReservaPermanente(array $input): array
     {
+        if($input['activo']=="true"||$input['activo']=="1"||$input['activo']==1){
+            $input['activo']=1;
+        }else{
+            $input['activo']=0;
+        }
 
         $data = Validator::validate($input, [
             'inicio'        => 'required|string',
             'fin'           => 'required|string',
             'comentario'    => 'string',
-            'id_recurso'       => 'required|string',
-            'dia_semana'    => 'required|int|min:0|max:7',
-            'unidades'      => 'int'
+            'activo'        => 'required|in:0,1',
+            'id_recurso'    => 'required|string',
         ]);
-
-        try {
-            $id = $this->model->create($data);
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        
+        if (empty($data['id_recurso'])) {
+            throw new ValidationException(array("id_recurso es obligatorio"));
         }
 
-        if (!$id) {
-            throw new \Exception("No se pudo crear la reserva permanente");
-        }
-
-        return ['id' => $id];
+        return $this->model->create($data);
     }
 
     /**
      * Actualizar reserva permanente
      */
-    public function updateReservaPermanente(int $id, array $input): array
+    public function updateReservaPermanente(string $id, array $input): array
     {
         $id = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
+        if($input['activo']=="true"||$input['activo']=="1"||$input['activo']==1){
+            $input['activo']=1;
+        }else{
+            $input['activo']=0;
+        }
+
         $data = Validator::validate($input, [
-            'inicio'        => 'required',
-            'fin'           => 'required',
-            'comentario'    => 'string',
-            'recurso'    => 'required|string',
-            'unidades'      => 'int',
-            'dia_semana'    => 'required|int|min:0|max:7',
+            'inicio'        => 'required|string',
+            'fin'           => 'required|string',
+            'comentario'    => 'required|string',
+            'activo'        => 'required|in:0,1',
+            'id_recurso'    => 'required|string',
         ]);
 
-        // maximo de unidades posibles
-        $unidades_maximas = $this->portatilModel->getMaterialUnidades($data['recurso']);
-
-        // unidades reservadas para ese recurso en ese dia y hora
-        $unidades_reservadas = $this->model->unidadesReservadas(
-            $data['recurso'], 
-            $data['dia_semana'], 
-            $data['inicio'], 
-            $data['fin']
-        );
-        if ($unidades_reservadas + $data['unidades'] > $unidades_maximas) {
-            throw new \Exception("No hay suficientes unidades disponibles. Unidades solicitadas: " . $data['unidades'] . ", Unidades totales: " . $unidades_maximas . ", Unidades libres: " . ($unidades_maximas - $unidades_reservadas), 500);
-        }else{
-            try {
-                $result = $this->model->update($id['id'], $data);
-            } catch (Throwable $e) {
-                throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-            }
-
-            if (!$result) {
-                return [
-                    'status'  => 'no_changes',
-                    'message' => 'No hubo cambios en la reserva permanente'
-                ];
-            }
-
-            return [
-                'status'  => 'updated',
-                'message' => 'Reserva permanente actualizada correctamente'
-            ];
+        if (empty($data['id_recurso'])) {
+            throw new ValidationException("id_recurso es obligatorio");
         }
+
+        return $this->model->update($id, $data);
     }
 
- /**
-     * Cambiar estado activo/inactivo
+    /**
+     * Activar reserva permanente
      */
-    public function toggleActiveStatus(int $id): array
+    public function activarReservaPermanente(string $id): array
     {
-        Validator::validate(['id' => $id], [
+        $data = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
-        try {
-            $isActive = $this->model->isActive($id);
-            if (!$isActive) {
-                $result = $this->model->setActive($id);
-            } else {
-                $result = $this->model->setInactive($id);
-            }
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        if(empty($data['id'])) {
+            throw new ValidationException("id es obligatorio");
         }
 
-        if (!$result) {
-            $this->ensureUserExists($id);
-            return [
-                'status'  => 'no_changes',
-                'message' => 'No hubo cambios en el estado de la reserva permanente'
-            ];
-        }
-
-        return [
-            'status'  => 'updated',
-            'message' => 'Estado de la reserva permanente actualizado correctamente'
-        ];
+        return $this->model->activar($data['id']);
     }
 
     /**
      * Desactivar todas las reservas permanentes
      */
-    public function desactivarTodo(): array
+    public function desactivarReservasPermanentes(): array
     {
-        try {
-            $result = $this->model->desactivarTodo();
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
-        }
-
-        if (!$result) {
-            $this->ensureUserExists($id);
-            return [
-                'status'  => 'no_changes',
-                'message' => 'No hubo cambios en el estado de las reservas permanentes'
-            ];
-        }
-
-        return [
-            'status'  => 'updated',
-            'message' => 'Estado de las reservas permanentes actualizado correctamente'
-        ];
-    }    
+        return $this->model->desactivar();
+    }
 }
