@@ -104,8 +104,8 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
-            $reserva = $this->service->updateReserva((int)$id, $data);
             $this->serviceNecesidad->updateNecesidad((int)$id, $data);
+            $reserva = $this->service->updateReserva((int)$id, $data);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getErrors(), 422);

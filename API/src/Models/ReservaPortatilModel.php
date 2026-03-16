@@ -156,48 +156,65 @@ class ReservaPortatilModel
             if($diasemana!=date('w', strtotime($data['fin']))){
                 return false;
             }
-
+            
+            //Suma unidades de reservas y de reservas permanentes y resta de liberaciones
             $filas=$this->db
                 ->query("
                     SELECT
-                        COUNT(DISTINCT r.id_reserva)+COUNT(DISTINCT rep.id_reserva_permanente) AS totalreservas, m.unidades AS materialunidades, 
-                        COALESCE(SUM(DISTINCT rp.unidades),0)+COALESCE(SUM(DISTINCT rep.unidades),0)-COALESCE(SUM(DISTINCT lp.unidades),0) AS totalunidades
+                        m.unidades AS materialunidades,
+                        (
+                            SELECT COALESCE(SUM(rp.unidades),0)
+                            FROM Reserva r
+                            JOIN Reserva_Portatiles rp 
+                                ON rp.id_reserva_material = r.id_reserva
+                            WHERE rp.id_material = m.id_material
+                            AND rp.id_reserva_material != :id
+                            AND r.inicio <= :fin1
+                            AND r.fin >= :inicio1
+                        )
+                        +
+                        (
+                            SELECT COALESCE(SUM(rep.unidades),0)
+                            FROM Reserva_permanente rep
+                            WHERE rep.id_recurso = m.id_material
+                            AND rep.dia_semana = :diasemana1
+                            AND rep.activo = 1
+                            AND rep.inicio <= :horafin1
+                            AND rep.fin >= :horainicio1
+                        )
+                        -
+                        (
+                            SELECT COALESCE(SUM(lp.unidades),0)
+                            FROM Liberacion_puntual lp
+                            JOIN Reserva_permanente rep 
+                                ON rep.id_reserva_permanente = lp.id_reserva_permanente
+                                AND rep.id_recurso = m.id_material
+                                AND rep.dia_semana = :diasemana2
+                                AND rep.activo = 1
+                            WHERE lp.inicio <= :fin2
+                            AND lp.fin >= :inicio2
+                        )
+                    AS totalunidades
                     FROM Material m
-                    LEFT JOIN Reserva_permanente rep ON rep.id_recurso=m.id_material AND rep.dia_semana=:diasemana AND rep.activo=1
-                    AND ((rep.inicio>:horainicio1 AND rep.fin<:horainicio2) OR (rep.inicio>:horafin1 AND rep.fin<:horafin2) OR (rep.inicio<=:horainicio3 AND rep.fin>=:horafin3))
-                    LEFT JOIN Liberacion_puntual lp ON lp.id_reserva_permanente=rep.id_reserva_permanente
-                    AND ((lp.inicio>:inicio1 AND lp.fin<:inicio2) OR (lp.inicio>:fin1 AND lp.fin<:fin2) OR (lp.inicio<=:inicio3 AND lp.fin>=:fin3))
-                    LEFT JOIN Reserva_Portatiles rp ON rp.id_material=m.id_material AND rp.id_material=:material AND rp.id_reserva_material!=:id
-                    LEFT JOIN Reserva r ON r.id_reserva=rp.id_reserva_material
-                    AND ((r.inicio>:inicio4 AND r.fin<:inicio5) OR (r.inicio>:fin4 AND r.fin<:fin5) OR (r.inicio<=:inicio6 AND r.fin>=:fin6))
+                    WHERE m.id_material = :material
                 ")
-                ->bind(':diasemana', $diasemana)
+                ->bind(':diasemana1', $diasemana)
+                ->bind(':diasemana2', $diasemana)
                 ->bind(':horainicio1', $horainicio)
                 ->bind(':horafin1', $horafin)
-                ->bind(':horainicio2', $horainicio)
-                ->bind(':horafin2', $horafin)
-                ->bind(':horainicio3', $horainicio)
-                ->bind(':horafin3', $horafin)
                 ->bind(':inicio1', $data['inicio'])
                 ->bind(':fin1', $data['fin'])
                 ->bind(':inicio2', $data['inicio'])
                 ->bind(':fin2', $data['fin'])
-                ->bind(':inicio3', $data['inicio'])
-                ->bind(':fin3', $data['fin'])
-                ->bind(':inicio4', $data['inicio'])
-                ->bind(':fin4', $data['fin'])
-                ->bind(':inicio5', $data['inicio'])
-                ->bind(':fin5', $data['fin'])
-                ->bind(':inicio6', $data['inicio'])
-                ->bind(':fin6', $data['fin'])
                 ->bind(':material', $data['id_material'])
                 ->bind(':id', $id)
                 ->fetch();
-            if($filas['totalreservas']>0 && ($filas['materialunidades']-$filas['totalunidades'])<$data['unidades']){
+            if(($filas['materialunidades']-$filas['totalunidades'])<$data['unidades']){
                 return false;
             }
             return true;
         } catch (PDOException $e) {
+            throw new \Exception($e->getMessage());
             throw new \Exception("Error al crear o actualizar reservas del portátil");
         }
     }

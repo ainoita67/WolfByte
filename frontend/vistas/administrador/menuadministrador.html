@@ -2,79 +2,40 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <script>const BASE = window.location.origin + "/frontend";
-        const API = window.location.origin + "/API";</script>
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
 
         <!-- Cargar authGuard PRIMERO -->
         <script src="/frontend/javascript/sesion/authGuard.js"></script>
 
         <!-- Verificación de acceso y carga de la página -->
         <script>
-            setTimeout(function() {
-                const rol = Number(sessionStorage.getItem("rol"));
-                console.log('Rol después de authGuard:', rol);
+            const rol = sessionStorage.getItem("rol");
+            console.log('Rol después de authGuard:', rol);
                 
-                // Admin (30) y super-admin (40) pueden acceder
-                if (rol !== 30 && rol !== 40) {
-                    console.warn('Acceso denegado - Rol:', rol);
-                    alert('No tienes permisos para acceder al panel de administrador');
-                    script1.src = BASE + "vistas/menu.html";
-                } else {
-                    // Guardar el rol para usarlo después
-                    window.rolAdmin = rol;
-                    
-                    // Cargar la página normalmente
-                    const script1 = document.createElement("script");
-                    script1.src = BASE + "/javascript/includes.js";
-                    script1.onload = () => {
-                        const script2 = document.createElement("script");
-                        script2.src = BASE + "/javascript/menu.js";
-                        script2.onload = () => {
-                            generarPagina("menu", "admin");
-                            
-                            // Ocultar el botón de usuarios para admin (rol 30)
-                            setTimeout(function() {
-                                if (window.rolAdmin === 30) {
-                                    
-                                    // Ocultar en el aside desktop
-                                    const enlaceUsuariosAside = document.querySelector('aside a[href="usuarios/usuarios.html"]');
-                                    if (enlaceUsuariosAside) {
-                                        enlaceUsuariosAside.closest('li').style.display = 'none';
-                                    }
-                                    
-                                    // Ocultar en el offcanvas móvil
-                                    const enlaceUsuariosOffcanvas = document.querySelector('.offcanvas-body a[href="usuarios/usuarios.html"]');
-                                    if (enlaceUsuariosOffcanvas) {
-                                        enlaceUsuariosOffcanvas.closest('li').style.display = 'none';
-                                    }
-                                } else {
-                                    console.log('Mostrando botón de usuarios para super-admin');
-                                }
-                            }, 200);
-                        };
-                        document.head.appendChild(script2);
-                    };
-                    document.head.appendChild(script1);
-                }
-            }, 100);
-
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol<30) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.replace(BASE+'/vistas/menu.html')
+            }
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("admin", "admin");
+                generarPagina("administrador", rol);
                 };
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
-            
+
+            // authGuard
             const scriptAuth = document.createElement('script');
             scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
             document.head.appendChild(scriptAuth);
         </script>
-
         <title>Menú Administrador - IES Bajo Aragón</title>
     </head>
     <body>
@@ -82,7 +43,7 @@
         <main class="container-fluid w-100 row p-0">
             <div class="d-flex h-100">
                 <!-- ASIDE (desktop fijo) -->
-                <aside class="d-none d-lg-block bg-blue text-white p-4" id="aside-admin">
+                <aside class="d-none d-lg-block bg-blue text-white pt-5 p-4" id="aside-admin">
                 <h5 class="mb-3">Menú Admin</h5>
                     <ul class="nav flex-column">
                         <li class="nav-item"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
@@ -560,13 +521,13 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
             <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-5 pe-md-0 text-end fs-5">
                 <a href="../menu.html" class="bg-azul rounded-pill p-2 px-3 me-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
         <footer id="footer"></footer>
-
+        <script type="module" src="/frontend/javascript/recursos/get.js"></script>
         <script>
             const id_usuario = sessionStorage.getItem("id_usuario");
 
@@ -614,13 +575,9 @@
                 obtenerEspaciosSelect();
             };
 
-            const scriptgetrecursos = document.createElement("script");
-            scriptgetrecursos.src = BASE + "/javascript/recursos/get.js";
-            document.head.appendChild(scriptgetrecursos);
-
-            scriptgetrecursos.onload = () => {
+            document.addEventListener("DOMContentLoaded", () => {
                 obtenerRecursosSelect();
-            };
+            });
 
             const scriptgetnecesidades = document.createElement("script");
             scriptgetnecesidades.src = BASE + "/javascript/necesidades/get.js";

@@ -97,7 +97,7 @@ function mostrarDatosModal(reserva){
     }else if(reserva.autorizada==1){
         autorizada='Autorizada';
     }
-    document.getElementById("reserva_autorizada").value = autorizada;
+    document.getElementById("reserva_autorizada").value = reserva.autorizada;
     document.getElementById("reserva_id").value = reserva.id_reserva;
     document.getElementById("reserva_f_creacion").value = reserva.f_creacion;
     document.getElementById("reserva_inicio").value = reserva.inicio;
@@ -139,33 +139,80 @@ function mostrarDatosModal(reserva){
 
 
 
-//Editar reservas
-function activarEditarReserva() {
-    let formeditar = document.getElementById("formEditarReserva");
+//Editar reservas menú administrador
+function activarEditarMisReservas() {
+    let formeditar = document.getElementById("formReserva");
     if(!formeditar) return;
+
+    //EDITAR
     formeditar.addEventListener("submit", function (e) {
         e.preventDefault();
+        let reserva=obtenerDatosReserva();
+        if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario){
+            mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
+            return;
+        }
 
-        let id = document.getElementById("editId").value;
-        let fecha = document.getElementById("editFecha").value;
-        let id_recurso = document.getElementById("editRecurso").value;
-        let titulo = document.getElementById("editTitulo").value;
-        let descripcion = document.getElementById("editDescripcion").value;
-        let usuario = 2;
-        let prioridad = document.getElementById("editPrioridad").value;
-        let estado = document.getElementById("editEstado").value;
-        if (!id) return;
         let modal = bootstrap.Modal.getInstance(
-            document.getElementById("modalEditar")
+            document.getElementById("modalReserva")
         );
-        modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal);
 
-        // Permite que la página vuelva a interactuar
-        document.querySelectorAll('.modal-backdrop').forEach(elemento => elemento.remove());
-        document.body.classList.remove('modal-open');
-
-        obtenerMisReservas();
+        modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
     });
+}
+
+
+
+function obtenerDatosReserva(usuarioautoriza=null){
+    let id = document.getElementById("reserva_id").value;
+    let autorizada = document.getElementById("reserva_autorizada").value.trim()||null;;
+    if(autorizada=="Pendiente"){
+        autorizada=null;
+    }else if(autorizada=="Denegada"){
+        autorizada=0;
+    }else if(autorizada=="Autorizada"){
+        autorizada=1;
+    }
+    let fechacreacion = formatearFecha(document.getElementById("reserva_f_creacion").value);
+    let inicio = formatearFecha(document.getElementById("reserva_inicio").value);
+    let fin = formatearFecha(document.getElementById("reserva_fin").value);
+    let tipo = document.getElementById("reserva_tipo").value;
+    let id_recurso = document.getElementById("reserva_espacio_portatil").value;
+    let asignatura = document.getElementById("reserva_asignatura").value.trim()||null;
+    let grupo = document.getElementById("reserva_grupo").value;
+    let profesor = document.getElementById("reserva_profesor").value;
+    let usuario = document.getElementById("reserva_id_usuario").value;
+    if(!usuarioautoriza||usuarioautoriza==null){
+        usuarioautoriza = document.getElementById("reserva_id_usuario_autoriza").value;
+    }
+    if(autorizada!=null&&(!usuarioautoriza||usuarioautoriza==null)){
+        mostrarToast("Error al actualizar los datos", 'danger');
+        return;
+    }
+    let observaciones = document.getElementById("reserva_observaciones").value.trim()||null;
+    let actividad=null;
+    let necesidades=null;
+    let unidades=null;
+    let espacio_uso=null;
+    if(tipo=="Reserva_espacio"){
+        actividad = document.getElementById("reserva_actividad").value;
+        necesidades = Array.from(document.getElementById("reserva_necesidades").selectedOptions).map(opt => opt.value);
+        if(actividad==null||actividad.trim()==''){
+            mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
+            return;
+        }
+    }else if(tipo=="Reserva_material"){
+        unidades = document.getElementById("reserva_unidades").value;
+        espacio_uso = document.getElementById("reserva_espacio_uso").value;
+        if(unidades==null||unidades<=0||espacio_uso==null){
+            mostrarToast("Error al actualizar los datos. Campos obligatorios no rellenados.", 'danger');
+            return;
+        }
+    }else{
+        mostrarToast("Error al actualizar los datos", 'danger');
+        return;
+    }
+    return {id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones}
 }
 
 
@@ -200,8 +247,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 
                     mostrarToast("Reserva actualizada correctamente", 'success');
                     // Recargar
-                    obtenerReservasAutorizar();
-                    obtenerReservasProximas();
+                    obtenerMisReservas();
                 } else {
                     if(response.message){
                         mostrarToast(response.message.trim(), 'danger');
@@ -339,3 +385,17 @@ function mostrarToast(mensaje, tipo = 'success') {
         this.remove();
     });
 }
+
+// Limpiar backdrop cuando el modal se cierra manualmente
+document.addEventListener('DOMContentLoaded', function() {
+    const modalReserva = document.getElementById('modalReserva');
+    if (modalReserva) {
+        modalReserva.addEventListener('hidden.bs.modal', function() {
+            // Limpiar cualquier backdrop residual
+            document.querySelectorAll('.modal-backdrop').forEach(elemento => elemento.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+    }
+});

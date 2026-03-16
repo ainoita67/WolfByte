@@ -164,40 +164,37 @@ class ReservaEspacioModel
             }
 
             $filas=$this->db
-                ->query("
-                    SELECT
-                        COUNT(DISTINCT r.id_reserva)+COUNT(DISTINCT rep.id_reserva_permanente)-COUNT(DISTINCT lp.id_liberacion_puntual) AS totalreservas
-                    FROM Espacio e
-                    LEFT JOIN Reserva_permanente rep ON rep.id_recurso=e.id_espacio AND rep.dia_semana=:diasemana AND rep.activo=1
-                    AND ((rep.inicio>:horainicio1 AND rep.fin<:horainicio2) OR (rep.inicio>:horafin1 AND rep.fin<:horafin2) OR (rep.inicio<=:horainicio3 AND rep.fin>=:horafin3))
-                    LEFT JOIN Liberacion_puntual lp ON lp.id_reserva_permanente=rep.id_reserva_permanente
-                    AND ((lp.inicio>:inicio1 AND lp.fin<:inicio2) OR (lp.inicio>:fin1 AND lp.fin<:fin2) OR (lp.inicio<=:inicio3 AND lp.fin>=:fin3))
-                    LEFT JOIN Reserva_espacio re ON re.id_espacio=e.id_espacio AND re.id_espacio=:espacio AND re.id_reserva!=:id
-                    LEFT JOIN Reserva r ON r.id_reserva=re.id_reserva
-                    AND ((r.inicio>:inicio4 AND r.fin<:inicio5) OR (r.inicio>:fin4 AND r.fin<:fin5) OR (r.inicio<=:inicio6 AND r.fin>=:fin6))
-                ")
-                ->bind(':diasemana', $diasemana)
-                ->bind(':horainicio1', $horainicio)
-                ->bind(':horafin1', $horafin)
-                ->bind(':horainicio2', $horainicio)
-                ->bind(':horafin2', $horafin)
-                ->bind(':horainicio3', $horainicio)
-                ->bind(':horafin3', $horafin)
-                ->bind(':inicio1', $data['inicio'])
-                ->bind(':fin1', $data['fin'])
-                ->bind(':inicio2', $data['inicio'])
-                ->bind(':fin2', $data['fin'])
-                ->bind(':inicio3', $data['inicio'])
-                ->bind(':fin3', $data['fin'])
-                ->bind(':inicio4', $data['inicio'])
-                ->bind(':fin4', $data['fin'])
-                ->bind(':inicio5', $data['inicio'])
-                ->bind(':fin5', $data['fin'])
-                ->bind(':inicio6', $data['inicio'])
-                ->bind(':fin6', $data['fin'])
-                ->bind(':espacio', $data['id_espacio'])
-                ->bind(':id', $id)
-                ->fetch();
+            ->query("
+                SELECT
+                    COUNT(DISTINCT r.id_reserva) 
+                    + COUNT(DISTINCT rep.id_reserva_permanente) 
+                    - COUNT(DISTINCT lp.id_liberacion_puntual) AS totalreservas
+                FROM Espacio e
+                LEFT JOIN Reserva_permanente rep 
+                    ON rep.id_recurso = e.id_espacio 
+                    AND rep.dia_semana = :diasemana 
+                    AND rep.activo = 1
+                    AND rep.inicio <= :fin1 AND rep.fin >= :inicio1
+                LEFT JOIN Liberacion_puntual lp 
+                    ON lp.id_reserva_permanente = rep.id_reserva_permanente
+                LEFT JOIN Reserva_espacio re 
+                    ON re.id_espacio = e.id_espacio 
+                    AND re.id_espacio = :espacio1
+                    AND re.id_reserva != :id
+                LEFT JOIN Reserva r 
+                    ON r.id_reserva = re.id_reserva
+                    AND r.inicio <= :fin2 AND r.fin >= :inicio2
+                WHERE e.id_espacio = :espacio2
+            ")
+            ->bind(':diasemana', $diasemana)
+            ->bind(':inicio1', $data['inicio'])
+            ->bind(':fin1', $data['fin'])
+            ->bind(':inicio2', $data['inicio'])
+            ->bind(':fin2', $data['fin'])
+            ->bind(':espacio1', $data['id_espacio'])
+            ->bind(':espacio2', $data['id_espacio'])
+            ->bind(':id', $id)
+            ->fetch();
             if($filas['totalreservas']>0){
                 return false;
             }

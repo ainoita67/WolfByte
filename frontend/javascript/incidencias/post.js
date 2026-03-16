@@ -46,6 +46,8 @@ function activarCrearIncidencia() {
                 // Recargar
                 let checktodos = document.getElementById("todos");
                 if (checktodos) checktodos.checked = true;
+                document.getElementById("divedificio").classList.add("d-none");
+                document.getElementById("divplanta").classList.add("d-none");
                 obtenerRecursos();
             } else {
                 mostrarToast("Error al crear la incidencia", "danger");
@@ -168,16 +170,13 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
 
 
 
-function mostrarToast(mensaje, tipo = 'success') {
-    console.log('Toast:', mensaje, tipo);
-    
+function mostrarToast(mensaje, tipo = 'success') {    
     let toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
         toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
         toastContainer.style.zIndex = '9999';
         document.body.appendChild(toastContainer);
-        console.log('Contenedor de toasts creado');
     }
     
     const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);

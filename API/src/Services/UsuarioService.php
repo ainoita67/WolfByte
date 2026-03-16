@@ -184,10 +184,10 @@ class UsuarioService
         ]);
 
         // cifrar la contraseña antes de guardarla
-        $password = password_hash($password, PASSWORD_DEFAULT);
+        $hashpassword = password_hash($password, PASSWORD_DEFAULT);
 
         try {
-            $result = $this->model->updatePassword($id, $password);
+            $result = $this->model->updatePassword($id, $hashpassword);
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
