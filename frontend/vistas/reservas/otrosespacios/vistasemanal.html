@@ -3,23 +3,17 @@
     <head>
         <meta charset="utf-8">
         <script src="../../../javascript/sesion/authGuard.js"></script>
-        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
-        <!--
-        AÑADE:
-            <script src="/ALEX/frontend/javascript/includes.js"></script>
-            <script src="/ALEX/frontend/javascript/menu.js"></script>
-        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-        -->
         <script>
+            const rol = sessionStorage.getItem("rol");
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("otros", "admin");
+                generarPagina("espacios", rol);
                 };
                 document.head.appendChild(script2);
             };
@@ -27,7 +21,7 @@
         </script>
 
 
-        <title>Otros Espacios - IES Bajo Aragón</title>
+        <title>Otros espacios - IES Bajo Aragón</title>
     </head>
     <body>
 
@@ -35,13 +29,7 @@
 
         <main>
             <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
-            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
-            
-            <div class="container mt-3 text-end">
-                <button id="btnVolver" class="btn btn-outline-primary">
-                    <i class="bi bi-arrow-left"></i> Volver al listado
-                </button>
-            </div>
+            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />
 
             <div class="container-fluid p-4">
                 <div class="row g-4">
@@ -268,7 +256,7 @@ else {
 });
 
 document.getElementById("btnVolver").addEventListener("click", () => {
-    window.location.href = `${BASE}/vistas/reservas/aulas/aulas.html`;
+    window.location.href = `${BASE}/vistas/reservas/otrosespacios/espacios.html`;
 });
 
 import { getEspacio } from "/frontend/javascript/espacio/espacios.js";
@@ -291,6 +279,10 @@ async function cargarInfoAula(id) {
 
 </script>
 
+
+            <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
+                <button id="btnVolver" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
+            </div>
         </main>
         <footer id="footer"></footer>
     </body>
