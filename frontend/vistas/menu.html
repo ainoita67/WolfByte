@@ -2,6 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <script src="../javascript/sesion/authGuard.js"></script>
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
         <script>
@@ -17,11 +18,6 @@
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
-
-            // authGuard
-            const scriptAuth = document.createElement('script');
-            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
-            document.head.appendChild(scriptAuth);
         </script>
         <title>Menú principal - IES Bajo Aragón</title>
     </head>

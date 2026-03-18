@@ -27,7 +27,7 @@ class EspacioModel
                             r.numero_planta,
                             p.nombre_planta,
                             e.nombre_edificio,
-                            r.id_edificio,
+                            e.id_edificio,
                             es.es_aula
                         FROM Recurso r
                         LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
@@ -51,6 +51,7 @@ class EspacioModel
                             r.numero_planta,
                             p.nombre_planta,
                             e.nombre_edificio,
+                            e.id_edificio,
                             es.es_aula
                         FROM Recurso r
                         LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
@@ -212,7 +213,7 @@ class EspacioModel
     public function getAllAulas(): array
     {
         return $this->db
-            ->query("SELECT r.id_recurso, r.descripcion, p.nombre_planta, ed.nombre_edificio 
+            ->query("SELECT r.id_recurso, r.descripcion, p.nombre_planta, ed.nombre_edificio, ed.id_edificio
                 FROM Recurso r 
                 JOIN Espacio e ON r.id_recurso=e.id_espacio 
                 LEFT JOIN Planta p ON r.numero_planta=p.numero_planta AND r.id_edificio=p.id_edificio
@@ -225,7 +226,7 @@ class EspacioModel
     public function getOtrosEspacios(): array
     {
         return $this->db
-            ->query("SELECT r.id_recurso, r.descripcion, p.nombre_planta, ed.nombre_edificio 
+            ->query("SELECT r.id_recurso, r.descripcion, p.nombre_planta, ed.nombre_edificio, ed.id_edificio
                 FROM Recurso r 
                 JOIN Espacio e ON r.id_recurso=e.id_espacio 
                 LEFT JOIN Planta p ON r.numero_planta=p.numero_planta AND r.id_edificio=p.id_edificio

@@ -89,13 +89,13 @@ class LiberacionPuntualService
      */
     public function createLiberacionPuntual(array $input): array
     {
-
         $data = Validator::validate($input, [
             'inicio'                => 'required|string',
             'fin'                   => 'required|string',
             'comentario'            => 'string',
             'id_reserva'            => 'int',
             'id_reserva_permanente' => 'required|int',
+            'unidades'              => 'int'
         ]);
         
         if (empty($data['id_reserva_permanente'])) {

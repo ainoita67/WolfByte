@@ -25,7 +25,7 @@ class ReservaEspacioService
         $reserva = $this->model->getById($id);
 
         if (!$reserva) {
-            throw new ValidationException("Reserva no encontrada");
+            throw new \Exception("Reserva no encontrada");
         }
 
         return $reserva;
