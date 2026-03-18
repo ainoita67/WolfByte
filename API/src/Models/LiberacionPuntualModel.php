@@ -80,19 +80,20 @@ class LiberacionPuntualModel
     /**
      * Crear liberación puntual
      */
-    public function create(array $data, int $id_reserva_permanente): array
+    public function create(array $data): array
     {
         try {
             $this->db
                 ->query("
-                    INSERT INTO Liberacion_puntual (inicio, fin, comentario, id_reserva, id_reserva_permanente)
-                    VALUES (:inicio, :fin, :comentario, :id_reserva, :id_reserva_permanente)
+                    INSERT INTO Liberacion_puntual (inicio, fin, comentario, id_reserva, id_reserva_permanente, unidades)
+                    VALUES (:inicio, :fin, :comentario, :id_reserva, :id_reserva_permanente, :unidades)
                 ")
                 ->bind(':inicio',                   $data['inicio'])
                 ->bind(':fin',                      $data['fin'])
                 ->bind(':comentario',               $data['comentario'] ?? null)
                 ->bind(':id_reserva',               $data['id_reserva'] ?? null)
-                ->bind(':id_reserva_permanente',    $id_reserva_permanente)
+                ->bind(':id_reserva_permanente',    $data['id_reserva_permanente'])
+                ->bind(':unidades',                 $data['unidades'] ?? null)
                 ->execute();
 
             return $this->findById((int)$this->db->lastId());

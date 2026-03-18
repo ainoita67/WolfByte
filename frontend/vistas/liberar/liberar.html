@@ -2,7 +2,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <script src="../../../javascript/sesion/authGuard.js"></script>
+        <script src="../../javascript/sesion/authGuard.js"></script>
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
         <script>
@@ -25,127 +25,107 @@
         <div id="header"></div>
         <main class="container-fluid p-5">
             <div class="card p-5 shadow-sm m-5">
-
-            <h2 class="mb-4">Liberar aula</h2>
-
-            <form class="row g-4">
-
-            <input type="hidden" id="id_reserva">
-
-            <div class="col-md-4">
-                <label class="form-label">Edificio *</label>
-                <select id="edificio" class="form-select" required>
-                    <option value="" selected disabled>Seleccionar edificio</option>
-                    <option value="RAM">RAM</option>
-                    <option value="Loscos">Loscos</option>
-                    <option value="Redondo">Redondo</option>
-                </select>
+                <h2 class="mb-4">Liberar aula</h2>
+                <form class="row g-4" id="formLiberar">
+                    <div class="col-lg-4" id="divedificio">
+                        <label class="form-label" for="selectedificio">Edificio *</label>
+                        <select id="selectedificio" name="select edificio" class="form-select" required>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 d-none" id="divplanta">
+                        <label class="form-label" for="selectplanta">Planta *</label>
+                        <select id="selectplanta" name="selectplanta" class="form-select" required>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 d-none" id="divaula">
+                        <label class="form-label">Aula *</label>
+                        <select id="selectaula" name="selectaula" class="form-select" required>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 divfechahora d-none">
+                        <label class="form-label">Fecha *</label>
+                        <input id="fecha" type="date" class="form-control" required>
+                    </div>
+                    <div class="col-lg-4 divfechahora d-none">
+                        <label class="form-label">Hora inicio *</label>
+                        <select id="hora_inicio" class="form-select" required>
+                            <option value="" selected disabled>Seleccionar hora de inicio</option>
+                            <option value="08:50">08:50</option>
+                            <option value="09:40">09:45</option>
+                            <option value="10:40">10:40</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:55">12:55</option>
+                            <option value="13:50">13:50</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 divfechahora d-none">
+                        <label class="form-label">Hora fin *</label>
+                        <select id="hora_fin" class="form-select" required>
+                            <option value="" selected disabled>Seleccionar hora de fin</option>
+                            <option value="09:40">09:40</option>
+                            <option value="10:35">10:35</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:50">12:50</option>
+                            <option value="13:45">13:45</option>
+                            <option value="14:40">14:40</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Observaciones</label>
+                        <textarea id="observaciones" class="form-control" rows="4" placeholder="Observaciones"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="enviar w-100 text-light p-2">Liberar</button>
+                    </div>
+                    <div class="col-md-6 text-center d-flex">
+                        <a href="../menu.html" class="col-12 bg-lightgrey w-100 text-dark p-2 pb-0 mb-0">
+                        <i class="bi bi-caret-left-fill"></i> Volver
+                        </a>
+                    </div>
+                </form>
             </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Planta *</label>
-                <select id="planta" class="form-select" required>
-                    <option value="" selected disabled>Seleccionar planta</option>
-                    <option value="Planta baja">Planta baja</option>
-                    <option value="1ª planta">1ª planta</option>
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Aula *</label>
-                <select id="aula" class="form-select" required>
-                    <option value="" selected disabled>Seleccionar aula</option>
-                    <option value="R1">R1</option>
-                    <option value="R2">R2</option>
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Fecha *</label>
-                <input id="fecha" type="date" class="form-control" required>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Hora inicio *</label>
-                <select id="hora_inicio" class="form-select" required>
-                    <option value="" selected disabled>Seleccionar hora de inicio</option>
-                    <option>08:50</option>
-                    <option>09:45</option>
-                    <option>10:40</option>
-                    <option>12:00</option>
-                    <option>12:55</option>
-                    <option>13:50</option>
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">Hora fin *</label>
-                <select id="hora_fin" class="form-select" required>
-                    <option value="" selected disabled>Seleccionar hora de fin</option>
-                    <option>09:40</option>
-                    <option>10:35</option>
-                    <option>11:30</option>
-                    <option>12:50</option>
-                    <option>13:45</option>
-                    <option>14:40</option>
-                </select>
-            </div>
-
-            <div class="col-12 mb-3">
-                <label class="form-label">Observaciones</label>
-                <textarea id="observaciones" class="form-control" rows="4" placeholder="Observaciones"></textarea>
-            </div>
-
-            <div class="col-md-6">
-                <button type="submit" class="enviar w-100 text-light p-2">Liberar</button>
-            </div>
-
-            <div class="col-md-6 text-center d-flex">
-                <a href="../menu.html" class="col-12 bg-lightgrey w-100 text-dark p-2 pb-0 mb-0">
-                <i class="bi bi-caret-left-fill"></i> Volver
-                </a>
-            </div>
-
-            </form>
-
-            </div>
-
         </main>
-
         <footer id="footer"></footer>
-
         <script>
+            const scriptget = document.createElement("script");
+            scriptget.src = BASE + "/javascript/liberar/get.js";
+            document.head.appendChild(scriptget);
 
-            document.addEventListener("DOMContentLoaded", () => {
+            const scriptpost = document.createElement("script");
+            scriptpost.src = BASE + "/javascript/liberar/post.js";
+            document.head.appendChild(scriptpost);
+            
+            scriptget.onload = () => {
+                obtenerEdificios();
+            };
 
-                const params = new URLSearchParams(window.location.search);
+            scriptpost.onload = () => {
+                activarLiberar();
+            };
 
-                const idReserva = params.get("id_reserva");
-                const inicio = params.get("inicio");
-                const fin = params.get("fin");
+            const divedificio = document.getElementById("divedificio");
+            const selectedificio = document.getElementById("selectedificio");
+            const divplanta = document.getElementById("divplanta");
+            const selectplanta = document.getElementById("selectplanta");
+            const divaula = document.getElementById("divaula");
+            const selectaula = document.getElementById("selectaula");
 
-            if (!idReserva || !inicio || !fin) return;
-                // guardar id reserva
-                document.getElementById("id_reserva").value = idReserva;
+            // Cuando cambia el primer select
+            function actualizarEdificio(){
+                obtenerPlantas(selectedificio.value);
+            }
 
-                // convertir fechas
-                const fechaInicio = new Date(inicio);
-                const fechaFin = new Date(fin);
+            function actualizarPlanta(){
+                obtenerAulas(selectedificio.value, selectplanta.value);
+            }
 
-                const fecha = fechaInicio.toISOString().split("T")[0];
-                const horaInicio = fechaInicio.toTimeString().substring(0,5);
-                const horaFin = fechaFin.toTimeString().substring(0,5);
+            function actualizarAula(){
+                obtenerFechas(selectedificio.value, selectplanta.value, selectaula.value);
+            }
 
-                // pintar valores
-                document.getElementById("fecha").value = fecha;
-                document.getElementById("hora_inicio").value = horaInicio;
-                document.getElementById("hora_fin").value = horaFin;
-
-                // bloquear campos
-                document.getElementById("fecha").disabled = true;
-                document.getElementById("hora_inicio").disabled = true;
-                document.getElementById("hora_fin").disabled = true;
-            });
+            selectedificio.addEventListener("change", actualizarEdificio);
+            selectplanta.addEventListener("change", actualizarPlanta);
+            selectaula.addEventListener("change", actualizarAula);
         </script>
     </body>
 </html>

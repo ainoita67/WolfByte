@@ -163,14 +163,17 @@ class ReservaPortatilModel
                     SELECT
                         m.unidades AS materialunidades,
                         (
-                            SELECT COALESCE(SUM(rp.unidades),0)
+                            SELECT COALESCE((SUM(rp.unidades)-SUM(lp.unidades)),0)
                             FROM Reserva r
                             JOIN Reserva_Portatiles rp 
                                 ON rp.id_reserva_material = r.id_reserva
+                            LEFT JOIN Liberacion_puntual lp
+                                ON r.id_reserva=lp.id_reserva
                             WHERE rp.id_material = m.id_material
                             AND rp.id_reserva_material != :id
                             AND r.inicio <= :fin1
                             AND r.fin >= :inicio1
+                            AND r.autorizada!=0
                         )
                         +
                         (

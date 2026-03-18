@@ -177,31 +177,35 @@ class ReservaEspacioModel
                 SELECT
                     COUNT(DISTINCT r.id_reserva) 
                     + COUNT(DISTINCT rep.id_reserva_permanente) 
-                    - COUNT(DISTINCT lp.id_liberacion_puntual) AS totalreservas
+                    - COUNT(DISTINCT lp_r.id_liberacion_puntual)
+                    - COUNT(DISTINCT lp_rep.id_liberacion_puntual) AS totalreservas
                 FROM Espacio e
-                LEFT JOIN Reserva_permanente rep 
-                    ON rep.id_recurso = e.id_espacio 
-                    AND rep.dia_semana = :diasemana 
+                LEFT JOIN Reserva_permanente rep
+                    ON rep.id_recurso = e.id_espacio
+                    AND rep.dia_semana = :diasemana
                     AND rep.activo = 1
-                    AND rep.inicio <= :fin1 AND rep.fin >= :inicio1
-                LEFT JOIN Liberacion_puntual lp 
-                    ON lp.id_reserva_permanente = rep.id_reserva_permanente
-                LEFT JOIN Reserva_espacio re 
-                    ON re.id_espacio = e.id_espacio 
-                    AND re.id_espacio = :espacio1
+                    AND rep.inicio <= :fin1
+                    AND rep.fin >= :inicio1
+                LEFT JOIN Liberacion_puntual lp_rep
+                    ON lp_rep.id_reserva_permanente = rep.id_reserva_permanente
+                LEFT JOIN Reserva_espacio re
+                    ON re.id_espacio = e.id_espacio
                     AND re.id_reserva != :id
-                LEFT JOIN Reserva r 
+                LEFT JOIN Reserva r
                     ON r.id_reserva = re.id_reserva
-                    AND r.inicio <= :fin2 AND r.fin >= :inicio2
-                WHERE e.id_espacio = :espacio2
+                    AND r.inicio <= :fin2
+                    AND r.fin >= :inicio2
+                    AND r.autorizada != 0
+                LEFT JOIN Liberacion_puntual lp_r
+                    ON lp_r.id_reserva = r.id_reserva
+                WHERE e.id_espacio = :espacio
             ")
             ->bind(':diasemana', $diasemana)
             ->bind(':inicio1', $data['inicio'])
             ->bind(':fin1', $data['fin'])
             ->bind(':inicio2', $data['inicio'])
             ->bind(':fin2', $data['fin'])
-            ->bind(':espacio1', $data['id_espacio'])
-            ->bind(':espacio2', $data['id_espacio'])
+            ->bind(':espacio', $data['id_espacio'])
             ->bind(':id', $id)
             ->fetch();
             if($filas['totalreservas']>0){
