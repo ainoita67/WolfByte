@@ -63,7 +63,7 @@ function mostrarToast(mensaje, tipo = 'success') {
     
     // Crear HTML del toast
     const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     <i class="bi ${iconClass} me-2"></i>

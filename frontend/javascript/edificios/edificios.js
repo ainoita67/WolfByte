@@ -23,12 +23,19 @@ function mostrarToast(mensaje, tipo = 'success') {
     
     // Determinar color según el tipo
     let bgClass = 'bg-success';
-    if (tipo === 'error') bgClass = 'bg-danger';
-    else if (tipo === 'warning') bgClass = 'bg-warning';
-    else if (tipo === 'info') bgClass = 'bg-info';
+    let textColor = 'text-white';
+    
+    if (tipo === 'error'){
+        bgClass = 'bg-danger';
+    }else if (tipo === 'warning'){
+        bgClass = 'bg-warning';
+        textColor = 'text-dark';
+    }else if (tipo === 'info'){
+        bgClass = 'bg-info';
+    }
     
     const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">${mensaje}</div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>

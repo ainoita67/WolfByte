@@ -96,17 +96,19 @@ function mostrarToast(mensaje, tipo = 'success') {
     const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
     
     let bgClass = 'bg-success';
+    let textColor = 'text-white';
     
     if (tipo === 'error'||tipo === 'danger') {
         bgClass = 'bg-danger';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
+        textColor = 'text-black';
     } else if (tipo === 'info') {
         bgClass = 'bg-info';
     }
     
     const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     ${mensaje}

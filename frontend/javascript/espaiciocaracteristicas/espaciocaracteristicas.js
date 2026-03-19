@@ -536,8 +536,8 @@ function mostrarAlerta(mensaje, tipo = "info") {
             <i class="bi ${tipo === 'success' ? 'bi-check-circle-fill' : 
                            tipo === 'danger' ? 'bi-exclamation-triangle-fill' : 
                            tipo === 'warning' ? 'bi-exclamation-circle-fill' : 'bi-info-circle-fill'} me-2"></i>
-            <div>${mensaje}</div>
-            <button type="button" class="btn-close ${textClass}" data-bs-dismiss="alert"></button>
+        <div>${mensaje}</div>
+            <button type="button" class="btn-close ${textClass === 'text-white' ? 'btn-close-white': ''}" data-bs-dismiss="alert"></button>
         </div>
     `;
 
