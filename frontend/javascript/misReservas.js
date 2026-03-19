@@ -26,11 +26,18 @@ function mostrarMisReservas(reservas, tarjetasReservas){
             div.className="col-lg-3 col-6";
             let divReserva = document.createElement("div");
             divReserva.className="card h-100 p-0 mb-4 reserva-card";
-            divReserva.setAttribute("role", "button");
-            divReserva.setAttribute("data-bs-toggle", "modal");
-            divReserva.setAttribute("data-bs-target", "#modalReserva");
-            divReserva.setAttribute("data-id", reserva.id_reserva);
-            divReserva.setAttribute("data-titulo", reserva.titulo);
+            if(reserva.autorizada!="0"){
+                divReserva.addEventListener("click", function(){
+                    mostrarDatosModal(reserva);
+
+                    let modal = new bootstrap.Modal(document.getElementById("modalReserva"));
+                    modal.show();
+                });
+            }else{
+                divReserva.addEventListener("click", function(){
+                    mostrarToast("No se puede modificar una reserva cancelada o denegada", "danger");
+                });
+            }
 
             let tipo='Portátil';                
             if(reserva.tipo == 'Reserva_espacio'){
@@ -47,11 +54,11 @@ function mostrarMisReservas(reservas, tarjetasReservas){
                 </div>
             `;
             if(reserva.autorizada=="1"){
-                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado aceptado"></div>';
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado aceptado text-light pt-2 ps-3 fs-6">Aceptado</div>';
             }else if(reserva.autorizada=="0"){
-                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado"></div>';
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado text-dark pt-2 ps-3 fs-6">Rechazado</div>';
             }else{
-                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado"></div>';
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado text-light pt-2 ps-3 fs-6">En proceso</div>';
             }
 
             divReserva.addEventListener("click", function(){
@@ -159,8 +166,26 @@ function activarEditarMisReservas() {
 
         modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
     });
-}
 
+    let btnCancelar=document.getElementById("cancelarReserva")
+
+    //DENEGAR
+    btnCancelar.addEventListener("click", function (e) {
+        e.preventDefault();
+        let reserva=obtenerDatosReserva(sessionStorage.getItem("id_usuario"));
+        if(!reserva.id||!reserva.fechacreacion||!reserva.inicio||!reserva.fin||!reserva.tipo||!reserva.id_recurso||!reserva.grupo||!reserva.profesor||!reserva.usuario){
+            mostrarToast("Error al autorizar los datos. Campos obligatorios no rellenados.", 'danger');
+            return;
+        }
+
+        let modal = bootstrap.Modal.getInstance(
+            document.getElementById("modalReserva")
+        );
+        
+        reserva.autorizada=0;
+        modificarReserva(reserva.id, reserva.autorizada, reserva.fechacreacion, reserva.inicio, reserva.fin, reserva.tipo, reserva.id_recurso, reserva.asignatura, reserva.grupo, reserva.profesor, reserva.usuario, reserva.usuarioautoriza, reserva.actividad, reserva.necesidades, reserva.unidades, reserva.espacio_uso, reserva.observaciones, formeditar, modal);
+    });
+}
 
 
 function obtenerDatosReserva(usuarioautoriza=null){
@@ -360,7 +385,7 @@ function mostrarToast(mensaje, tipo = 'success') {
     }
     
     const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
             <div class="d-flex">
                 <div class="toast-body">
                     ${mensaje}
