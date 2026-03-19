@@ -32,7 +32,7 @@ class ReservaModel
     /**
      * Obtener reservas por usuario
      */
-    public function getByUsuario(int $idUsuario): array
+    public function findByUsuario(int $idUsuario): array
     {
         try{
             return $this->db
@@ -338,13 +338,6 @@ class ReservaModel
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar la reserva");
         }
-    }
-    public function findByUsuario(int $id_usuario): array
-    {
-        return $this->db
-            ->query("SELECT * FROM Reserva WHERE id_usuario = :id_usuario")
-            ->bind(":id_usuario", $id_usuario)
-            ->fetchAll();
     }
 }
 

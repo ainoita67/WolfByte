@@ -30,6 +30,21 @@ class EdificioModel
     }
 
     /**
+     * Obtener edificio por nombre
+     */
+    public function findByNombre(string $nombre): array|false
+    {
+        try {
+            return $this->db
+                ->query("SELECT * FROM Edificio WHERE lower(nombre_edificio) = lower(:nombre)")
+                ->bind(':nombre', $nombre)
+                ->fetch();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al buscar edificio: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Obtener edificio por ID
      */
     public function findById(int $id): array|false
@@ -50,15 +65,18 @@ class EdificioModel
     public function create(array $data): array
     {
         try {
-            $this->db
-                ->query("INSERT INTO Edificio (nombre_edificio) VALUES (:nombre)")
-                ->bind(':nombre', $data['nombre_edificio'])
-                ->execute();
+            if($this->findByNombre($data['nombre_edificio'])) {
+                throw new \Exception("El edificio con ese nombre ya existe");
+            }else{
+                $this->db
+                    ->query("INSERT INTO Edificio (nombre_edificio) VALUES (:nombre)")
+                    ->bind(':nombre', $data['nombre_edificio'])
+                    ->execute();
 
-            $id = (int)$this->db->lastId();
-            
-            return $this->findById($id);
-            
+                $id = (int)$this->db->lastId();
+                
+                return $this->findById($id);
+            }            
         } catch (PDOException $e) {
             throw new \Exception("Error al crear edificio: " . $e->getMessage());
         }
@@ -70,14 +88,17 @@ class EdificioModel
     public function update(int $id, array $data): array
     {
         try {
-            $this->db
-                ->query("UPDATE Edificio SET nombre_edificio = :nombre WHERE id_edificio = :id")
-                ->bind(':nombre', $data['nombre_edificio'])
-                ->bind(':id', $id)
-                ->execute();
+            if($this->findByNombre($data['nombre_edificio'])) {
+                throw new \Exception("El edificio con ese nombre ya existe");
+            }else{
+                $this->db
+                    ->query("UPDATE Edificio SET nombre_edificio = :nombre WHERE id_edificio = :id")
+                    ->bind(':nombre', $data['nombre_edificio'])
+                    ->bind(':id', $id)
+                    ->execute();
 
-            return $this->findById($id);
-            
+                return $this->findById($id);
+            }            
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar edificio: " . $e->getMessage());
         }
