@@ -47,9 +47,9 @@ async function comprobarLiberacion(fecha, reservaLiberar){
     let liberaciones=await obtenerLiberaciones()
     let n=liberaciones.filter(liberacion => {
         return (
-            liberacion.inicio==fecha+" "+reservaLiberar.inicio||
-            liberacion.fin==fecha+" "+reservaLiberar.fin||
-            liberacion.id_reserva_permanente==reservaLiberar.id_reserva_permanente||
+            liberacion.inicio==fecha+" "+reservaLiberar.inicio&&
+            liberacion.fin==fecha+" "+reservaLiberar.fin&&
+            liberacion.id_reserva_permanente==reservaLiberar.id_reserva_permanente&&
             liberacion.unidades==reservaLiberar.unidades
         );
     });
@@ -92,6 +92,7 @@ async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaF
             if(reservasEntreFechas.length==0){
                 mostrarToast("No se han encontrado reservas permanentes entre esas fechas", "warning");
             }else{
+                let usuario=sessionStorage.getItem("id_usuario");
                 let nliberaciones=0;
                 reservasEntreFechas.forEach(async (reservaLiberar) => {
                     if(await comprobarLiberacion(fecha, reservaLiberar)){
@@ -100,7 +101,7 @@ async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaF
                             headers: {
                                 "Content-Type": "application/json"
                             },
-                            body: JSON.stringify({inicio: fecha+" "+reservaLiberar.inicio, fin: fecha+" "+reservaLiberar.fin, comentario: observaciones, id_reserva: null, id_reserva_permanente: reservaLiberar.id_reserva_permanente, unidades: reservaLiberar.unidades})
+                            body: JSON.stringify({inicio: fecha+" "+reservaLiberar.inicio, fin: fecha+" "+reservaLiberar.fin, comentario: observaciones, id_reserva: null, id_reserva_permanente: reservaLiberar.id_reserva_permanente, unidades: reservaLiberar.unidades, id_usuario_actor: usuario})
                         })
                         .then(res => res.json())
                         .then(response => {

@@ -12,30 +12,27 @@
 
     <!-- En menuadministrador.html y otras páginas de admin -->
     <script>
-        setTimeout(function () {
-            const rol = Number(sessionStorage.getItem("rol"));
-            console.log('Rol después de authGuard:', rol);
-
-            // Admin (30) y super-admin (40) pueden acceder
-            if (rol !== 30 && rol !== 40) {
-                console.warn('Acceso denegado - Rol:', rol);
-                alert('No tienes permisos para acceder al panel de administrador');
-                window.location.href = '../../menu.html'; // REDIRIGE AL MENÚ PRINCIPAL
-            } else {
-                // Cargar la página normalmente
-                const script1 = document.createElement("script");
-                script1.src = BASE + "/javascript/includes.js";
-                script1.onload = () => {
-                    const script2 = document.createElement("script");
-                    script2.src = BASE + "/javascript/menu.js";
-                    script2.onload = () => {
-                        generarPagina("menu", "admin");
-                    };
-                    document.head.appendChild(script2);
+        const rol = Number(sessionStorage.getItem("rol"));
+            
+        // Admin (30) y super-admin (40) pueden acceder
+        if (rol!=30&&rol!=40) {
+            console.warn('Acceso denegado - Rol:', rol);
+            alert('No tienes permisos para acceder al panel de administrador');
+            window.location.replace(BASE + '/menu.html');
+        }else{
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("administrador", rol);
                 };
-                document.head.appendChild(script1);
-            }
-        }, 100);
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        }
     </script>
 </head>
 

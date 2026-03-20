@@ -34,7 +34,13 @@ function generateHeaderNav(menuactivo, role) {
             { texto: "Salón de actos", href: "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
             { texto: "Portátiles", href: "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
             { texto: "Otros espacios", href: "/vistas/reservas/otrosespacios/espacios.html", key: "espacios" },
-            { texto: "Incidencias", href: "/vistas/incidencias/verincidencias.html", key: "incidencias" },
+            { 
+                texto: "Incidencias", 
+                href: (role==30||role==40)
+                    ? "/vistas/incidencias/verincidencias.html"
+                    : "/vistas/incidencias/incidencias.html", 
+                key: "incidencias" 
+            },
             { texto: "Liberar aulas", href: "/vistas/liberar/liberar.html", key: "liberar" }
         ];
         console.log("Rol del usuario:", role); // DEBUG: Verificar el rol del usuario

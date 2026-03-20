@@ -2,26 +2,36 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
-        <script>
-            const rol = sessionStorage.getItem("rol");
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
-                generarPagina("incidencias", rol);
-                };
-                document.head.appendChild(script2);
-            };
-            document.head.appendChild(script1);
 
-            // authGuard
-            const scriptAuth = document.createElement('script');
-            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
-            document.head.appendChild(scriptAuth);
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+                
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol!=30&&rol!=40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para ver las incidencias');
+                window.location.replace(BASE + '/vistas/incidencias/incidencias.html');
+            }else{
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("incidencias", rol);
+                    };
+                    // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
         </script>
         <title>Ver incidencias - IES Bajo Aragón</title>
     </head>

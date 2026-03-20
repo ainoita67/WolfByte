@@ -2,256 +2,252 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <!-- SE CREA EL BASE PATH PARA USAR EN TODOS LOS SCRIPTS, ENLACES Y REDIRECCIONES-->
+        <!-- PRIMERO: Definir BASE -->
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
-        <!--
-        AÑADE:
-            <script src="/frontend/javascript/includes.js"></script>
-            <script src="/frontend/javascript/menu.js"></script>
-        QUE GENERAN EL RESTO DE ENLACES DEL HEAD Y EL HEADER, NAV Y FOOTER
-        -->
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
         <script>
-            const rol = sessionStorage.getItem("rol");
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            // Admin (30) y super-admin (40) pueden acceder
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("salonactos", rol);
+                    generarPagina("salonactos", rol);
                 };
                 // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
-
-            // authGuard
-            const scriptAuth = document.createElement('script');
-            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
-            document.head.appendChild(scriptAuth);
         </script>
         <title>Salón de actos - IES Bajo Aragón</title>
 
-    <!-- DayPilot -->
-    <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
-    <link rel="stylesheet" href="../../../assets/css/calendar_green.css" />
-    <style>
-.cursor-pointer {
-    cursor: pointer !important;
-}
-</style>
-</head>
+        <!-- DayPilot -->
+        <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+        <link rel="stylesheet" href="../../../assets/css/calendar_green.css" />
+        <style>
+            .cursor-pointer {
+                cursor: pointer !important;
+            }
+        </style>
+    </head>
 
-<body>
+    <body>
 
-<div id="header"></div>
+        <div id="header"></div>
 
-<main>
-    <!-- CONTENEDOR CALENDARIO -->
-    <div class="container my-4 d-flex flex-column" style="height: 65vh;">
+        <main>
+            <!-- CONTENEDOR CALENDARIO -->
+            <div class="container my-4 d-flex flex-column" style="height: 65vh;">
 
-        <!-- NAVEGACIÓN SEMANAL -->
-        <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
+                <!-- NAVEGACIÓN SEMANAL -->
+                <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
 
-            <button id="prevWeek"
-                    type="button"
-                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                    style="width: 2.5rem; height: 2.5rem;">
-                <i class="bi bi-arrow-left-circle fs-2"></i>
-            </button>
-            <h2 class="col-auto">Salón de actos</h2>
-            <button id="nextWeek"
-                    type="button"
-                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                    style="width: 2.5rem; height: 2.5rem;">
-                <i class="bi bi-arrow-right-circle fs-2"></i>
-            </button>
+                    <button id="prevWeek"
+                            type="button"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                            style="width: 2.5rem; height: 2.5rem;">
+                        <i class="bi bi-arrow-left-circle fs-2"></i>
+                    </button>
+                    <h2 class="col-auto">Salón de actos</h2>
+                    <button id="nextWeek"
+                            type="button"
+                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                            style="width: 2.5rem; height: 2.5rem;">
+                        <i class="bi bi-arrow-right-circle fs-2"></i>
+                    </button>
 
-        </div>
+                </div>
 
-        <!-- CALENDARIO -->
-        <div id="dp" class="flex-grow-1"></div>
+                <!-- CALENDARIO -->
+                <div id="dp" class="flex-grow-1"></div>
 
-    </div>
+            </div>
 
-    <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
-        <button id="btnVolver" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
-    </div>
-</main>
+            <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
+                <button id="btnVolver" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
+            </div>
+        </main>
 
-<footer id="footer"></footer>
+        <footer id="footer"></footer>
 
 
-<!-- ============================= -->
-<!-- SCRIPT PRINCIPAL DEL CALENDARIO -->
-<!-- ============================= -->
+        <!-- ============================= -->
+        <!-- SCRIPT PRINCIPAL DEL CALENDARIO -->
+        <!-- ============================= -->
 
-<script type="module">
+        <script type="module">
 
-import { generarEventosSegunRecurso } from "/frontend/javascript/salon-actos/crud.js";
+        import { generarEventosSegunRecurso } from "/frontend/javascript/salon-actos/crud.js";
 
-const idRecurso = "salon";
+        const idRecurso = "salon";
 
-document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", async () => {
 
-    if (!idRecurso) {
-        console.error("No se ha recibido id del recurso en la URL");
-        return;
-    }
+            if (!idRecurso) {
+                console.error("No se ha recibido id del recurso en la URL");
+                return;
+            }
 
-   const dp = new DayPilot.Calendar("dp", {
+        const dp = new DayPilot.Calendar("dp", {
 
-    viewType: "WorkWeek",
-    theme: "calendar_green",
-    startDate: DayPilot.Date.today(),
+            viewType: "WorkWeek",
+            theme: "calendar_green",
+            startDate: DayPilot.Date.today(),
 
-    locale: "es-es",
-    headerDateFormat: "dd/MM/yyyy",
-    weekStarts: 1,
+            locale: "es-es",
+            headerDateFormat: "dd/MM/yyyy",
+            weekStarts: 1,
 
-    cellDuration: 5,
-    cellHeight: 8,
-    businessBeginsHour: 8,
-    businessEndsHour: 22,
+            cellDuration: 5,
+            cellHeight: 8,
+            businessBeginsHour: 8,
+            businessEndsHour: 22,
 
-    eventDeleteHandling: "Disabled",
-    heightSpec: "BusinessHoursNoScroll",
+            eventDeleteHandling: "Disabled",
+            heightSpec: "BusinessHoursNoScroll",
 
-    // 🎨 Cambiar cursor según tipo
-    onBeforeEventRender: function(args) {
-        args.data.cssClass = "cursor-pointer";
-    },
+            // 🎨 Cambiar cursor según tipo
+            onBeforeEventRender: function(args) {
+                args.data.cssClass = "cursor-pointer";
+            },
 
-    // 🧠 CLICK EN EVENTO
-    onEventClick: async function(args) {
+            // 🧠 CLICK EN EVENTO
+            onEventClick: async function(args) {
 
-        const evento = args.e.data;
+                const evento = args.e.data;
 
-        // =============================
-        // 🟢 CREAR RESERVA (Disponible)
-        // =============================
+                // =============================
+                // 🟢 CREAR RESERVA (Disponible)
+                // =============================
 
-        if (evento.bloqueBase) {
+                if (evento.bloqueBase) {
 
-    const modal = await DayPilot.Modal.form([
-        { name: "Asignatura", id: "asignatura", type: "text" },
-        { name: "Grupo", id: "grupo", type: "text" },
-        { name: "Profesor", id: "profesor", type: "text" },
-        { name: "Actividad", id: "actividad", type: "text" },
-        { name: "Observaciones", id: "observaciones", type: "textarea" }
-    ]);
+            const modal = await DayPilot.Modal.form([
+                { name: "Asignatura", id: "asignatura", type: "text" },
+                { name: "Grupo", id: "grupo", type: "text" },
+                { name: "Profesor", id: "profesor", type: "text" },
+                { name: "Actividad", id: "actividad", type: "text" },
+                { name: "Observaciones", id: "observaciones", type: "textarea" }
+            ]);
 
-    if (!modal.result) return;
-    const idusuario = sessionStorage.getItem("id_usuario");
+            if (!modal.result) return;
+            const idusuario = sessionStorage.getItem("id_usuario");
 
-    const response = await fetch(`${API}/reservaEspacio`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-            asignatura: modal.result.asignatura,
-            grupo: modal.result.grupo,
-            profesor: modal.result.profesor,
-            observaciones: modal.result.observaciones,
-            inicio: evento.start.replace("T", " "),
-            fin: evento.end.replace("T", " "),
-            actividad: modal.result.actividad,
-            id_espacio: idRecurso,
-            id_usuario: idusuario
-        })
-    });
+            const response = await fetch(`${API}/reservaEspacio`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                },
+                body: JSON.stringify({
+                    asignatura: modal.result.asignatura,
+                    grupo: modal.result.grupo,
+                    profesor: modal.result.profesor,
+                    observaciones: modal.result.observaciones,
+                    inicio: evento.start.replace("T", " "),
+                    fin: evento.end.replace("T", " "),
+                    actividad: modal.result.actividad,
+                    id_espacio: idRecurso,
+                    id_usuario: idusuario
+                })
+            });
 
-    if (!response.ok) {
-        alert("Error creando la reserva");
-        return;
-    }
+            if (!response.ok) {
+                alert("Error creando la reserva");
+                return;
+            }
 
-    const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
-    dp.events.list = nuevosEventos;
-    dp.update();
-}
+            const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+            dp.events.list = nuevosEventos;
+            dp.update();
+        }
 
-        // =============================
-        // 🔵 EDITAR RESERVA
-        // =============================
-else {
+                // =============================
+                // 🔵 EDITAR RESERVA
+                // =============================
+        else {
 
-    const modal = await DayPilot.Modal.form([
-        { name: "Asignatura", id: "asignatura", type: "text" },
-        { name: "Grupo", id: "grupo", type: "text" },
-        { name: "Profesor", id: "profesor", type: "text" },
-        { name: "Actividad", id: "actividad", type: "text" },
-        { name: "Observaciones", id: "observaciones", type: "textarea" }
-    ], {
-        asignatura: evento.asignatura,
-        grupo: evento.grupo,
-        profesor: evento.profesor,
-        actividad: evento.actividad,
-        observaciones: evento.observaciones
-    });
-    
-    if (!modal.result) return;
+            const modal = await DayPilot.Modal.form([
+                { name: "Asignatura", id: "asignatura", type: "text" },
+                { name: "Grupo", id: "grupo", type: "text" },
+                { name: "Profesor", id: "profesor", type: "text" },
+                { name: "Actividad", id: "actividad", type: "text" },
+                { name: "Observaciones", id: "observaciones", type: "textarea" }
+            ], {
+                asignatura: evento.asignatura,
+                grupo: evento.grupo,
+                profesor: evento.profesor,
+                actividad: evento.actividad,
+                observaciones: evento.observaciones
+            });
+            
+            if (!modal.result) return;
 
-    const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("token")
-        },
-        body: JSON.stringify({
-            asignatura: modal.result.asignatura,
-            grupo: modal.result.grupo,
-            profesor: modal.result.profesor,
-            actividad: modal.result.actividad,
-            observaciones: modal.result.observaciones
-        })
-    });
+            const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                },
+                body: JSON.stringify({
+                    asignatura: modal.result.asignatura,
+                    grupo: modal.result.grupo,
+                    profesor: modal.result.profesor,
+                    actividad: modal.result.actividad,
+                    observaciones: modal.result.observaciones
+                })
+            });
 
-    if (!response.ok) {
-        alert("Error actualizando la reserva");
-        return;
-    }
+            if (!response.ok) {
+                alert("Error actualizando la reserva");
+                return;
+            }
 
-    const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
-    dp.events.list = nuevosEventos;
-    dp.update();
-}
-    }
+            const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+            dp.events.list = nuevosEventos;
+            dp.update();
+        }
+            }
 
-});
+        });
 
-    try {
-        const eventos = await generarEventosSegunRecurso(idRecurso);
-        dp.events.list = eventos;
-        dp.init();
-    } catch (error) {
-        console.error("Error cargando eventos:", error);
-    }
+            try {
+                const eventos = await generarEventosSegunRecurso(idRecurso);
+                dp.events.list = eventos;
+                dp.init();
+            } catch (error) {
+                console.error("Error cargando eventos:", error);
+            }
 
-    // ====== NAVEGACIÓN SEMANAL ======
+            // ====== NAVEGACIÓN SEMANAL ======
 
-    document.getElementById("prevWeek").addEventListener("click", () => {
-        dp.startDate = dp.startDate.addDays(-7);
-        dp.update();
-    });
+            document.getElementById("prevWeek").addEventListener("click", () => {
+                dp.startDate = dp.startDate.addDays(-7);
+                dp.update();
+            });
 
-    document.getElementById("nextWeek").addEventListener("click", () => {
-        dp.startDate = dp.startDate.addDays(7);
-        dp.update();
-    });
+            document.getElementById("nextWeek").addEventListener("click", () => {
+                dp.startDate = dp.startDate.addDays(7);
+                dp.update();
+            });
 
-});
+        });
 
-// ====== BOTÓN VOLVER ======
+        // ====== BOTÓN VOLVER ======
 
-document.getElementById("btnVolver").addEventListener("click", () => {
-    window.location.href = `${BASE}/vistas/menu.html    `;
-});
+        document.getElementById("btnVolver").addEventListener("click", () => {
+            window.location.href = `${BASE}/vistas/menu.html    `;
+        });
 
-</script>
+        </script>
 
-</body>
+    </body>
 </html>

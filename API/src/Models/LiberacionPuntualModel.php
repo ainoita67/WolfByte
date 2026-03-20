@@ -95,7 +95,7 @@ class LiberacionPuntualModel
                 ->bind(':id_reserva_permanente',    $data['id_reserva_permanente'])
                 ->bind(':unidades',                 $data['unidades'] ?? null)
                 ->execute();
-
+            
             return $this->findById((int)$this->db->lastId());
         } catch (PDOException $e) {
             throw new \Exception("Error al crear la liberación puntual");

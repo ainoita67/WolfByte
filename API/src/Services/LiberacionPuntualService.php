@@ -121,7 +121,7 @@ class LiberacionPuntualService
             'id_reserva_permanente' => 'required|int',
         ]);
         
-        if (empty($id_r['id_reserva']) || empty($data['id_reserva_permanente'])) {
+        if (empty($id_r['id_reserva']) && empty($data['id_reserva_permanente'])) {
             throw new ValidationException(array("id_reserva e id_reserva_permanente son obligatorios"));
         }
 
