@@ -181,7 +181,7 @@ function obtenerTipoLogsSelect(){
 
         tiposLog.forEach(tipoLog => {
             let option = document.createElement("option");
-            option.setAttribute("value", tipoLog.id_tipoLog);
+            option.setAttribute("value", tipoLog.id_tipo_log);
             option.textContent = tipoLog.tipo;
             select.appendChild(option);
         });
