@@ -7,16 +7,19 @@ use Core\Request;
 use Core\Response;
 use Core\Session;
 use Services\LiberacionPuntualService;
+use Services\LogAccionesService;
 use Throwable;
 use Validation\ValidationException;
 
 class LiberacionPuntualController
 {
     private LiberacionPuntualService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new LiberacionPuntualService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     /**
@@ -90,6 +93,9 @@ class LiberacionPuntualController
         try {
             $data = $req->getBody();
             $liberacion = $this->service->createLiberacionPuntual($data);
+            $log['id_liberacion_puntual']=$liberacion['id_liberacion_puntual'];
+            $log['id_usuario_actor']=$data['id_usuario_actor'];
+            $this->serviceLog->createLog('Creación de liberación', $log);
             $res->status(201)->json($liberacion);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);

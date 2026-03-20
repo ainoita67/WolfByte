@@ -2,26 +2,30 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
         <script>const BASE = window.location.origin + "/frontend";</script>
         <script>const API = window.location.origin + "/API";</script>
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
         <script>
-            const rol = sessionStorage.getItem("rol");
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            // Admin (30) y super-admin (40) pueden acceder
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
                 const script2 = document.createElement("script");
                 script2.src = BASE + "/javascript/menu.js";
                 script2.onload = () => {
-                generarPagina("menu", rol);
+                    generarPagina("menu", rol);
                 };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
                 document.head.appendChild(script2);
             };
             document.head.appendChild(script1);
-
-            // authGuard
-            const scriptAuth = document.createElement('script');
-            scriptAuth.src = BASE + '/javascript/sesion/authGuard.js';
-            document.head.appendChild(scriptAuth);
         </script>
         <title>Mis datos - IES Bajo Aragón</title>
     </head>
