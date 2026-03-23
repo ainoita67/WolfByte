@@ -196,6 +196,7 @@ $router->get('/caracteristicasEspacios', 'Controllers\\CaracteristicaEspacioCont
 $router->get('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@showByEspacio'); // Listar características de un espacio específico
 $router->get('/espacios/{id}/caracteristicas/disponibles', 'Controllers\\CaracteristicaEspacioController@showDisponibles'); // Listar características disponibles para un espacio específico
 $router->post('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@asignar'); // Asignar una característica a un espacio específico 
+$router->delete('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@quitar'); // Desasignar una característica a un espacio específico 
 
 // LOG DE ACCIONES
 $router->get('/logacciones', 'Controllers\\LogAccionesController@index');

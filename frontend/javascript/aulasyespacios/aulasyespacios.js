@@ -399,7 +399,8 @@ async function guardarEspacio(evento) {
     
     const esCreacion = evento.target.id === 'formCrearEspacio';
     
-    let id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, es_aula;
+    let usuario=sessionStorage.getItem("id_usuario");
+    let id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial, es_aula;
     
     if (esCreacion) {
         id_recurso = document.getElementById('crearId')?.value;
@@ -408,8 +409,9 @@ async function guardarEspacio(evento) {
         id_edificio = document.getElementById('crearEdificio')?.value;
         numero_planta = document.getElementById('crearPlanta')?.value;
         activo = document.getElementById('crearEstado')?.value === "1";
+        especial = document.getElementById('crearEspecial')?.value === "1";
         id = null;
-        console.log("CREANDO - Datos del formulario:", {id_recurso, descripcion, tipo, id_edificio, numero_planta, activo});
+        console.log("CREANDO - Datos del formulario:", {id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial});
     } else {
         id = document.getElementById('editId')?.value;
         id_recurso = document.getElementById('editIdDisplay')?.value;
@@ -418,7 +420,8 @@ async function guardarEspacio(evento) {
         id_edificio = document.getElementById('editEdificio')?.value;
         numero_planta = document.getElementById('editPlanta')?.value;
         activo = document.getElementById('editEstado')?.value === "1";
-        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo});
+        especial = document.getElementById('editEspecial')?.value === "1";
+        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial});
     }
     
     es_aula = tipo === "1";
@@ -432,10 +435,11 @@ async function guardarEspacio(evento) {
         id_recurso: id_recurso,
         descripcion: descripcion,
         activo: activo ? 1 : 0,
-        especial: 0,
+        especial: especial ? 1 : 0,
         numero_planta: parseInt(numero_planta),
         id_edificio: parseInt(id_edificio),
-        es_aula: es_aula ? 1 : 0
+        es_aula: es_aula ? 1 : 0,
+        id_usuario: usuario
     };
     
     console.log("Enviando datos:", datos);
@@ -445,7 +449,7 @@ async function guardarEspacio(evento) {
         let url;
         
         if (!esCreacion && id) {
-            url = `${DOMAIN}/espacios/${id}`;
+            url = `${API}/espacios/${id}`;
             console.log("Actualizando espacio en:", url);
             response = await fetch(url, {
                 method: "PUT",
@@ -456,7 +460,7 @@ async function guardarEspacio(evento) {
                 body: JSON.stringify(datos)
             });
         } else {
-            url = `${DOMAIN}/espacios`;
+            url = `${API}/espacios`;
             console.log("Creando espacio en:", url);
             response = await fetch(url, {
                 method: "POST",
@@ -481,10 +485,17 @@ async function guardarEspacio(evento) {
             }
         }
         
-        mostrarAlerta(
-            esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
-            "success"
-        );
+        if(response.status==200){
+            mostrarAlerta(
+                "No han habido cambios",
+                "warning"
+            );
+        }else{
+            mostrarAlerta(
+                esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
+                "success"
+            );
+        }
         
         const modalId = esCreacion ? 'modalCrear' : 'modalEditar';
         const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));

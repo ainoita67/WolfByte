@@ -39,30 +39,28 @@ class EspacioModel
     }
 
     // Obtener Espacio por ID
-    public function findById(string $id): ?array
+    public function findById(string $id): array|false
     {
-        $result = $this->db
+        return $this->db
             ->query("SELECT 
-                            r.id_recurso,
-                            r.descripcion,
-                            r.tipo,
-                            r.activo,
-                            r.especial,
-                            r.numero_planta,
-                            p.nombre_planta,
-                            e.nombre_edificio,
-                            e.id_edificio,
-                            es.es_aula
-                        FROM Recurso r
-                        LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
-                        LEFT JOIN Planta p ON p.numero_planta = r.numero_planta
-                        LEFT JOIN Espacio es ON r.id_recurso = es.id_espacio
-                        WHERE r.tipo = 'Espacio' AND r.id_recurso=:id
-                        ORDER BY r.id_recurso;")
+                        r.id_recurso,
+                        r.descripcion,
+                        r.tipo,
+                        r.activo,
+                        r.especial,
+                        r.numero_planta,
+                        p.nombre_planta,
+                        e.nombre_edificio,
+                        e.id_edificio,
+                        es.es_aula
+                    FROM Recurso r
+                    LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
+                    LEFT JOIN Planta p ON p.numero_planta = r.numero_planta
+                    LEFT JOIN Espacio es ON r.id_recurso = es.id_espacio
+                    WHERE r.tipo = 'Espacio' AND r.id_recurso=:id
+                    ORDER BY r.id_recurso;")
             ->bind(':id', $id)
             ->fetch();
-
-        return $result ?: null;
     }
 
     // Crear Espacio
@@ -70,7 +68,7 @@ class EspacioModel
     {
         try {
             $this->db->beginTransaction();
-
+            
             $this->db
                 ->query("INSERT INTO Recurso (id_recurso, descripcion, tipo, activo, especial, numero_planta, id_edificio)
                         VALUES (:id_recurso, :descripcion, 'Espacio', :activo, :especial, :numero_planta, :id_edificio)")
@@ -103,7 +101,7 @@ class EspacioModel
     /**
      * Actualizar un espacio existente
      */
-    public function update(string $id, array $data): int
+    public function update(array $data): int
     {
         try {
             $this->db->beginTransaction();
@@ -117,7 +115,7 @@ class EspacioModel
                             numero_planta = :numero_planta, 
                             id_edificio = :id_edificio
                         WHERE id_recurso = :id_recurso AND tipo = 'Espacio'")
-                ->bind(':id_recurso', $id)
+                ->bind(':id_recurso', $data['id_recurso'])
                 ->bind(':descripcion', $data['descripcion'])
                 ->bind(':activo', $data['activo'])
                 ->bind(':especial', $data['especial'])
@@ -125,19 +123,23 @@ class EspacioModel
                 ->bind(':id_edificio', $data['id_edificio'])
                 ->execute();
 
+            $afectadosRecurso = $this->db->rowCount();
+
             // Actualizar Espacio
             $this->db
                 ->query("UPDATE Espacio 
                         SET es_aula = :es_aula
                         WHERE id_espacio = :id_espacio")
-                ->bind(':id_espacio', $id)
+                ->bind(':id_espacio', $data['id_recurso'])
                 ->bind(':es_aula', $data['es_aula'])
                 ->execute();
+
+            $afectadosEspacio = $this->db->rowCount();
 
             $this->db->commit();
             
             // Verificar si hubo cambios
-            $afectados = $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'];
+            $afectados = $afectadosRecurso+$afectadosEspacio;
             return $afectados > 0 ? $afectados : 0;
 
         } catch (PDOException $e) {

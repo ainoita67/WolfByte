@@ -44,6 +44,7 @@ function mostrarToast(mensaje, tipo = 'success') {
     
     // Determinar color e icono según el tipo
     let bgClass = 'bg-success';
+    let textColor = 'text-white';
     let iconClass = 'bi-check-circle-fill';
     let titulo = 'Éxito';
     
@@ -53,6 +54,7 @@ function mostrarToast(mensaje, tipo = 'success') {
         titulo = 'Error';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
+        textColor='text-dark'
         iconClass = 'bi-exclamation-circle-fill';
         titulo = 'Advertencia';
     } else if (tipo === 'info') {
@@ -236,14 +238,15 @@ async function actualizarMaterial(id, data) {
 }
 
 // Función para eliminar un material
-async function eliminarMaterial(id) {
+async function eliminarMaterial(id, data) {
     try {
         const url = `${API_PORTATILES_MATERIALES}/${id}`;
         console.log('Eliminando material en:', url);
         
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
         
         console.log('Respuesta status:', response.status);
@@ -355,7 +358,7 @@ async function obtenerMateriales() {
             const card = document.createElement("div");
             card.className = "col-12 col-md-6 col-lg-4 mb-4";
             
-            const id = material.id || material.id_material || material.id_recurso;
+            const id = material.id || material.id_recurso;
             const descripcion = material.descripcion || `Carro ${id}`;
             const idEdificio = material.id_edificio;
             const nombreEdificio = material.edificio || material.nombre_edificio || obtenerNombreEdificio(idEdificio) || 'Edificio';
@@ -536,6 +539,19 @@ function configurarBotones() {
             document.getElementById("mostrarEstado").textContent = this.dataset.estado;
         });
     });
+
+    
+    
+    // Configurar botones de eliminar
+    document.querySelectorAll(".btn-eliminar").forEach(boton => {
+        boton.addEventListener("click", function() {
+            document.getElementById("deleteCarro").textContent = this.dataset.carro;
+            document.getElementById("deleteEdificio").textContent = this.dataset.edificio;
+            document.getElementById("deletePlanta").textContent = this.dataset.planta;
+            document.getElementById("deleteUnidades").textContent = this.dataset.unidades;
+            document.getElementById("deleteEstado").textContent = this.dataset.estado;
+        });
+    })
 }
 
 function actualizarSelectEdificios() {
@@ -635,7 +651,7 @@ ready(function() {
                 console.log('Verificando planta:', { idEdificio, numeroPlanta });
                 
                 // Intentar obtener la planta directamente
-                const plantaCheckResponse = await fetch(`${API_BASE}/planta/${idEdificio}?numero_planta=${numeroPlanta}`);
+                const plantaCheckResponse = await fetch(`${API_BASE}/plantas/${idEdificio}?numero_planta=${numeroPlanta}`);
                 
                 if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
                     console.log('Planta no encontrada, creándola...');
@@ -677,6 +693,7 @@ ready(function() {
                     console.log('Planta ya existe');
                 }
                 
+                let usuario=sessionStorage.getItem("id_usuario");
                 // PASO 2: Crear el material
                 const data = {
                     id_recurso: id,
@@ -685,7 +702,8 @@ ready(function() {
                     numero_planta: numeroPlanta,
                     unidades: unidades,
                     activo: 1,
-                    especial: 0
+                    especial: 0,
+                    id_usuario: usuario
                 };
                 
                 const success = await crearMaterial(data);
@@ -735,6 +753,7 @@ ready(function() {
             const carro = document.getElementById("editCarro")?.value;
             const unidades = parseInt(document.getElementById("editUnidades")?.value);
             const activo = parseInt(document.getElementById("editEstado")?.value);
+            const usuario=sessionStorage.getItem("id_usuario");
             
             if (!id || !carro || !unidades) {
                 mostrarToast('Completa todos los campos', 'warning');
@@ -758,7 +777,8 @@ ready(function() {
                 descripcion: carro,
                 unidades: unidades,
                 activo: activo,
-                especial: 0
+                especial: 0,
+                id_usuario: usuario
             };
             
             try {
@@ -828,7 +848,11 @@ ready(function() {
             }
             
             try {
-                const success = await eliminarMaterial(id);
+                const usuario=sessionStorage.getItem("id_usuario");
+                const data={
+                    id_usuario: usuario
+                }
+                const success = await eliminarMaterial(id, data);
                 
                 if (success) {
                     // Cerrar modal

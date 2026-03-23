@@ -90,7 +90,7 @@ class IncidenciaModel
 
  
     public function delete(int $id): int
-    //elimina con parametros y devuelve el numero de filas eliminadas
+    //Elimina con parámetros y devuelve el número de filas eliminadas
     {
         $this->db->query("DELETE FROM Incidencia WHERE id_incidencia = :id")
                  ->bind(":id", $id)

@@ -78,7 +78,7 @@ class LogAccionesService
                 'id_usuario'            => 'int|min:1',
                 'id_incidencia'         => 'int|min:1',
                 'id_reserva'            => 'int|min:1',
-                'id_recurso'            => 'int|min:1',
+                'id_recurso'            => 'string|min:1',
                 'id_reserva_permanente' => 'int|min:1',
                 'id_liberacion_puntual' => 'int|min:1',
                 'id_usuario_actor'      => 'required|int|min:1'
