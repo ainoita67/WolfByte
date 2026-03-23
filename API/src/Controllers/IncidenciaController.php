@@ -14,15 +14,18 @@ use Validation\ValidationException;
 use Throwable;
 
 use Services\IncidenciaService;
+use Services\LogAccionesService;
 
 
 class IncidenciaController
 {
     private IncidenciaService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new IncidenciaService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     
@@ -64,7 +67,11 @@ class IncidenciaController
     public function store(Request $req, Response $res): void
     {
         try {
-            $result = $this->service->createIncidencia($req->json());
+            $data=$req->json();
+            $result = $this->service->createIncidencia($data);
+            $log['id_incidencia']=(int)$result['id'];
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
+            $this->serviceLog->createLog('Creación de incidencia', $log);
 
             $res->status(201)->json(
                 ['id' => $result['id']],
@@ -94,11 +101,16 @@ class IncidenciaController
     {
         try {
             //tras recibir los datos de id y del request llama al service
-            $result = $this->service->updateIncidencia((int)$id, $req->json());
+            $data=$req->json();
+            $result = $this->service->updateIncidencia((int)$id, $data);
             //depende de lo recibido del servicio envia no_changes o updated
             if ($result['status'] === 'no_changes') {
                 $res->status(200)->json([], $result['message']);
                 return;
+            }else{
+                $log['id_incidencia']=(int)$id;
+                $log['id_usuario_actor']=(int)$data['id_usuario'];
+                $this->serviceLog->createLog('Modificación de incidencia', $log);
             }
 
             $res->status(200)->json([], $result['message']);
@@ -119,12 +131,14 @@ class IncidenciaController
     public function destroy(Request $req, Response $res, string $id): void
     {
         try {
-            $id = (int) $id; //se convierte el id a entero
+            $data->$req->json();
+            $log['id_incidencia']=(int)$id;
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
 
-            $service = new \Services\IncidenciaService();
-            $service->deleteIncidencia($id); //llama al servicio
+            $this->$service->deleteIncidencia((int)$id); //llama al servicio
+            $this->serviceLog->createLog('Resolución de incidencia', $log);
 
-            $res->status(200)->json([], "Incidencia eliminado correctamente");
+            $res->status(200)->json([], "Incidencia eliminada correctamente");
 
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors], "Errores de validación");

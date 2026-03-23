@@ -7,18 +7,21 @@ use Core\Request;
 use Core\Response;
 use Validation\ValidationException;
 use Throwable;
+use Services\LogAccionesService;
 use Models\CaracteristicaEspacioModel;
 use Models\EspacioModel;
 use Models\CaracteristicaModel;
 
 class CaracteristicaEspacioController
 {
+    private LogAccionesService $serviceLog;
     private CaracteristicaEspacioModel $model;
     private EspacioModel $espacioModel;
     private CaracteristicaModel $caracteristicaModel;
 
     public function __construct()
     {
+        $this->serviceLog=new LogAccionesService();
         $this->model = new CaracteristicaEspacioModel();
         $this->espacioModel = new EspacioModel();
         $this->caracteristicaModel = new CaracteristicaModel();
@@ -111,6 +114,10 @@ class CaracteristicaEspacioController
                 $res->status(409)->json([], "La característica ya está asignada a este espacio");
                 return;
             }
+            
+            $log['id_recurso']=$id;
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
+            $this->serviceLog->createLog('Asignación de característica', $log);
 
             $res->status(201)->json(
                 $caracteristica,
@@ -146,6 +153,10 @@ class CaracteristicaEspacioController
                 $res->status(404)->json([], "La asignación no existe");
                 return;
             }
+            
+            $log['id_recurso']=$id;
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
+            $this->serviceLog->createLog('Desvinculación de característica', $log);
 
             $res->status(200)->json([], "Característica quitada correctamente del espacio");
 

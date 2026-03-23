@@ -8,12 +8,9 @@
 
         <!-- Cargar authGuard PRIMERO -->
         <script src="/frontend/javascript/sesion/authGuard.js"></script>
-
-        <!-- En menuadministrador.html y otras páginas de admin -->
         <script>
             const rol = Number(sessionStorage.getItem("rol"));
             
-            // Admin (30) y super-admin (40) pueden acceder
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
             script1.onload = () => {
