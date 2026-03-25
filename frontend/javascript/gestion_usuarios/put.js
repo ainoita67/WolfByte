@@ -28,13 +28,15 @@ export async function updateUser(user) {
       throw new Error("updateUser: faltan campos obligatorios (nombre, correo, id_rol)");
     }
 
+    let usuario=sessionStorage.getItem("id_usuario")
+
     const response = await fetch(`${API}/user/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({nombre: body.nombre, correo: body.correo, contrasena: body.contrasena, id_rol: body.id_rol, usuario_activo: body.usuario_activo, id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);
@@ -69,8 +71,7 @@ export async function updateUserPassword(user) {
 
     // Solo si existe contraseña
     if (!user.contrasena) return null;
-
-    const body = { password: user.contrasena };
+    let usuario=sessionStorage.getItem("id_usuario");
 
     const response = await fetch(`${API}/user/${id}`, {
       method: "PATCH",
@@ -78,7 +79,7 @@ export async function updateUserPassword(user) {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({password: user.contrasena, id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);
@@ -108,12 +109,14 @@ export async function desactiveUser(user) {
 
     const id = user.id_usuario;
     if (!id) throw new Error("desactiveUser: falta id_usuario");
-
+    let usuario=sessionStorage.getItem("id_usuario");
+    
     const response = await fetch(`${API}/user/${id}`, {
       method: "PATCH",
       headers: {
         "Accept": "application/json"
       },
+      body: JSON.stringify({id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);

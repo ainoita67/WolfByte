@@ -8,14 +8,17 @@ use Core\Response;
 use Validation\ValidationException;
 use Throwable;
 use Services\UsuarioService;
+use Services\LogAccionesService;
 
 class UsuarioController
 {
     private UsuarioService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new UsuarioService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     // Listar usuarios activos
@@ -57,8 +60,12 @@ class UsuarioController
     public function store(Request $req, Response $res): void
     {
         try {
-            $result = $this->service->createUsuario($req->json());
-            $res->status(201)->json(['id' => $result['id']], "Usuario creado correctamente");
+            $data=$req->json();
+            $log['id_usuario_actor']=$data['id_usuario_actor'];
+            $usuario = $this->service->createUsuario($data);
+            $log['id_usuario']=$usuario['id'];
+            $this->serviceLog->createLog('Creación de usuario', $log);
+            $res->status(201)->json(['id' => $usuario['id']], "Usuario creado correctamente");
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
@@ -70,8 +77,14 @@ class UsuarioController
     public function update(Request $req, Response $res, string $id): void
     {
         try {
-            $result = $this->service->updateUsuario((int)$id, $req->json());
-            $res->status(200)->json([], $result['message']);
+            $data=$req->json();
+            $log['id_usuario_actor']=$data['id_usuario_actor'];
+            $usuario = $this->service->updateUsuario((int)$id, $data);
+            $log['id_usuario']=$id;
+            if($usuario['status']!='no_changes'){
+                $this->serviceLog->createLog('Modificación de usuario', $log);
+            }
+            $res->status(200)->json([], $usuario['message']);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
@@ -83,17 +96,26 @@ class UsuarioController
     {
         try {
             $data = $req->json(); // Puede ser null o []
+            $log['id_usuario_actor']=$data['id_usuario_actor'];
 
             // Si se envía contraseña → actualizar
             if (isset($data['password']) && trim($data['password']) !== '') {
-                $result = $this->service->updatePassword((int)$id, $data['password']);
-                $res->status(200)->json([], $result['message']);
+                $usuario = $this->service->updatePassword((int)$id, $data['password']);
+                $log['id_usuario']=$id;
+                $this->serviceLog->createLog('Modificación de usuario', $log);
+                $res->status(200)->json([], $usuario['message']);
                 return;
             }
 
             // Si no se envía contraseña → activar / desactivar
-            $result = $this->service->toggleActiveStatus((int)$id);
-            $res->status(200)->json([], $result['message']);
+            $usuario = $this->service->toggleActiveStatus((int)$id);
+            $log['id_usuario']=$id;
+            if($this->service->getUsuarioById((int)$id)['usuario_activo']){
+                $this->serviceLog->createLog('Activación de usuario', $log);
+            }else{
+                $this->serviceLog->createLog('Desactivación de usuario', $log);
+            }
+            $res->status(200)->json([], $usuario['message']);
 
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors]);

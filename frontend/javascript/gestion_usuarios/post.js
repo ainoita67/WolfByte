@@ -11,13 +11,15 @@ export async function insertUser(user) {
       throw new Error("insertUser: faltan campos obligatorios (nombre, correo, contrasena, id_rol)");
     }
 
+    let usuario=sessionStorage.getItem("id_usuario");
+
     const response = await fetch(`${API}/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({nombre: body.nombre, correo: body.correo, contrasena: body.contrasena, id_rol: body.id_rol, id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);
