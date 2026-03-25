@@ -94,17 +94,19 @@ async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaF
             }else{
                 let usuario=sessionStorage.getItem("id_usuario");
                 let nliberaciones=0;
-                reservasEntreFechas.forEach(async (reservaLiberar) => {
-                    if(await comprobarLiberacion(fecha, reservaLiberar)){
-                        fetch(window.location.origin+"/API/liberaciones/", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({inicio: fecha+" "+reservaLiberar.inicio, fin: fecha+" "+reservaLiberar.fin, comentario: observaciones, id_reserva: null, id_reserva_permanente: reservaLiberar.id_reserva_permanente, unidades: reservaLiberar.unidades, id_usuario_actor: usuario})
-                        })
-                        .then(res => res.json())
-                        .then(response => {
+                for(let reservaLiberar of reservasEntreFechas){
+                    try{
+                        if(await comprobarLiberacion(fecha, reservaLiberar)){
+                            let res = await fetch(window.location.origin+"/API/liberaciones/", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({inicio: fecha+" "+reservaLiberar.inicio, fin: fecha+" "+reservaLiberar.fin, comentario: observaciones, id_reserva: null, id_reserva_permanente: reservaLiberar.id_reserva_permanente, unidades: reservaLiberar.unidades, id_usuario_actor: usuario})
+                            })
+
+                            let response = await res.json();
+                            
                             if (response.status === "success") {
                                 nliberaciones++;
 
@@ -128,10 +130,11 @@ async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaF
                             } else {
                                 mostrarToast("Error al crear la liberación<br>Inicio: "+invertirFecha(fecha, reservaLiberar.inicio)+"<br>Fin: "+invertirFecha(fecha, reservaLiberar.fin), "danger");
                             }
-                        })
-                        .catch(err => console.error("Error al crear la liberación:", err));
+                        }
+                    }catch(err){
+                        console.error("Error al crear la liberación:", err);
                     }
-                });
+                }
                 if(nliberaciones==0){
                     mostrarToast("La liberación para esa reserva permanente ya estaba creada", "warning");
                 }
