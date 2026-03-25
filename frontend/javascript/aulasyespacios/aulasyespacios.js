@@ -340,6 +340,13 @@ async function abrirModalEditar(id) {
         estadoSelect.value = espacio.activo ? "1" : "0";
         console.log("Estado seleccionado:", estadoSelect.value);
     }
+
+    // Especial: sí/no
+    const especialSelect = document.getElementById('editEspecial');
+    if (especialSelect) {
+        especialSelect.value = espacio.especial ? "1" : "0";
+        console.log("Especial seleccionado:", especialSelect.value);
+    }
     
     // Tipo: aula u otro espacio
     const tipoSelect = document.getElementById('editTipo');
@@ -381,6 +388,7 @@ function verEspacio(id) {
     document.getElementById('verPlanta').textContent = nombrePlanta;
     document.getElementById('verTipo').textContent = espacio.es_aula ? 'Aula' : 'Otro espacio';
     document.getElementById('verEstado').textContent = espacio.activo ? 'Activo' : 'Inactivo';
+    document.getElementById('verEspecial').textContent = espacio.especial ? 'Sí' : 'No';
     
     const btnEditar = document.getElementById('btnEditarDesdeVer');
     btnEditar.dataset.id = id;
@@ -636,4 +644,3 @@ document.addEventListener("DOMContentLoaded", function () {
 window.abrirModalCrear = abrirModalCrear;
 window.abrirModalEditar = abrirModalEditar;
 window.verEspacio = verEspacio;
-window.confirmarEliminar = confirmarEliminar;
