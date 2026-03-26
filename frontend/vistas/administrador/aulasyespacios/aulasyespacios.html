@@ -214,6 +214,13 @@
                                         <option value="0" selected>No, no requiere que un administrador lo autorice</option>
                                     </select>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Características</label>
+                                    <select class="form-select" id="crearCaracteristicas" multiple>
+                                    </select>
+                                    <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -291,6 +298,13 @@
                                         <option value="0">No, no requiere que un administrador lo autorice</option>
                                     </select>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Características</label>
+                                    <select class="form-select" id="editCaracteristicas" multiple>
+                                    </select>
+                                    <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -320,6 +334,7 @@
                         <p><strong>Tipo:</strong> <span id="verTipo"></span></p>
                         <p><strong>Estado:</strong> <span id="verEstado"></span></p>
                         <p><strong>Especial:</strong> <span id="verEspecial"></span></p>
+                        <p class="mb-0"><strong>Características:</strong> <span id="verCaracteristicas"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" id="btnEditarDesdeVer" data-id="">Editar</button>

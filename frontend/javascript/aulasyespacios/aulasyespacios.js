@@ -7,6 +7,52 @@ let espaciosGlobal = [];
 
 // ************  OBTENER DATOS ****************** //
 
+async function getCaracteristicasEspacio(id){
+    try{
+        const response = await fetch(API_BASE+"/espacios/"+id+"/caracteristicas", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const res = await response.json();
+
+        return res.data;
+    } catch (error) {
+        console.error("Error obteniendo características:", error);
+        throw error;
+    }
+}
+
+
+async function getCaracteristicas(){
+    try{
+        const response = await fetch(API_BASE+"/caracteristicas", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const res = await response.json();
+
+        return res.data;
+    } catch (error) {
+        console.error("Error obteniendo características:", error);
+        throw error;
+    }
+}
+
+
 async function getEspacios() {
     const URL = API_BASE + "/espacios";
 
@@ -136,6 +182,57 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         console.log("Intentando seleccionar con select.value...");
         select.value = String(valorSeleccionado);
         console.log(`Valor después de select.value: ${select.value}`);
+    }
+}
+
+async function cargarSelectCaracteristicasCrear(){
+    let caracteristicas=await getCaracteristicas();
+
+    let selectcrear=document.getElementById('crearCaracteristicas');
+    selectcrear.innerHTML = '';
+    let ninguna = document.createElement('option');
+    ninguna.textContent = 'Ninguna';
+    ninguna.value = '';
+    ninguna.selected = true;
+    ninguna.classList.add("border", "border-primary");
+    selectcrear.appendChild(ninguna);
+    caracteristicas.forEach(caracteristica => {
+        let option = document.createElement('option');
+        option.value = caracteristica.id_caracteristica;
+        option.textContent = caracteristica.nombre;
+        selectcrear.appendChild(option);
+    });
+}
+
+async function cargarSelectCaracteristicasEditar(id){
+    let caracteristicas=await getCaracteristicas();
+    let espacios=await getCaracteristicasEspacio(id)
+
+    let selectedit = document.getElementById('editCaracteristicas');
+    selectedit.innerHTML = '';
+    let ninguna = document.createElement('option');
+    ninguna.textContent = 'Ninguna';
+    ninguna.value = '';
+    selectedit.appendChild(ninguna);
+    let seleccionadas=false;
+    caracteristicas.forEach(caracteristica => {
+        let option = document.createElement('option');
+        option.value = caracteristica.id_caracteristica;
+        option.textContent = caracteristica.nombre;
+        if(espacios.length>0){
+            espacios.forEach(espacio => {
+                if(espacio.id_caracteristica==caracteristica.id_caracteristica){
+                    option.selected=true;
+                    option.classList.add("border", "border-primary");
+                    seleccionadas=true;
+                }
+            });
+        }
+        selectedit.appendChild(option);
+    });
+    if(!seleccionadas){
+        ninguna.selected=true;
+        ninguna.classList.add("border", "border-primary");
     }
 }
 
@@ -298,6 +395,7 @@ async function abrirModalCrear() {
     
     // Cargar select de edificios (SIN valor seleccionado)
     await cargarSelectEdificios('crearEdificio');
+    await cargarSelectCaracteristicasCrear();
     
     // Mostrar modal
     const modalElement = document.getElementById('modalCrear');
@@ -328,6 +426,7 @@ async function abrirModalEditar(id) {
         console.log("Cargando edificios...");
         await getEdificios();
     }
+    await cargarSelectCaracteristicasEditar(id);
     
     // Rellenar el formulario - TODOS LOS DATOS DEL ESPACIO
     document.getElementById('editId').value = espacio.id_recurso;
@@ -375,7 +474,7 @@ async function abrirModalEditar(id) {
     modal.show();
 }
 
-function verEspacio(id) {
+async function verEspacio(id) {
     const espacio = espaciosGlobal.find(e => e.id_recurso === id);
     if (!espacio) return;
     
@@ -389,7 +488,21 @@ function verEspacio(id) {
     document.getElementById('verTipo').textContent = espacio.es_aula ? 'Aula' : 'Otro espacio';
     document.getElementById('verEstado').textContent = espacio.activo ? 'Activo' : 'Inactivo';
     document.getElementById('verEspecial').textContent = espacio.especial ? 'Sí' : 'No';
-    
+    let verCaracteristicas = document.getElementById('verCaracteristicas');
+    verCaracteristicas.innerHTML = '';
+    let caracteristicas=await getCaracteristicasEspacio(espacio.id_recurso);
+    if (caracteristicas && caracteristicas.length > 0) {
+        let ul = document.createElement('ul');
+        caracteristicas.forEach(caracteristica => {
+            let li = document.createElement("li");
+            li.textContent = caracteristica.nombre;
+            ul.appendChild(li);
+        });
+        verCaracteristicas.appendChild(ul);
+    } else {
+        verCaracteristicas.textContent = 'No';
+    }
+
     const btnEditar = document.getElementById('btnEditarDesdeVer');
     btnEditar.dataset.id = id;
     btnEditar.onclick = () => {
@@ -409,6 +522,8 @@ async function guardarEspacio(evento) {
     
     let usuario=sessionStorage.getItem("id_usuario");
     let id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial, es_aula;
+    let caracteristicas=[];
+    let arraycaracteristicas=[];
     
     if (esCreacion) {
         id_recurso = document.getElementById('crearId')?.value;
@@ -418,7 +533,13 @@ async function guardarEspacio(evento) {
         numero_planta = document.getElementById('crearPlanta')?.value;
         activo = document.getElementById('crearEstado')?.value === "1";
         especial = document.getElementById('crearEspecial')?.value === "1";
-        id = null;
+        caracteristicas = Array.from(document.getElementById('crearCaracteristicas').selectedOptions).map(opt => opt.value)
+        .filter(valor => valor !== '')   // opcional: quitar "Ninguna"
+        .map(valor => Number(valor));
+
+        arraycaracteristicas = caracteristicas.map(id => ({
+            id_caracteristica: id
+        }));
         console.log("CREANDO - Datos del formulario:", {id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial});
     } else {
         id = document.getElementById('editId')?.value;
@@ -429,7 +550,15 @@ async function guardarEspacio(evento) {
         numero_planta = document.getElementById('editPlanta')?.value;
         activo = document.getElementById('editEstado')?.value === "1";
         especial = document.getElementById('editEspecial')?.value === "1";
-        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial});
+        
+        caracteristicas = Array.from(document.getElementById("editCaracteristicas").selectedOptions).map(opt => opt.value)
+        .filter(valor => valor !== '')   // opcional: quitar "Ninguna"
+        .map(valor => Number(valor));
+
+        arraycaracteristicas = caracteristicas.map(id => ({
+            id_caracteristica: id
+        }));
+        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial, arraycaracteristicas});
     }
     
     es_aula = tipo === "1";
@@ -454,7 +583,9 @@ async function guardarEspacio(evento) {
     
     try {
         let response;
+        let responsecaracteristicas;
         let url;
+        let cambios=false;
         
         if (!esCreacion && id) {
             url = `${API}/espacios/${id}`;
@@ -467,6 +598,44 @@ async function guardarEspacio(evento) {
                 },
                 body: JSON.stringify(datos)
             });
+
+            let caracteristicasantes=await getCaracteristicasEspacio(id);
+            console.log("CARACTERÍSTICAS");
+            console.log(caracteristicasantes);
+            for (let caracteristica of caracteristicasantes) {
+                url = `${API}/espacios/${id}/caracteristicas`;
+                console.log("Creando espacio en:", url);
+                responsecaracteristicas = await fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
+
+            for (let caracteristica of arraycaracteristicas) {
+                url = `${API}/espacios/${id}/caracteristicas`;
+                console.log("Creando espacio en:", url);
+                responsecaracteristicas = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
+            let caracteristicasdespues=await getCaracteristicasEspacio(id);
+
+            if(JSON.stringify(caracteristicasantes) !== JSON.stringify(caracteristicasdespues)) {
+                mostrarAlerta(
+                    "Características actualizadas correctamente",
+                    "success"
+                );
+                cambios=true;
+            }
         } else {
             url = `${API}/espacios`;
             console.log("Creando espacio en:", url);
@@ -478,6 +647,19 @@ async function guardarEspacio(evento) {
                 },
                 body: JSON.stringify(datos)
             });
+
+            for (let caracteristica of arraycaracteristicas) {
+                url = `${API}/espacios/${datos.id_recurso}/caracteristicas`;
+                console.log("Creando espacio en:", url);
+                responsecaracteristicas = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
         }
         
         console.log("Respuesta status:", response.status);
@@ -493,12 +675,12 @@ async function guardarEspacio(evento) {
             }
         }
         
-        if(response.status==200){
+        if(response.status==200&&!cambios){
             mostrarAlerta(
                 "No han habido cambios",
                 "warning"
             );
-        }else{
+        }else if(response.status!=200){
             mostrarAlerta(
                 esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
                 "success"

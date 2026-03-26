@@ -66,7 +66,6 @@ class EspacioController
                 $result,
                 "Espacio creado correctamente"
             );
-
         } catch (ValidationException $e) {
             $res->status(422)->json(
                 ['errors' => $e->errors],
@@ -88,7 +87,6 @@ class EspacioController
 
             $log['id_usuario_actor']=(int)$data['id_usuario'];
             
-            // Crear nuevo espacio
             $result = $this->service->updateEspacio($data);
             
             if($result['status']=='no_changes'){
