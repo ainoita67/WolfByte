@@ -8,9 +8,17 @@ use Firebase\JWT\JWT;
 use Core\Request;
 use Core\Response;
 use Core\Session;
+use Services\LogAccionesService;
 
 class AuthController
 {
+    private LogAccionesService $serviceLog;
+
+    public function __construct()
+    {
+        $this->serviceLog=new LogAccionesService();
+    }
+
     public function login(Request $request, Response $response): void
     {
         $input = $request->getBody();
@@ -47,11 +55,15 @@ class AuthController
 
         $token = JWT::encode($payload, JWT_SECRET, 'HS256');
 
+        $log['id_usuario_actor']=(int)$user['id_usuario'];
+        $log['id_usuario']=(int)$user['id_usuario'];
+        $this->serviceLog->createLog('Login de usuario', $log);
         $response->json(['token' => $token], 'Login correcto');
     }
 
     public function logout(Request $req, Response $res): void
     {
+        $user = $req->getBody();
         // Destruye la sesión PHP
         if (session_status() !== PHP_SESSION_NONE) {
             $_SESSION = [];
@@ -61,6 +73,9 @@ class AuthController
         // También destruye la sesión en tu helper
         Session::destroy();
 
+        $log['id_usuario_actor']=(int)$user['id_usuario'];
+        $log['id_usuario']=(int)$user['id_usuario'];
+        $this->serviceLog->createLog('Logout de usuario', $log);
         $res->status(200)->json([], "Sesión cerrada correctamente");
     }
 }

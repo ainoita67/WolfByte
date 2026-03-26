@@ -8,14 +8,17 @@ use Core\Response;
 use Validation\ValidationException;
 use Throwable;
 use Services\PortatilService;
+use Services\LogAccionesService;
 
 class PortatilController
 {
     private PortatilService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new PortatilService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     /**
@@ -66,7 +69,11 @@ class PortatilController
     {
         try {
             $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
             $result = $this->service->createMaterial($data);
+
+            $log['id_recurso']=$result['id'];
+            $this->serviceLog->createLog('Creación de carro de portátiles', $log);
             $res->status(201)->json(
                 ['id' => $result['id']],
                 $result['message']
@@ -86,14 +93,15 @@ class PortatilController
     {
         try {
             $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
             $result = $this->service->updateMaterial($id, $data);
             
-            if ($result['status'] === 'no_changes') {
-                $res->status(200)->json([], $result['message']);
-                return;
+            if ($result['status'] !== 'no_changes') {
+                $log['id_recurso']=$id;
+                $this->serviceLog->createLog('Modificación de carro de portátiles', $log);
             }
 
-            $res->status(200)->json([], $result['message']);
+            $res->status(200)->json([], $result['status']);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->getErrors()]);
         } catch (Throwable $e) {

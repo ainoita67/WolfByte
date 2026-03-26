@@ -230,66 +230,13 @@ async function actualizarMaterial(id, data) {
             throw new Error(mensajeError);
         }
         
-        return true;
+        return resultado.message;
     } catch (error) {
         console.error('Error actualizando material:', error);
         throw error;
     }
 }
 
-// Función para eliminar un material
-async function eliminarMaterial(id, data) {
-    try {
-        const url = `${API_PORTATILES_MATERIALES}/${id}`;
-        console.log('Eliminando material en:', url);
-        
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        
-        console.log('Respuesta status:', response.status);
-        
-        // 204 No Content es éxito
-        if (response.status === 204) {
-            return true;
-        }
-        
-        // Intentar parsear respuesta de error
-        let mensajeError = `Error al eliminar (código ${response.status})`;
-        
-        try {
-            const resultado = await response.json();
-            console.log('Respuesta error:', resultado);
-            
-            if (resultado.error) {
-                mensajeError = resultado.error;
-            } else if (resultado.message) {
-                mensajeError = resultado.message;
-            }
-            
-            // Personalizar mensajes comunes
-            if (mensajeError.includes('foreign key') || mensajeError.includes('constraint fails') || mensajeError.includes('en uso')) {
-                mensajeError = 'No se puede eliminar porque tiene reservas asociadas';
-            } else if (mensajeError.includes('not found') || mensajeError.includes('no encontrado')) {
-                mensajeError = 'El carro que intentas eliminar no existe';
-            }
-            
-        } catch {
-            // Si no se puede parsear, usar mensaje por defecto
-        }
-        
-        if (!response.ok) {
-            throw new Error(mensajeError);
-        }
-        
-        return true;
-    } catch (error) {
-        console.error('Error eliminando material:', error);
-        throw error;
-    }
-}
 
 // ============================================
 // FUNCIONES DE INTERFAZ
@@ -423,14 +370,6 @@ async function obtenerMateriales() {
                                 data-estado="${activo}">
                                 <i class="bi bi-pencil"></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-danger btn-eliminar"
-                                data-id="${id}"
-                                data-carro="${descripcion}"
-                                data-edificio="${nombreEdificio}"
-                                data-planta="${nombrePlanta}"
-                                data-unidades="${unidades}">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -488,7 +427,6 @@ function configurarBotones() {
             const modalElement = document.getElementById("modalEditar");
             if (modalElement) {
                 const modal = new bootstrap.Modal(modalElement, {
-                    backdrop: 'static',
                     keyboard: false
                 });
                 modal.show();
@@ -496,37 +434,6 @@ function configurarBotones() {
         });
     });
     
-    // Configurar botones de eliminar (MANUALMENTE, sin data-bs-toggle)
-    document.querySelectorAll(".btn-eliminar").forEach(boton => {
-        // Quitar cualquier atributo data-bs-toggle que pueda interferir
-        boton.removeAttribute('data-bs-toggle');
-        boton.removeAttribute('data-bs-target');
-        
-        boton.addEventListener("click", function(e) {
-            e.preventDefault();
-            
-            // Rellenar el formulario de eliminación
-            document.getElementById("deleteId").value = this.dataset.id;
-            document.getElementById("deleteCarro").value = this.dataset.carro;
-            document.getElementById("deleteEdificio").value = this.dataset.edificio;
-            document.getElementById("deletePlanta").value = this.dataset.planta;
-            document.getElementById("deleteUnidades").value = this.dataset.unidades;
-            
-            // Limpiar backdrops residuales
-            limpiarBackdrops();
-            
-            // Abrir modal de eliminación MANUALMENTE
-            const modalElement = document.getElementById("modalEliminar");
-            if (modalElement) {
-                const modal = new bootstrap.Modal(modalElement, {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-                modal.show();
-            }
-        });
-    });
-
     
     
     // Configurar botones de mostrar
@@ -539,19 +446,6 @@ function configurarBotones() {
             document.getElementById("mostrarEstado").textContent = this.dataset.estado;
         });
     });
-
-    
-    
-    // Configurar botones de eliminar
-    document.querySelectorAll(".btn-eliminar").forEach(boton => {
-        boton.addEventListener("click", function() {
-            document.getElementById("deleteCarro").textContent = this.dataset.carro;
-            document.getElementById("deleteEdificio").textContent = this.dataset.edificio;
-            document.getElementById("deletePlanta").textContent = this.dataset.planta;
-            document.getElementById("deleteUnidades").textContent = this.dataset.unidades;
-            document.getElementById("deleteEstado").textContent = this.dataset.estado;
-        });
-    })
 }
 
 function actualizarSelectEdificios() {
@@ -782,9 +676,11 @@ ready(function() {
             };
             
             try {
-                const success = await actualizarMaterial(id, data);
+                const estado = await actualizarMaterial(id, data);
                 
-                if (success) {
+                if (estado=='no_changes') {
+                    mostrarToast('No han habido cambios', 'warning');
+                }else if(estado=='updated'){
                     // Cerrar modal
                     const modalElement = document.getElementById("modalEditar");
                     const modal = bootstrap.Modal.getInstance(modalElement);
@@ -816,79 +712,8 @@ ready(function() {
         console.error('Formulario de edición NO encontrado');
     }
     
-    // Formulario de eliminación
-    const formEliminar = document.querySelector("#modalEliminar form");
-    if (formEliminar) {
-        console.log('Formulario de eliminación encontrado');
-        
-        formEliminar.addEventListener("submit", async function(e) {
-            e.preventDefault();
-            
-            const id = document.getElementById("deleteId")?.value;
-            const carro = document.getElementById("deleteCarro")?.value;
-            
-            console.log('Eliminando material ID:', id, 'Carro:', carro);
-            
-            if (!id) {
-                mostrarToast('Error al identificar el material', 'error');
-                return;
-            }
-            
-            // Confirmación adicional
-            if (!confirm(`¿Estás seguro de que quieres eliminar el carro "${carro}"?`)) {
-                return;
-            }
-            
-            const submitBtn = formEliminar.querySelector("button[type='submit']");
-            const originalText = submitBtn ? submitBtn.innerHTML : '';
-            
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Eliminando...';
-            }
-            
-            try {
-                const usuario=sessionStorage.getItem("id_usuario");
-                const data={
-                    id_usuario: usuario
-                }
-                const success = await eliminarMaterial(id, data);
-                
-                if (success) {
-                    // Cerrar modal
-                    const modalElement = document.getElementById("modalEliminar");
-                    const modal = bootstrap.Modal.getInstance(modalElement);
-                    if (modal) {
-                        modal.hide();
-                    }
-                    
-                    // Limpiar backdrop
-                    limpiarBackdrops();
-                    
-                    // Resetear formulario
-                    formEliminar.reset();
-                    
-                    // Recargar lista
-                    await obtenerMateriales();
-                    
-                    mostrarToast('Carro eliminado correctamente', 'success');
-                }
-            } catch (error) {
-                console.error('Error en eliminación:', error);
-                mostrarToast(error.message, 'error');
-            } finally {
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText || '<i class="bi bi-trash"></i> Eliminar';
-                }
-            }
-        });
-    } else {
-        console.error('Formulario de eliminación NO encontrado');
-    }
-    
     // Eventos para limpiar cuando se cierran los modales
-    const modales = ['modalCrear', 'modalEditar', 'modalEliminar', 'modalMostrar'];
+    const modales = ['modalCrear', 'modalEditar', 'modalMostrar'];
     modales.forEach(id => {
         const modal = document.getElementById(id);
         if (modal) {
