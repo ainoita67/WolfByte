@@ -80,24 +80,4 @@ class ReservaEspacioController
             $res->errorJson($e->getMessage(), 500);
         }
     }
-
-    public function update(Request $req, Response $res, int $id): void
-{
-    try {
-        $data = $req->getBody();
-
-        $reserva = $this->service->updateReserva($id, $data);
-
-        $res->status(200)->json($reserva);
-
-    } catch (ValidationException $e) {
-
-        $res->errorJson($e->getMessage(), 422);
-
-    } catch (Throwable $e) {
-
-        $res->errorJson($e->getMessage(), 500);
-
-    }
-}
 }
