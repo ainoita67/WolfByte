@@ -157,6 +157,7 @@ class PortatilModel
                 ->bind(':id_recurso', $id)
                 ->execute();
 
+            $afectadosRecurso = $this->db->rowCount();
             // Actualizar Material
             $this->db
                 ->query("
@@ -168,8 +169,12 @@ class PortatilModel
                 ->bind(':id_material', $id)
                 ->execute();
 
+            $afectadosMaterial = $this->db->rowCount();
+
             $this->db->commit();
-            return true;
+            
+            $afectados = $afectadosRecurso+$afectadosMaterial;
+            return $afectados > 0 ? true : false;
 
         } catch (PDOException $e) {
             $this->db->rollback();

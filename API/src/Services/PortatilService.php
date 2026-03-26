@@ -132,7 +132,7 @@ class PortatilService
 
             $result = $this->model->updateMaterial($id, $data);
 
-            if (!$result) {
+            if (!$result||$result==0) {
                 return [
                     'status' => 'no_changes',
                     'message' => 'No hubo cambios en el material'

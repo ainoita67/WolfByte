@@ -5,9 +5,16 @@ document.addEventListener('click', async (e) => {
     e.preventDefault();
 
     try {
+        let id = sessionStorage.getItem('id_usuario');
+
         const response = await fetch(`${API}/logout`, {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({id_usuario: id})
         });
 
         const data = await response.json();

@@ -44,6 +44,7 @@ class LogAccionesModel
                 LEFT JOIN Reserva r ON l.id_reserva=r.id_reserva
                 LEFT JOIN Recurso rec ON l.id_recurso=rec.id_recurso
                 LEFT JOIN Liberacion_puntual lp ON l.id_liberacion_puntual=lp.id_liberacion_puntual
+                ORDER BY l.id_log
             ")
             ->fetchAll();
     }
