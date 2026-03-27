@@ -1,16 +1,31 @@
+let logsFiltrados=[];
+let paginacion=25
+
 //API Obtener logs de acciones
-function obtenerLogs(){
-    fetch(window.location.origin+"/API/logacciones")
+function obtenerLogs(npagina=1){
+    let datos={
+        'page': npagina,
+        'perPage': paginacion
+    }
+
+    fetch(window.location.origin+"/API/logacciones", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(datos)
+    })
     .then(res => res.json())
     .then(response => {
         let logs = response.data;
-        mostrarLogs(logs);
+        mostrarLogs(logs.data);
+        mostrarPaginacion(logs.currentPage, logs.totalPages, paginacion);
     });
 }
 
 
+
 function mostrarLogs(logs){
-    logs=logs.reverse();
     let tablaverlogs = document.getElementById("tablalogs");
     tablaverlogs.innerHTML = "";
     if(logs.length === 0){
@@ -73,6 +88,73 @@ function mostrarLogs(logs){
 }
 
 
+function mostrarPaginacion(npagina=1, max=1){
+    let divPaginacion=document.getElementById("paginacion");
+    divPaginacion.classList.add("ps-3", "mt-3", "mb-5", "d-flex");
+    divPaginacion.innerHTML=`
+        <button class="btn btn-primary border-0 rounded-pill" id="btninicio"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></button>
+        <button class="btn btn-primary border-0 rounded-pill ms-3" id="btnantes"><i class="bi bi-caret-left-fill"></i></button>
+        <p class="p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
+        <button class="btn btn-primary border-0 rounded-pill me-3" id="btndespues"><i class="bi bi-caret-right-fill"></i></button>
+        <button class="btn btn-primary border-0 rounded-pill" id="btnfin"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></button>
+    `
+
+    let btninicio=document.getElementById("btninicio");
+    let btnantes=document.getElementById("btnantes");
+    let btndespues=document.getElementById("btndespues");
+    let btnfin=document.getElementById("btnfin");
+    
+    if(npagina<=1){
+        btnantes.disabled=true;
+        btninicio.disabled=true;
+    }
+    if(npagina>=max){
+        btndespues.disabled=true;
+        btnfin.disabled=true;
+    }
+
+    btninicio.addEventListener("click", function(){
+        if(npagina>1){
+            if(logsFiltrados.length>0){
+                obtenerPaginaLogs(1);
+            }else{
+                obtenerLogs(1);
+            }
+        }
+    })
+
+    btnantes.addEventListener("click", function(){
+        if(npagina>1){
+            if(logsFiltrados.length>0){
+                obtenerPaginaLogs(npagina-1);
+            }else{
+                obtenerLogs(npagina-1);
+            }
+        }
+    })
+
+    btndespues.addEventListener("click", function(){
+        if(npagina<max){
+            if(logsFiltrados.length>0){
+                obtenerPaginaLogs(npagina+1);
+            }else{
+                obtenerLogs(npagina+1);
+            }
+        }
+    })
+
+    btnfin.addEventListener("click", function(){
+        if(npagina<max){
+            if(logsFiltrados.length>0){
+                obtenerPaginaLogs(max);
+            }else{
+                obtenerLogs(max);
+            }
+        }
+    })
+}
+
+
 
 //API Obtener logs para filtrarlas
 function activarFiltrarLog(){
@@ -90,7 +172,7 @@ function activarFiltrarLog(){
             let fechaInicio = document.getElementById("filtrarFechaInicio").value;
             let fechaFin = document.getElementById("filtrarFechaFin").value;
 
-            logsFiltrados=logs.filter(log => {
+            logsFiltrados=logs.data.filter(log => {
                 // Filtro por tipo
                 if(tipo!=="Todos"&&log.id_tipo_log!=tipo){
                     return false;
@@ -119,7 +201,7 @@ function activarFiltrarLog(){
                 return true;
             }) ?? [];
 
-            mostrarLogs(logsFiltrados);
+            obtenerPaginaLogs(1);
 
             let modalfiltrar = document.getElementById("modalFiltrar");
             let cerrarmodal = bootstrap.Modal.getInstance(modalfiltrar);
@@ -130,6 +212,17 @@ function activarFiltrarLog(){
     });
 }
 
+
+function obtenerPaginaLogs(npagina=1) {
+    let inicio = (npagina - 1) * paginacion;
+    let fin = inicio + paginacion;
+    let logsPagina = logsFiltrados.slice(inicio, fin);
+
+    mostrarLogs(logsPagina);
+
+    let totalPaginas = Math.ceil(logsFiltrados.length / paginacion);
+    mostrarPaginacion(npagina, totalPaginas, paginacion);
+}
 
 
 function anyadirValores(elemento){

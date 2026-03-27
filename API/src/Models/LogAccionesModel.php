@@ -19,8 +19,12 @@ class LogAccionesModel
     /**
      * Obtener todos los logs
      */
-    public function all(): array
+    public function all(array $data=[]): array
     {
+        $page = $data['page'] ?? 1;
+        $perPage = $data['perPage'] ?? 25;
+        $offset = ($page - 1) * $perPage;
+
         return $this->db
             ->query("SELECT
                     l.id_log,
@@ -44,11 +48,27 @@ class LogAccionesModel
                 LEFT JOIN Reserva r ON l.id_reserva=r.id_reserva
                 LEFT JOIN Recurso rec ON l.id_recurso=rec.id_recurso
                 LEFT JOIN Liberacion_puntual lp ON l.id_liberacion_puntual=lp.id_liberacion_puntual
-                ORDER BY l.id_log
+                ORDER BY l.id_log DESC
+                LIMIT :inicio, :fin
             ")
+            ->bind(':inicio', $offset)
+            ->bind(':fin', $perPage)
             ->fetchAll();
     }
 
+
+    public function totalpaginas(array $data=[]): int
+    {
+        $perPage = $data['perPage'] ?? null;
+        $totalRows = $this->db->query("SELECT COUNT(*) AS total FROM Log")->fetch()['total'];
+
+        if($perPage!==null){
+            $totalPages = ceil($totalRows / $perPage);
+            return (int)$totalPages;
+        }else{
+            return $totalRows;
+        }
+    }
 
 
     /**

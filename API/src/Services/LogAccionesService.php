@@ -20,10 +20,18 @@ class LogAccionesService
     /**
      * Obtener todos los logs
      */
-    public function getLog(): array
+    public function getLog(array $data=[]): array
     {
         try {
-            return $this->model->all();
+            $totalPages=$this->model->totalpaginas($data);
+            $data['perPage']=$data['perPage'] ?? $totalPages;
+            $logs=$this->model->all($data);
+
+            return [
+                'data' => $logs,
+                'totalPages' => $totalPages,
+                'currentPage' => $data['page'] ?? 1
+            ];
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }
