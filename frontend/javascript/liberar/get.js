@@ -1,4 +1,4 @@
-//API Obtener edificios para crear incidencia
+//API Obtener edificios para crear liberación
 function obtenerEdificios(){
     fetch(window.location.origin+"/API/edificios")
     .then(res => res.json())
@@ -35,7 +35,7 @@ function obtenerEdificios(){
 
 
 
-//API Obtener plantas para crear incidencia
+//API Obtener plantas para crear liberación
 function obtenerPlantas(edificio){
     fetch(window.location.origin+"/API/plantas/"+edificio)
     .then(res => res.json())
@@ -72,7 +72,7 @@ function obtenerPlantas(edificio){
 
 
 
-//API Obtener espacios para crear incidencia
+//API Obtener espacios para crear liberación
 function obtenerAulas(edificio=-1, planta=-1){
     if(!edificio||edificio<=0){
         return obtenerEdificios();

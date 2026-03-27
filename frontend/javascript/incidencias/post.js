@@ -14,14 +14,13 @@ function activarCrearIncidencia() {
 
         let fecha = `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
         let id_recurso = document.getElementById("createIdRecurso").value;
-        let titulo = document.getElementById("createTitulo").value;
-        let descripcion = document.getElementById("createDescripcionIncidencia").value;
+        let titulo = capitalizar(document.getElementById("createTitulo").value);
+        let descripcion = capitalizar(document.getElementById("createDescripcionIncidencia").value);
         let prioridad = 'Media';
         let estado = 'Abierta';
         let usuario = sessionStorage.getItem("id_usuario");
         
-        if (!titulo) return;
-        titulo = capitalizar(titulo);
+        if (!titulo||!id_recurso||!descripcion||!prioridad||!estado||!fecha||!id_recurso) return;
 
         fetch(window.location.origin+"/API/incidencias/", {
             method: "POST",
@@ -69,12 +68,14 @@ function activarEditarIncidencia() {
         let id = document.getElementById("editId").value;
         let fecha = document.getElementById("editFecha").value;
         let id_recurso = document.getElementById("editRecurso").value;
-        let titulo = document.getElementById("editTitulo").value;
-        let descripcion = document.getElementById("editDescripcion").value;
+        let titulo = capitalizar(document.getElementById("editTitulo").value);
+        let descripcion = capitalizar(document.getElementById("editDescripcion").value);
         let usuario = document.getElementById("editUsuario").value;
         let prioridad = document.getElementById("editPrioridad").value;
         let estado = document.getElementById("editEstado").value;
-        if (!id) return;
+        
+        if (!id||!titulo||!id_recurso||!descripcion||!prioridad||!estado||!fecha||!id_recurso) return;
+
         let modal = bootstrap.Modal.getInstance(
             document.getElementById("modalEditar")
         );
@@ -95,12 +96,14 @@ function activarEditarTarjetasIncidencia() {
         let id = document.getElementById("incidencia_id").value;
         let fecha = document.getElementById("incidencia_fecha").value;
         let id_recurso = document.getElementById("incidencia_recurso").value;
-        let titulo = document.getElementById("incidencia_titulo").value;
-        let descripcion = document.getElementById("incidencia_descripcion").value;
+        let titulo = capitalizar(document.getElementById("incidencia_titulo").value);
+        let descripcion = capitalizar(document.getElementById("incidencia_descripcion").value);
         let usuario = document.getElementById("incidencia_id_usuario").value;
         let prioridad = document.getElementById("incidencia_prioridad").value;
         let estado = document.getElementById("incidencia_estado").value;
-        if (!id) return;
+        
+        if (!id||!titulo||!id_recurso||!descripcion||!prioridad||!estado||!fecha||!id_recurso) return;
+
         let modal = bootstrap.Modal.getInstance(
             document.getElementById("modalincidencia")
         );
@@ -121,12 +124,14 @@ function activarEditarMisIncidencias(){
         let id = document.getElementById("incidencia_id").value;
         let fecha = document.getElementById("incidencia_fecha").value;
         let id_recurso = document.getElementById("incidencia_recurso").value;
-        let titulo = document.getElementById("incidencia_titulo").value;
-        let descripcion = document.getElementById("incidencia_descripcion").value;
+        let titulo = capitalizar(document.getElementById("incidencia_titulo").value);
+        let descripcion = capitalizar(document.getElementById("incidencia_descripcion").value);
         let usuario = document.getElementById("incidencia_id_usuario").value;
         let prioridad = document.getElementById("incidencia_prioridad").value;
         let estado = document.getElementById("incidencia_estado").value;
-        if (!id) return;
+        
+        if (!id||!titulo||!id_recurso||!descripcion||!prioridad||!estado||!fecha||!id_recurso) return;
+        
         let modal = bootstrap.Modal.getInstance(
             document.getElementById("modalincidencia")
         );

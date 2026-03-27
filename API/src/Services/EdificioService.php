@@ -110,9 +110,20 @@ class EdificioService
             if (!$edificio) {
                 throw new \Exception("No se pudo actualizar el edificio");
             }
-
-            return $edificio;
-
+            
+            if(!$edificio['cambios']){
+                return[
+                    'status' => 'no_changes',
+                    'data' => $edificio,
+                    'message' => 'No han habido cambios'
+                ];
+            }
+            
+            return[
+                'status' => 'success',
+                'data' => $edificio,
+                'message' => 'Edificio actualizado correctamente'
+            ];
         } catch (ValidationException $e) {
             throw $e;
         } catch (Throwable $e) {

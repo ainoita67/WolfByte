@@ -454,6 +454,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     data = await res.json();
                     console.log('Respuesta data:', data);
+
+                    if(data.data.message.includes('existe')){
+                        mostrarToast('El edificio con ese nombre ya existe', 'warning');
+                    }
                 } catch {
                     mensajeError = 'Error al procesar la respuesta del servidor';
                     throw new Error(mensajeError);
