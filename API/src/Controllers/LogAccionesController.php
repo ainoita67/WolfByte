@@ -29,6 +29,18 @@ class LogAccionesController
         }
     }
 
+    // Listar log paginado
+    public function indexPaginado(Request $req, Response $res): void
+    {
+        try {
+            $data=$req->getBody() ?? [];
+            $log = $this->service->getLog($data);
+            $res->status(200)->json($log);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
     // Listar tipos de log
     public function indexTipoLog(Request $req, Response $res): void
     {

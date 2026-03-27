@@ -200,4 +200,5 @@ $router->delete('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEs
 
 // LOG DE ACCIONES
 $router->get('/logacciones', 'Controllers\\LogAccionesController@index');
+$router->post('/logacciones', 'Controllers\\LogAccionesController@indexPaginado');
 $router->get('/tipolog', 'Controllers\\LogAccionesController@indexTipoLog');
