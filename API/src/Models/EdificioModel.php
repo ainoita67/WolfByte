@@ -97,7 +97,9 @@ class EdificioModel
                     ->bind(':id', $id)
                     ->execute();
 
-                return $this->findById($id);
+                $edificio=$this->findById($id);
+                $edificio['cambios']=$this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
+                return $edificio;
             }            
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar edificio: " . $e->getMessage());

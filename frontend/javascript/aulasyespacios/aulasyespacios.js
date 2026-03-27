@@ -148,7 +148,7 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         return;
     }
     
-    select.innerHTML = '<option value="">Seleccionar edificio...</option>';
+    select.innerHTML = '<option value="" selected disabled>Seleccionar edificio</option>';
     
     if (!edificios || edificios.length === 0) {
         console.warn("No hay edificios cargados, intentando cargarlos...");
@@ -172,6 +172,11 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         if (valorSeleccionado !== null && String(edificio.id_edificio) === String(valorSeleccionado)) {
             option.selected = true;
             console.log(`✅ Edificio seleccionado: ${edificio.nombre_edificio} (ID: ${edificio.id_edificio})`);
+            if(selectId=='crearSelect'){
+                obtenerPlantas(edificio.id_edificio, 'crear');
+            }else if(selectId=='editSelect'){
+                obtenerPlantas(edificio.id_edificio, 'editar');
+            }
         }
         
         select.appendChild(option);
@@ -183,6 +188,59 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         select.value = String(valorSeleccionado);
         console.log(`Valor después de select.value: ${select.value}`);
     }
+}
+
+function obtenerPlantas(edificio, accion, nplanta=0){
+    fetch(window.location.origin+"/API/plantas/"+edificio)
+    .then(res => res.json())
+    .then(response => {
+        let plantas = response.data;
+        let divplantas;
+        let selectplantas;
+        if(accion=='crear'){
+            divplantas = document.getElementById("divcrearplanta");
+            selectplantas = document.getElementById("crearPlanta");
+        }else if(accion=='editar'){
+            divplantas = document.getElementById("diveditarplanta");
+            selectplantas = document.getElementById("editPlanta");
+        }else{
+            return;
+        }
+        selectplantas.innerHTML = "";
+
+        if(plantas.length === 0||edificio == ""||!edificio){
+            let option=document.createElement("option");
+            option.value="";
+            option.textContent("Seleccione un edificio primero");
+            option.selected=true;
+            selectplantas.appendChild(option);
+            selectplantas.disabled=true;
+        }else{
+            selectplantas.disabled=false;
+
+            if(accion=='crear'){
+                let optionseleccionar = document.createElement("option");
+                optionseleccionar.value = "";
+                optionseleccionar.textContent = "Seleccionar planta";
+                optionseleccionar.selected = true;
+                optionseleccionar.disabled = true;
+                selectplantas.appendChild(optionseleccionar);
+            }
+
+            plantas.forEach(planta => {
+                let optionplanta = document.createElement("option");
+                optionplanta.value = planta.numero_planta;
+                optionplanta.textContent = 'Planta '+planta.numero_planta;
+                if(nplanta==planta.numero_planta){
+                    optionplanta.selected=true;
+                }else{
+                    optionplanta.selected=false;
+                }
+                selectplantas.appendChild(optionplanta);
+            });
+        }
+    })
+    .catch(error => console.error("<p>Error al obtener plantas</p>", error));
 }
 
 async function cargarSelectCaracteristicasCrear(){
@@ -465,6 +523,7 @@ async function abrirModalEditar(id) {
         if (espacio.numero_planta !== undefined && espacio.numero_planta !== null) {
             plantaSelect.value = String(espacio.numero_planta);
             console.log("Planta seleccionada:", plantaSelect.value);
+            obtenerPlantas(espacio.id_edificio, 'editar', espacio.numero_planta);
         } else {
             plantaSelect.value = "";
         }

@@ -176,18 +176,15 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Edificio</label>
-                                    <select class="form-select" id="crearEdificio" required>
-                                        <option value="">Seleccionar edificio...</option>
+                                    <select class="form-select selectEdificio" id="crearEdificio" required>
+                                        <option value="">Seleccionar edificio</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3" id="divcrearplanta">
                                     <label class="form-label">Planta</label>
                                     <select class="form-select" id="crearPlanta" required>
-                                        <option value="">Seleccionar planta...</option>
-                                        <option value="0">Planta baja</option>
-                                        <option value="1">Primera planta</option>
-                                        <option value="2">Segunda planta</option>
+                                        <option value="" selected disabled>Seleccione un edificio primero</option>
                                     </select>
                                 </div>
 
@@ -260,18 +257,15 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Edificio</label>
-                                    <select class="form-select" id="editEdificio" required>
-                                        <option value="">Seleccionar edificio...</option>
+                                    <select class="form-select selectEdificio" id="editEdificio" required>
+                                        <option value="">Seleccionar edificio</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-6 mb-3" id="diveditarplanta">
                                     <label class="form-label">Planta</label>
                                     <select class="form-select" id="editPlanta" required>
-                                        <option value="">Seleccionar planta...</option>
-                                        <option value="0">Planta baja</option>
-                                        <option value="1">Primera planta</option>
-                                        <option value="2">Segunda planta</option>
+                                        <option value="" selected disabled>Seleccione un edificio primero</option>
                                     </select>
                                 </div>
 
@@ -351,6 +345,30 @@
 
         <!-- Script principal -->
         <script type="module" src="../../../javascript/aulasyespacios/aulasyespacios.js"></script>
+        <script>
+            const script = document.createElement("script");
+            script.src = BASE + "/javascript/aulasyespacios/aulasyespacios.js";
+            document.head.appendChild(script);
+
+            selectedificio=document.querySelectorAll(".selectEdificio");
+
+            function actualizarEdificio(event){
+                let select=event.target;
+                idselect=select.id;
+                edificio=select.value;
+
+                // Dependiendo del id puedes hacer diferentes acciones
+                if(idselect === "crearEdificio"){
+                    window.obtenerPlantas(edificio, 'crear');
+                } else if(idselect === "editEdificio"){
+                    window.obtenerPlantas(edificio, 'editar');
+                }
+            }
+
+            selectedificio.forEach(select => {
+                select.addEventListener("change", actualizarEdificio);
+            });
+        </script>
 
     </body>
 

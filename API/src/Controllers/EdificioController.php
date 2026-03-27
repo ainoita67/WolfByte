@@ -8,14 +8,17 @@ use Core\Response;
 use Validation\ValidationException;
 use Throwable;
 use Services\EdificioService;
+use Services\LogAccionesService;
 
 class EdificioController
 {
     private EdificioService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new EdificioService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     /**
@@ -87,20 +90,16 @@ class EdificioController
     public function update(Request $req, Response $res, string $id): void  // Cambiado a string $id
     {
         try {
-            $data = $req->getBody();
+            $data = $req->json();
             
             if (!isset($data['nombre_edificio']) || empty(trim($data['nombre_edificio']))) {
                 $res->errorJson('El nombre del edificio es obligatorio', 422);
                 return;
             }
-
-            $edificio = $this->service->updateEdificio((int)$id, $data);
             
-            $res->status(200)->json([
-                'status' => 'success',
-                'data' => $edificio,
-                'message' => 'Edificio actualizado correctamente'
-            ]);
+            $edificio = $this->service->updateEdificio((int)$id, $data);
+
+            $res->status(200)->json($edificio);
             
         } catch (ValidationException $e) {
             $res->status(422)->json([
