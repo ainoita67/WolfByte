@@ -171,43 +171,43 @@ class ReservaEspacioModel
             if($diasemana!=date('w', strtotime($data['fin']))){
                 return false;
             }
-
+            
             $filas=$this->db
-            ->query("
-                SELECT
-                    COUNT(DISTINCT r.id_reserva) 
-                    + COUNT(DISTINCT rep.id_reserva_permanente) 
-                    - COUNT(DISTINCT lp_r.id_liberacion_puntual)
-                    - COUNT(DISTINCT lp_rep.id_liberacion_puntual) AS totalreservas
-                FROM Espacio e
-                LEFT JOIN Reserva_permanente rep
-                    ON rep.id_recurso = e.id_espacio
+            ->query("SELECT
+                (
+                    SELECT COUNT(*) 
+                    FROM Reserva_permanente rep
+                    LEFT JOIN Liberacion_puntual lp
+                    ON lp.id_reserva_permanente = rep.id_reserva_permanente
+                    WHERE rep.id_recurso = :espacio1
                     AND rep.dia_semana = :diasemana
                     AND rep.activo = 1
-                    AND rep.inicio <= :fin1
-                    AND rep.fin >= :inicio1
-                LEFT JOIN Liberacion_puntual lp_rep
-                    ON lp_rep.id_reserva_permanente = rep.id_reserva_permanente
-                LEFT JOIN Reserva_espacio re
-                    ON re.id_espacio = e.id_espacio
-                    AND re.id_reserva != :id
-                LEFT JOIN Reserva r
-                    ON r.id_reserva = re.id_reserva
-                    AND r.inicio <= :fin2
-                    AND r.fin >= :inicio2
+                    AND rep.inicio <= :horafin
+                    AND rep.fin >= :horainicio
+                ) 
+                +
+                (
+                    SELECT COUNT(*) 
+                    FROM Reserva r
+                    JOIN Reserva_espacio re
+                    ON re.id_reserva = r.id_reserva
+                    WHERE re.id_espacio = :espacio2
+                    AND r.id_reserva != :id
+                    AND r.inicio <= :fin
+                    AND r.fin >= :inicio
                     AND r.autorizada != 0
-                LEFT JOIN Liberacion_puntual lp_r
-                    ON lp_r.id_reserva = r.id_reserva
-                WHERE e.id_espacio = :espacio
+                ) AS totalreservas;
             ")
             ->bind(':diasemana', $diasemana)
-            ->bind(':inicio1', $data['inicio'])
-            ->bind(':fin1', $data['fin'])
-            ->bind(':inicio2', $data['inicio'])
-            ->bind(':fin2', $data['fin'])
-            ->bind(':espacio', $data['id_espacio'])
+            ->bind(':horainicio', $horainicio)
+            ->bind(':horafin', $horafin)
+            ->bind(':inicio', $data['inicio'])
+            ->bind(':fin', $data['fin'])
+            ->bind(':espacio1', $data['id_espacio'])
+            ->bind(':espacio2', $data['id_espacio'])
             ->bind(':id', $id)
             ->fetch();
+            
             if($filas['totalreservas']>0){
                 return false;
             }

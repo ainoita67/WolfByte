@@ -6,16 +6,22 @@ namespace Controllers;
 use Core\Request;
 use Core\Response;
 use Services\ReservaEspacioService;
+use Services\NecesidadReservaService;
+use Services\LogAccionesService;
 use Throwable;
 use Validation\ValidationException;
 
 class ReservaEspacioController
 {
     private ReservaEspacioService $service;
+    private NecesidadReservaService $serviceNecesidad;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new ReservaEspacioService();
+        $this->serviceNecesidad = new NecesidadReservaService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     public function index(Request $req, Response $res): void
@@ -71,7 +77,28 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
+            $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
+            
             $this->serviceNecesidad->updateNecesidad((int)$id, $data);
+            $necesidadesdespues=$this->serviceNecesidad->getNecesidadById((int)$id);
+
+            $coincide=true;
+            if(count($necesidadesantes)!=count($necesidadesdespues)){
+                $coincide=false;
+            }
+            foreach ($necesidadesantes as $key => $antes) {
+                if ($antes !== $necesidadesdespues[$key]) {
+                    $coincide = false;
+                    break;
+                }
+            }
+
+            if($coincide === false){
+                $log['id_usuario_actor']=$data['id_usuario'];
+                $log['id_reserva']=(int)$id;
+                $this->serviceLog->createLog('Modificación de necesidad', $log);
+            }
+            
             $reserva = $this->service->updateReserva((int)$id, $data);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {

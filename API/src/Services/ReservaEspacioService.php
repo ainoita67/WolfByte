@@ -5,6 +5,7 @@ namespace Services;
 
 use Models\ReservaEspacioModel;
 use Validation\ValidationException;
+use Validation\Validator;
 
 class ReservaEspacioService
 {
@@ -58,30 +59,19 @@ class ReservaEspacioService
         ];
     }
 
-    public function updateReserva(int $id, array $data): array
-{
-    // comprobar que existe
-    $reserva = $this->model->getById($id);
+    public function updateReserva(int $id, array $input): array
+    {
+        $data = Validator::validate($input, [
+            'id_espacio'            => 'required|string|min:1',
+            'actividad'             => 'nullable|string|min:1',
+            'necesidades'           => 'required',
+            'inicio'                => 'required|string|min:1',
+            'fin'                   => 'required|string|min:1'
+        ]);
 
-    if (!$reserva) {
-        throw new ValidationException("Reserva no encontrada");
-    }
-
-    // validar campos obligatorios
-    $required = ['asignatura','grupo','profesor','actividad'];
-
-    foreach ($required as $field) {
-        if (empty($data[$field])) {
-            throw new ValidationException("El campo {$field} es obligatorio");
+        if($this->model->getReservaFecha($id, $data)&&count($this->model->findById($id))>0){
+            return $this->model->update($id, $data);
         }
+        throw new \Exception("Ya hay una reserva entre esas horas");
     }
-
-    // actualizar reserva
-    $this->model->updateReserva($id, $data);
-
-    return [
-        'id_reserva' => $id,
-        'message' => 'Reserva actualizada correctamente'
-    ];
-}
 }

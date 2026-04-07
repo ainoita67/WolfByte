@@ -184,15 +184,17 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
         if(resultado!=1){
             mostrarToast("Error al actualizar la reserva", 'danger');
         }else{
+            let usuariolog=sessionStorage.getItem("id_usuario");
             fetch(window.location.origin+"/API/reservas/"+id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo})
+                body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo, id_usuario_log: usuariolog})
             })
             .then(res => res.json())
             .then(response => {
+                console.log(response);
                 if (response.status === "success") {
                     // Cerrar modal
                     modal.hide();
@@ -224,19 +226,20 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 //API Editar reservas de tipo espacio
 async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin){
     try{
+        let usuario=sessionStorage.getItem("id_usuario");
         let arraynecesidades = necesidades.map(id => ({ id_necesidad: id }));
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades, inicio: inicio, fin: fin})
+            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades, inicio: inicio, fin: fin, id_usuario: usuario})
         })
         let response = await res.json();
         if (response.status == "success"){
             return 1;
         }else{
-            mostrarToast("Ya hay una reserva entre esas horas", 'warning');
+            mostrarToast(response.message+"Ya hay una reserva entre esas horas", 'warning');
             return -1;
         }
     }catch(err){

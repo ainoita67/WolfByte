@@ -219,7 +219,7 @@ class ReservaService
 
     public function updateReserva(int $id, array $input): array
     {
-        try{
+        try{        
             $data = Validator::validate($input, [
                 'asignatura'            => 'nullable|string|min:1',
                 'autorizada'            => 'nullable|in:0,1',
@@ -233,8 +233,19 @@ class ReservaService
                 'id_usuario_autoriza'   => 'nullable|int|min:1',
                 'tipo'                  => 'required|string|min:1'
             ]);
+            
+            if(!$this->model->update($id, $data)){
+                return [
+                    'status' => 'no_changes',
+                    'message' => 'No han habido cambios',
+                    'data' => $this->model->findById($id)
+                ];
+            }
 
-            return $this->model->update($id, $data);
+            return [
+                'status' => 'updated',
+                'data' => $this->model->findById($id)
+            ];
         }catch(Exception $e){
             throw new ValidationException(json_encode($errors));
         }
