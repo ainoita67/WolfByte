@@ -302,7 +302,7 @@ class ReservaModel
             ->fetchAll();
     }
 
-    public function update(int $id, array $data): array{
+    public function update(int $id, array $data): bool{
         try{
             $this->db
                 ->query("
@@ -334,10 +334,9 @@ class ReservaModel
                 ->bind(':id',                   $id)
                 ->execute();
 
-                return $this->findById($id);
+            return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar la reserva");
         }
     }
 }
-

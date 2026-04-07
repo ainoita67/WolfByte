@@ -6,16 +6,19 @@ namespace Controllers;
 use Core\Request;
 use Core\Response;
 use Services\ReservaService;
+use Services\LogAccionesService;
 use Throwable;
 use Validation\ValidationException;
 
 class ReservaController
 {
     private ReservaService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new ReservaService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     public function misReservas(Request $req, Response $res, string $id_usuario): void
@@ -189,8 +192,25 @@ class ReservaController
         try {
             $id = is_array($args) ? (int)$args['id'] : (int)$args;
             $data = $req->getBody();
-            $necesidad = $this->service->updateReserva($id, $data);
-            $res->status(200)->json($necesidad);
+
+            $log['id_usuario_actor']=(int)$data['id_usuario_log'];
+            
+            $result = $this->service->updateReserva((int)$id, $data);
+            
+            if($result['status']!='no_changes'){
+                $log['id_reserva']=$result['data']['id_reserva'];
+                if($data['autorizada']!=$result['data']['autorizada']){
+                    if($data['autorizada']==1){
+                        $this->serviceLog->createLog('Autorización de reserva', $log);
+                    }else if($data['autorizada']==0){
+                        $this->serviceLog->createLog('Cancelación de reserva', $log);
+                    }
+                }
+
+                $this->serviceLog->createLog('Modificación de reserva', $log);
+            }
+            
+            $res->status(200)->json($result);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {
