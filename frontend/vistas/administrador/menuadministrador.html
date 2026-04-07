@@ -177,18 +177,21 @@
                                         <div class="col-md-4">
                                             <label class="form-label" for="incidencia_id">ID</label>
                                             <input type="number" class="form-control" id="incidencia_id" name="id" readonly required>
+                                            <small class="text-muted">El ID no se puede modificar</small>
                                         </div>
 
                                         <!-- Fecha -->
                                         <div class="col-md-4">
                                             <label class="form-label" for="incidencia_fecha">Fecha</label>
                                             <input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
+                                            <small class="text-muted">La fecha de creación no se puede modificar</small>
                                         </div>
 
                                         <!-- Recurso -->
                                         <div class="col-md-4">
                                             <label class="form-label" for="incidencia_recurso">Recurso</label>
                                             <input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
+                                            <small class="text-muted">El recurso no se puede modificar</small>
                                         </div>
 
                                         <!-- Titulo -->
@@ -208,6 +211,7 @@
                                             <input type="hidden" class="form-control" id="incidencia_id_usuario" name="idusuario" readonly required>
                                             <label class="form-label" for="incidencia_usuario">Usuario</label>
                                             <input type="text" class="form-control" id="incidencia_usuario" name="usuario" readonly required>
+                                            <small class="text-muted">El usuario no se puede modificar</small>
                                         </div>
 
                                         <!-- Estado -->
@@ -331,24 +335,28 @@
                                         <div class="col-lg-6">
                                             <label class="form-label">ID Reserva</label>
                                             <input type="number" class="form-control" id="reserva_id" name="reserva_id" required readonly>
+                                            <small class="text-muted">El ID no se puede modificar</small>
                                         </div>
 
                                         <!-- Fecha creación -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_f_creacion">F. creación</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" required readonly>
+                                            <small class="text-muted">La fecha de creación no se puede modificar</small>
                                         </div>
 
                                         <!-- Inicio -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_inicio">Inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio" required>
+                                            <small class="text-muted">La fecha de inicio no se puede modificar</small>
                                         </div>
 
                                         <!-- Fin -->
                                         <div class="col-lg-6">
                                             <label class="form-label" for="reserva_fin">Fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin" required>
+                                            <small class="text-muted">La fecha fin no se puede modificar</small>
                                         </div>
 
                                         <!-- Espacio/Portátil -->
@@ -356,6 +364,7 @@
                                             <input type="hidden" id="reserva_tipo" name="tipo" required readonly>
                                             <label class="form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
                                             <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil" required readonly>
+                                            <small class="text-muted">El tipo de recurso no se puede modificar</small>
                                         </div>
 
                                         <!-- Asignatura -->
@@ -382,6 +391,7 @@
                                             <input type="hidden" id="reserva_id_usuario_autoriza" name="id_usuario_autoriza" required readonly>
                                             <label class="form-label" for="reserva_usuario">Usuario</label>
                                             <input type="text" class="form-control" id="reserva_usuario" name="usuario" required readonly>
+                                            <small class="text-muted">El usuario no se puede modificar</small>
                                         </div>
 
                                         <!-- Unidades -->

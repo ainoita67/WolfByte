@@ -30,6 +30,20 @@ class ReservaPermanenteModel
     }
 
     /**
+     * Obtener todas las reservas permanentes inactivas
+     */
+    public function getAllInactivas(): array
+    {
+        try {
+            return $this->db
+                ->query("SELECT * FROM Reserva_permanente WHERE activo=0")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas permanentes");
+        }
+    }
+
+    /**
      * Obtener reserva permanente por ID
      */
     public function findById(int $id): array|false
