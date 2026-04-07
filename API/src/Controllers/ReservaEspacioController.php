@@ -80,23 +80,31 @@ class ReservaEspacioController
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
             $this->serviceNecesidad->updateNecesidad((int)$id, $data);
+            
             $necesidadesdespues=$this->serviceNecesidad->getNecesidadById((int)$id);
-
+            
             $coincide=true;
             if(count($necesidadesantes)!=count($necesidadesdespues)){
                 $coincide=false;
-            }
-            foreach ($necesidadesantes as $key => $antes) {
-                if ($antes !== $necesidadesdespues[$key]) {
-                    $coincide = false;
-                    break;
+            }else{
+                if(count($necesidadesdespues)!=0){
+                    foreach ($necesidadesantes as $key => $antes) {
+                        if ($antes !== $necesidadesdespues[$key]) {
+                            $coincide = false;
+                            break;
+                        }
+                    }
                 }
             }
 
             if($coincide === false){
                 $log['id_usuario_actor']=$data['id_usuario'];
                 $log['id_reserva']=(int)$id;
-                $this->serviceLog->createLog('Modificación de necesidad', $log);
+                if($data['necesidades']==null||count($data['necesidades'])==0){
+                    $this->serviceLog->createLog('Desvinculación de necesidades', $log);
+                }else{
+                    $this->serviceLog->createLog('Asignación de necesidades', $log);
+                }
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);

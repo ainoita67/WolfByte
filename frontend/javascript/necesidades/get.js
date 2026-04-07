@@ -65,6 +65,11 @@ function obtenerNecesidadesSelectMultiple(){
         selectNecesidad.forEach(select => {
             select.innerHTML = "";
 
+            let ninguna = document.createElement('option');
+            ninguna.textContent = 'Ninguna';
+            ninguna.value = '';
+            select.appendChild(ninguna);
+
             necesidades.forEach(necesidad => {
                 let option = document.createElement("option");
                 option.setAttribute("value", necesidad.id_necesidad);

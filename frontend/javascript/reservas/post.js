@@ -227,7 +227,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin){
     try{
         let usuario=sessionStorage.getItem("id_usuario");
-        let arraynecesidades = necesidades.map(id => ({ id_necesidad: id }));
+        let arraynecesidades = (necesidades||[]).filter(valor => valor !== '').map(id => ({ id_necesidad: id }));
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
