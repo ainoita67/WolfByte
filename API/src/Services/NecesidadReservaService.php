@@ -23,23 +23,21 @@ class NecesidadReservaService
     public function getNecesidadById(int $id): array
     {
         $necesidad = $this->model->findById($id);
-
         if (!$necesidad) {
-            throw new ValidationException("Necesidad de reserva no encontrada");
+            $necesidad = [];
         }
-
         return $necesidad;
     }
 
     public function createNecesidad(array $data): array
     {
         if (empty($data['id_reserva_espacio']) || empty($data['necesidades'])) {
-            throw new ValidationException("id_reserva_espacio y id_necesidad son obligatorios");
+            throw new \Exception("id_reserva_espacio y id_necesidad son obligatorios");
         }
         $resultados=[];
         foreach ($data['necesidades'] as $n) {
             if (!isset($n['id_necesidad'])) {
-                throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+                throw new \Exception("Cada necesidad debe tener un id_necesidad");
             }
         }
         foreach ($data['necesidades'] as $necesidad) {
@@ -61,7 +59,7 @@ class NecesidadReservaService
         }else{
             foreach ($input['necesidades'] as $n) {
                 if (!isset($n['id_necesidad'])) {
-                    throw new ValidationException("Cada necesidad debe tener un id_necesidad");
+                    throw new \Exception("Cada necesidad debe tener un id_necesidad");
                 }
             }
             $this->model->delete($id, $input);

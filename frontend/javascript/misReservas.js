@@ -73,9 +73,8 @@ function mostrarMisReservas(reservas, tarjetasReservas){
 
 
 function mostrarDatosModal(reserva){
-    console.log(reserva);
     let selectNecesidades = document.getElementById("reserva_necesidades");
-
+    
     if(reserva.tipo == "Reserva_espacio"){
         let necesidades=[];
 
@@ -83,19 +82,28 @@ function mostrarDatosModal(reserva){
             necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
         }
 
-        for (let i = 0; i < selectNecesidades.options.length; i++) {
+        for (let i = 1; i < selectNecesidades.options.length; i++) {
             selectNecesidades.options[i].selected = false;
             selectNecesidades.options[i].classList.remove("border", "border-primary");
         }
 
+        seleccionadas=false;
         necesidades.forEach(nec => {
-            for (let i = 0; i < selectNecesidades.options.length; i++) {
+            for (let i = 1; i < selectNecesidades.options.length; i++) {
                 if (selectNecesidades.options[i].value === nec) {
                     selectNecesidades.options[i].selected = true;
                     selectNecesidades.options[i].classList.add("border", "border-primary");
+                    seleccionadas=true;
                 }
             }
         });
+        if(!seleccionadas||necesidades.length==0){
+            selectNecesidades.options[0].selected=true;
+            selectNecesidades.options[0].classList.add("border", "border-primary");
+        }else{
+            selectNecesidades.options[0].selected=false;
+            selectNecesidades.options[0].classList.remove("border", "border-primary");
+        }
     }
 
     let autorizada='Denegada';
@@ -293,7 +301,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 //API Editar reservas de tipo espacio
 async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin){
     try{
-        let arraynecesidades = necesidades.map(id => ({ id_necesidad: id }));
+        let arraynecesidades = necesidades.filter(valor => valor !== '').map(id => ({ id_necesidad: id }));
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
