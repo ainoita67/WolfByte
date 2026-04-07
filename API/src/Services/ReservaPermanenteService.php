@@ -28,6 +28,14 @@ class ReservaPermanenteService
     }
 
     /**
+     * Obtener todas las reservas permanentes inactivas
+     */
+    public function getAllReservasPermanentesInactivas(): array
+    {
+        return $this->model->getAllInactivas();
+    }
+
+    /**
      * Obtener reserva permanente por ID
      */
     public function getReservaPermanenteById(string $id): array
