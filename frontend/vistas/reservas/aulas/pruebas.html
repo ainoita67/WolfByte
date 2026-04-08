@@ -28,30 +28,24 @@
             document.head.appendChild(script1);
         </script>
 
-
         <title>Salón de Actos - IES Bajo Aragón</title>
     </head>
-<body>
+    <body>
+        <script type="module">
+            import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
+            import { generarHorarioRealEventos, getLiberacionesRecurso, aplicarLiberaciones } from "/frontend/javascript/reservas/disponibilidad.js";
 
+            const permanentes = await getPermanentesRecurso("salon");
+            console.log(permanentes);
+            const horario = generarHorarioPermanentes(permanentes);
+            console.log(horario);
+            const eventos = await generarHorarioRealEventos(horario);
+            console.log(eventos);
 
-
-
-<script type="module">
-    import { getPermanentesRecurso, generarHorarioPermanentes } from "/frontend/javascript/reservas/horario_permanente.js";
-    import { generarHorarioRealEventos, getLiberacionesRecurso, aplicarLiberaciones } from "/frontend/javascript/reservas/disponibilidad.js";
-
-    const permanentes = await getPermanentesRecurso("salon");
-    console.log(permanentes);
-    const horario = generarHorarioPermanentes(permanentes);
-    console.log(horario);
-    const eventos = await generarHorarioRealEventos(horario);
-    console.log(eventos);
-
-    const liberaciones = await getLiberacionesRecurso("salon");
-    console.log(liberaciones);
-    const eventos2 = aplicarLiberaciones(eventos, liberaciones);
-    console.log(eventos2);
-
-</script>
-</body>
+            const liberaciones = await getLiberacionesRecurso("salon");
+            console.log(liberaciones);
+            const eventos2 = aplicarLiberaciones(eventos, liberaciones);
+            console.log(eventos2);
+        </script>
+    </body>
 </html>

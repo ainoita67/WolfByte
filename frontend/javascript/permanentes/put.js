@@ -61,11 +61,13 @@ export async function desactivePermanente(id) {
   try {
     if (!id) throw new Error("desactivePermanente: falta id_reserva_permanente");
 
+    let usuario = sessionStorage.getItem("id_usuario");
     const response = await fetch(`${API}/reservas_permanentes/${id}/activar`, {
       method: "PATCH",
       headers: {
         "Accept": "application/json"
       },
+      body: JSON.stringify({ id_usuario: usuario })
     });
 
     const json = await response.json().catch(() => null);
@@ -88,11 +90,13 @@ export async function desactivePermanente(id) {
 
 export async function desactivarTodo() {
   try {
+    let usuario = sessionStorage.getItem("id_usuario");
     const response = await fetch(`${API}/reservas_permanentes/desactivar_todo`, {
       method: "PATCH",
       headers: {
         "Accept": "application/json"
       },
+      body: JSON.stringify({ id_usuario: usuario })
     });
 
     const json = await response.json().catch(() => null);

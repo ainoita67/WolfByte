@@ -150,9 +150,31 @@ class ReservaPermanenteModel
     }
 
     /**
+     * Desactivar reserva permanente
+     */
+    public function desactivar(int $id): array
+    {
+        try {
+            $this->db
+                ->query("
+                    UPDATE Reserva_permanente SET
+                        activo = :activo
+                    WHERE id_reserva_permanente = :id
+                ")
+                ->bind(':id',           $id)
+                ->bind(':activo',       0)
+                ->execute();
+
+            return $this->findById($id);
+        } catch (PDOException $e) {
+            throw new \Exception("Error al desactivar la reserva permanente");
+        }
+    }
+
+    /**
      * Desactivar todas las reservas permanentes
      */
-    public function desactivar(): array
+    public function desactivartodas(): array
     {
         try {
             $this->db

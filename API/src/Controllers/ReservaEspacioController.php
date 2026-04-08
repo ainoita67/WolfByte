@@ -62,7 +62,10 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
             $reserva = $this->service->createReserva($data);
+            $log['id_reserva']=$reserva['id_reserva'];
+            $this->serviceLog->createLog("Creación de reserva", $log);
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);

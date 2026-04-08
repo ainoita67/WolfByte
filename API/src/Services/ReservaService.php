@@ -217,6 +217,29 @@ class ReservaService
         }
     }
 
+    public function createReserva(array $input): array
+    {
+        try{
+            $data = Validator::validate($input, [
+                'asignatura'            => 'string|min:1',
+                'autorizada'            => 'in:0,1',
+                'observaciones'         => 'string|min:1',
+                'grupo'                 => 'required|string|min:1',
+                'profesor'              => 'required|string|min:1',
+                'f_creacion'            => 'required|string',
+                'inicio'                => 'required|string',
+                'fin'                   => 'required|string',
+                'id_usuario'            => 'required|int|min:1',
+                'id_usuario_autoriza'   => 'int|min:1',
+                'tipo'                  => 'required|string|min:1'
+            ]);
+            
+            return $this->model->create($data);
+        }catch(Exception $e){
+            throw new ValidationException(json_encode($errors));
+        }
+    }
+
     public function updateReserva(int $id, array $input): array
     {
         try{        

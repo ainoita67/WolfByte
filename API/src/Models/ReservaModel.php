@@ -253,6 +253,33 @@ class ReservaModel
             ->fetchAll();
     }
 
+    public function create(array $data): array
+    {
+        try{
+            $this->db
+                ->query("
+                    INSERT INTO Reserva (asignatura, autorizada, observaciones, grupo, profesor, f_creacion, inicio, fin, id_usuario, id_usuario_autoriza, tipo)
+                    VALUES (:asignatura, :autorizada, :observaciones, :grupo, :profesor, :f_creacion, :inicio, :fin, :id_usuario, :id_usuario_autoriza, :tipo)
+                ")
+                ->bind(':asignatura', $data['asignatura'])
+                ->bind(':autorizada', $data['autorizada'] ?? null)
+                ->bind(':observaciones', $data['observaciones'] ?? null)
+                ->bind(':grupo', $data['grupo'])
+                ->bind(':profesor', $data['profesor'])
+                ->bind(':f_creacion', $data['f_creacion'])
+                ->bind(':inicio', $data['inicio'])
+                ->bind(':fin', $data['fin'])
+                ->bind(':id_usuario', $data['id_usuario'])
+                ->bind(':id_usuario_autoriza', $data['id_usuario_autoriza'])
+                ->bind(':tipo', $data['tipo'])
+                ->execute();
+
+            return $this->findById((int)$this->db->lastId());
+        } catch (PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function updateFechas(
         int $idReserva,
         string $inicio,

@@ -126,23 +126,36 @@ class ReservaPermanenteService
             throw new ValidationException("id_recurso es obligatorio");
         }
 
-        return $this->model->update($id, $data);
+        return[
+            message => "Reserva actualizada correctamente",
+            data => $this->model->update($id, $data)
+        ];
     }
 
     /**
      * Activar reserva permanente
      */
-    public function activarReservaPermanente(string $id): array
+    public function activarReservaPermanente(string $id, bool $activar): array
     {
         $data = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
         if(empty($data['id'])) {
-            throw new ValidationException("id es obligatorio");
+            throw new ValidationException("ID es obligatorio");
         }
 
-        return $this->model->activar($data['id']);
+        if($activar){
+            return [
+                'message' => 'Reserva activada correctamente',
+                'data' => $this->model->activar($data['id'])
+            ];
+        }else{
+            return [
+                'message' => 'Reserva desactivada correctamente',
+                'data' => $this->model->desactivar($data['id'])
+            ];
+        }
     }
 
     /**
@@ -150,6 +163,6 @@ class ReservaPermanenteService
      */
     public function desactivarReservasPermanentes(): array
     {
-        return $this->model->desactivar();
+        return $this->model->desactivartodas();
     }
 }
