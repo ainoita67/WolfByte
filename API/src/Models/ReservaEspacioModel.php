@@ -121,7 +121,7 @@ class ReservaEspacioModel
     /**
      * Crear reservas
      */
-    public function create(array $data): array
+    public function create(int $id_reserva, array $data): array
     {
         try{
             $this->db
@@ -129,7 +129,7 @@ class ReservaEspacioModel
                     INSERT INTO Reserva_espacio (id_reserva, actividad, id_espacio)
                     VALUES (:id_reserva, :actividad, :id_espacio)
                 ")
-                ->bind(':id_reserva', $data['id_reserva'])
+                ->bind(':id_reserva', $id_reserva)
                 ->bind(':actividad', $data['actividad'])
                 ->bind(':id_espacio', $data['id_espacio'])
                 ->execute();
@@ -184,6 +184,7 @@ class ReservaEspacioModel
                     AND rep.activo = 1
                     AND rep.inicio <= :horafin
                     AND rep.fin >= :horainicio
+                    AND lp.id_liberacion_puntual IS NULL
                 ) 
                 +
                 (

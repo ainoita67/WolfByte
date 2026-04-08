@@ -7,16 +7,19 @@ use Core\Request;
 use Core\Response;
 use Core\Session;
 use Services\ReservaPermanenteService;
+use Services\LogAccionesService;
 use Throwable;
 use Validation\ValidationException;
 
 class ReservaPermanenteController
 {
     private ReservaPermanenteService $service;
+    private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new ReservaPermanenteService();
+        $this->serviceLog = new LogAccionesService();
     }
 
     /**
@@ -101,7 +104,7 @@ class ReservaPermanenteController
     public function update(Request $req, Response $res, string $id): void
     {
         try {
-            $reserva = $this->service->updateReservaPermanente((int)$id, $req->json());
+            $reserva = $this->service->updateReservaPermanente($id, $req->json());
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422, [
@@ -119,9 +122,24 @@ class ReservaPermanenteController
     public function activate(Request $req, Response $res, string $id): void
     {
         try {
-            $result = $this->service->toggleActiveStatus((int)$id);
-            $res->status(200)->json([], $result['message']);
+            $data=$req->getBody();
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
+            $activar=false;
+            $reserva = $this->service->getReservaPermanenteById($id);
+            $log['id_reserva_permanente']=(int)$reserva['id_reserva_permanente'];
+            if($reserva['activo']==0||$reserva['activo']=="0"||$reserva['activo']==false){
+                $activar=true;
+            }
+            
+            $result = $this->service->activarReservaPermanente($id, $activar);
 
+            if($activar){
+                $this->serviceLog->createLog("Activación de reserva permanente", $log);
+            }else{
+                $this->serviceLog->createLog("Desactivación de reserva permanente", $log);
+            }
+
+            $res->status(200)->json([], $result['message']);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {
@@ -136,8 +154,24 @@ class ReservaPermanenteController
     public function deactivate(Request $req, Response $res): void
     {
         try {
-            $reserva = $this->service->desactivarTodo();
-            $res->status(201)->json($reserva);
+            $data=$req->getBody();
+            $log['id_usuario_actor']=(int)$data['id_usuario'];
+            
+            $reservas = $this->service->getAllReservasPermanentes();
+            $reservasinactivas = $this->service->desactivarReservasPermanentes();
+            foreach ($reservas as $reserva) {
+                if(!(in_array($reserva['id_reserva_permanente'], array_column($reservasinactivas, 'id_reserva_permanente')))){
+                    $log['id_reserva_permanente']=(int)$reserva['id_reserva_permanente'];
+                    $this->serviceLog->createLog("Desactivación de reserva permanente", $log);
+                }
+            }
+
+            $respuesta=[
+                'status' => 'success',
+                'message' => 'Todas las reservas permanentes han sido desactivadas correctamente',
+                'data' => $reservasinactivas
+            ];
+            $res->status(201)->json($respuesta);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {
