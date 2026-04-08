@@ -242,7 +242,7 @@ class ReservaService
 
     public function updateReserva(int $id, array $input): array
     {
-        try{        
+        try{
             $data = Validator::validate($input, [
                 'asignatura'            => 'nullable|string|min:1',
                 'autorizada'            => 'nullable|in:0,1',
