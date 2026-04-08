@@ -82,6 +82,10 @@ class ReservaEspacioController
             $data = $req->getBody();
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
+            if(!isset($data['necesidades'])||$data['necesidades']==null){
+                $data['necesidades']=$necesidadesantes;
+            }
+            
             $this->serviceNecesidad->updateNecesidad((int)$id, $data);
             
             $necesidadesdespues=$this->serviceNecesidad->getNecesidadById((int)$id);
