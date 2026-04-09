@@ -89,7 +89,7 @@ class ReservaEspacioService
         if($reserva['autorizada']===0){
             throw new \Exception("No se pueden modificar reservas no autorizadas");
         }
-        if(!isset($input['autorizada'])||$input['autorizada']==null){
+        if($input['autorizada']!==0&&$input['autorizada']!==1){
             $input['autorizada']=$reserva['autorizada'];
         }
         if(!isset($input['f_creacion'])||$input['f_creacion']==null){
