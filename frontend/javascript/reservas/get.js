@@ -130,7 +130,7 @@ function mostrarDatosModal(reserva){
     document.getElementById("reserva_espacio_uso").value = reserva.usaenespacio;
     document.getElementById("reserva_actividad").value = reserva.actividad;
     document.getElementById("reserva_observaciones").value = reserva.observaciones;
-                    
+                 
     if (reserva.tipo == 'Reserva_espacio') {
         document.getElementById("div_reserva_usuario").classList.add('col-lg-6');
         document.getElementById("div_reserva_unidades").classList.add('d-none');

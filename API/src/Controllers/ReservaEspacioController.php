@@ -84,9 +84,9 @@ class ReservaEspacioController
             
             if(!isset($data['necesidades'])||$data['necesidades']==null){
                 $data['necesidades']=$necesidadesantes;
+            }else{
+                $this->serviceNecesidad->updateNecesidad((int)$id, $data);
             }
-            
-            $this->serviceNecesidad->updateNecesidad((int)$id, $data);
             
             $necesidadesdespues=$this->serviceNecesidad->getNecesidadById((int)$id);
             
@@ -117,7 +117,7 @@ class ReservaEspacioController
             $reserva = $this->service->updateReserva((int)$id, $data);
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
-            $res->errorJson($e->getErrors(), 422);
+            $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);
         }

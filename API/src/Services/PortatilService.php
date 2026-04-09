@@ -385,7 +385,8 @@ class PortatilService
             'asignatura' => 'required|string|min:1|max:100',
             'grupo' => 'required|string|min:1|max:50',
             'profesor' => 'required|string|min:1|max:100',
-            'observaciones' => 'string|max:500'
+            'observaciones' => 'string|max:500',
+            'usaenespacio' => 'required|string|min:1'
         ];
 
         // Solo validar autorizada si viene en el input
