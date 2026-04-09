@@ -116,7 +116,7 @@ class LogAccionesModel
     {
         $this->db
             ->query("INSERT INTO Log (fecha, id_tipo_log, id_usuario, id_incidencia, id_reserva, id_recurso, id_reserva_permanente, id_liberacion_puntual, id_usuario_actor)
-            VALUES (NOW(), :id_tipo_log, :id_usuario, :id_incidencia, :id_reserva, :id_recurso, :id_reserva_permanente, :id_liberacion_puntual, :id_usuario_actor)")
+            VALUES (CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid'), :id_tipo_log, :id_usuario, :id_incidencia, :id_reserva, :id_recurso, :id_reserva_permanente, :id_liberacion_puntual, :id_usuario_actor)")
             ->bind(':id_tipo_log', $tipo)
             ->bind(':id_usuario', $data['id_usuario'] ?? null)
             ->bind(':id_incidencia', $data['id_incidencia'] ?? null)

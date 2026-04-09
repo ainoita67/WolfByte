@@ -177,44 +177,23 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
     if(tipo=="Reserva_espacio"||tipo=="Reserva_material"){
         let resultado=0;
         if(tipo=="Reserva_espacio"){
-            resultado=await modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin);
+            resultado=await modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
         }else if(tipo=="Reserva_material"&&unidades>0){
-            resultado=await modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin);
+            resultado=await modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
         }
         if(resultado!=1){
             mostrarToast("Error al actualizar la reserva", 'danger');
         }else{
-            let usuariolog=sessionStorage.getItem("id_usuario");
-            fetch(window.location.origin+"/API/reservas/"+id, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({asignatura: asignatura, autorizada: autorizada, observaciones: observaciones, grupo: grupo, profesor: profesor, f_creacion: fechacreacion, inicio: inicio, fin: fin, id_usuario: usuario, id_usuario_autoriza: usuarioautoriza, tipo: tipo, id_usuario_log: usuariolog})
-            })
-            .then(res => res.json())
-            .then(response => {
-                console.log(response);
-                if (response.status === "success") {
-                    // Cerrar modal
-                    modal.hide();
+            // Cerrar modal
+            modal.hide();
 
-                    // Limpiar input
-                    formeditar.reset();
+            // Limpiar input
+            formeditar.reset();
 
-                    mostrarToast("Reserva actualizada correctamente", 'success');
-                    // Recargar
-                    obtenerReservasAutorizar();
-                    obtenerReservasProximas();
-                } else {
-                    if(response.message){
-                        mostrarToast(response.message.trim(), 'danger');
-                    }else{
-                        mostrarToast("Error al actualizar la reserva", 'danger');
-                    }
-                }
-            })
-            .catch(err => console.error("Error al actualizar la reserva:", err));
+            mostrarToast("Reserva actualizada correctamente", 'success');
+            // Recargar
+            obtenerReservasAutorizar();
+            obtenerReservasProximas();
         }
     }else{
         mostrarToast("Error al actualizar la reserva", 'danger');
@@ -224,22 +203,36 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 
 
 //API Editar reservas de tipo espacio
-async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, inicio, fin){
+async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
-        let usuario=sessionStorage.getItem("id_usuario");
         let arraynecesidades = (necesidades||[]).filter(valor => valor !== '').map(id => ({ id_necesidad: id }));
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_espacio: id_recurso, actividad: actividad, necesidades: arraynecesidades, inicio: inicio, fin: fin, id_usuario: usuario})
+            body: JSON.stringify({
+                id_espacio: id_recurso,
+                autorizada: autorizada,
+                asignatura: asignatura,
+                actividad: actividad,
+                necesidades: arraynecesidades,
+                f_creacion: fechacreacion,
+                inicio: inicio,
+                fin: fin,
+                grupo: grupo,
+                profesor: profesor,
+                id_usuario: usuario,
+                id_usuario_autoriza: usuarioautoriza,
+                observaciones: observaciones,
+                tipo: "Reserva_espacio"
+            })
         })
         let response = await res.json();
         if (response.status == "success"){
             return 1;
         }else{
-            mostrarToast(response.message+"Ya hay una reserva entre esas horas", 'warning');
+            mostrarToast("Ya hay una reserva entre esas horas", 'warning');
             return -1;
         }
     }catch(err){
@@ -251,21 +244,36 @@ async function modificarReservaEspacio(id, id_recurso, actividad, necesidades, i
 
 
 //API Editar reservas de tipo portátil
-async function modificarReservaPortatil(id, id_recurso, unidades, espacio_uso, inicio, fin){
+async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
-        let res = await fetch(window.location.origin+"/API/reservaPortatil/"+id, {
+        let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({id_material: id_recurso, unidades: unidades, usaenespacio: espacio_uso, inicio: inicio, fin: fin})
+            body: JSON.stringify({
+                id_material: id_recurso,
+                autorizada: autorizada,
+                asignatura: asignatura,
+                unidades: unidades,
+                usaenespacio: espacio_uso,
+                f_creacion: fechacreacion,
+                inicio: inicio,
+                fin: fin,
+                grupo: grupo,
+                profesor: profesor,
+                id_usuario: usuario,
+                id_usuario_autoriza: usuarioautoriza,
+                observaciones: observaciones,
+                tipo: "Reserva_material"
+            })
         })
         let response = await res.json();
-        
+        console.log("Respuesta al modificar reserva portátil:", response);
         if (response.status == "success") {
             return 1;
         } else {
-            mostrarToast("No hay suficientes portátiles disponibles entre esas horas", 'warning')
+            mostrarToast(response.message+"No hay suficientes portátiles disponibles entre esas horas", 'warning')
             return -1;
         }
     }catch(err){

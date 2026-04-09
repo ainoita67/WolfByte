@@ -82,8 +82,8 @@ class ReservaPortatilService
     {
         $errors = [];
 
-        if (empty($data['unidades'])) {
-            $errors['unidades'] = "Las unidades son obligatorias";
+        if (empty($data['unidades']) || !is_numeric($data['unidades']) || $data['unidades'] <= 0) {
+            $errors['unidades'] = "Las unidades son obligatorias y deben ser mayores que 0";
         }
 
         if (empty($data['usaenespacio'])) {

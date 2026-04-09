@@ -86,7 +86,7 @@ class ReservaEspacioService
     {
         $reserva=$this->serviceReserva->getReservaById($id);
         
-        if($reserva['autorizada']==0){
+        if($reserva['autorizada']===0){
             throw new \Exception("No se pueden modificar reservas no autorizadas");
         }
         if(!isset($input['autorizada'])||$input['autorizada']==null){
@@ -112,15 +112,16 @@ class ReservaEspacioService
         
         $data = Validator::validate($input, [
             'id_espacio'            => 'required|string|min:1',
-            'actividad'             => 'nullable|string|min:1',
+            'actividad'             => 'string|min:1',
+            'asignatura'            => 'required|string|min:1',
             'necesidades'           => 'required',
             'inicio'                => 'required|string|min:1',
             'fin'                   => 'required|string|min:1'
         ]);
-
-        $inicio = date("Y-m-d H:i:s", strtotime($data['inicio']));
-        $fin = date("Y-m-d H:i:s", strtotime($data['fin']));
-        $creacion = date("Y-m-d H:i:s", strtotime($data['f_creacion']));
+        
+        $inicio = date("Y-m-d H:i:s", strtotime($input['inicio']));
+        $fin = date("Y-m-d H:i:s", strtotime($input['fin']));
+        $creacion = date("Y-m-d H:i:s", strtotime($input['f_creacion']));
 
         if($inicio>=$fin){
             throw new \Exception("La fecha de inicio debe ser anterior a la fecha de fin");

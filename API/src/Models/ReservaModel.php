@@ -65,7 +65,7 @@ class ReservaModel
                         LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                         LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                         JOIN Usuario u ON r.id_usuario = u.id_usuario
-                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND u.id_usuario=:id_usuario1
+                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND u.id_usuario=:id_usuario1
                         GROUP BY r.id_reserva
 
                         UNION ALL
@@ -94,7 +94,7 @@ class ReservaModel
                         JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                         JOIN Recurso rec ON rec.id_recurso = rp.id_material
                         JOIN Usuario u ON r.id_usuario = u.id_usuario
-                        WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND u.id_usuario=:id_usuario2
+                        WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND u.id_usuario=:id_usuario2
                     ) union_result ORDER BY inicio, id_reserva;
                 ")
                 ->bind(':id_usuario1', $idUsuario)
@@ -149,7 +149,7 @@ class ReservaModel
                 LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                 LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada IS NULL
                 GROUP BY r.id_reserva
 
                 UNION ALL
@@ -178,7 +178,7 @@ class ReservaModel
                 JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                 JOIN Recurso rec ON rec.id_recurso = rp.id_material
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada IS NULL
             ")
             ->fetchAll();
     }
@@ -218,7 +218,7 @@ class ReservaModel
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
-                    WHERE r.tipo = 'Reserva_espacio' AND r.inicio>NOW() AND r.autorizada=1
+                    WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada=1
                     GROUP BY r.id_reserva
 
                     UNION ALL
@@ -247,7 +247,7 @@ class ReservaModel
                     JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                     JOIN Recurso rec ON rec.id_recurso = rp.id_material
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
-                    WHERE r.tipo = 'Reserva_material' AND r.inicio>NOW() AND r.autorizada=1
+                    WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada=1
                 ) union_result ORDER BY inicio, id_reserva;
             ")
             ->fetchAll();
