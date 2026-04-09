@@ -89,6 +89,15 @@
 
         const idRecurso = "salon";
 
+        let horainicio = 8;
+        if(sessionStorage.getItem("rol") == "10"){
+            horainicio = 15;
+        }
+        let horafin = 15;
+        if(sessionStorage.getItem("rol") == "10" || sessionStorage.getItem("rol") == "30" || sessionStorage.getItem("rol") == "40"){
+            horafin = 23;
+        }
+
         document.addEventListener("DOMContentLoaded", async () => {
 
             if (!idRecurso) {
@@ -108,8 +117,8 @@
 
             cellDuration: 5,
             cellHeight: 8,
-            businessBeginsHour: 8,
-            businessEndsHour: 22,
+            businessBeginsHour: horainicio,
+            businessEndsHour: horafin,
 
             eventDeleteHandling: "Disabled",
             heightSpec: "BusinessHoursNoScroll",
