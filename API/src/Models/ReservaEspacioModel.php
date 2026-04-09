@@ -25,6 +25,7 @@ class ReservaEspacioModel
             ->query("
                 SELECT
                     r.id_reserva,
+                    r.autorizada,
                     r.asignatura,
                     r.profesor,
                     r.grupo,
@@ -53,6 +54,7 @@ class ReservaEspacioModel
                 ->query("
                     SELECT
                         r.id_reserva,
+                        r.autorizada,
                         r.asignatura,
                         r.profesor,
                         r.grupo,
@@ -95,6 +97,7 @@ class ReservaEspacioModel
                 ->query("
                     SELECT
                         r.id_reserva,
+                        r.autorizada,
                         r.asignatura,
                         r.profesor,
                         r.grupo,

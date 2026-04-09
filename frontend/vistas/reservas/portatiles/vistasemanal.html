@@ -160,6 +160,7 @@ if (evento.bloqueBase) {
         autorizada = 1;
     } else {
         autorizada = requiereAutorizacion ? null : 1;
+        usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
     }
 
     const response = await fetch(`${API}/portatiles/reservas`, {  // ✅ endpoint correcto
@@ -177,8 +178,10 @@ if (evento.bloqueBase) {
             fin: evento.end.replace("T", " "),
             unidades: parseInt(modal.result.unidades),
             id_material: idAula,          // ✅ id del carrito
-            id_usuario: parseInt(sessionStorage.getItem("id_usuario")),
-            autorizada: autorizada
+            id_usuario: sessionStorage.getItem("id_usuario"),
+            id_usuario_autoriza: usuarioautioriza,
+            autorizada: autorizada,
+            tipo: "Reserva_material"
         })
     });
 

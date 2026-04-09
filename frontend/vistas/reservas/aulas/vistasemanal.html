@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     usuarioautoriza = sessionStorage.getItem("id_usuario");
                 } else {
                     autorizada = requiereAutorizacion ? null : 1;
-                    usuarioautoriza = null;
+                    usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
                 }
                 
                 let fechaactual=new Date();
@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         actividad: modal.result.actividad,
                         id_espacio: idAula,
                         id_usuario: sessionStorage.getItem("id_usuario"),
-                        id_usuario_autoriza: null,
+                        id_usuario_autoriza: requiereAutorizacion ? null : sessionStorage.getItem("id_usuario"),
                         autorizada: requiereAutorizacion ? null : 1,
                         tipo: "Reserva_espacio"
                     })

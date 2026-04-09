@@ -117,6 +117,12 @@
             // 🎨 Cambiar cursor según tipo
             onBeforeEventRender: function(args) {
                 args.data.cssClass = "cursor-pointer";
+
+                // Si la reserva no está autorizada, se pinta de naranja
+                if (args.data.autorizada === null) {
+                    args.data.backColor = "#cc6c11"; // naranja
+                    args.data.barColor = "#bb5c0f";
+                }
             },
 
             // 🧠 CLICK EN EVENTO
@@ -140,6 +146,12 @@
 
             if (!modal.result) return;
             const idusuario = sessionStorage.getItem("id_usuario");
+            let autorizada=null;
+            let idusuarioautoriza=null;
+            if(sessionStorage.getItem("rol")==30||sessionStorage.getItem("rol")==40){
+                autorizada=true;
+                idusuarioautoriza=idusuario;
+            }
 
             const response = await fetch(`${API}/reservaEspacio`, {
                 method: "POST",
@@ -152,14 +164,18 @@
                     grupo: modal.result.grupo,
                     profesor: modal.result.profesor,
                     observaciones: modal.result.observaciones,
+                    f_creacion: new Date().toISOString().substring(0, 19).replace("T", " "),
                     inicio: evento.start.replace("T", " "),
                     fin: evento.end.replace("T", " "),
                     actividad: modal.result.actividad,
                     id_espacio: idRecurso,
-                    id_usuario: idusuario
+                    id_usuario: idusuario,
+                    id_usuario_autoriza: idusuarioautoriza,
+                    autorizada: autorizada,
+                    tipo: "Reserva_espacio"
                 })
             });
-
+            console.log(response);
             if (!response.ok) {
                 alert("Error creando la reserva");
                 return;

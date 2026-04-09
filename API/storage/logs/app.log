@@ -272,3 +272,9 @@
 2026-03-02T11:14:35+01:00 - Exception: Class "Controllers\Session" not found
 2026-03-02T12:37:33+01:00 - Exception: Route not found for GET /aulas/disponibles
 2026-03-05T14:26:04+01:00 - Exception: Method activate not found in controller Controllers\ReservaPermanenteController
+2026-03-18T12:55:22+01:00 - Exception: Route not found for GET /reservaspermanentes
+2026-03-18T12:55:26+01:00 - Exception: Route not found for GET /reservas-permanentes
+2026-03-18T12:55:30+01:00 - Exception: Route not found for GET /reservasPermanentes
+2026-03-18T12:55:34+01:00 - Exception: Route not found for GET /permanentes
+2026-03-18T12:55:46+01:00 - Exception: Route not found for GET /reservasPermanentes
+2026-03-18T12:55:48+01:00 - Exception: Route not found for GET /reservas-permanentes
