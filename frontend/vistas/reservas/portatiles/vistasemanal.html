@@ -91,6 +91,16 @@
     
 import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";
 // cojer id de la url
+
+let horainicio = 8;
+if(sessionStorage.getItem("rol") == "10"){
+    horainicio = 15;
+}
+let horafin = 15;
+if(sessionStorage.getItem("rol") == "10" || sessionStorage.getItem("rol") == "30" || sessionStorage.getItem("rol") == "40"){
+    horafin = 23;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
     const idAula = params.get("id");
@@ -107,8 +117,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         cellDuration: 5,
         cellHeight: 8, 
-        businessBeginsHour: 8,
-        businessEndsHour: 15,
+        businessBeginsHour: horainicio,
+        businessEndsHour: horafin,
         eventDeleteHandling: "Disabled",
         heightSpec: "BusinessHoursNoScroll",
 
