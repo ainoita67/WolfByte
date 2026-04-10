@@ -4,16 +4,19 @@ declare(strict_types=1);
 namespace Services;
 
 use Models\ReservaModel;
+use Services\UsuarioService;
 use Validation\ValidationException;
 use Validation\Validator;
 
 class ReservaService
 {
     private ReservaModel $model;
+    private UsuarioService $serviceUsuario;
 
     public function __construct()
     {
         $this->model = new ReservaModel();
+        $this->serviceUsuario = new UsuarioService();
     }
 
     /**
@@ -220,6 +223,18 @@ class ReservaService
     public function createReserva(array $input): array
     {
         try{
+            $inicio = date("Y-m-d H:i:s", strtotime($input['inicio']));
+            $fin = date("Y-m-d H:i:s", strtotime($input['fin']));
+            $creacion = date("Y-m-d H:i:s", strtotime($input['f_creacion']));
+
+            if ($inicio >= $fin) {
+                throw new \Exception("La fecha de inicio debe ser anterior a la fecha de fin");
+            }
+
+            if($creacion > $inicio){
+                throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
+            }
+
             $data = Validator::validate($input, [
                 'asignatura'            => 'string|min:1',
                 'autorizada'            => 'in:0,1',
@@ -233,6 +248,26 @@ class ReservaService
                 'id_usuario_autoriza'   => 'int|min:1',
                 'tipo'                  => 'required|string|min:1'
             ]);
+
+            if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){
+                throw new \Exception("Ha ocurrido un error al autorizar la reserva");
+            }
+
+            $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
+            $horainicio = date("H:i:s", strtotime($data['inicio']));
+            $horafin = date("H:i:s", strtotime($data['fin']));
+
+            if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
+
+            if($usuario['id_rol']==20&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("15:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
+
+            if(($usuario['id_rol']==30||$usuario['id_rol']==40)&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
             
             return $this->model->create($data);
         }catch(Exception $e){
@@ -243,6 +278,18 @@ class ReservaService
     public function updateReserva(int $id, array $input): array
     {
         try{
+            $inicio = date("Y-m-d H:i:s", strtotime($input['inicio']));
+            $fin = date("Y-m-d H:i:s", strtotime($input['fin']));
+            $creacion = date("Y-m-d H:i:s", strtotime($input['f_creacion']));
+
+            if ($inicio >= $fin) {
+                throw new \Exception("La fecha de inicio debe ser anterior a la fecha de fin");
+            }
+
+            if($creacion > $inicio){
+                throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
+            }
+            
             $data = Validator::validate($input, [
                 'asignatura'            => 'string|min:1',
                 'autorizada'            => 'in:0,1',
@@ -256,6 +303,30 @@ class ReservaService
                 'id_usuario_autoriza'   => 'int|min:1',
                 'tipo'                  => 'required|string|min:1'
             ]);
+
+            if($data['observaciones']!=null&&$data['observaciones']!=''){
+                $data['observaciones'] = ucfirst($data['observaciones']);
+            }
+
+            if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){
+                throw new \Exception("Ha ocurrido un error al autorizar la reserva");
+            }
+
+            $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
+            $horainicio = date("H:i:s", strtotime($data['inicio']));
+            $horafin = date("H:i:s", strtotime($data['fin']));
+
+            if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
+
+            if($usuario['id_rol']==20&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("15:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
+
+            if(($usuario['id_rol']==30||$usuario['id_rol']==40)&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
             
             if(!$this->model->update($id, $data)){
                 return [
@@ -267,6 +338,7 @@ class ReservaService
 
             return [
                 'status' => 'updated',
+                'message' => 'Reserva actualizada correctamente',
                 'data' => $this->model->findById($id)
             ];
         }catch(Exception $e){

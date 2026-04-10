@@ -54,7 +54,7 @@ class NecesidadReservaService
     public function updateNecesidad(int $id, array $input): array
     {
         $resultados=[];
-        if($input==null){
+        if($input==null||$input['necesidades']==null||count($input['necesidades'])==0){
             $this->model->delete($id, $input);
         }else{
             foreach ($input['necesidades'] as $n) {

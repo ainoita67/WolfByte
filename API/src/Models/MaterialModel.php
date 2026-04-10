@@ -331,7 +331,7 @@ class MaterialModel
                 LEFT JOIN (
                     SELECT rp.id_recurso, SUM(rp.unidades) AS unidades_permanentes
                     FROM Reserva_permanente rp
-                    WHERE rp.activo = true
+                    WHERE rp.activo = 1
                     AND rp.dia_semana = :dia_semana
                     AND rp.inicio < :rp_fin
                     AND rp.fin > :rp_inicio
@@ -345,7 +345,7 @@ class MaterialModel
                     FROM Liberacion_puntual lp
                     JOIN Reserva_permanente rp
                         ON rp.id_reserva_permanente = lp.id_reserva_permanente
-                        AND rp.activo = true
+                        AND rp.activo = 1
                         AND rp.dia_semana = :dia_semana2
                         AND rp.inicio < :rp_fin2
                         AND rp.fin > :rp_inicio2
@@ -354,7 +354,7 @@ class MaterialModel
                     GROUP BY rp.id_recurso
                 ) liberadas
                     ON liberadas.id_recurso = r.id_recurso
-
+                WHERE r.activo = 1
                 GROUP BY 
                     r.id_recurso,
                     r.descripcion,

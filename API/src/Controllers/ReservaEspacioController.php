@@ -80,9 +80,11 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
+
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
-            if(!isset($data['necesidades'])||$data['necesidades']==null){
+            if(!isset($data['necesidades'])){
                 $data['necesidades']=$necesidadesantes;
             }else{
                 $this->serviceNecesidad->updateNecesidad((int)$id, $data);
@@ -115,7 +117,11 @@ class ReservaEspacioController
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);
-            $res->status(200)->json($reserva);
+            if($reserva['status']=='updated'){
+                $log['id_reserva']=(int)$id;
+                $this->serviceLog->createLog('Modificación de reserva', $log);
+            }
+            $res->status(200)->json($reserva['data']);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {

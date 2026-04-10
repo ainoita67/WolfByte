@@ -191,10 +191,13 @@ class PortatilController
     {
         try {
             $data = $req->getBody();
-            $result = $this->service->createReserva($data);
+            $log['id_usuario_actor']=$data['id_usuario'];
+            $reserva = $this->service->createReserva($data);
+            $log['id_reserva']=$reserva['id'];
+            $this->serviceLog->createLog("Creación de reserva", $log);
             $res->status(201)->json(
-                ['id' => $result['id']],
-                $result['message']
+                ['id' => $reserva['id']],
+                $reserva['message']
             );
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->getErrors()]);
@@ -228,14 +231,18 @@ class PortatilController
     {
         try {
             $data = $req->getBody();
-            $result = $this->service->updateReserva((int)$id, $data);
+            $log['id_usuario_actor']=$data['id_usuario'];
+            $reserva = $this->service->updateReserva((int)$id, $data);
             
-            if ($result['status'] === 'no_changes') {
-                $res->status(200)->json([], $result['message']);
+            if ($reserva['status'] === 'no_changes') {
+                $res->status(200)->json([], $reserva['message']);
                 return;
             }
 
-            $res->status(200)->json([], $result['message']);
+            $log['id_reserva']=$reserva['id'];
+            $this->serviceLog->createLog("Creación de reserva", $log);
+
+            $res->status(200)->json([], $reserva['message']);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->getErrors()]);
         } catch (Throwable $e) {

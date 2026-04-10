@@ -24,17 +24,34 @@ class ReservaPortatilModel
             return $this->db
             ->query("
                 SELECT
-                    r.id_reserva,
-                    r.asignatura,
-                    r.profesor,
-                    r.grupo,
-                    r.inicio,
-                    r.fin,
+                    re.id_reserva,
+                    re.asignatura,
+                    re.profesor,
+                    re.grupo,
+                    re.inicio,
+                    re.fin,
+                    re.observaciones,
+                    re.autorizada,
+                    re.f_creacion,
+                    re.id_usuario,
+                    re.id_usuario_autoriza,
+                    re.descripcion,
+                    r.activo,
+                    r.especial,
+                    re.planta,
+                    e.id_edificio,
+                    e.nombre_edificio,
                     rp.unidades,
                     rp.id_material,
-                    rp.usaenespacio
-                FROM Reserva r
-                JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                    rp.usaenespacio,
+                    p.numero_planta,
+                    p.nombre_planta
+                FROM Reserva re
+                JOIN Reserva_Portatiles rp ON re.id_reserva = rp.id_reserva_material
+                JOIN Material m ON rp.id_material = m.id_material
+                JOIN Recurso r ON m.id_material = r.id_recurso
+                JOIN Edificio e ON r.id_edificio = e.id_edificio
+                JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
                 ORDER BY r.inicio;
             ")
             ->fetchAll();
@@ -159,57 +176,39 @@ class ReservaPortatilModel
             
             //Suma unidades de reservas y de reservas permanentes y resta de liberaciones
             $filas=$this->db
-                ->query("
-                    SELECT
-                        m.unidades AS materialunidades,
-                        (
-                            SELECT COALESCE((SUM(rp.unidades)-SUM(lp.unidades)),0)
+                ->query("SELECT
+                        m.unidades AS materialunidades,SELECT
+                            (SELECT IFNULL(SUM(rp.unidades),0)
                             FROM Reserva r
-                            JOIN Reserva_Portatiles rp 
-                                ON rp.id_reserva_material = r.id_reserva
-                            LEFT JOIN Liberacion_puntual lp
-                                ON r.id_reserva=lp.id_reserva
-                            WHERE rp.id_material = m.id_material
-                            AND rp.id_reserva_material != :id
-                            AND r.inicio <= :fin1
-                            AND r.fin >= :inicio1
-                            AND r.autorizada!=0
-                        )
-                        +
-                        (
-                            SELECT COALESCE(SUM(rep.unidades),0)
-                            FROM Reserva_permanente rep
-                            WHERE rep.id_recurso = m.id_material
-                            AND rep.dia_semana = :diasemana1
-                            AND rep.activo = 1
-                            AND rep.inicio <= :horafin1
-                            AND rep.fin >= :horainicio1
-                        )
-                        -
-                        (
-                            SELECT COALESCE(SUM(lp.unidades),0)
-                            FROM Liberacion_puntual lp
-                            JOIN Reserva_permanente rep 
-                                ON rep.id_reserva_permanente = lp.id_reserva_permanente
-                                AND rep.id_recurso = m.id_material
-                                AND rep.dia_semana = :diasemana2
-                                AND rep.activo = 1
-                            WHERE lp.inicio <= :fin2
-                            AND lp.fin >= :inicio2
-                        )
-                    AS totalunidades
+                            JOIN Reserva_Portatiles rp ON r.id_reserva=rp.id_reserva_material
+                            JOIN Material m ON rp.id_material=m.id_material
+                            WHERE r.tipo='Reserva_material' AND m.id_material=:material1
+                            AND ((r.inicio>:fin1 AND r.fin<:inicio1)
+                            OR (r.inicio=:inicio2 AND r.fin=:fin2))
+                            AND r.id_reserva!=:id)
+                            +
+                            (SELECT IFNULL(SUM(rp.unidades),0)-IFNULL(SUM(lp.unidades),0)
+                            FROM Reserva_permanente rp
+                            JOIN Liberacion_puntual lp ON rp.id_reserva_permanente=lp.id_reserva_permanente
+                            WHERE rp.id_recurso=:material2 AND activo=1 AND dia_semana=:diasemana
+                            AND ((rp.inicio>horafin1 AND rp.fin<horainicio1)
+                            OR (rp.inicio=horainicio2 AND rp.fin=horafin2)))
+                        AS totalunidades;
                     FROM Material m
-                    WHERE m.id_material = :material
+                    WHERE m.id_material=:material3
                 ")
-                ->bind(':diasemana1', $diasemana)
-                ->bind(':diasemana2', $diasemana)
+                ->bind(':diasemana', $diasemana)
                 ->bind(':horainicio1', $horainicio)
                 ->bind(':horafin1', $horafin)
+                ->bind(':horainicio2', $horainicio)
+                ->bind(':horafin2', $horafin)
                 ->bind(':inicio1', $data['inicio'])
                 ->bind(':fin1', $data['fin'])
                 ->bind(':inicio2', $data['inicio'])
                 ->bind(':fin2', $data['fin'])
-                ->bind(':material', $data['id_material'])
+                ->bind(':material1', $data['id_material'])
+                ->bind(':material2', $data['id_material'])
+                ->bind(':material3', $data['id_material'])
                 ->bind(':id', $id)
                 ->fetch();
             if(($filas['materialunidades']-$filas['totalunidades'])<$data['unidades']){

@@ -27,19 +27,30 @@ export async function cargarReservas(idRecurso) {
         if (!json.data || json.data.length === 0) {
             return [];
         }
-
+        
         const eventos = json.data.map(r => ({
             id: r.id_reserva,
             text: ` ${r.unidades} unidades - ${r.asignatura} - ${r.grupo} ${r.profesor}`,
             start: r.inicio.replace(" ", "T"),
             end: r.fin.replace(" ", "T"),
             unidades: Number(r.unidades),
-            asignatura: r.asignatura,       // ✅ añadir
-            grupo: r.grupo,                 // ✅ añadir
-            profesor: r.profesor,           // ✅ añadir
-            actividad: r.actividad ?? "",   // ✅ añadir
-            observaciones: r.observaciones ?? "",  // ✅ añadir
-            autorizada: r.autorizada        // ✅ añadir (para el color naranja)
+            asignatura: r.asignatura,
+            grupo: r.grupo,
+            profesor: r.profesor,
+            observaciones: r.observaciones,
+            autorizada: r.autorizada,
+            id_usuario: r.id_usuario,
+            autorizada: r.autorizada,
+            id_usuario_autoriza: r.id_usuario_autoriza ?? null,
+            f_creacion: r.f_creacion,
+            descripcion:r.descripcion ?? null,
+            activo: r.activo ?? null,
+            especial: r.especial ?? null,
+            numero_planta: r.numero_planta ?? null,
+            planta: r.nombre_planta ?? null,
+            id_edificio: r.id_edificio ?? null,
+            edificio: r.nombre_edificio ?? null,
+            usaenespacio: r.usaenespacio ?? null
         }));
 
         return eventos; // array de eventos para el calendario
