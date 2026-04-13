@@ -53,6 +53,14 @@ class ReservaEspacioService
             }
         }
 
+        date_default_timezone_set('Europe/Madrid');
+        
+        if(!isset($data['f_creacion'])||$data['f_creacion']==null){
+            $data['f_creacion']=date("Y-m-d H:i:s");
+        }else if($data['f_creacion']>date("Y-m-d H:i:s")){
+            throw new \Exception("La fecha de creación no puede ser posterior a la fecha actual");
+        }
+
         $inicio = date("Y-m-d H:i:s", strtotime($data['inicio']));
         $fin = date("Y-m-d H:i:s", strtotime($data['fin']));
         $creacion = date("Y-m-d H:i:s", strtotime($data['f_creacion']));
@@ -92,9 +100,9 @@ class ReservaEspacioService
         if($input['autorizada']!==0&&$input['autorizada']!==1){
             $input['autorizada']=$reserva['autorizada'];
         }
-        if(!isset($input['f_creacion'])||$input['f_creacion']==null){
-            $input['f_creacion']=$reserva['f_creacion'];
-        }
+
+        $input['f_creacion']=$reserva['f_creacion'];
+
         if(!isset($input['inicio'])||$input['inicio']==null){
             $input['inicio']=$reserva['inicio'];
         }
@@ -131,9 +139,21 @@ class ReservaEspacioService
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
 
-        $this->serviceReserva->updateReserva($id, $input);
+        $cambio=$this->serviceReserva->updateReserva($id, $input);
         if($this->model->getReservaFecha($id, $data)&&count($this->model->findById($id))>0){
-            return $this->model->update($id, $data);
+            if($this->model->update($id, $data)||$cambio['status']==='updated'){
+                return [
+                    'data' => $this->serviceReserva->getReservaById($id),
+                    'status' => 'updated',
+                    'message' => 'Reserva actualizada correctamente'
+                ];
+            }else{
+                return [
+                    'data' => $this->serviceReserva->getReservaById($id),
+                    'status' => 'no_changes',
+                    'message' => 'No se han realizado cambios en la reserva'
+                ];
+            }
         }
         throw new \Exception("Ya hay una reserva entre esas horas");
     }

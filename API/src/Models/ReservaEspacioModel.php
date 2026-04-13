@@ -103,6 +103,7 @@ class ReservaEspacioModel
                         r.grupo,
                         r.inicio,
                         r.fin,
+                        r.observaciones,
                         re.actividad,
                         re.id_espacio,
                         GROUP_CONCAT(n.nombre) AS necesidades
@@ -145,7 +146,7 @@ class ReservaEspacioModel
     /**
      * Actualizar reservas
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): bool
     {
         try{
             $this->db
@@ -159,7 +160,8 @@ class ReservaEspacioModel
                 ->bind(':id_espacio', $data['id_espacio'])
                 ->bind(':id', $id)
                 ->execute();
-            return $this->findById($id);
+
+            return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar reservas del espacio");
         }

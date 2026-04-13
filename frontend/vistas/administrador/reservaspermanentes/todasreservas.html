@@ -168,9 +168,8 @@
                 </div>
 
                 <!-- Body / Formulario -->
-                <div class="modal-body">
-                    <form class="row g-4" id="formEditarReserva">
-
+                <form id="formEditarReserva">
+                    <div class="modal-body row g-4">
                         <div class="col-md-6">
                             <label class="form-label">ID</label>
                             <input type="text" class="form-control" id="idEditar" required readonly>
@@ -181,7 +180,7 @@
                             <input type="text" class="form-control" id="recursoEditar" required readonly>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label">Día de la semana</label>
                             <select name="diaEditar" id="diaEditar" class="form-select" required>
                                 <option value="" disabled>Seleccione un día</option>
@@ -192,8 +191,6 @@
                                 <option value="5">Viernes</option>
                             </select>
                         </div>
-
-                        <div class="col-md-6"></div>
 
                         <div class="col-md-6">
                             <label class="form-label">Hora de Inicio</label>
@@ -210,23 +207,18 @@
                             <input type="text" class="form-control" id="comentarioEditar">
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label">Unidades</label>
                             <input type="number" class="form-control" id="unidadesEditar">
                         </div>
-
-                        <div class="col-md-6"></div>
-
+                    </div>
+                    <div class="modal-footer">
                         <div class="col-md-6">
                             <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
                         </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <div id="editarUserErrors" class="alert alert-danger d-none"></div>
-                </div>
+                        <div id="editarUserErrors" class="alert alert-danger d-none"></div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

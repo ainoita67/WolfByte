@@ -174,29 +174,35 @@ function obtenerDatosReserva(usuarioautoriza=null){
 
 //API Editar reservas
 async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo, id_recurso, asignatura, grupo, profesor, usuario, usuarioautoriza, actividad, necesidades, unidades, espacio_uso, observaciones, formeditar, modal){
-    if(tipo=="Reserva_espacio"||tipo=="Reserva_material"){
-        let resultado=0;
-        if(tipo=="Reserva_espacio"){
-            resultado=await modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
-        }else if(tipo=="Reserva_material"&&unidades>0){
-            resultado=await modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
-        }
-        if(resultado!=1){
-            mostrarToast("Error al actualizar la reserva", 'danger');
-        }else{
-            // Cerrar modal
-            modal.hide();
-
-            // Limpiar input
-            formeditar.reset();
-
-            mostrarToast("Reserva actualizada correctamente", 'success');
-            // Recargar
-            obtenerReservasAutorizar();
-            obtenerReservasProximas();
-        }
+    let fechaactual=new Date();
+    let fechainicio=new Date(inicio);
+    if(fechaactual>=fechainicio){
+        mostrarToast("No se puede modificar una reserva pasada", 'danger');
     }else{
-        mostrarToast("Error al actualizar la reserva", 'danger');
+        if(tipo=="Reserva_espacio"||tipo=="Reserva_material"){
+            let resultado=0;
+            if(tipo=="Reserva_espacio"){
+                resultado=await modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
+            }else if(tipo=="Reserva_material"&&unidades>0){
+                resultado=await modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
+            }
+            if(resultado!=1){
+                mostrarToast("Error al actualizar la reserva", 'danger');
+            }else{
+                // Cerrar modal
+                modal.hide();
+
+                // Limpiar input
+                formeditar.reset();
+
+                mostrarToast("Reserva actualizada correctamente", 'success');
+                // Recargar
+                obtenerReservasAutorizar();
+                obtenerReservasProximas();
+            }
+        }else{
+            mostrarToast("Error al actualizar la reserva", 'danger');
+        }
     }
 }
 
@@ -224,6 +230,7 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
                 profesor: profesor,
                 id_usuario: usuario,
                 id_usuario_autoriza: usuarioautoriza,
+                id_usuario_actor: sessionStorage.getItem("id_usuario"),
                 observaciones: observaciones,
                 tipo: "Reserva_espacio"
             })
@@ -264,6 +271,7 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
                 profesor: profesor,
                 id_usuario: usuario,
                 id_usuario_autoriza: usuarioautoriza,
+                id_usuario_actor: sessionStorage.getItem("id_usuario"),
                 observaciones: observaciones,
                 tipo: "Reserva_material"
             })

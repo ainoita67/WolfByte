@@ -81,7 +81,6 @@ class ReservaController
     {
         try {
             $data = $req->getBody();
-            $data['id_usuario'] = 3; // Usuario de prueba
             $reserva = $this->service->createReserva($data);
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {

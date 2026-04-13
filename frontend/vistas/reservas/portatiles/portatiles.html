@@ -34,12 +34,13 @@
         <div id="header"></div>
         <main class="container mt-5">
             <div class="container">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <h2 class="text-center">Portátiles disponibles</h2>
                     <button class="btn bg-verde text-light" data-bs-toggle="modal" data-bs-target="#modalFiltrar">
                         <i class="bi bi-filter"></i> Filtrar
                     </button>
                 </div>
+                <p id="textofiltro"></p>
                 <div class="row g-4 contenedor-carros">
                     <!-- Aquí se insertarán las tarjetas de los carritos -->
                 </div>
@@ -122,6 +123,8 @@ function aplicarFechaYTramoActual() {
     document.getElementById("f_hora_inicio").value = tramo.inicio;
     document.getElementById("f_hora_fin").value = tramo.fin;
 
+    let fecha = new Date(hoy).toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
+    document.getElementById("textofiltro").textContent = fecha+": "+tramo.inicio+" - "+tramo.fin;
     return {
         fecha: hoy,
         horaInicio: tramo.inicio,
@@ -196,6 +199,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const data = await getCarritosDisponibles(fecha, horaInicio, horaFin);
+        
+        fecha = new Date(fecha).toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
+        document.getElementById("textofiltro").textContent = fecha+": "+horaInicio+" - "+horaFin;
+        
         crearTarjetas(data);
         cerrarModal("modalFiltrar");
     });

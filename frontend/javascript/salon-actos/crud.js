@@ -48,7 +48,8 @@ export async function cargarReservas(idRecurso) {
             text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
             start: r.inicio.replace(" ", "T"),
             end: r.fin.replace(" ", "T"),
-            autorizada: r.autorizada
+            autorizada: r.autorizada,
+            observaciones: r.observaciones
         }));
 
         return eventos;

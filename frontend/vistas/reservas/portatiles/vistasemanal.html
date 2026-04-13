@@ -97,8 +97,44 @@ if(sessionStorage.getItem("rol") == "10"){
     horainicio = 15;
 }
 let horafin = 15;
-if(sessionStorage.getItem("rol") == "10" || sessionStorage.getItem("rol") == "30" || sessionStorage.getItem("rol") == "40"){
-    horafin = 23;
+
+async function cargarEspacios() {
+    const res = await fetch(`${API}/espacios`, {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("token")
+        }
+    });
+    const json = await res.json();
+    return json.data;
+}
+
+async function seleccionarEspacio() {
+    const espacios = await cargarEspacios();
+
+    return new Promise((resolve) => {
+        const select = document.createElement("select");
+
+        espacios.forEach(e => {
+            const option = document.createElement("option");
+            option.value = e.id_recurso;
+            option.textContent = e.descripcion;
+            select.appendChild(option);
+        });
+
+        const btn = document.createElement("button");
+        btn.textContent = "Aceptar";
+
+        btn.onclick = () => {
+            resolve(select.value);
+            document.body.removeChild(container);
+        };
+
+        const container = document.createElement("div");
+        container.appendChild(select);
+        container.appendChild(btn);
+
+        document.body.appendChild(container);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -148,7 +184,6 @@ if (evento.bloqueBase) {
         { name: "Asignatura", id: "asignatura", type: "text" },
         { name: "Grupo", id: "grupo", type: "text" },
         { name: "Profesor", id: "profesor", type: "text" },
-        { name: "Actividad", id: "actividad", type: "text" },
         { name: "Observaciones", id: "observaciones", type: "textarea" },
         { 
             name: `Cantidad de portátiles (máx ${maxDisponibles})`,
@@ -164,14 +199,32 @@ if (evento.bloqueBase) {
 
     const requiereAutorizacion = carrito.autorizacion;
     const rol = parseInt(sessionStorage.getItem("rol"), 10);
-
+    
     let autorizada;
+    let usuarioautoriza;
     if (rol === 40 || rol === 30) {
         autorizada = 1;
+        usuarioautoriza = sessionStorage.getItem("id_usuario");
     } else {
         autorizada = requiereAutorizacion ? null : 1;
         usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
     }
+const espacios = await cargarEspacios();
+
+    const modalEspacio = await DayPilot.Modal.form([
+        {
+            name: "Selecciona espacio",
+            id: "usaenespacio",
+            type: "select",
+            options: espacios.map(e => ({
+                name: e.descripcion,
+                id: e.id_recurso
+            }))
+        }
+    ]);
+
+    if (!modalEspacio.result) return;
+    const usaenespacio = modalEspacio.result.usaenespacio;
 
     const response = await fetch(`${API}/portatiles/reservas`, {  // ✅ endpoint correcto
         method: "POST",
@@ -184,20 +237,27 @@ if (evento.bloqueBase) {
             grupo: modal.result.grupo,
             profesor: modal.result.profesor,
             observaciones: modal.result.observaciones,
+            f_creacion: new Date().toISOString().slice(0, 19).replace("T", " "),
             inicio: evento.start.replace("T", " "),
             fin: evento.end.replace("T", " "),
             unidades: parseInt(modal.result.unidades),
-            id_material: idAula,          // ✅ id del carrito
+            id_material: idAula,
             id_usuario: sessionStorage.getItem("id_usuario"),
-            id_usuario_autoriza: usuarioautioriza,
+            id_usuario_autoriza: usuarioautoriza,
             autorizada: autorizada,
-            tipo: "Reserva_material"
+            tipo: "Reserva_material",
+            descripcion: evento.descripcion,
+            activo: evento.activo,
+            especial: evento.especial,
+            numero_planta: evento.numero_planta,
+            id_edificio: evento.id_edificio,
+            usaenespacio: usaenespacio
         })
     });
-
+console.log(response);
 if (!response.ok) {
     const err = await response.json();
-    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? JSON.stringify(response.json)+"No hay suficientes portátiles disponibles";
     alert(mensaje);
     return;
 }
@@ -213,20 +273,18 @@ else {
         { name: "Asignatura", id: "asignatura", type: "text" },
         { name: "Grupo", id: "grupo", type: "text" },
         { name: "Profesor", id: "profesor", type: "text" },
-        { name: "Actividad", id: "actividad", type: "text" },
         { name: "Observaciones", id: "observaciones", type: "textarea" },
         { name: "Cantidad de portátiles", id: "unidades", type: "number" }
     ], {
         asignatura: evento.asignatura,
         grupo: evento.grupo,
         profesor: evento.profesor,
-        actividad: evento.actividad,
         observaciones: evento.observaciones,
         unidades: evento.unidades
     });
 
     if (!modal.result) return;
-
+    
     const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
         method: "PUT",
         headers: {
@@ -237,20 +295,33 @@ else {
             asignatura: modal.result.asignatura,
             grupo: modal.result.grupo,
             profesor: modal.result.profesor,
-            actividad: modal.result.actividad,
             observaciones: modal.result.observaciones,
             unidades: parseInt(modal.result.unidades),
             id_material: idAula,
+            f_creacion: evento.f_creacion,
             inicio: evento.start.replace("T", " "),
-            fin: evento.end.replace("T", " ")
+            fin: evento.end.replace("T", " "),
+            id_usuario: evento.id_usuario,
+            id_usuario_autoriza: evento.id_usuario_autoriza,
+            id_usuario_actor: sessionStorage.getItem("id_usuario"),
+            autorizada: evento.autorizada,
+            tipo: "Reserva_material",
+            descripcion: evento.descripcion,
+            activo: evento.activo,
+            especial: evento.especial,
+            numero_planta: evento.numero_planta,
+            id_edificio: evento.id_edificio,
+            usaenespacio: evento.usaenespacio
         })
     });
 
 if (!response.ok) {
     const err = await response.json();
-    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? JSON.stringify(response.json)+"No hay suficientes portátiles disponibles";
     alert(mensaje);
     return;
+}else{
+    alert("Reserva actualizada correctamente");
 }
 
     const nuevosEventos = await generarEventos(idAula, carrito.unidades);

@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         onEventClick: async function(args) {
 
             const evento = args.e.data;
-
+            
             // =============================
             // 🟢 CREAR RESERVA (Disponible)
             // =============================
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
                 
                 if (!modal.result) return;
-                
+
                 const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
                     method: "PUT",
                     headers: {
@@ -276,14 +276,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                         fin: evento.end.replace("T", " ") ?? null,
                         actividad: modal.result.actividad,
                         id_espacio: idAula,
-                        id_usuario: sessionStorage.getItem("id_usuario"),
-                        id_usuario_autoriza: requiereAutorizacion ? null : sessionStorage.getItem("id_usuario"),
+                        id_usuario_actor: sessionStorage.getItem("id_usuario"),
                         autorizada: requiereAutorizacion ? null : 1,
                         tipo: "Reserva_espacio"
                     })
                 });
-                console.log(evento.id);
-console.log(response);
+                let res = await response.json();
+                console.log(res);
                 if (!response.ok) {
                     alert("Error actualizando la reserva");
                     return;

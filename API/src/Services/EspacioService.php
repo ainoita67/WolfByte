@@ -26,6 +26,15 @@ class EspacioService
         }
     }
 
+    public function getAllEspaciosActivos(): array
+    {
+        try {
+            return $this->model->getAllActivos();
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
     public function getEspacioById(string $id): array
     {
         Validator::validate(['id' => $id], [

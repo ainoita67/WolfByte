@@ -200,7 +200,7 @@ function obtenerRecursos(){
 
 //API Obtener portatiles para crear incidencia
 function obtenerPortatiles(){
-    fetch(window.location.origin+"/API/material")
+    fetch(window.location.origin+"/API/material/activos")
     .then(res => res.json())
     .then(response => {
         let portatiles = response.data;
@@ -243,7 +243,7 @@ function obtenerPortatiles(){
 
 //API Obtener espacios para crear incidencia
 function obtenerEspacios(){
-    fetch(window.location.origin+"/API/espacios")
+    fetch(window.location.origin+"/API/espacios/activos")
     .then(res => res.json())
     .then(response => {
         let espacios = response.data;
@@ -404,7 +404,7 @@ function obtenerPlantas(edificio){
             selectplantas.appendChild(optionseleccionar);
 
             let optiontodos = document.createElement("option");
-            optiontodos.value = -1;
+            optiontodos.value = -100;
             optiontodos.textContent = "Todas las plantas";
             selectplantas.appendChild(optiontodos);
 
@@ -422,10 +422,10 @@ function obtenerPlantas(edificio){
 
 
 //API Obtener espacios para crear incidencia
-function obtenerEspaciosPorPlanta(edificio, planta=-1){
+function obtenerEspaciosPorPlanta(edificio, planta=-100){
     if(!edificio||edificio<=0){
         return obtenerEspacios();
-    }else if(!planta||planta<0){
+    }else if(!planta||planta<=-100){
         return obtenerEspaciosPorEdificio(edificio);
     }else{
         fetch(window.location.origin+"/API/recurso/")

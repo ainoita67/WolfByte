@@ -252,10 +252,12 @@ class PortatilService
             'unidades' => 'required|int|min:1',
             'inicio' => 'required|date',
             'fin' => 'required|date',
+            'f_creacion' => 'required|date',
             'asignatura' => 'required|string|min:1|max:100',
             'grupo' => 'required|string|min:1|max:50',
             'profesor' => 'required|string|min:1|max:100',
-            'observaciones' => 'string|max:500'
+            'observaciones' => 'string|max:500',
+            'usaenespacio' => 'required|string|min:1'
         ];
 
         // Solo validar autorizada si viene en el input
@@ -267,11 +269,15 @@ class PortatilService
 
         // Validar que fin sea mayor que inicio
         if (strtotime($data['fin']) <= strtotime($data['inicio'])) {
-            throw new ValidationException(["La fecha de fin debe ser posterior a la fecha de inicio"]);
+            throw new \Exception("La fecha de fin debe ser posterior a la fecha de inicio");
+        }
+
+        if (strtotime($data['inicio']) <= strtotime($data['f_creacion'])) {
+            throw new \Exception("No se puede hacer una reserva en el pasado");
         }
 
         // Asignar valor por defecto a autorizada si no viene
-        $data['autorizada'] = $data['autorizada'] ?? 0;
+        $data['autorizada'] = $data['autorizada'] ?? null;
 
         try {
             // Verificar que el material existe
@@ -331,6 +337,10 @@ class PortatilService
         // Validar que fin sea mayor que inicio
         if (strtotime($data['fin']) <= strtotime($data['inicio'])) {
             throw new ValidationException(["La fecha de fin debe ser posterior a la fecha de inicio"]);
+        }
+
+        if (strtotime($data['inicio']) <= strtotime($data['f_creacion'])) {
+            throw new ValidationException(["No se puede hacer una reserva en el pasado"]);
         }
 
         try {
@@ -395,7 +405,7 @@ class PortatilService
         }
 
         $data = Validator::validate($input, $reglas);
-
+        
         // Validar que fin sea mayor que inicio
         if (strtotime($data['fin']) <= strtotime($data['inicio'])) {
             throw new ValidationException(["La fecha de fin debe ser posterior a la fecha de inicio"]);
@@ -436,13 +446,15 @@ class PortatilService
             if (!$result) {
                 return [
                     'status' => 'no_changes',
-                    'message' => 'No hubo cambios en la reserva'
+                    'message' => 'No hubo cambios en la reserva',
+                    'id' => $id
                 ];
             }
 
             return [
                 'status' => 'updated',
-                'message' => 'Reserva actualizada correctamente'
+                'message' => 'Reserva actualizada correctamente',
+                'id' => $id
             ];
 
         } catch (ValidationException $e) {

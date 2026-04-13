@@ -26,6 +26,15 @@ class MaterialService
         }
     }
 
+    public function getAllMaterialsActivos(): array
+    {
+        try {
+            return $this->model->getAllActivos();
+        } catch (Throwable $e) {
+            throw new \Exception("Error al obtener materiales: " . $e->getMessage(), 500);
+        }
+    }
+
     public function getMaterialById(string $id): array
     {
         try {

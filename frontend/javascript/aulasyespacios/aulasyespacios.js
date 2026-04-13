@@ -657,7 +657,7 @@ async function guardarEspacio(evento) {
                 },
                 body: JSON.stringify(datos)
             });
-
+            
             let caracteristicasantes=await getCaracteristicasEspacio(id);
             console.log("CARACTERÍSTICAS");
             console.log(caracteristicasantes);

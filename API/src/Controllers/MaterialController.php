@@ -33,6 +33,20 @@ class MaterialController
     }
 
     /**
+     * GET /material/activos
+     * Obtiene todos los materiales activos
+     */
+    public function indexActivos(Request $req, Response $res): void
+    {
+        try {
+            $materials = $this->service->getAllMaterialsActivos();
+            $res->status(200)->json($materials);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+    /**
      * GET /material/{id}
      * Obtiene un material por ID
      */
