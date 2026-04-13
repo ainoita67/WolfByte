@@ -8,8 +8,9 @@ export async function updatePermanente(reserva) {
         inicio: reserva.inicio,
         fin: reserva.fin,
         comentario: reserva.comentario?.trim() || null,
-        recurso: reserva.recurso,
-        unidades: reserva.unidades != null ? Number(reserva.unidades) : null
+        id_recurso: reserva.recurso,
+        unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
+        id_usuario: sessionStorage.getItem("id_usuario")
       });
     
 
@@ -22,8 +23,8 @@ export async function updatePermanente(reserva) {
     const body = permanente;
 
     // Validación mínima antes de enviar
-    if (!body.dia_semana || !body.recurso || !body.inicio || !body.fin || reserva.id == null) {
-      throw new Error("updatePermanente: faltan campos obligatorios (recurso, dia de la semana, hora de inicio y hora de fin)");
+    if (!body.dia_semana || !body.id_recurso || !body.inicio || !body.fin || reserva.id == null) {
+      throw new Error("Faltan campos obligatorios (recurso, dia de la semana, hora de inicio y hora de fin)");
     }
 
     console.log("Enviando PUT con body:",reserva.id, body);

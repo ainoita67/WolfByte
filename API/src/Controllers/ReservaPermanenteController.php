@@ -88,7 +88,10 @@ class ReservaPermanenteController
     {
         try {
             $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
             $reserva = $this->service->createReservaPermanente($data);
+            $log['id_reserva_permanente']=$reserva['id_reserva_permanente'];
+            $this->serviceLog->createLog("Creación de reserva permanente", $log);
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
@@ -104,7 +107,15 @@ class ReservaPermanenteController
     public function update(Request $req, Response $res, string $id): void
     {
         try {
-            $reserva = $this->service->updateReservaPermanente($id, $req->json());
+            $data = $req->getBody();
+            $log['id_usuario_actor']=$data['id_usuario'];
+            $reserva = $this->service->getReservaPermanenteById($id);
+            $data['activo']=$reserva['activo'];
+            $reserva = $this->service->updateReservaPermanente($id, $data);
+            if($reserva['status']=="updated"){
+                $log['id_reserva_permanente']=$reserva['data']['id_reserva_permanente'];
+                $this->serviceLog->createLog("Modificación de reserva permanente", $log);
+            }
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422, [

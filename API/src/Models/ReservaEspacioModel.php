@@ -103,6 +103,7 @@ class ReservaEspacioModel
                         r.grupo,
                         r.inicio,
                         r.fin,
+                        r.observaciones,
                         re.actividad,
                         re.id_espacio,
                         GROUP_CONCAT(n.nombre) AS necesidades

@@ -32,6 +32,17 @@ class EspacioController
         }
     }
 
+    public function indexActivos(Request $req, Response $res): void
+    {
+        try {
+            // Obtener todos los espacios activos
+            $espacios = $this->service->getAllEspacios();
+            $res->status(200)->json($espacios);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
     public function show(Request $req, Response $res, string $id): void
     {
         try {
@@ -84,7 +95,7 @@ class EspacioController
     {
         try {
             $data=$req->json();
-
+            
             $log['id_usuario_actor']=(int)$data['id_usuario'];
             
             $result = $this->service->updateEspacio($data);

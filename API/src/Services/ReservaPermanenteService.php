@@ -90,6 +90,7 @@ class ReservaPermanenteService
             'comentario'    => 'string',
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
+            'dia_semana'    => 'required|int|min:1|max:5'
         ]);
         
         if (empty($data['id_recurso'])) {
@@ -104,7 +105,7 @@ class ReservaPermanenteService
      */
     public function updateReservaPermanente(string $id, array $input): array
     {
-        $id = Validator::validate(['id' => $id], [
+        $idreserva = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
 
@@ -117,18 +118,28 @@ class ReservaPermanenteService
         $data = Validator::validate($input, [
             'inicio'        => 'required|string',
             'fin'           => 'required|string',
-            'comentario'    => 'required|string',
+            'comentario'    => 'string',
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
+            'dia_semana'    => 'required|int|min:1|max:5'
         ]);
-
+        
         if (empty($data['id_recurso'])) {
             throw new ValidationException("id_recurso es obligatorio");
         }
 
+        if(!$this->model->update((int)$idreserva['id'], $data)){
+            return[
+                'status' => "no_changes",
+                'message' => "No han habido cambios",
+                'data' => $this->getReservaPermanenteById($id)
+            ];
+        }
+        
         return[
-            message => "Reserva actualizada correctamente",
-            data => $this->model->update($id, $data)
+            'status' => "updated",
+            'message' => "Reserva actualizada correctamente",
+            'data' => $this->getReservaPermanenteById($id)
         ];
     }
 

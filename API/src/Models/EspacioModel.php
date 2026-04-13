@@ -38,6 +38,30 @@ class EspacioModel
             ->fetchAll();
     }
 
+    // Obtener todos los Espacios
+    public function getAllActivos(): array
+    {
+        return $this->db
+            ->query("SELECT 
+                            r.id_recurso,
+                            r.descripcion,
+                            r.tipo,
+                            r.activo,
+                            r.especial,
+                            r.numero_planta,
+                            p.nombre_planta,
+                            e.nombre_edificio,
+                            e.id_edificio,
+                            es.es_aula
+                        FROM Recurso r
+                        LEFT JOIN Edificio e ON r.id_edificio = e.id_edificio
+                        LEFT JOIN Planta p ON p.numero_planta = r.numero_planta AND r.id_edificio = p.id_edificio
+                        LEFT JOIN Espacio es ON r.id_recurso = es.id_espacio
+                        WHERE r.tipo = 'Espacio' AND r.activo
+                        ORDER BY r.id_recurso;")
+            ->fetchAll();
+    }
+
     // Obtener Espacio por ID
     public function findById(string $id): array|false
     {

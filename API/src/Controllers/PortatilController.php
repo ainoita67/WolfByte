@@ -240,7 +240,7 @@ class PortatilController
             }
 
             $log['id_reserva']=$reserva['id'];
-            $this->serviceLog->createLog("Creación de reserva", $log);
+            $this->serviceLog->createLog("Modificación de reserva", $log);
 
             $res->status(200)->json([], $reserva['message']);
         } catch (ValidationException $e) {

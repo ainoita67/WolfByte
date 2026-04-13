@@ -42,6 +42,32 @@ class MaterialModel
     }
 
     /**
+     * Obtener todos los materiales activos
+     */
+    public function getAllActivos(): array
+    {
+        try {
+            return $this->db
+                ->query("
+                    SELECT 
+                        r.id_recurso,
+                        r.descripcion,
+                        r.tipo,
+                        r.activo,
+                        r.especial,
+                        m.unidades
+                    FROM Recurso r
+                    INNER JOIN Material m ON r.id_recurso = m.id_material
+                    WHERE r.tipo = 'Material' AND r.activo=1
+                    ORDER BY r.id_recurso
+                ")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener materiales: " . $e->getMessage());
+        }
+    }
+
+    /**
      * Obtener material por ID
      */
     public function findById(string $id): array|false

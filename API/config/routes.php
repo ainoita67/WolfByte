@@ -70,7 +70,8 @@ $router->put('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@upd
 $router->delete('/caracteristicas/{id}', 'Controllers\\CaracteristicaController@destroy');
 
 // MATERIALES 
-$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los materiales con todas sus características 
+$router ->get('/material', 'Controllers\\MaterialController@index'); // Nos devuelve los todos materiales con todas sus características 
+$router ->get('/material/activos', 'Controllers\\MaterialController@indexActivos'); // Nos devuelve los materiales activos con todas sus características 
 $router ->get('/material/{id}', 'Controllers\\MaterialController@show'); // Nos devuelve los datos del material que pasemos el id 
 $router ->patch('/material/{id}', 'Controllers\\MaterialController@update'); // Modifica el material que pasemos el ID 
 $router ->post('/material', 'Controllers\\MaterialController@store'); // Crea un nuevo material  
@@ -105,6 +106,7 @@ $router->get('/reservaMaterial/material/{id}','Controllers\\ReservaMaterialContr
 //Espacios
 
 $router->get('/espacios', 'Controllers\\EspacioController@index');
+$router->get('/espacios/activos', 'Controllers\\EspacioController@indexActivos');
 $router->get('/espacios/{id}', 'Controllers\\EspacioController@show');
 $router->post('/espacios', 'Controllers\\EspacioController@store');
 $router->get('/espacios/disponibles', 'Controllers\\EspacioController@disponibles');
@@ -180,7 +182,8 @@ $router->patch('/portatiles/reservas/{id}/unidades',   'Controllers\\PortatilCon
 $router->delete('/portatiles/reservas/{id}',           'Controllers\\PortatilController@deleteReserva'); // Eliminar reserva
 // RECURSO
 $router->get('/recurso', 'Controllers\\RecursoController@index'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
-$router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción de todos los recursos activos que estén en la base de datos
+$router->get('/recurso/activos', 'Controllers\\RecursoController@indexActivos'); //Nos devuelve id y descripción del recurso por id
+$router->get('/recurso/{id}', 'Controllers\\RecursoController@show'); //Nos devuelve id y descripción de todos los recursos que estén en la base de datos
 $router->patch('/recurso/{id}/activo', 'Controllers\\RecursoController@updateActivar'); //Modifica el estado de activo a desactivo y viceversa
 
 // LIBERACIÓN PUNTUAL
@@ -197,6 +200,7 @@ $router->get('/caracteristicasEspacios', 'Controllers\\CaracteristicaEspacioCont
 $router->get('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@showByEspacio'); // Listar características de un espacio específico
 $router->get('/espacios/{id}/caracteristicas/disponibles', 'Controllers\\CaracteristicaEspacioController@showDisponibles'); // Listar características disponibles para un espacio específico
 $router->post('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@asignar'); // Asignar una característica a un espacio específico 
+$router->delete('/espacios/{id}/caracteristicas', 'Controllers\\CaracteristicaEspacioController@quitar'); // Asignar una característica a un espacio específico 
 
 // LOG DE ACCIONES
 $router->get('/logacciones', 'Controllers\\LogAccionesController@index');

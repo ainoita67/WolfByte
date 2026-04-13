@@ -80,7 +80,7 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
-            $log['id_usuario_actor']=$data['id_usuario'];
+            $log['id_usuario_actor']=$data['id_usuario_actor'];
 
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
@@ -107,7 +107,7 @@ class ReservaEspacioController
             }
 
             if($coincide === false){
-                $log['id_usuario_actor']=$data['id_usuario'];
+                $log['id_usuario_actor']=$data['id_usuario_actor'];
                 $log['id_reserva']=(int)$id;
                 if($data['necesidades']==null||count($data['necesidades'])==0){
                     $this->serviceLog->createLog('Desvinculación de necesidades', $log);

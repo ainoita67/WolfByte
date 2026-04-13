@@ -289,6 +289,8 @@ class ReservaService
             if($creacion > $inicio){
                 throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
             }
+
+            $input['id_usuario']=$this->getReservaById($id)['id_usuario'];
             
             $data = Validator::validate($input, [
                 'asignatura'            => 'string|min:1',
@@ -301,7 +303,8 @@ class ReservaService
                 'fin'                   => 'required|string',
                 'id_usuario'            => 'required|int|min:1',
                 'id_usuario_autoriza'   => 'int|min:1',
-                'tipo'                  => 'required|string|min:1'
+                'tipo'                  => 'required|string|min:1',
+                'id_usuario_actor'      => 'required|int|min:1'
             ]);
 
             if($data['observaciones']!=null&&$data['observaciones']!=''){

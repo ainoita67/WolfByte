@@ -396,13 +396,14 @@ class PortatilModel
                     INSERT INTO Reserva 
                     (asignatura, autorizada, observaciones, grupo, profesor, f_creacion, inicio, fin, id_usuario, tipo) 
                     VALUES 
-                    (:asignatura, :autorizada, :observaciones, :grupo, :profesor, CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid'), :inicio, :fin, :id_usuario, 'Reserva_material')
+                    (:asignatura, :autorizada, :observaciones, :grupo, :profesor, :f_creacion, :inicio, :fin, :id_usuario, 'Reserva_material')
                 ")
                 ->bind(':asignatura', $data['asignatura'])
-                ->bind(':autorizada', $autorizada)  // Ahora siempre tiene un valor
+                ->bind(':autorizada', $autorizada ?? null)
                 ->bind(':observaciones', $data['observaciones'] ?? null)
                 ->bind(':grupo', $data['grupo'])
                 ->bind(':profesor', $data['profesor'])
+                ->bind(':f_creacion', $data['f_creacion'])
                 ->bind(':inicio', $data['inicio'])
                 ->bind(':fin', $data['fin'])
                 ->bind(':id_usuario', $data['id_usuario'])
@@ -421,7 +422,7 @@ class PortatilModel
                 ->bind(':id_reserva', $idReserva)
                 ->bind(':unidades', $data['unidades'])
                 ->bind(':id_material', $data['id_material'])
-                ->bind(':usaenespacio', $data['usaenespacio'] ?? null)
+                ->bind(':usaenespacio', $data['usaenespacio'])
                 ->execute();
 
             $this->db->commit();

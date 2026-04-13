@@ -126,14 +126,12 @@
                 <div class="container-fluid p-4">
                     <div class="row g-4">
 
-                        <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
-
-                        <section class="col-12 col-lg-8 d-flex flex-column mb-2 mb-lg-5">
+                        <section class="col-12 col-lg-6 col-xl-10 d-flex flex-column mb-2 mb-lg-5">
                             <div class="d-flex justify-content-between align-items-center my-4">
                                 <h2>Reservas permanentes</h2>
                                 <button class="btn btn-success btn-sm btn-crear" data-bs-toggle="modal"
                                     data-bs-target="#modalCrear">
-                                    <i class="bi bi-plus"></i> Crear Reserva Permanente
+                                    <i class="bi bi-plus-circle"></i> Crear reserva permanente
                                 </button>
                             </div>
                             <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
@@ -207,8 +205,8 @@
                 </div>
 
                 <!-- Body / Formulario -->
-                <div class="modal-body">
-                    <form class="row g-4" id="formEditarReserva">
+                <form id="formEditarReserva">
+                    <div class="modal-body row g-4">
 
                         <div class="col-md-6">
                             <label class="form-label">ID</label>
@@ -220,7 +218,7 @@
                             <input type="text" class="form-control" id="recursoEditar" required readonly>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="form-label">Día de la semana</label>
                             <select name="diaEditar" id="diaEditar" class="form-select" required>
                                 <option value="" disabled>Seleccione un día</option>
@@ -231,8 +229,6 @@
                                 <option value="5">Viernes</option>
                             </select>
                         </div>
-
-                        <div class="col-md-6"></div>
 
                         <div class="col-md-6">
                             <label class="form-label">Hora de Inicio</label>
@@ -265,23 +261,19 @@
                             <input type="text" class="form-control" id="comentarioEditar">
                         </div>
 
-                        <div class="col-md-6" id="unidadesEditar">
+                        <div class="col-md-12" id="unidadesEditar">
                             <label class="form-label">Unidades</label>
-                            <input type="number" class="form-control">
+                            <input type="number" class="form-control" min="1">
                         </div>
+                    </div>
 
-                        <div class="col-md-6"></div>
-
-                        <div class="col-md-6">
+                    <div class="modal-footer g-4">
+                        <div class="col-md-6 offset-md-6">
                             <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
                         </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <div id="editarUserErrors" class="alert alert-danger d-none"></div>
-                </div>
+                        <div id="editarUserErrors" class="alert alert-danger d-none"></div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -296,10 +288,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body">
-
-                    <form class="row g-4" id="formCrearReserva">
-
+                <form id="formCrearReserva">
+                    <div class="modal-body row g-4">
                         <div class="col-md-6">
                             <label class="form-label">Recurso</label>
                             <input type="text" class="form-control" id="recursoCrear" readonly>
@@ -350,27 +340,21 @@
                             <input type="text" class="form-control" id="comentarioCrear">
                         </div>
 
-                        <div class="col-md-6" id="unidadesCrear">
+                        <div class="col-md-12" id="unidadesCrear">
                             <label class="form-label">Unidades</label>
                             <input type="number" class="form-control">
                         </div>
+                    </div>
 
-                        <div class="col-md-6"></div>
-
-                        <div class="col-md-6">
+                    <div class="modal-footer">
+                        <div class="col-md-6 offset-md-6">
                             <button type="submit" class="enviar w-100 text-light p-2">
                                 Crear reserva
                             </button>
                         </div>
-
-                    </form>
-
-                </div>
-
-                <div class="modal-footer">
-                    <div id="crearReservaErrors" class="alert alert-danger d-none"></div>
-                </div>
-
+                        <div id="crearReservaErrors" class="alert alert-danger d-none"></div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -560,15 +544,20 @@
                     alert("La hora de inicio debe ser anterior a la hora de fin");
                     return; // Detener la ejecución
                 }
-                await updatePermanente(reservaActualizada);
-
+                let json=await updatePermanente(reservaActualizada);
+                
                 // Actualizar array local
                 reservas = await getReservasRecurso(idRecurso);
                 rellenarTablaReservas(reservas);
 
                 // Cerrar modal
                 bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
-                alert("Reserva actualizada correctamente");
+                
+                if(json.data.status="no_changes"){
+                    alert("No han habido cambios en la reserva permanente")
+                }else{
+                    alert("Reserva permanente actualizada correctamente");
+                }
             } catch (err) {
                 console.error(err);
                 alert(err?.message ?? "Error al actualizar la reserva");

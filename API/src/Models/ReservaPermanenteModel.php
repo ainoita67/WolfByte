@@ -81,26 +81,27 @@ class ReservaPermanenteModel
         try {
             $this->db
                 ->query("
-                    INSERT INTO Reserva_permanente (inicio, fin, comentario, activo, id_recurso)
-                    VALUES (:inicio, :fin, :comentario, :activo, :id_recurso)
+                    INSERT INTO Reserva_permanente (inicio, fin, comentario, activo, id_recurso, dia_semana)
+                    VALUES (:inicio, :fin, :comentario, :activo, :id_recurso, :dia_semana)
                 ")
                 ->bind(':inicio',       $data['inicio'])
                 ->bind(':fin',          $data['fin'])
                 ->bind(':comentario',   $data['comentario'] ?? null)
                 ->bind(':activo',       $data['activo'])
                 ->bind(':id_recurso',   $data['id_recurso'])
+                ->bind(':dia_semana',    $data['dia_semana'])
                 ->execute();
 
             return $this->findById((int)$this->db->lastId());
         } catch (PDOException $e) {
-            throw new \Exception("Error al crear la reserva permanente");
+            throw new \Exception("Error al crear la reserva permanente".$e->getMessage());
         }
     }
 
     /**
      * Actualizar reserva permanente
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): bool
     {
         try {
             $this->db
@@ -110,18 +111,20 @@ class ReservaPermanenteModel
                         fin = :fin,
                         comentario = :comentario,
                         activo = :activo,
-                        id_recurso = :id_recurso
+                        id_recurso = :id_recurso,
+                        dia_semana = :dia_semana
                     WHERE id_reserva_permanente = :id
                 ")
                 ->bind(':id',           $id)
                 ->bind(':inicio',       $data['inicio'])
                 ->bind(':fin',          $data['fin'])
-                ->bind(':comentario',   $data['comentario'])
+                ->bind(':comentario',   $data['comentario'] ?? '')
                 ->bind(':activo',       $data['activo'])
                 ->bind(':id_recurso',   $data['id_recurso'])
+                ->bind(':dia_semana',   $data['dia_semana'])
                 ->execute();
 
-            return $this->findById($id);
+            return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar la reserva permanente");
         }
