@@ -234,7 +234,7 @@ class ReservaService
             if($creacion > $inicio){
                 throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
             }
-
+            
             $data = Validator::validate($input, [
                 'asignatura'            => 'string|min:1',
                 'autorizada'            => 'in:0,1',

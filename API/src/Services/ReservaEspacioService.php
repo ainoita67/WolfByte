@@ -139,8 +139,8 @@ class ReservaEspacioService
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
 
-        $cambio=$this->serviceReserva->updateReserva($id, $input);
         if($this->model->getReservaFecha($id, $data)&&count($this->model->findById($id))>0){
+            $cambio=$this->serviceReserva->updateReserva($id, $input);
             if($this->model->update($id, $data)||$cambio['status']==='updated'){
                 return [
                     'data' => $this->serviceReserva->getReservaById($id),

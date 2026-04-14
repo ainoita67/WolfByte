@@ -8,16 +8,19 @@ use Core\Response;
 use Validation\ValidationException;
 use Throwable;
 use Services\PortatilService;
+use Services\ReservaPortatilService;
 use Services\LogAccionesService;
 
 class PortatilController
 {
     private PortatilService $service;
+    private ReservaPortatilService $serviceReserva;
     private LogAccionesService $serviceLog;
 
     public function __construct()
     {
         $this->service = new PortatilService();
+        $this->serviceReserva = new ReservaPortatilService();
         $this->serviceLog = new LogAccionesService();
     }
 
@@ -192,11 +195,11 @@ class PortatilController
         try {
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario'];
-            $reserva = $this->service->createReserva($data);
-            $log['id_reserva']=$reserva['id'];
+            $reserva = $this->serviceReserva->createReserva($data);
+            $log['id_reserva']=$reserva['id_reserva'];
             $this->serviceLog->createLog("Creación de reserva", $log);
             $res->status(201)->json(
-                ['id' => $reserva['id']],
+                ['id' => $reserva['id_reserva']],
                 $reserva['message']
             );
         } catch (ValidationException $e) {
@@ -232,15 +235,36 @@ class PortatilController
         try {
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario'];
-            $reserva = $this->service->updateReserva((int)$id, $data);
-            
-            if ($reserva['status'] === 'no_changes') {
-                $res->status(200)->json([], $reserva['message']);
-                return;
-            }
 
-            $log['id_reserva']=$reserva['id'];
-            $this->serviceLog->createLog("Modificación de reserva", $log);
+            $autorizada=$this->service->getReservaById((int)$id)['autorizada'];
+
+            if($autorizada===0){
+                throw new \Exception("No se puede modificar una reserva cancelada");
+            }
+            
+            $reserva = $this->serviceReserva->updateReserva((int)$id, $data);
+            
+            if(!isset($reserva['data']['id'])){
+                $reserva['id']=$reserva['data']['id_reserva'];
+            }
+            
+            $log['id_reserva']=$reserva['data']['id_reserva'];
+            if($reserva['status']!='no_changes'){
+                if($autorizada!=$reserva['data']['autorizada']){
+                    if($reserva['data']['autorizada']===1){
+                        $this->serviceLog->createLog('Autorización de reserva', $log);
+                    }else if($reserva['data']['autorizada']===0){
+                        $this->serviceLog->createLog('Cancelación de reserva', $log);
+                    }
+                }
+            }else{            
+                if ($reserva['status'] === 'no_changes') {
+                    $res->status(200)->json([], $reserva['message']);
+                    return;
+                }
+
+                $this->serviceLog->createLog("Modificación de reserva", $log);
+            }
 
             $res->status(200)->json([], $reserva['message']);
         } catch (ValidationException $e) {

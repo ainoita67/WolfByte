@@ -196,6 +196,15 @@ if (evento.bloqueBase) {
 
     if (!modal.result) return;
 
+    if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
+        alert("No se han rellenado los campos obligatorios");
+        return;
+    }
+
+    if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
+        alert("No se han reservado unidades válidas");
+        return;
+    }
 
     const requiereAutorizacion = carrito.autorizacion;
     const rol = parseInt(sessionStorage.getItem("rol"), 10);
@@ -209,21 +218,30 @@ if (evento.bloqueBase) {
         autorizada = requiereAutorizacion ? null : 1;
         usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
     }
-const espacios = await cargarEspacios();
+
+    const espacios = await cargarEspacios();
+    let idPrincipal = 'salon';
+
+    espacios.sort((a, b) => {
+        if(a.id_recurso == idPrincipal) return -1;
+        if(b.id_recurso == idPrincipal) return 1;
+        return 0;
+    });
 
     const modalEspacio = await DayPilot.Modal.form([
         {
-            name: "Selecciona espacio",
+            name: "Seleccione un espacio",
             id: "usaenespacio",
             type: "select",
             options: espacios.map(e => ({
-                name: e.descripcion,
+                name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
                 id: e.id_recurso
             }))
         }
     ]);
 
     if (!modalEspacio.result) return;
+
     const usaenespacio = modalEspacio.result.usaenespacio;
 
     const response = await fetch(`${API}/portatiles/reservas`, {  // ✅ endpoint correcto
@@ -254,10 +272,10 @@ const espacios = await cargarEspacios();
             usaenespacio: usaenespacio
         })
     });
-console.log(response);
+    
 if (!response.ok) {
     const err = await response.json();
-    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? JSON.stringify(response.json)+"No hay suficientes portátiles disponibles";
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
     alert(mensaje);
     return;
 }
@@ -284,6 +302,50 @@ else {
     });
 
     if (!modal.result) return;
+
+    if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
+        alert("No se han rellenado los campos obligatorios");
+        return;
+    }
+
+    if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
+        alert("No se han reservado unidades válidas");
+        return;
+    }
+
+    const espacios = await cargarEspacios();
+    let idPrincipal = 'salon';
+
+    espacios.sort((a, b) => {
+        if(a.id_recurso == idPrincipal) return -1;
+        if(b.id_recurso == idPrincipal) return 1;
+        return 0;
+    });
+
+    let textoespacio="Salón de actos"
+    if(evento.usaenespacio!="salon"){
+        espacios.forEach(e => {
+            if(evento.usaenespacio==e.id_recurso){
+                textoespacio=e.id_recurso + " - " + e.descripcion;
+            }
+        });
+    }
+    
+    const modalEspacio = await DayPilot.Modal.form([
+        {
+            name: "Seleccione un espacio (Seleccionado anteriormente: "+textoespacio+")",
+            id: "usaenespacio",
+            type: "select",
+            options: espacios.map(e => ({
+                name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
+                id: e.id_recurso
+            }))
+        }
+    ], {usaenespacio: evento.usaenespacio});
+
+    if (!modalEspacio.result) return;
+
+    const usaenespacio = modalEspacio.result.usaenespacio;
     
     const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
         method: "PUT",
@@ -317,7 +379,7 @@ else {
 
 if (!response.ok) {
     const err = await response.json();
-    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? JSON.stringify(response.json)+"No hay suficientes portátiles disponibles";
+    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
     alert(mensaje);
     return;
 }else{

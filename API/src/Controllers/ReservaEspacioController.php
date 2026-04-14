@@ -61,6 +61,7 @@ class ReservaEspacioController
     public function store(Request $req, Response $res): void
     {
         try {
+            throw new \Exception(json_encode($autorizada));
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario'];
             $reserva = $this->service->createReserva($data);
@@ -81,7 +82,8 @@ class ReservaEspacioController
         try {
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario_actor'];
-
+            $autorizada=$this->service->getReservaById((int)$id)['autorizada'];
+            
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
             if(!isset($data['necesidades'])){
@@ -117,9 +119,17 @@ class ReservaEspacioController
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);
+            
+            $log['id_reserva']=$result['data']['id_reserva'];
+            if($autorizada!==$reserva['data']['autorizada']){
+                if($autorizada===1){
+                    $this->serviceLog->createLog('Autorización de reserva', $log);
+                }else if($autorizada===0){
+                    $this->serviceLog->createLog('Cancelación de reserva', $log);
+                }
+            }
             if($reserva['status']=='updated'){
-                $log['id_reserva']=(int)$id;
-                $this->serviceLog->createLog('Modificación de reserva', $log);
+                $this->serviceLog->createLog('Autorización de reserva', $log);
             }
             $res->status(200)->json($reserva['data']);
         } catch (ValidationException $e) {

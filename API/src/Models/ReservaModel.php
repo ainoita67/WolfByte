@@ -273,7 +273,7 @@ class ReservaModel
                 ->bind(':id_usuario_autoriza', $data['id_usuario_autoriza'])
                 ->bind(':tipo', $data['tipo'])
                 ->execute();
-
+                
             return $this->findById((int)$this->db->lastId());
         } catch (PDOException $e) {
             throw new \Exception($e->getMessage());
