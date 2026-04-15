@@ -226,6 +226,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             if (!modal.result) return;
 
+            let arraynecesidades = await fetch(`${API}/necesidades`);
+            let resnecesidades = await arraynecesidades.json()
+            
+            const campos = [
+                {
+                    name: "Seleccione las necesidades",
+                },
+                ...resnecesidades.data.map(n => ({
+                    name: " "+n.nombre,
+                    id: n.id_necesidad,
+                    type: "checkbox"
+                }))
+            ];
+
+            const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+            const seleccionadas = Object.entries(modalnecesidades.result)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => ({
+                id_necesidad: key
+            }));
+
             const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
                 method: "PUT",
                 headers: {
@@ -238,7 +260,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     profesor: modal.result.profesor,
                     actividad: modal.result.actividad,
                     observaciones: modal.result.observaciones,
-                    id_usuario_actor: sessionStorage.getItem("id_usuario")
+                    id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                    necesidades: seleccionadas
                 })
             });
 
