@@ -161,6 +161,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (!modal.result) return;
 
+                let arraynecesidades = await fetch(`${API}/necesidades`);
+                let resnecesidades = await arraynecesidades.json()
+                
+                const campos = [
+                    {
+                        name: "Seleccione las necesidades",
+                    },
+                    ...resnecesidades.data.map(n => ({
+                        name: " "+n.nombre,
+                        id: n.id_necesidad,
+                        type: "checkbox"
+                    }))
+                ];
+
+                const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+                const seleccionadas = Object.entries(modalnecesidades.result)
+                .filter(([key, value]) => value === true)
+                .map(([key]) => ({
+                    id_necesidad: key
+                }));
+
                 const { asignatura, grupo, profesor, actividad } = modal.result;
 
                 if (!asignatura?.trim() || !grupo?.trim() || !profesor?.trim() || !actividad?.trim()) {
@@ -209,6 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         id_usuario: sessionStorage.getItem("id_usuario"),
                         id_usuario_autoriza: usuarioautoriza,
                         autorizada: autorizada,
+                        necesidades: seleccionadas,
                         tipo: "Reserva_espacio"
                     })
                 });
@@ -259,6 +282,28 @@ document.addEventListener("DOMContentLoaded", async () => {
                 
                 if (!modal.result) return;
 
+                let arraynecesidades = await fetch(`${API}/necesidades`);
+                let resnecesidades = await arraynecesidades.json()
+                
+                const campos = [
+                    {
+                        name: "Seleccione las necesidades",
+                    },
+                    ...resnecesidades.data.map(n => ({
+                        name: " "+n.nombre,
+                        id: n.id_necesidad,
+                        type: "checkbox"
+                    }))
+                ];
+
+                const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+                const seleccionadas = Object.entries(modalnecesidades.result)
+                .filter(([key, value]) => value === true)
+                .map(([key]) => ({
+                    id_necesidad: key
+                }));
+
                 const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
                     method: "PUT",
                     headers: {
@@ -278,6 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         id_espacio: idAula,
                         id_usuario_actor: sessionStorage.getItem("id_usuario"),
                         autorizada: requiereAutorizacion ? null : 1,
+                        necesidades: seleccionadas,
                         tipo: "Reserva_espacio"
                     })
                 });
