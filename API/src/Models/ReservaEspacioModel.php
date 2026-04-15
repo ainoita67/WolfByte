@@ -101,9 +101,12 @@ class ReservaEspacioModel
                         r.asignatura,
                         r.profesor,
                         r.grupo,
+                        r.f_creacion,
                         r.inicio,
                         r.fin,
                         r.observaciones,
+                        r.id_usuario,
+                        r.id_usuario_autoriza,
                         re.actividad,
                         re.id_espacio,
                         GROUP_CONCAT(n.nombre) AS necesidades
@@ -111,7 +114,7 @@ class ReservaEspacioModel
                     JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
-                    WHERE re.id_espacio=:espacio
+                    WHERE re.id_espacio=:espacio AND (r.autorizada IS NULL OR r.autorizada=1)
                     GROUP BY r.id_reserva
                     ORDER BY r.inicio;
                 ")

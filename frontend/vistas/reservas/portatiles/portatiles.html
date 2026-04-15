@@ -89,6 +89,9 @@
 <script type="module">
 import { getCarritosDisponibles } from "/frontend/javascript/portatiles/get.js";
 
+let fecha = new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
+document.getElementById("textofiltro").textContent = fecha+": 08:50 - 09:40";
+
 const TRAMOS = [
     { inicio: "08:50", fin: "09:40" },
     { inicio: "09:45", fin: "10:35" },

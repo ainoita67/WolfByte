@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Services;
 
 use Models\ReservaPortatilModel;
+use Services\ReservaService;
 use Validation\Validator;
 use Validation\ValidationException;
 use Throwable;
@@ -11,10 +12,12 @@ use Throwable;
 class ReservaPortatilService
 {
     private ReservaPortatilModel $model;
+    private ReservaService $serviceReserva;
 
     public function __construct()
     {
         $this->model = new ReservaPortatilModel();
+        $this->serviceReserva = new ReservaService();
     }
 
     // Devuelve todas las reservas de portatils
@@ -60,11 +63,32 @@ class ReservaPortatilService
     // Crea una nueva reserva
     public function createReserva(array $data): array
     {
-        if($this->model->getReservaFecha(-1, $data)<=0){
-            $this->validateReservaData($data, false);
-            return $this->model->create($data);
+        if(!$data['unidades']||$data['unidades']<=0){
+            throw new \Exception("No se han reservado unidades");
         }
-        throw new \Exception("Ya hay una reserva entre esas horas");
+        
+        if($this->model->getReservaFecha(-1, $data)){
+            $this->validateReservaData($data, false);
+            $reserva=$this->serviceReserva->createReserva($data);
+
+            if (!$reserva||!$reserva['id_reserva']) {
+                throw new \Exception("No se pudo crear la reserva");
+            }
+
+            $data['id_reserva_material']=(int)$reserva['id_reserva'];
+
+            $reservaportatil=$this->model->create($data);
+
+            if (!$reservaportatil||!$reservaportatil['id_reserva']) {
+                throw new \Exception("No se pudo crear la reserva");
+            }
+
+            return [
+                'id_reserva' => $reservaportatil['id_reserva'],
+                'message' => 'Reserva creada correctamente'
+            ];
+        }
+        throw new \Exception("No hay suficientes portátiles disponibles entre esas horas");
     }
 
     // Actualiza una reserva existente
@@ -72,7 +96,20 @@ class ReservaPortatilService
     {
         if($this->model->getReservaFecha($id, $data)&&count($this->model->findById($id))>0){
             $this->validateReservaData($data, false);
-            return $this->model->update($id, $data);
+            $cambio=$this->serviceReserva->updateReserva($id, $data);
+            if($this->model->update($id, $data)||$cambio['status']==='updated'){
+                return [
+                    'status'=>'updated',
+                    'message'=>'Reserva actualizada correctamente',
+                    'data'=>$this->model->findById($id)
+                ];
+            }
+
+            return [
+                'status'=>'no_changes',
+                'message'=>'No han habido cambios',
+                'data'=>$this->model->findById($id)
+            ];
         }
         throw new \Exception("Ya hay una reserva entre esas horas");
     }
@@ -100,6 +137,22 @@ class ReservaPortatilService
 
         if (!isset($data['fin']) || is_numeric($data['fin'])) {
             $errors['fin'] = "La fecha de fin es obligatoria y debe ser texto";
+        }
+
+        if (!isset($data['f_creacion']) || is_numeric($data['f_creacion'])) {
+            $errors['f_creacion'] = "La fecha de fin es obligatoria y debe ser texto";
+        }
+        
+        $inicio = date("Y-m-d H:i:s", strtotime($data['inicio']));
+        $fin = date("Y-m-d H:i:s", strtotime($data['fin']));
+        $creacion = date("Y-m-d H:i:s", strtotime($data['f_creacion']));
+
+        if($inicio>=$fin){
+            throw new \Exception("La fecha de inicio debe ser anterior a la fecha de fin");
+        }
+
+        if($creacion>$inicio){
+            throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
 
         if (!empty($errors)) {

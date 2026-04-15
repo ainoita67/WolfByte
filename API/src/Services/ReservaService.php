@@ -234,7 +234,7 @@ class ReservaService
             if($creacion > $inicio){
                 throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
             }
-
+            
             $data = Validator::validate($input, [
                 'asignatura'            => 'string|min:1',
                 'autorizada'            => 'in:0,1',
@@ -251,6 +251,13 @@ class ReservaService
 
             if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){
                 throw new \Exception("Ha ocurrido un error al autorizar la reserva");
+            }
+
+            $data['asignatura'] = ucfirst(trim($data['asignatura']));
+            $data['grupo'] = ucfirst(trim($data['grupo']));
+            $data['profesor'] = ucfirst(trim($data['profesor']));
+            if($data['observaciones']!=null&&$data['observaciones']!=''){
+                $data['observaciones'] = ucfirst(trim($data['observaciones']));
             }
 
             $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
@@ -307,8 +314,11 @@ class ReservaService
                 'id_usuario_actor'      => 'required|int|min:1'
             ]);
 
+            $data['asignatura'] = ucfirst(trim($data['asignatura']));
+            $data['grupo'] = ucfirst(trim($data['grupo']));
+            $data['profesor'] = ucfirst(trim($data['profesor']));
             if($data['observaciones']!=null&&$data['observaciones']!=''){
-                $data['observaciones'] = ucfirst($data['observaciones']);
+                $data['observaciones'] = ucfirst(trim($data['observaciones']));
             }
 
             if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){

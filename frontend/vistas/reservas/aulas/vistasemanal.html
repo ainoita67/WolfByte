@@ -281,11 +281,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                         tipo: "Reserva_espacio"
                     })
                 });
+
                 let res = await response.json();
-                console.log(res);
+                
                 if (!response.ok) {
                     alert("Error actualizando la reserva");
                     return;
+                }else if(res.data.status=="no_changes"){
+                    alert("No han habido cambios");
+                }else{
+                    alert("Reserva actualizada correctamente");
                 }
 
                 const nuevosEventos = await generarEventos(idAula);

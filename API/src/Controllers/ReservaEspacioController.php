@@ -64,8 +64,14 @@ class ReservaEspacioController
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario'];
             $reserva = $this->service->createReserva($data);
+            if($data['necesidades']){
+                $this->serviceNecesidad->updateNecesidad((int)$reserva['id_reserva'], $data);
+            }
             $log['id_reserva']=$reserva['id_reserva'];
             $this->serviceLog->createLog("Creación de reserva", $log);
+            if(count($this->serviceNecesidad->getNecesidadById((int)$reserva['id_reserva']))>0){
+                $this->serviceLog->createLog("Asignación de necesidades", $log);
+            }
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
@@ -81,7 +87,8 @@ class ReservaEspacioController
         try {
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario_actor'];
-
+            $autorizada=$this->service->getReservaById((int)$id)['autorizada'];
+            
             $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
             
             if(!isset($data['necesidades'])){
@@ -117,11 +124,19 @@ class ReservaEspacioController
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);
+            
+            $log['id_reserva']=$reserva['data']['id_reserva'];
+            if($autorizada!==$reserva['data']['autorizada']){
+                if($autorizada===1){
+                    $this->serviceLog->createLog('Autorización de reserva', $log);
+                }else if($autorizada===0){
+                    $this->serviceLog->createLog('Cancelación de reserva', $log);
+                }
+            }
             if($reserva['status']=='updated'){
-                $log['id_reserva']=(int)$id;
                 $this->serviceLog->createLog('Modificación de reserva', $log);
             }
-            $res->status(200)->json($reserva['data']);
+            $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {

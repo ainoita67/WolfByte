@@ -154,6 +154,29 @@
             ]);
 
             if (!modal.result) return;
+
+            let arraynecesidades = await fetch(`${API}/necesidades`);
+            let resnecesidades = await arraynecesidades.json()
+            
+            const campos = [
+                {
+                    name: "Seleccione las necesidades",
+                },
+                ...resnecesidades.data.map(n => ({
+                    name: " "+n.nombre,
+                    id: n.id_necesidad,
+                    type: "checkbox"
+                }))
+            ];
+
+            const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+            const seleccionadas = Object.entries(modalnecesidades.result)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => ({
+                id_necesidad: key
+            }));
+
             const idusuario = sessionStorage.getItem("id_usuario");
             let autorizada=null;
             let idusuarioautoriza=null;
@@ -161,7 +184,7 @@
                 autorizada=true;
                 idusuarioautoriza=idusuario;
             }
-
+            
             const response = await fetch(`${API}/reservaEspacio`, {
                 method: "POST",
                 headers: {
@@ -181,10 +204,11 @@
                     id_usuario: idusuario,
                     id_usuario_autoriza: idusuarioautoriza,
                     autorizada: autorizada,
+                    necesidades: seleccionadas,
                     tipo: "Reserva_espacio"
                 })
             });
-            console.log(response);
+            
             if (!response.ok) {
                 alert("Error creando la reserva");
                 return;
@@ -199,7 +223,6 @@
                 // 🔵 EDITAR RESERVA
                 // =============================
         else {
-
             const modal = await DayPilot.Modal.form([
                 { name: "Asignatura", id: "asignatura", type: "text" },
                 { name: "Grupo", id: "grupo", type: "text" },
@@ -216,6 +239,28 @@
             
             if (!modal.result) return;
 
+            let arraynecesidades = await fetch(`${API}/necesidades`);
+            let resnecesidades = await arraynecesidades.json()
+            
+            const campos = [
+                {
+                    name: "Seleccione las necesidades",
+                },
+                ...resnecesidades.data.map(n => ({
+                    name: " "+n.nombre,
+                    id: n.id_necesidad,
+                    type: "checkbox"
+                }))
+            ];
+
+            const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+            const seleccionadas = Object.entries(modalnecesidades.result)
+            .filter(([key, value]) => value === true)
+            .map(([key]) => ({
+                id_necesidad: key
+            }));
+
             const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
                 method: "PUT",
                 headers: {
@@ -228,13 +273,28 @@
                     profesor: modal.result.profesor,
                     actividad: modal.result.actividad,
                     observaciones: modal.result.observaciones,
-                    id_usuario_actor: sessionStorage.getItem("id_usuario")
+                    f_creacion: evento.f_creacion,
+                    inicio: evento.start.replace("T", " "),
+                    fin: evento.end.replace("T", " "),
+                    actividad: modal.result.actividad,
+                    id_espacio: idRecurso,
+                    id_usuario: evento.idusuario,
+                    id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                    autorizada: evento.autorizada,
+                    necesidades: seleccionadas,
+                    tipo: "Reserva_espacio"
                 })
             });
 
+            let res = await response.json()
+            
             if (!response.ok) {
                 alert("Error actualizando la reserva");
                 return;
+            }else if(res.data.status=="no_changes"){
+                alert("No han habido cambios");
+            }else{
+                alert("Reserva actualizada correctamente");
             }
 
             const nuevosEventos = await generarEventosSegunRecurso(idRecurso);

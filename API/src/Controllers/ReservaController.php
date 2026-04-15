@@ -191,17 +191,18 @@ class ReservaController
         try {
             $id = is_array($args) ? (int)$args['id'] : (int)$args;
             $data = $req->getBody();
-
+            $autorizada=$this->service->getReservaById((int)$id);
+            
             $log['id_usuario_actor']=(int)$data['id_usuario_log'];
             
             $result = $this->service->updateReserva((int)$id, $data);
             
             if($result['status']!='no_changes'){
                 $log['id_reserva']=$result['data']['id_reserva'];
-                if($data['autorizada']!=$result['data']['autorizada']){
-                    if($data['autorizada']==1){
+                if($autorizada!=$result['data']['autorizada']){
+                    if($autorizada===1){
                         $this->serviceLog->createLog('Autorización de reserva', $log);
-                    }else if($data['autorizada']==0){
+                    }else if($autorizada===0){
                         $this->serviceLog->createLog('Cancelación de reserva', $log);
                     }
                 }

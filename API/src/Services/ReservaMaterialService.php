@@ -32,6 +32,17 @@ class ReservaMaterialService
 
         try {
             $reservas = $this->model->getByMaterial($idMaterial);
+            
+            $fechaactual = date('Y-m-d H:i:s');
+            foreach ($reservas as &$reserva){
+                if(date($reserva['inicio'])>$fechaactual){
+                    $reserva['unidades_libres'] = $this->model->getUnidadesFecha($idMaterial, $reserva);
+                }else{
+                    $reserva['unidades_libres'] = 0;
+                }
+            }
+            unset($reserva);
+            return $reservas;
         } catch (Throwable $e) {
             throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
         }

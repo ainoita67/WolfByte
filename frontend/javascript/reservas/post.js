@@ -281,7 +281,7 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
         if (response.status == "success") {
             return 1;
         } else {
-            mostrarToast(response.message+"No hay suficientes portátiles disponibles entre esas horas", 'warning')
+            mostrarToast("No hay suficientes portátiles disponibles entre esas horas", 'warning')
             return -1;
         }
     }catch(err){

@@ -22,39 +22,39 @@ class ReservaPortatilModel
     {
         try{
             return $this->db
-            ->query("
-                SELECT
-                    re.id_reserva,
-                    re.asignatura,
-                    re.profesor,
-                    re.grupo,
-                    re.inicio,
-                    re.fin,
-                    re.observaciones,
-                    re.autorizada,
-                    re.f_creacion,
-                    re.id_usuario,
-                    re.id_usuario_autoriza,
-                    re.descripcion,
-                    r.activo,
-                    r.especial,
-                    re.planta,
-                    e.id_edificio,
-                    e.nombre_edificio,
-                    rp.unidades,
-                    rp.id_material,
-                    rp.usaenespacio,
-                    p.numero_planta,
-                    p.nombre_planta
-                FROM Reserva re
-                JOIN Reserva_Portatiles rp ON re.id_reserva = rp.id_reserva_material
-                JOIN Material m ON rp.id_material = m.id_material
-                JOIN Recurso r ON m.id_material = r.id_recurso
-                JOIN Edificio e ON r.id_edificio = e.id_edificio
-                JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
-                ORDER BY r.inicio;
-            ")
-            ->fetchAll();
+                ->query("
+                    SELECT
+                        re.id_reserva,
+                        re.asignatura,
+                        re.profesor,
+                        re.grupo,
+                        re.inicio,
+                        re.fin,
+                        re.observaciones,
+                        re.autorizada,
+                        re.f_creacion,
+                        re.id_usuario,
+                        re.id_usuario_autoriza,
+                        re.descripcion,
+                        r.activo,
+                        r.especial,
+                        re.planta,
+                        e.id_edificio,
+                        e.nombre_edificio,
+                        rp.unidades,
+                        rp.id_material,
+                        rp.usaenespacio,
+                        p.numero_planta,
+                        p.nombre_planta
+                    FROM Reserva re
+                    JOIN Reserva_Portatiles rp ON re.id_reserva = rp.id_reserva_material
+                    JOIN Material m ON rp.id_material = m.id_material
+                    JOIN Recurso r ON m.id_material = r.id_recurso
+                    JOIN Edificio e ON r.id_edificio = e.id_edificio
+                    JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
+                    ORDER BY r.inicio;
+                ")
+                ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas portátil");
         }
@@ -67,6 +67,7 @@ class ReservaPortatilModel
                 ->query("
                     SELECT
                         r.id_reserva,
+                        r.autorizada,
                         r.asignatura,
                         r.profesor,
                         r.grupo,
@@ -81,7 +82,7 @@ class ReservaPortatilModel
                     ORDER BY r.inicio;
                 ")
                 ->bind(':id', $id)
-                ->fetchAll();
+                ->fetch();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas de portátil");
         }
@@ -97,6 +98,7 @@ class ReservaPortatilModel
                 ->query("
                     SELECT
                         r.id_reserva,
+                        r.autorizada,
                         r.asignatura,
                         r.profesor,
                         r.grupo,
@@ -142,7 +144,7 @@ class ReservaPortatilModel
     /**
      * Actualizar reservas
      */
-    public function update(int $id, array $data): array
+    public function update(int $id, array $data): bool
     {
         try{
             $this->db
@@ -158,7 +160,8 @@ class ReservaPortatilModel
                 ->bind(':usaenespacio', $data['usaenespacio'])
                 ->bind(':id', $id)
                 ->execute();
-            return $this->findById($id);
+
+            return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar reservas del portátil");
         }
@@ -173,11 +176,11 @@ class ReservaPortatilModel
             if($diasemana!=date('w', strtotime($data['fin']))){
                 return false;
             }
-            
+
             //Suma unidades de reservas y de reservas permanentes y resta de liberaciones
             $filas=$this->db
                 ->query("SELECT
-                        m.unidades AS materialunidades,SELECT
+                        m.unidades AS materialunidades,
                             (SELECT IFNULL(SUM(rp.unidades),0)
                             FROM Reserva r
                             JOIN Reserva_Portatiles rp ON r.id_reserva=rp.id_reserva_material
@@ -189,19 +192,16 @@ class ReservaPortatilModel
                             +
                             (SELECT IFNULL(SUM(rp.unidades),0)-IFNULL(SUM(lp.unidades),0)
                             FROM Reserva_permanente rp
-                            JOIN Liberacion_puntual lp ON rp.id_reserva_permanente=lp.id_reserva_permanente
-                            WHERE rp.id_recurso=:material2 AND activo=1 AND dia_semana=:diasemana
-                            AND ((rp.inicio>horafin1 AND rp.fin<horainicio1)
-                            OR (rp.inicio=horainicio2 AND rp.fin=horafin2)))
-                        AS totalunidades;
+                            LEFT JOIN Liberacion_puntual lp ON rp.id_reserva_permanente=lp.id_reserva_permanente
+                            WHERE rp.id_recurso=:material2 AND rp.activo=1 AND rp.dia_semana=:diasemana
+                            AND rp.inicio<:horafin AND rp.fin>:horainicio)
+                        AS totalunidades
                     FROM Material m
                     WHERE m.id_material=:material3
                 ")
                 ->bind(':diasemana', $diasemana)
-                ->bind(':horainicio1', $horainicio)
-                ->bind(':horafin1', $horafin)
-                ->bind(':horainicio2', $horainicio)
-                ->bind(':horafin2', $horafin)
+                ->bind(':horainicio', $horainicio)
+                ->bind(':horafin', $horafin)
                 ->bind(':inicio1', $data['inicio'])
                 ->bind(':fin1', $data['fin'])
                 ->bind(':inicio2', $data['inicio'])
@@ -216,7 +216,6 @@ class ReservaPortatilModel
             }
             return true;
         } catch (PDOException $e) {
-            throw new \Exception($e->getMessage());
             throw new \Exception("Error al crear o actualizar reservas del portátil");
         }
     }
