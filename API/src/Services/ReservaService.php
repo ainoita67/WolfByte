@@ -253,6 +253,13 @@ class ReservaService
                 throw new \Exception("Ha ocurrido un error al autorizar la reserva");
             }
 
+            $data['asignatura'] = ucfirst(trim($data['asignatura']));
+            $data['grupo'] = ucfirst(trim($data['grupo']));
+            $data['profesor'] = ucfirst(trim($data['profesor']));
+            if($data['observaciones']!=null&&$data['observaciones']!=''){
+                $data['observaciones'] = ucfirst(trim($data['observaciones']));
+            }
+
             $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
             $horainicio = date("H:i:s", strtotime($data['inicio']));
             $horafin = date("H:i:s", strtotime($data['fin']));
@@ -307,8 +314,11 @@ class ReservaService
                 'id_usuario_actor'      => 'required|int|min:1'
             ]);
 
+            $data['asignatura'] = ucfirst(trim($data['asignatura']));
+            $data['grupo'] = ucfirst(trim($data['grupo']));
+            $data['profesor'] = ucfirst(trim($data['profesor']));
             if($data['observaciones']!=null&&$data['observaciones']!=''){
-                $data['observaciones'] = ucfirst($data['observaciones']);
+                $data['observaciones'] = ucfirst(trim($data['observaciones']));
             }
 
             if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){

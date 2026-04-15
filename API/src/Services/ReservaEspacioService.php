@@ -32,6 +32,17 @@ class ReservaEspacioService
         return $this->model->getByEspacio($id);
     }
 
+    public function findReservaById(int $id): array
+    {
+        $reserva = $this->model->findById($id);
+
+        if (!$reserva) {
+            throw new \Exception("Reserva no encontrada");
+        }
+
+        return $reserva;
+    }
+
     public function getReservaById(int $id): array
     {
         $reserva = $this->model->getById($id);
@@ -72,6 +83,8 @@ class ReservaEspacioService
         if($creacion > $inicio){
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
+
+        $data['actividad'] = ucfirst($data['actividad']);
 
         if(!$this->model->getReservaFecha(0, $data)){
             throw new \Exception("Ya hay una reserva entre esas horas");
@@ -138,6 +151,8 @@ class ReservaEspacioService
         if($creacion>$inicio){
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
+
+        $data['actividad'] = ucfirst($data['actividad']);
 
         if($this->model->getReservaFecha($id, $data)&&count($this->model->findById($id))>0){
             $cambio=$this->serviceReserva->updateReserva($id, $input);

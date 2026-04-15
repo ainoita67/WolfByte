@@ -256,14 +256,12 @@ class PortatilController
                     }else if($reserva['data']['autorizada']===0){
                         $this->serviceLog->createLog('Cancelación de reserva', $log);
                     }
+                }else{
+                    $this->serviceLog->createLog("Modificación de reserva", $log);
                 }
-            }else{            
-                if ($reserva['status'] === 'no_changes') {
-                    $res->status(200)->json([], $reserva['message']);
-                    return;
-                }
-
-                $this->serviceLog->createLog("Modificación de reserva", $log);
+            }else{
+                $res->status(200)->json([], $reserva['message']);
+                return;
             }
 
             $res->status(200)->json([], $reserva['message']);

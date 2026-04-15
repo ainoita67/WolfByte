@@ -50,7 +50,8 @@ export async function cargarReservas(idRecurso) {
             planta: r.nombre_planta ?? null,
             id_edificio: r.id_edificio ?? null,
             edificio: r.nombre_edificio ?? null,
-            usaenespacio: r.usaenespacio ?? null
+            usaenespacio: r.usaenespacio ?? null,
+            unidades_libres: r.unidades_libres
         }));
 
         return eventos; // array de eventos para el calendario
