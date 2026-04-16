@@ -13,19 +13,24 @@
         <script>
             const rol = Number(sessionStorage.getItem("rol"));
             
-            // Admin (30) y super-admin (40) pueden acceder
-            const script1 = document.createElement("script");
-            script1.src = BASE + "/javascript/includes.js";
-            script1.onload = () => {
-                const script2 = document.createElement("script");
-                script2.src = BASE + "/javascript/menu.js";
-                script2.onload = () => {
-                    generarPagina("portatiles", rol);
+            if(rol!=20&&rol!=30&&rol!=40){
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder a las reservas de portátiles');
+                window.location.replace(BASE + '/vistas/menu.html');
+            }else{
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("portatiles", rol);
+                    };
+                    // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                    document.head.appendChild(script2);
                 };
-                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
-                document.head.appendChild(script2);
-            };
-            document.head.appendChild(script1);
+                document.head.appendChild(script1);
+            }
         </script>
         <title>Portátiles - IES Bajo Aragón</title>
     </head>
@@ -243,8 +248,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!modalEspacio.result) return;
 
                 const usaenespacio = modalEspacio.result.usaenespacio;
+                
+                let fechaactual=new Date();
+                let inicio=new Date(evento.start);
+                if(fechaactual>=inicio){
+                    alert("No se pueden crear reservas en el pasado");
+                    return;
+                }
 
-                const response = await fetch(`${API}/portatiles/reservas`, {  // ✅ endpoint correcto
+                let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+
+                const response = await fetch(`${API}/portatiles/reservas`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -255,7 +269,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         grupo: modal.result.grupo,
                         profesor: modal.result.profesor,
                         observaciones: modal.result.observaciones,
-                        f_creacion: new Date().toISOString().slice(0, 19).replace("T", " "),
+                        f_creacion: fecha,
                         inicio: evento.start.replace("T", " "),
                         fin: evento.end.replace("T", " "),
                         unidades: parseInt(modal.result.unidades),
@@ -286,123 +300,149 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // 🔵 EDITAR RESERVA
             else {
-                console.log(evento);
-                const maxDisponibles = evento.unidades_libres;
-                const modal = await DayPilot.Modal.form([
-                    { name: "Asignatura", id: "asignatura", type: "text" },
-                    { name: "Grupo", id: "grupo", type: "text" },
-                    { name: "Profesor", id: "profesor", type: "text" },
-                    { name: "Observaciones", id: "observaciones", type: "textarea" },
-                    { 
-                        name: `Cantidad de portátiles (máx ${maxDisponibles})`,
-                        id: "unidades",
-                        type: "number",
-                        min: 1,
-                        max: maxDisponibles
-                    }
-                ], {
-                    asignatura: evento.asignatura,
-                    grupo: evento.grupo,
-                    profesor: evento.profesor,
-                    observaciones: evento.observaciones,
-                    unidades: evento.unidades
-                });
+                if(sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario){
+                    const html = `
+                        <div style="line-height:1.6">
+                            <b>Asignatura:</b> ${evento.asignatura}<br>
+                            <b>Grupo:</b> ${evento.grupo}<br>
+                            <b>Profesor:</b> ${evento.profesor}<br>
+                            <b>Observaciones:</b> ${evento.observaciones || "-"}<br>
+                            <b>Unidades:</b> ${evento.unidades}
+                        </div>
+                    `;
 
-                if (!modal.result) return;
-
-                if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
-                    alert("No se han rellenado los campos obligatorios");
-                    return;
-                }
-
-                if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
-                    alert("No se han reservado unidades válidas");
-                    return;
-                }
-
-                const espacios = await cargarEspacios();
-                let idPrincipal = 'salon';
-
-                espacios.sort((a, b) => {
-                    if(a.id_recurso == idPrincipal) return -1;
-                    if(b.id_recurso == idPrincipal) return 1;
-                    return 0;
-                });
-
-                let textoespacio="Salón de actos"
-                if(evento.usaenespacio!="salon"){
-                    espacios.forEach(e => {
-                        if(evento.usaenespacio==e.id_recurso){
-                            textoespacio=e.id_recurso + " - " + e.descripcion;
-                        }
-                    });
-                }
-                
-                const modalEspacio = await DayPilot.Modal.form([
-                    {
-                        name: "Seleccione un espacio (Seleccionado anteriormente: "+textoespacio+")",
-                        id: "usaenespacio",
-                        type: "select",
-                        options: espacios.map(e => ({
-                            name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
-                            id: e.id_recurso
-                        }))
-                    }
-                ], {usaenespacio: evento.usaenespacio});
-
-                if (!modalEspacio.result) return;
-
-                const usaenespacio = modalEspacio.result.usaenespacio;
-                
-                const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token")
-                    },
-                    body: JSON.stringify({
-                        asignatura: modal.result.asignatura,
-                        grupo: modal.result.grupo,
-                        profesor: modal.result.profesor,
-                        observaciones: modal.result.observaciones,
-                        unidades: parseInt(modal.result.unidades),
-                        id_material: idAula,
-                        f_creacion: evento.f_creacion,
-                        inicio: evento.start.replace("T", " "),
-                        fin: evento.end.replace("T", " "),
-                        id_usuario: evento.id_usuario,
-                        id_usuario_autoriza: evento.id_usuario_autoriza,
-                        id_usuario_actor: sessionStorage.getItem("id_usuario"),
-                        autorizada: evento.autorizada,
-                        tipo: "Reserva_material",
-                        descripcion: evento.descripcion,
-                        activo: evento.activo,
-                        especial: evento.especial,
-                        numero_planta: evento.numero_planta,
-                        id_edificio: evento.id_edificio,
-                        usaenespacio: evento.usaenespacio
-                    })
-                });
-                
-                let res = await response.json();
-                
-                if (!response.ok) {
-                    const err = res
-                    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
-                    alert(mensaje);
-                    return;
-                }else if(res.data.status=="no_changes"){
-                    alert("No han habido cambios");
+                    DayPilot.Modal.alert(html);
                 }else{
-                    alert("Reserva actualizada correctamente");
-                }
+                    const maxDisponibles = evento.unidades_libres;
+                    const modal = await DayPilot.Modal.form([
+                        { name: "Asignatura", id: "asignatura", type: "text" },
+                        { name: "Grupo", id: "grupo", type: "text" },
+                        { name: "Profesor", id: "profesor", type: "text" },
+                        { name: "Observaciones", id: "observaciones", type: "textarea" },
+                        { 
+                            name: `Cantidad de portátiles (máx ${maxDisponibles})`,
+                            id: "unidades",
+                            type: "number",
+                            min: 1,
+                            max: maxDisponibles
+                        }
+                    ], {
+                        asignatura: evento.asignatura,
+                        grupo: evento.grupo,
+                        profesor: evento.profesor,
+                        observaciones: evento.observaciones,
+                        unidades: evento.unidades
+                    });
 
-                const nuevosEventos = await generarEventos(idAula, carrito.unidades);
-                dp.events.list = nuevosEventos;
-                dp.update();
+                    if (!modal.result) return;
+
+                    if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
+                        alert("No se han rellenado los campos obligatorios");
+                        return;
+                    }
+
+                    if(isNaN(modal.result.unidades)){
+                        alert("Las unidades deben ser un número");
+                        return;
+                    }
+
+                    if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
+                        alert("No se han reservado unidades válidas");
+                        return;
+                    }
+
+                    const espacios = await cargarEspacios();
+                    let idPrincipal = 'salon';
+
+                    espacios.sort((a, b) => {
+                        if(a.id_recurso == idPrincipal) return -1;
+                        if(b.id_recurso == idPrincipal) return 1;
+                        return 0;
+                    });
+
+                    let textoespacio="Salón de actos"
+                    if(evento.usaenespacio!="salon"){
+                        espacios.forEach(e => {
+                            if(evento.usaenespacio==e.id_recurso){
+                                textoespacio=e.id_recurso + " - " + e.descripcion;
+                            }
+                        });
+                    }
+                    
+                    const modalEspacio = await DayPilot.Modal.form([
+                        {
+                            name: "Seleccione un espacio (Seleccionado anteriormente: "+textoespacio+")",
+                            id: "usaenespacio",
+                            type: "select",
+                            options: espacios.map(e => ({
+                                name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
+                                id: e.id_recurso
+                            }))
+                        }
+                    ], {usaenespacio: evento.usaenespacio});
+
+                    if (!modalEspacio.result) return;
+
+                    const usaenespacio = modalEspacio.result.usaenespacio;
+                    
+                    let fechaactual=new Date();
+                    let inicio=new Date(evento.start);
+                    if(fechaactual>=inicio){
+                        alert("No se pueden modificar reservas en el pasado");
+                        return;
+                    }
+
+                    let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+                    
+                    const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + localStorage.getItem("token")
+                        },
+                        body: JSON.stringify({
+                            asignatura: modal.result.asignatura,
+                            grupo: modal.result.grupo,
+                            profesor: modal.result.profesor,
+                            observaciones: modal.result.observaciones,
+                            unidades: parseInt(modal.result.unidades),
+                            id_material: idAula,
+                            f_creacion: evento.f_creacion,
+                            inicio: evento.start.replace("T", " "),
+                            fin: evento.end.replace("T", " "),
+                            id_usuario: evento.id_usuario,
+                            id_usuario_autoriza: evento.id_usuario_autoriza,
+                            id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                            autorizada: evento.autorizada,
+                            tipo: "Reserva_material",
+                            descripcion: evento.descripcion,
+                            activo: evento.activo,
+                            especial: evento.especial,
+                            numero_planta: evento.numero_planta,
+                            id_edificio: evento.id_edificio,
+                            usaenespacio: evento.usaenespacio
+                        })
+                    });
+                    
+                    let res = await response.json();
+                    
+                    if (!response.ok) {
+                        const err = res
+                        const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "Error al actualizar la reserva";
+                        alert(mensaje);
+                        return;
+                    }else if(res.data.status=="no_changes"){
+                        alert("No han habido cambios");
+                    }else{
+                        alert("Reserva actualizada correctamente");
+                    }
+
+                    const nuevosEventos = await generarEventos(idAula, carrito.unidades);
+                    dp.events.list = nuevosEventos;
+                    dp.update();
+                }
             }
         }
-
     });
 
     cargarInfoCarrito(carrito);

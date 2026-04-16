@@ -260,11 +260,11 @@ class PortatilController
                     $this->serviceLog->createLog("Modificación de reserva", $log);
                 }
             }else{
-                $res->status(200)->json([], $reserva['message']);
+                $res->status(200)->json($reserva);
                 return;
             }
 
-            $res->status(200)->json([], $reserva['message']);
+            $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->getErrors()]);
         } catch (Throwable $e) {

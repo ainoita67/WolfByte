@@ -43,7 +43,7 @@ export async function cargarReservas(idRecurso) {
             return [];
         }
 
-        const eventos = json.data.map(r => ({
+        const eventos = json.data.filter(r => r.autorizada == 1 || r.autorizada == null).map(r => ({
             id: r.id_reserva,
             text: `${r.asignatura} - ${r.grupo}\n${r.profesor} - ${r.actividad}`,
             start: r.inicio.replace(" ", "T"),

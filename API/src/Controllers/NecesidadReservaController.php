@@ -18,10 +18,10 @@ class NecesidadReservaController
         $this->service = new NecesidadReservaService();
     }
 
-    public function index(Request $req, Response $res): void
+    public function index(Request $req, Response $res, string $id): void
     {
         try {
-            $necesidades = $this->service->getAllNecesidades();
+            $necesidades = $this->service->getAllNecesidades((int)$id);
             $res->status(200)->json($necesidades);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), 500);

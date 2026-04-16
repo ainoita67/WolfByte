@@ -89,7 +89,7 @@ class ReservaEspacioController
             $log['id_usuario_actor']=$data['id_usuario_actor'];
             $autorizada=$this->service->getReservaById((int)$id)['autorizada'];
             
-            $necesidadesantes=$this->serviceNecesidad->getNecesidadById((int)$id);
+            $necesidadesantes=$this->serviceNecesidad->getAllNecesidades((int)$id);
             
             if(!isset($data['necesidades'])){
                 $data['necesidades']=$necesidadesantes;
@@ -97,22 +97,18 @@ class ReservaEspacioController
                 $this->serviceNecesidad->updateNecesidad((int)$id, $data);
             }
             
-            $necesidadesdespues=$this->serviceNecesidad->getNecesidadById((int)$id);
-            
-            $coincide=true;
-            if(count($necesidadesantes)!=count($necesidadesdespues)){
-                $coincide=false;
-            }else{
-                if(count($necesidadesdespues)!=0){
-                    foreach ($necesidadesantes as $key => $antes) {
-                        if ($antes !== $necesidadesdespues[$key]) {
-                            $coincide = false;
-                            break;
-                        }
-                    }
-                }
-            }
+            $necesidadesdespues=$this->serviceNecesidad->getAllNecesidades((int)$id);
 
+            $antes = array_map(fn($n) => $n['id_necesidad'], $necesidadesantes);
+            $despues = array_map(fn($n) => $n['id_necesidad'], $necesidadesdespues);
+            sort($antes);
+            sort($despues);
+
+            $coincide=false;
+            if($antes==$despues){
+                $coincide=true;
+            }
+            
             if($coincide === false){
                 $log['id_usuario_actor']=$data['id_usuario_actor'];
                 $log['id_reserva']=(int)$id;
@@ -126,15 +122,18 @@ class ReservaEspacioController
             $reserva = $this->service->updateReserva((int)$id, $data);
             
             $log['id_reserva']=$reserva['data']['id_reserva'];
+            if($reserva['status']=='updated'){
+                $this->serviceLog->createLog('Modificación de reserva', $log);
+            }
             if($autorizada!==$reserva['data']['autorizada']){
-                if($autorizada===1){
+                if($reserva['data']['autorizada']===1){
                     $this->serviceLog->createLog('Autorización de reserva', $log);
-                }else if($autorizada===0){
+                }else if($reserva['data']['autorizada']===0){
                     $this->serviceLog->createLog('Cancelación de reserva', $log);
                 }
             }
-            if($reserva['status']=='updated'){
-                $this->serviceLog->createLog('Modificación de reserva', $log);
+            if(!$coincide){
+                $reserva['status']='updated';
             }
             $res->status(200)->json($reserva);
         } catch (ValidationException $e) {
