@@ -322,7 +322,7 @@ class ReservaService
                 'id_usuario_actor'      => 'required|int|min:1'
             ]);
 
-            if($data['tipo']!='Reserva_espacio'||$data['tipo']!='Reserva_material'){
+            if($data['tipo']!='Reserva_espacio'&&$data['tipo']!='Reserva_material'){
                 throw new \Exception("El tipo de reserva no es válido");
             }
 

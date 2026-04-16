@@ -128,9 +128,9 @@ function obtenerDatosReserva(usuarioautoriza=null){
     }else if(autorizada=="Autorizada"){
         autorizada=1;
     }
-    let fechacreacion = formatearFecha(document.getElementById("reserva_f_creacion").value);
-    let inicio = formatearFecha(document.getElementById("reserva_inicio").value);
-    let fin = formatearFecha(document.getElementById("reserva_fin").value);
+    let fechacreacion = anyadirFecha(document.getElementById("reserva_f_creacion").value);
+    let inicio = anyadirFecha(document.getElementById("reserva_inicio").value);
+    let fin = anyadirFecha(document.getElementById("reserva_fin").value);
     let tipo = document.getElementById("reserva_tipo").value;
     let id_recurso = document.getElementById("reserva_espacio_portatil").value;
     let asignatura = document.getElementById("reserva_asignatura").value.trim()||null;
@@ -292,7 +292,7 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
 
 
 
-function formatearFecha(fecha){
+function anyadirFecha(fecha){
     if (!fecha) return null;
     let fechaFormulario = new Date(fecha);
     let anyo = fechaFormulario.getFullYear();
