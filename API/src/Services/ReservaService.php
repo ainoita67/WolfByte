@@ -249,6 +249,10 @@ class ReservaService
                 'tipo'                  => 'required|string|min:1'
             ]);
 
+            if($data['tipo']!='Reserva_espacio'&&$data['tipo']!='Reserva_material'){
+                throw new \Exception("El tipo de reserva no es válido");
+            }
+
             if($data['autorizada']!=null&&$data['id_usuario_autoriza']==null){
                 throw new \Exception("Ha ocurrido un error al autorizar la reserva");
             }
@@ -263,6 +267,10 @@ class ReservaService
             $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
             $horainicio = date("H:i:s", strtotime($data['inicio']));
             $horafin = date("H:i:s", strtotime($data['fin']));
+
+            if($data['tipo']=='Reserva_material'&&($horafin>date("H:i:s", strtotime("15:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
 
             if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
                 throw new \Exception("No tienes permisos para reservar en ese horario");
@@ -314,6 +322,10 @@ class ReservaService
                 'id_usuario_actor'      => 'required|int|min:1'
             ]);
 
+            if($data['tipo']!='Reserva_espacio'||$data['tipo']!='Reserva_material'){
+                throw new \Exception("El tipo de reserva no es válido");
+            }
+
             $data['asignatura'] = ucfirst(trim($data['asignatura']));
             $data['grupo'] = ucfirst(trim($data['grupo']));
             $data['profesor'] = ucfirst(trim($data['profesor']));
@@ -328,6 +340,10 @@ class ReservaService
             $usuario=$this->serviceUsuario->getUsuarioById((int)$data['id_usuario']);
             $horainicio = date("H:i:s", strtotime($data['inicio']));
             $horafin = date("H:i:s", strtotime($data['fin']));
+
+            if($data['tipo']=='Reserva_material'&&($horafin>date("H:i:s", strtotime("15:00:00")))){
+                throw new \Exception("No tienes permisos para reservar en ese horario");
+            }
 
             if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
                 throw new \Exception("No tienes permisos para reservar en ese horario");

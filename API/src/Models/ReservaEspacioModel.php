@@ -114,7 +114,7 @@ class ReservaEspacioModel
                     JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva = nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad = n.id_necesidad
-                    WHERE re.id_espacio=:espacio AND (r.autorizada IS NULL OR r.autorizada=1)
+                    WHERE re.id_espacio=:espacio
                     GROUP BY r.id_reserva
                     ORDER BY r.inicio;
                 ")

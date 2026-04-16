@@ -18,11 +18,12 @@ class NecesidadReservaModel
     /**
      * Obtener todas las necesidades de reserva
      */
-    public function getAll(): array
+    public function getAll(int $id): array
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Necesidad_R_espacio")
+                ->query("SELECT nre.id_necesidad, n.nombre FROM Necesidad_R_espacio nre JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad WHERE nre.id_reserva_espacio=:id")
+                ->bind(':id', $id)
                 ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener necesidades de reserva");

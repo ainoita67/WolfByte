@@ -84,6 +84,11 @@ class ReservaEspacioService
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
         }
 
+        $fechaactual=date("Y-m-d H:i:s");
+        if($fechaactual>=$inicio){
+            throw new \Exception("No se pueden crear reservas en el pasado");
+        }
+
         $data['actividad'] = ucfirst($data['actividad']);
 
         if(!$this->model->getReservaFecha(0, $data)){
@@ -150,6 +155,11 @@ class ReservaEspacioService
 
         if($creacion>$inicio){
             throw new \Exception("La fecha de creación no puede ser posterior a la fecha de inicio");
+        }
+
+        $fechaactual=date("Y-m-d H:i:s");
+        if($fechaactual>=$inicio){
+            throw new \Exception("No se pueden actualizar reservas en el pasado");
         }
 
         $data['actividad'] = ucfirst($data['actividad']);

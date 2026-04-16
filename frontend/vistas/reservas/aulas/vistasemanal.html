@@ -265,83 +265,126 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // 🔵 EDITAR RESERVA
                     // =============================
             else {
+                if(sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario){
+                    let html = `
+                        <div style="line-height:1.6">
+                            <b>Asignatura:</b> ${evento.asignatura}<br>
+                            <b>Grupo:</b> ${evento.grupo}<br>
+                            <b>Profesor:</b> ${evento.profesor}<br>
+                            <b>Observaciones:</b> ${evento.observaciones || "-"}
+                    `;
 
-                const modal = await DayPilot.Modal.form([
-                    { name: "Asignatura", id: "asignatura", type: "text" },
-                    { name: "Grupo", id: "grupo", type: "text" },
-                    { name: "Profesor", id: "profesor", type: "text" },
-                    { name: "Actividad", id: "actividad", type: "text" },
-                    { name: "Observaciones", id: "observaciones", type: "textarea" }
-                ], {
-                    asignatura: evento.asignatura,
-                    grupo: evento.grupo,
-                    profesor: evento.profesor,
-                    actividad: evento.actividad,
-                    observaciones: evento.observaciones
-                });
-                
-                if (!modal.result) return;
+                    let necesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`);
+                    let resnecesidades = await necesidadesreserva.json();
+                    if(!resnecesidades||!resnecesidades.data||resnecesidades.data.length==0){
+                        html=html+'</div>';
+                    }else{
+                        html=html+'<br><b>Necesidades:</b><br><ul>'
+                        resnecesidades.data.forEach(necesidad => {
+                            html=html+'<li>'+necesidad.nombre+'</li>'
+                        });
+                        html=html+'</ul></div>'
+                    }
 
-                let arraynecesidades = await fetch(`${API}/necesidades`);
-                let resnecesidades = await arraynecesidades.json()
-                
-                const campos = [
-                    {
-                        name: "Seleccione las necesidades",
-                    },
-                    ...resnecesidades.data.map(n => ({
-                        name: " "+n.nombre,
-                        id: n.id_necesidad,
-                        type: "checkbox"
-                    }))
-                ];
-
-                const modalnecesidades = await DayPilot.Modal.form(campos, {});
-
-                const seleccionadas = Object.entries(modalnecesidades.result)
-                .filter(([key, value]) => value === true)
-                .map(([key]) => ({
-                    id_necesidad: key
-                }));
-
-                const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token")
-                    },
-                    body: JSON.stringify({
-                        asignatura: modal.result.asignatura,
-                        grupo: modal.result.grupo,
-                        profesor: modal.result.profesor,
-                        actividad: modal.result.actividad,
-                        observaciones: modal.result.observaciones,
-                        f_creacion: null,
-                        inicio: evento.start.replace("T", " ") ?? null,
-                        fin: evento.end.replace("T", " ") ?? null,
-                        actividad: modal.result.actividad,
-                        id_espacio: idAula,
-                        id_usuario_actor: sessionStorage.getItem("id_usuario"),
-                        autorizada: requiereAutorizacion ? null : 1,
-                        necesidades: seleccionadas,
-                        tipo: "Reserva_espacio"
-                    })
-                });
-
-                let res = await response.json();
-                
-                if (!response.ok) {
-                    alert("Error actualizando la reserva");
-                    return;
-                }else if(res.data.status=="no_changes"){
-                    alert("No han habido cambios");
+                    DayPilot.Modal.alert(html);
                 }else{
-                    alert("Reserva actualizada correctamente");
-                }
+                    const modal = await DayPilot.Modal.form([
+                        { name: "Asignatura", id: "asignatura", type: "text" },
+                        { name: "Grupo", id: "grupo", type: "text" },
+                        { name: "Profesor", id: "profesor", type: "text" },
+                        { name: "Actividad", id: "actividad", type: "text" },
+                        { name: "Observaciones", id: "observaciones", type: "textarea" }
+                    ], {
+                        asignatura: evento.asignatura,
+                        grupo: evento.grupo,
+                        profesor: evento.profesor,
+                        actividad: evento.actividad,
+                        observaciones: evento.observaciones
+                    });
+                    
+                    if (!modal.result) return;
 
-                const nuevosEventos = await generarEventos(idAula);
-                dp.events.list = nuevosEventos;
-                dp.update();
+                    let arraynecesidades = await fetch(`${API}/necesidades`);
+                    let resnecesidades = await arraynecesidades.json();
+                    console.log(resnecesidades.data);
+
+                    let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`);
+                    let necesidadesreserva = await resnecesidadesreserva.json();
+                    const idsSeleccionados = necesidadesreserva.data.map(n => n.id_necesidad);
+                    
+                    const campos = [
+                        {
+                            name: "Seleccione las necesidades"
+                        },
+                        ...resnecesidades.data.map(n => ({
+                            name: " "+n.nombre,
+                            id: String(n.id_necesidad),
+                            type: "checkbox"
+                        }))
+                    ];
+                    
+                    const valoresIniciales = {};
+
+                    idsSeleccionados.forEach(id => {
+                        valoresIniciales[id] = true;
+                    });
+
+                    const modalnecesidades = await DayPilot.Modal.form(campos, valoresIniciales);
+
+                    const seleccionadas = Object.entries(modalnecesidades.result)
+                    .filter(([key, value]) => value === true)
+                    .map(([key]) => ({
+                        id_necesidad: key
+                    }));
+                    
+                    let fechaactual=new Date();
+                    let inicio=new Date(evento.start);
+                    if(fechaactual>=inicio){
+                        alert("No se pueden modificar reservas en el pasado");
+                        return;
+                    }
+
+                    let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+
+                    const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + localStorage.getItem("token")
+                        },
+                        body: JSON.stringify({
+                            asignatura: modal.result.asignatura,
+                            grupo: modal.result.grupo,
+                            profesor: modal.result.profesor,
+                            actividad: modal.result.actividad,
+                            observaciones: modal.result.observaciones,
+                            f_creacion: evento.f_creacion,
+                            inicio: evento.start.replace("T", " ") ?? null,
+                            fin: evento.end.replace("T", " ") ?? null,
+                            actividad: modal.result.actividad,
+                            id_espacio: idAula,
+                            id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                            autorizada: requiereAutorizacion ? null : 1,
+                            necesidades: seleccionadas,
+                            tipo: "Reserva_espacio"
+                        })
+                    });
+
+                    let res = await response.json();
+                    console.log(res);
+                    if (!response.ok) {
+                        alert("Error actualizando la reserva");
+                        return;
+                    }else if(res.data.status=="no_changes"){
+                        alert("No han habido cambios");
+                    }else{
+                        alert("Reserva actualizada correctamente");
+                    }
+
+                    const nuevosEventos = await generarEventos(idAula);
+                    dp.events.list = nuevosEventos;
+                    dp.update();
+                }
             }
         }
 

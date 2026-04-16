@@ -15,9 +15,9 @@ class NecesidadReservaService
         $this->model = new NecesidadReservaModel();
     }
 
-    public function getAllNecesidades(): array
+    public function getAllNecesidades(int $id): array
     {
-        return $this->model->getAll();
+        return $this->model->getAll($id);
     }
 
     public function getNecesidadById(int $id): array
