@@ -34,7 +34,7 @@
         <main class="container-fluid menu row text-center mt-lg-5" id="mainmenu">
             <a href="reservas/aulas/aulas.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar aulas</a>
             <a href="reservas/salondeactos/salondeactos.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar salón de actos</a>
-            <a href="reservas/portatiles/portatiles.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar portátiles</a>
+            <a href="reservas/portatiles/portatiles.html" class="menu d-none col-lg-3 mx-lg-5 p-5 fs-5" id="portatiles">Reservar portátiles</a>
             <a href="reservas/otrosespacios/espacios.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Reservar otros espacios</a>
             <a href="incidencias/incidencias.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5" id="incidencias">Incidencias</a>
             <a href="liberar/liberar.html" class="menu col-lg-3 mx-lg-5 p-5 fs-5">Liberar aula</a>
@@ -49,7 +49,9 @@
                     document.getElementById("menuadministradormovil").classList.remove("d-none");
                     document.getElementById("incidencias").href="incidencias/verincidencias.html"
                 }
-
+                if(rol==20||rol==30||rol==40){
+                    document.getElementById("portatiles").classList.remove("d-none");
+                }
             </script>
         </main>
         <footer id="footer"></footer>
