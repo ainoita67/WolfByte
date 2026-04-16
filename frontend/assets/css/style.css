@@ -145,6 +145,18 @@ nav ul li a:hover{
     color: black !important;
 }
 
+.dropdown-menu{
+    right: 0 !important;
+}
+
+.dropdown-menu li{
+    padding: 0 !important;
+}
+
+.dropdown-menu li a{
+    padding: 0.75em 1.25em !important;
+}
+
 
 
 

@@ -32,7 +32,11 @@ function generateHeaderNav(menuactivo, role) {
         let menus=[
             { texto: "Aulas", href: "/vistas/reservas/aulas/aulas.html", key: "aulas" },
             { texto: "Salón de actos", href: "/vistas/reservas/salondeactos/salondeactos.html", key: "salonactos" },
-            { texto: "Portátiles", href: "/vistas/reservas/portatiles/portatiles.html", key: "portatiles" },
+            ...(role==20||role==30||role==40 ? [{
+                texto: "Portátiles", 
+                href: "/vistas/reservas/portatiles/portatiles.html",
+                key: "portatiles"
+            }]: ""),
             { texto: "Otros espacios", href: "/vistas/reservas/otrosespacios/espacios.html", key: "espacios" },
             { 
                 texto: "Incidencias", 
@@ -50,9 +54,9 @@ function generateHeaderNav(menuactivo, role) {
 
         // UL PARA TODO Y LOGO
         const ul = document.createElement('ul');
-            ul.classList.add("col-12", "d-flex", "justify-content-between", "d-xl-grid", "text-center", "fs-5", "py-2", "py-xl-4", "ps-4", "ps-xl-0", "mb-0");
+            ul.classList.add("col-12", "d-flex", "justify-content-between", "d-xl-flex", "text-center", "fs-5", "py-1", "py-xl-1", "ps-4", "ps-xl-0", "mb-0");
             ul.innerHTML = 
-                `<li class="col-xl-12 col-2">
+                `<li class="col-2 p-0">
                     <a href="${BASE}/vistas/menu.html">
                         <img src="${BASE}/assets/img/ieslogo.png" alt="Logo">
                     </a>
@@ -65,7 +69,7 @@ function generateHeaderNav(menuactivo, role) {
         // NAV DESKTOP
         menus.forEach(menu => {
             const li = document.createElement('li');
-            li.classList.add("py-2", "d-none", "d-xl-block");
+            li.classList.add("d-none", "d-xl-flex", "align-items-center","gap-4", "ms-auto", "me-4");
 
             const a = document.createElement('a');
             a.href = `${BASE}${menu.href}`;
