@@ -159,88 +159,98 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
     const contenedor = document.querySelector(".contenedor-aulas");
     contenedor.innerHTML = ""; // limpiar contenido estático
     // data = { edificio: { planta: [aulas] } }
-    for (const [edificio, plantas] of Object.entries(data)) {
+    
+    if(!data||data.length==0){
+        let card = document.createElement("div");
+        card.className = "card h-100 p-0 m-0 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body bg-secondary-subtle">No se han encontrado espacios</div>
+        `;
+        contenedor.appendChild(card);
+    }else{
+        for (const [edificio, plantas] of Object.entries(data)) {
 
-        // --- Tarjeta edificio ---
-        const edificioCard = document.createElement("div");
-        edificioCard.className = "edificio-card";
+            // --- Tarjeta edificio ---
+            const edificioCard = document.createElement("div");
+            edificioCard.className = "edificio-card";
 
-        const tituloEdificio = document.createElement("h3");
-        tituloEdificio.textContent = edificio.toUpperCase();
-        edificioCard.appendChild(tituloEdificio);
+            const tituloEdificio = document.createElement("h3");
+            tituloEdificio.textContent = edificio.toUpperCase();
+            edificioCard.appendChild(tituloEdificio);
 
-        // --- Plantas ---
-        for (const [planta, aulas] of Object.entries(plantas)) {
+            // --- Plantas ---
+            for (const [planta, aulas] of Object.entries(plantas)) {
 
-            const plantaDiv = document.createElement("div");
-            plantaDiv.className = "planta";
+                const plantaDiv = document.createElement("div");
+                plantaDiv.className = "planta";
 
-            const plantaTitulo = document.createElement("span");
-            plantaTitulo.className = "planta-titulo";
-            plantaTitulo.textContent = planta;
-            plantaDiv.appendChild(plantaTitulo);
+                const plantaTitulo = document.createElement("span");
+                plantaTitulo.className = "planta-titulo";
+                plantaTitulo.textContent = planta;
+                plantaDiv.appendChild(plantaTitulo);
 
-            const aulasDiv = document.createElement("div");
-            aulasDiv.className = "aulas";
+                const aulasDiv = document.createElement("div");
+                aulasDiv.className = "aulas";
 
-            // --- Botones de aulas ---
-            aulas.forEach(aula => {
-                const btn = document.createElement("button");
-                btn.id = aula.id_recurso;
-                btn.className = "aula";
-                btn.textContent = aula.id_recurso;
+                // --- Botones de aulas ---
+                aulas.forEach(aula => {
+                    const btn = document.createElement("button");
+                    btn.id = aula.id_recurso;
+                    btn.className = "aula";
+                    btn.textContent = aula.id_recurso;
 
-                btn.title = aula.descripcion;
+                    btn.title = aula.descripcion;
 
-                // si tiene reservas marcar
-                if (aula.reservas > 0) {
-                    btn.classList.add("ocupada");
-                    btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
-                }
-
-                //caracteristicas seleccionadas → comprobar si el aula las cumple
-                if (caracteristicasSeleccionadas.length > 0) {
-
-                    const aulaCaracteristicas = aula.caracteristicas || [];
-
-                    // comprobar si tiene TODAS las seleccionadas
-                    const cumple = caracteristicasSeleccionadas.every(c =>
-                        aulaCaracteristicas.includes(c)
-                    );
-
-                    if (!cumple) {
-                        btn.classList.add("no-cumple");
-
-                        btn.title += " - No cumple con las características seleccionadas";
+                    // si tiene reservas marcar
+                    if (aula.reservas > 0) {
+                        btn.classList.add("ocupada");
+                        btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
                     }
-                }
 
-                // REDIRECCIÓN
-                btn.addEventListener("click", () => {
-                    // Guardar estado actual del filtro
-                    const filtros = {
-                        fecha: document.getElementById("f_fecha").value,
-                        horaInicio: document.getElementById("f_hora_inicio").value,
-                        horaFin: document.getElementById("f_hora_fin").value,
-                        caracteristicas: Array.from(
-                            document.getElementById("caracteristicas").selectedOptions
-                        ).map(opt => opt.value)
-                    };
+                    //caracteristicas seleccionadas → comprobar si el aula las cumple
+                    if (caracteristicasSeleccionadas.length > 0) {
 
-                    sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
+                        const aulaCaracteristicas = aula.caracteristicas || [];
 
-                    const id = aula.id_recurso;
-                    const especial = aula.autorizacion ? 1 : 0;
-                    window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}&especial=${encodeURIComponent(especial )}`;
+                        // comprobar si tiene TODAS las seleccionadas
+                        const cumple = caracteristicasSeleccionadas.every(c =>
+                            aulaCaracteristicas.includes(c)
+                        );
+
+                        if (!cumple) {
+                            btn.classList.add("no-cumple");
+
+                            btn.title += " - No cumple con las características seleccionadas";
+                        }
+                    }
+
+                    // REDIRECCIÓN
+                    btn.addEventListener("click", () => {
+                        // Guardar estado actual del filtro
+                        const filtros = {
+                            fecha: document.getElementById("f_fecha").value,
+                            horaInicio: document.getElementById("f_hora_inicio").value,
+                            horaFin: document.getElementById("f_hora_fin").value,
+                            caracteristicas: Array.from(
+                                document.getElementById("caracteristicas").selectedOptions
+                            ).map(opt => opt.value)
+                        };
+
+                        sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
+
+                        const id = aula.id_recurso;
+                        const especial = aula.autorizacion ? 1 : 0;
+                        window.location.href = `${BASE}/vistas/reservas/aulas/vistasemanal.html?id=${encodeURIComponent(id)}&especial=${encodeURIComponent(especial )}`;
+                    });
+                    aulasDiv.appendChild(btn);
                 });
-                aulasDiv.appendChild(btn);
-            });
 
-            plantaDiv.appendChild(aulasDiv);
-            edificioCard.appendChild(plantaDiv);
+                plantaDiv.appendChild(aulasDiv);
+                edificioCard.appendChild(plantaDiv);
+            }
+
+            contenedor.appendChild(edificioCard);
         }
-
-        contenedor.appendChild(edificioCard);
     }
 }
 
