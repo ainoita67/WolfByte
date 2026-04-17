@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
-                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                 <button type="reset" class="col-3 btn bg-verde border text-light rounded-3"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
                                 <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                             </div>
@@ -96,6 +96,12 @@
 <script type="module">
 import { getAulas, getAulasDisponibles } from "/frontend/javascript/espacio/aulas.js";
 import { getCaracteristicas } from "/frontend/javascript/espacio/caracteristicas.js";
+
+const filtros = {
+    caracteristicas: []
+};
+
+sessionStorage.setItem("filtrosAulas", JSON.stringify(filtros));
 
 document.addEventListener("DOMContentLoaded", async () => {
     await cargarCaracteristicas();
@@ -127,7 +133,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         crearTarjetas(data, caracteristicasSeleccionadas);
-
     });
 
     form.addEventListener("reset", async () => {
@@ -136,24 +141,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             crearTarjetas(data, []);
         }, 0);
     });
-    
-
 });
-
-function cerrarModal(id) {
-    const modalElement = document.getElementById(id);
-    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-    modal.hide();
-
-    // Limpieza manual del backdrop (fix Bootstrap)
-    setTimeout(() => {
-        document.body.classList.remove("modal-open");
-        document.body.style.removeProperty("padding-right");
-
-        const backdrops = document.querySelectorAll(".modal-backdrop");
-        backdrops.forEach(b => b.remove());
-    }, 200);
-}
 
 function crearTarjetas(data, caracteristicasSeleccionadas = []) {
     const contenedor = document.querySelector(".contenedor-aulas");
@@ -204,7 +192,11 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
                     // si tiene reservas marcar
                     if (aula.reservas > 0) {
                         btn.classList.add("ocupada");
-                        btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
+                        if(aula.reservas==1){
+                            btn.title += ` - ${aula.reservas} reserva en este horario`;
+                        }else{
+                            btn.title += ` - ${aula.reservas} reservas en este horario`;
+                        }
                     }
 
                     //caracteristicas seleccionadas → comprobar si el aula las cumple
@@ -261,6 +253,11 @@ async function cargarCaracteristicas() {
         const caracteristicas = await getCaracteristicas();
 
         select.innerHTML = ""; // limpiar por si acaso
+        let optionninguna=document.createElement("option");
+        optionninguna.value="ninguna";
+        optionninguna.textContent="Ninguna";
+        optionninguna.classList.add("bg-primary", "text-white");
+        select.appendChild(optionninguna);
 
         caracteristicas.forEach(c => {
             const option = document.createElement("option");
@@ -269,13 +266,30 @@ async function cargarCaracteristicas() {
             select.appendChild(option);
         });
 
+        select.addEventListener("change", () => {
+            const selected = Array.from(select.selectedOptions).map(o => o.value);
+
+            if (selected.includes("ninguna")) {
+                Array.from(select.options).forEach(opt => {
+                    if(opt.value=="ninguna"){
+                        opt.classList.add("bg-primary", "text-white");
+                    }
+                    opt.selected = opt.value == "";
+                });
+            }else{
+                Array.from(select.options).forEach(opt => {
+                    if(opt.value=="ninguna"){
+                        opt.classList.remove("bg-primary", "text-white");
+                    }
+                });
+            }
+        });
     } catch (error) {
         console.error("Error cargando características:", error);
     }
 }
 
 async function filtrosGuardadosyCrearTarjetas(){
-
     const filtrosGuardados = sessionStorage.getItem("filtrosAulas");
 
     if (filtrosGuardados) {

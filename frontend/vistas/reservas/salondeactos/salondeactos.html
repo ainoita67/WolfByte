@@ -43,34 +43,38 @@
 
         <div id="header"></div>
 
-        <main>
+        <main class="container-fluid">
             <!-- CONTENEDOR CALENDARIO -->
-            <div class="container my-4 d-flex flex-column" style="height: 65vh;">
 
+            <div class="container p-4">
+                <div class="row">
                 <!-- NAVEGACIÓN SEMANAL -->
-                <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
+                    <section class="d-flex flex-column mb-2 mb-lg-5">
+                        <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
 
-                    <button id="prevWeek"
-                            type="button"
-                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                            style="width: 2.5rem; height: 2.5rem;">
-                        <i class="bi bi-arrow-left-circle fs-2"></i>
-                    </button>
-                    <h2 class="col-auto">Salón de actos</h2>
-                    <button id="nextWeek"
-                            type="button"
-                            class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
-                            style="width: 2.5rem; height: 2.5rem;">
-                        <i class="bi bi-arrow-right-circle fs-2"></i>
-                    </button>
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+                            <h2 class="col-auto">Salón de actos</h2>
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+
+                        </div>
+
+                        <!-- CALENDARIO -->
+                        <div id="dp" class="flex-grow-1"></div>
+                    </section>
 
                 </div>
 
-                <!-- CALENDARIO -->
-                <div id="dp" class="flex-grow-1"></div>
-
             </div>
-
             <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
                 <button id="btnVolver" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</button>
             </div>

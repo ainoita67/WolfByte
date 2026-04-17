@@ -154,78 +154,26 @@
     </main>
 
 
-    <!-- MODAL EDITAR RESERVA -->
-    <div class="modal fade" id="modalEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <!-- MODAL MOSTRAR RESERVA -->
+    <div class="modal fade" id="modalMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Header -->
                 <div class="modal-header">
-                    <h2 class="modal-title">Editar reserva</h2>
+                    <h2 class="modal-title">Mostrar reserva</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <!-- Body / Formulario -->
                 <div class="modal-body">
-                    <form class="row g-4" id="formEditarReserva">
-
-                        <div class="col-md-6">
-                            <label class="form-label">ID</label>
-                            <input type="text" class="form-control" id="idEditar" required readonly>
-                            <small class="text-muted">El ID no se puede modificar</small>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Recurso</label>
-                            <input type="text" class="form-control" id="recursoEditar" required readonly>
-                            <small class="text-muted">El recurso no se puede modificar</small>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Día de la semana</label>
-                            <select name="diaEditar" id="diaEditar" class="form-select" required>
-                                <option value="" disabled>Seleccione un día</option>
-                                <option value="1">Lunes</option>
-                                <option value="2">Martes</option>
-                                <option value="3">Miércoles</option>
-                                <option value="4">Jueves</option>
-                                <option value="5">Viernes</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6"></div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Hora de Inicio</label>
-                            <input type="time" class="form-control" id="inicioEditar" required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Hora de Fin</label>
-                            <input type="time" class="form-control" id="finEditar" required>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label">Comentario</label>
-                            <input type="text" class="form-control" id="comentarioEditar">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Unidades</label>
-                            <input type="number" class="form-control" id="unidadesEditar">
-                        </div>
-
-                        <div class="col-md-6"></div>
-
-                        <div class="col-md-6">
-                            <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
-                        </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <div id="editarUserErrors" class="alert alert-danger d-none"></div>
+                    <p class="m-1">ID: <span id="idMostrar"></span></p>
+                    <p class="m-1">Recurso: <span id="recursoMostrar"></span></p>
+                    <p class="m-1">Día de la semana: <span id="diaMostrar"></span></p>
+                    <p class="m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
+                    <p class="m-1">Hora de Fin: <span id="finMostrar"></span></p>
+                    <p class="m-1">Comentario: <span id="comentarioMostrar"></span></p>
+                    <p class="m-1">Unidades: <span id="unidadesMostrar"></span></p>
                 </div>
             </div>
         </div>
@@ -233,7 +181,7 @@
 
 
     <script type="module">
-        import { getReservasInactivas } from "/frontend/javascript/permanentes/get.js";
+        import { getReservasInactivas, mostrarToast } from "/frontend/javascript/permanentes/get.js";
         import { updatePermanente, desactivePermanente } from "/frontend/javascript/permanentes/put.js";
 
         // Map numérico → día
@@ -254,14 +202,8 @@
             rellenarTablaReservas(reservas);
 
             // Listener para abrir modal
-            document.getElementById("modalEditar").addEventListener("show.bs.modal", async (e) => {
-                cargarModalEditar(e);
-            });
-
-            // Listener para guardar cambios
-            document.getElementById("formEditarReserva").addEventListener("submit", async (e) => {
-                e.preventDefault();
-                await guardarCambiosReserva();
+            document.getElementById("modalMostrar").addEventListener("show.bs.modal", async (e) => {
+                cargarModalMostrar(e);
             });
         });
 
@@ -269,36 +211,47 @@
             const tbody = document.querySelector(".tabla-cabecera tbody");
             tbody.innerHTML = "";
 
-            reservas.forEach(reserva => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-            <td>${reserva.recurso}</td>
-            <td>${diasSemana[reserva.dia_semana] || reserva.dia_semana}</td>
-            <td>${reserva.inicio}</td>
-            <td class="d-none d-md-table-cell">${reserva.fin}</td>
-            <td class="d-none d-md-table-cell">${reserva.comentario}</td>
-            <td class="d-none d-md-table-cell">${reserva.unidades}</td>
-            <td>
-                <button class="btn btn-warning btn-sm btn-editar"
-                    data-id="${reserva.id}"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#modalEditar">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button 
-                    type="button" 
-                    class="btn btn-sm btn-success text-white btn-eliminar" 
-                    data-id="${reserva.id}" 
-                    title="Restaurar">
-                    <i class="bi bi-arrow-counterclockwise"></i>
-                </button>
-            </td>
-        `;
-                tbody.appendChild(tr);
-            });
+            if(!reservas||reservas.length==0){
+                let numColumnas = document.getElementsByTagName("table")[0].querySelectorAll("thead tr th").length;
+                let row = document.createElement("tr");
+                row.className = "text-start";
+                row.innerHTML = `
+                    <td colspan="${numColumnas}" class="p-3">No se han encontrado reservas</td>
+                `;
+                tbody.appendChild(row);
+            }else{
+                reservas.forEach(reserva => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${reserva.recurso}</td>
+                        <td>${diasSemana[reserva.dia_semana] || reserva.dia_semana}</td>
+                        <td>${reserva.inicio}</td>
+                        <td class="d-none d-md-table-cell">${reserva.fin}</td>
+                        <td class="d-none d-md-table-cell">${reserva.comentario}</td>
+                        <td class="d-none d-md-table-cell">${reserva.unidades}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-mostrar d-md-none"
+                                data-id="${reserva.id}"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modalMostrar">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-sm btn-success text-white btn-eliminar" 
+                                data-id="${reserva.id}" 
+                                title="Restaurar">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(tr);
+                });
+            }
         }
 
-        function cargarModalEditar(e) {
+        function cargarModalMostrar(e) {
             const btn = e.relatedTarget;
             if (!btn) return;
 
@@ -307,40 +260,13 @@
             if (!reserva) return console.error("Reserva no encontrada");
 
             // Rellenar modal
-            document.getElementById("idEditar").value = reserva.id;
-            document.getElementById("recursoEditar").value = reserva.recurso ?? "";
-            document.getElementById("diaEditar").value = reserva.dia_semana ?? "";
-            document.getElementById("inicioEditar").value = reserva.inicio ?? "";
-            document.getElementById("finEditar").value = reserva.fin ?? "";
-            document.getElementById("comentarioEditar").value = reserva.comentario !== " - " ? reserva.comentario : "";
-            document.getElementById("unidadesEditar").value = reserva.unidades !== " - " ? reserva.unidades : "";
-        }
-
-        async function guardarCambiosReserva() {
-            const id = Number(document.getElementById("idEditar").value);
-            const recurso = document.getElementById("recursoEditar").value;
-            const dia_semana = Number(document.getElementById("diaEditar").value);
-            const inicio = document.getElementById("inicioEditar").value;
-            const fin = document.getElementById("finEditar").value;
-            const comentario = document.getElementById("comentarioEditar").value.trim() || null;
-            const unidades = Number(document.getElementById("unidadesEditar").value) || null;
-
-            const reservaActualizada = { id, recurso, dia_semana, inicio, fin, comentario, unidades };
-
-            try {
-                await updatePermanente(reservaActualizada);
-
-                // Actualizar array local
-                reservas = await getReservasInactivas();
-                rellenarTablaReservas(reservas);
-
-                // Cerrar modal
-                bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
-                alert("Reserva actualizada correctamente");
-            } catch (err) {
-                console.error(err);
-                alert(err?.message ?? "Error al actualizar la reserva");
-            }
+            document.getElementById("idMostrar").textContent = reserva.id;
+            document.getElementById("recursoMostrar").textContent = reserva.recurso ?? "";
+            document.getElementById("diaMostrar").textContent = reserva.dia_semana ?? "";
+            document.getElementById("inicioMostrar").textContent = reserva.inicio ?? "";
+            document.getElementById("finMostrar").textContent = reserva.fin ?? "";
+            document.getElementById("comentarioMostrar").textContent = reserva.comentario ?? "-";
+            document.getElementById("unidadesMostrar").textContent = reserva.unidades ?? "-";
         }
 
         // Delegación de eventos para eliminar reservas
@@ -350,21 +276,23 @@
 
             const id = Number(btn.dataset.id);
             const reserva = reservas.find(r => r.id === id);
-            if (!reserva) return alert("Reserva no encontrada");
+            if (!reserva) return mostrarToasr("Reserva no encontrada", "danger");
 
             const ok = confirm(`¿Seguro que deseas restaurar la reserva del recurso ${reserva.recurso}?`);
             if (!ok) return;
 
             try {
-                await desactivePermanente(reserva.id);
+                let response=await desactivePermanente(reserva.id);
+                if(response.status=="success"){
+                    mostrarToast("Reserva restaurada correctamente", "success");
+                }
 
                 // Actualizar array local
                 reservas = await getReservasInactivas();
                 rellenarTablaReservas(reservas);
-                alert("Reserva restaurada correctamente");
             } catch (err) {
                 console.error(err);
-                alert(err?.message ?? "Error al restaurar la reserva");
+                mostrarToasr(err?.message ?? "Error al restaurar la reserva", "danger");
             }
         });
     </script>

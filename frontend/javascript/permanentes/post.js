@@ -8,6 +8,7 @@ export async function createPermanente(reserva) {
         fin: reserva.fin,
         comentario: reserva.comentario?.trim() || null,
         id_recurso: reserva.recurso,
+        activo: 1,
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
         id_usuario: sessionStorage.getItem("id_usuario")
     };

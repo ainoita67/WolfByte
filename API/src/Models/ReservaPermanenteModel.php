@@ -22,7 +22,7 @@ class ReservaPermanenteModel
     {
         try {
             return $this->db
-                ->query("SELECT * FROM Reserva_permanente WHERE activo=1")
+                ->query("SELECT rp.*, r.tipo FROM Reserva_permanente rp JOIN Recurso r ON r.id_recurso=rp.id_recurso WHERE rp.activo=1")
                 ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al obtener reservas permanentes");
@@ -112,7 +112,8 @@ class ReservaPermanenteModel
                         comentario = :comentario,
                         activo = :activo,
                         id_recurso = :id_recurso,
-                        dia_semana = :dia_semana
+                        dia_semana = :dia_semana,
+                        unidades = :unidades
                     WHERE id_reserva_permanente = :id
                 ")
                 ->bind(':id',           $id)
@@ -122,6 +123,7 @@ class ReservaPermanenteModel
                 ->bind(':activo',       $data['activo'])
                 ->bind(':id_recurso',   $data['id_recurso'])
                 ->bind(':dia_semana',   $data['dia_semana'])
+                ->bind(':unidades',     $data['unidades'] ?? null)
                 ->execute();
 
             return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;

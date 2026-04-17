@@ -64,7 +64,6 @@ class RecursoModel
         }
 
         return $result;
-
     }
 
     /**
