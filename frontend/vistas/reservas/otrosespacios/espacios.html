@@ -70,9 +70,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
-                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                 <button type="reset" class="col-3 btn bg-verde border text-light rounded-3"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                             </div>
                         </form>
                     </div>
@@ -91,11 +91,19 @@
 <script type="module">
 import { getOtrosEspacios, getOtrosEspaciosDisponibles } from "/frontend/javascript/espacio/espacios.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+const form = document.getElementById("formFiltrarAulas");
+form.reset();
+setTimeout(async () => {
+    const data = await getOtrosEspacios();
+    crearTarjetas(data);
+}, 0);
 
+document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById("formFiltrarAulas");
 
-    filtrosGuardadosyCrearTarjetas();
+    if(document.getElementById("f_hora_fin").value!=""&&document.getElementById("f_hora_fin").value!=""){
+        filtrosGuardadosyCrearTarjetas();
+    }
 
     //al enviar el formulario de filtrar
     form.addEventListener("submit", async (e) => {
@@ -116,8 +124,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         crearTarjetas(data);
-        cerrarModal("modalFiltrar");
-
     });
 
     form.addEventListener("reset", async () => {
@@ -128,21 +134,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 });
-
-function cerrarModal(id) {
-    const modalElement = document.getElementById(id);
-    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-    modal.hide();
-
-    // Limpieza manual del backdrop (fix Bootstrap)
-    setTimeout(() => {
-        document.body.classList.remove("modal-open");
-        document.body.style.removeProperty("padding-right");
-
-        const backdrops = document.querySelectorAll(".modal-backdrop");
-        backdrops.forEach(b => b.remove());
-    }, 200);
-}
 
 function crearTarjetas(data) {
     const contenedor = document.querySelector(".contenedor-aulas");
@@ -188,10 +179,16 @@ function crearTarjetas(data) {
                     btn.className = "aula";
                     btn.textContent = aula.id_recurso + (aula.descripcion ? ` - ${aula.descripcion}` : "");
 
+                    btn.title=aula.descripcion;
+
                     // si tiene reservas marcar
                     if (aula.reservas > 0) {
                         btn.classList.add("ocupada");
-                        btn.title += ` - ${aula.reservas} reserva(s) en este horario`;
+                        if(aula.reservas==1){
+                            btn.title += ` - ${aula.reservas} reserva en este horario`;
+                        }else{
+                            btn.title += ` - ${aula.reservas} reservas en este horario`;
+                        }
                     }
 
                     // REDIRECCIÓN

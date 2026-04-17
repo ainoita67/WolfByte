@@ -6,6 +6,7 @@ namespace Services;
 use Core\Request;
 use Core\Response;
 use Models\ReservaPermanenteModel;
+use Services\RecursoService;
 use Throwable;
 use Validation\Validator;
 use Validation\ValidationException;
@@ -13,10 +14,12 @@ use Validation\ValidationException;
 class ReservaPermanenteService
 {
     private ReservaPermanenteModel $model;
+    private RecursoService $serviceRecurso;
 
     public function __construct()
     {
         $this->model = new ReservaPermanenteModel();
+        $this->serviceRecurso = new RecursoService();
     }
 
     /**
@@ -90,8 +93,24 @@ class ReservaPermanenteService
             'comentario'    => 'string',
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
-            'dia_semana'    => 'required|int|min:1|max:5'
+            'dia_semana'    => 'required|int|min:1|max:5',
+            'unidades'      => 'int|min:1'
         ]);
+
+        if($data['comentario']){
+            $data['comentario']=ucfirst(trim($data['comentario']));
+        }
+
+        $recurso=$this->serviceRecurso->getRecursoById($data['id_recurso']);
+        if($recurso['tipo']=="Espacio"&&!$data['unidades']){
+            $data['unidades']==null;
+        }
+        if($recurso['tipo']=="Espacio"&&$data['unidades']>0){
+            throw new \Exception("Los espacios no pueden tener unidades");
+        }
+        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null)){
+            throw new \Exception("Los materiales deben tener unidades");
+        }
         
         if (empty($data['id_recurso'])) {
             throw new ValidationException(array("id_recurso es obligatorio"));
@@ -121,11 +140,27 @@ class ReservaPermanenteService
             'comentario'    => 'string',
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
-            'dia_semana'    => 'required|int|min:1|max:5'
+            'dia_semana'    => 'required|int|min:1|max:5',
+            'unidades'      => 'int|min:1'
         ]);
+
+        if($data['comentario']){
+            $data['comentario']=ucfirst(trim($data['comentario']));
+        }
+
+        $recurso=$this->serviceRecurso->getRecursoById($data['id_recurso']);
+        if($recurso['tipo']=="Espacio"&&!$data['unidades']){
+            $data['unidades']==null;
+        }
+        if($recurso['tipo']=="Espacio"&&$data['unidades']>0){
+            throw new \Exception("Los espacios no pueden tener unidades");
+        }
+        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null)){
+            throw new \Exception("Los materiales deben tener unidades");
+        }
         
         if (empty($data['id_recurso'])) {
-            throw new ValidationException("id_recurso es obligatorio");
+            throw new \Exception("id_recurso es obligatorio");
         }
 
         if(!$this->model->update((int)$idreserva['id'], $data)){

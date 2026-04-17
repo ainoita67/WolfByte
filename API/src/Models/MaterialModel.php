@@ -349,6 +349,7 @@ class MaterialModel
                         ON res.id_reserva = rp.id_reserva_material
                         AND res.inicio < :res_fin
                         AND res.fin > :res_inicio
+                        AND autorizada!=0
                     GROUP BY rp.id_material
                 ) puntuales
                     ON puntuales.id_material = r.id_recurso

@@ -109,7 +109,5 @@ export async function getCarritos() {
   } catch (error) {
     console.error(error);
     return [];
-  }
-
-  
+  }  
 }

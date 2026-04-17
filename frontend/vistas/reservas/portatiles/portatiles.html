@@ -80,9 +80,9 @@
                                 </div>
                             </div>
                             <div class="modal-footer d-flex justify-content-between">
-                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3"><i class="bi bi-check2"></i> Aplicar filtros</button>
+                                <button type="submit" class="col-3 btn bg-azul border text-light rounded-3" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                 <button type="reset" class="col-3 btn bg-verde border text-light rounded-3"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="button" class="col-3 btn bg-lightgrey border text-dark rounded-3" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                             </div>
                         </form>
                     </div>
@@ -93,9 +93,6 @@
 
 <script type="module">
 import { getCarritosDisponibles } from "/frontend/javascript/portatiles/get.js";
-
-let fecha = new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
-document.getElementById("textofiltro").textContent = fecha+": 08:50 - 09:40";
 
 const TRAMOS = [
     { inicio: "08:50", fin: "09:40" },
@@ -140,6 +137,7 @@ function aplicarFechaYTramoActual() {
     };
 }
 
+
 function getTramoActual() {
     const ahora = new Date();
     const horaActual = ahora.toTimeString().slice(0,5); // "HH:MM"
@@ -156,6 +154,7 @@ function getTramoActual() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    let fechas=aplicarFechaYTramoActual();
 
     const form = document.getElementById("formFiltrarAulas");
     cargarOpcionesHoras();
@@ -212,7 +211,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("textofiltro").textContent = fecha+": "+horaInicio+" - "+horaFin;
         
         crearTarjetas(data);
-        cerrarModal("modalFiltrar");
     });
 
     form.addEventListener("reset", async (e) => {
@@ -231,21 +229,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
 });
-
-function cerrarModal(id) {
-    const modalElement = document.getElementById(id);
-    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-    modal.hide();
-
-    // Limpieza manual del backdrop (fix Bootstrap)
-    setTimeout(() => {
-        document.body.classList.remove("modal-open");
-        document.body.style.removeProperty("padding-right");
-
-        const backdrops = document.querySelectorAll(".modal-backdrop");
-        backdrops.forEach(b => b.remove());
-    }, 200);
-}
 
 async function filtrosGuardadosyCrearTarjetas(){
 

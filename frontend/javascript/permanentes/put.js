@@ -12,7 +12,6 @@ export async function updatePermanente(reserva) {
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
         id_usuario: sessionStorage.getItem("id_usuario")
       });
-    
 
     // id_usuario es obligatorio
     if (!reserva.id) {
