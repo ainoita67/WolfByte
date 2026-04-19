@@ -9,14 +9,17 @@ use Core\Request;
 use Core\Response;
 use Core\Session;
 use Services\LogAccionesService;
+use Services\MailService;
 
 class AuthController
 {
     private LogAccionesService $serviceLog;
+    private MailService $serviceMail;
 
     public function __construct()
     {
         $this->serviceLog=new LogAccionesService();
+        $this->serviceMail=new MailService();
     }
 
     public function login(Request $request, Response $response): void
@@ -57,6 +60,7 @@ class AuthController
 
         $log['id_usuario_actor']=(int)$user['id_usuario'];
         $log['id_usuario']=(int)$user['id_usuario'];
+        $this->serviceMail->createMail($user['correo'], 'un inicio de sesión', 'Inicio de sesión');
         $this->serviceLog->createLog('Login de usuario', $log);
         $response->json(['token' => $token], 'Login correcto');
     }
