@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("login", rol);
+                };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+        <title>Inicio - IES Bajo Aragón</title>
+    </head>
+    <body>
+        <div id="header"></div>
+        <main class="container-fluid d-flex flex-column justify-content-center align-items-center text-center" style="margin-top: -5em !important;">
+            <h1 class="pb-5">Le damos la bienvenida</h1>
+            <a href="frontend/vistas/menu.html" class="btn bg-azul text-white p-5 border-0 rounded-4 fs-4 fw-bold">
+                Acceder al menú principal
+            </a>
+        </main>
+        <footer id="footer"></footer>
+    </body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+                
+            // Admin (30) y super-admin (40) pueden acceder
+            if (rol!=30&&rol!=40) {
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder al panel de administrador');
+                window.location.replace(BASE + '/menu.html');
+            }else{
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("administrador", rol);
+                    };
+                    // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+        </script>
+        <title>Reservas permanentes - IES Bajo Aragón</title>
+    </head>
+
+    <body>
+        <div id="header"></div>
+
+        <main class="container-fluid w-100 row p-0">
+            <div class="d-flex h-100">
+                <!-- ASIDE (desktop fijo) -->
+                <aside class="col-2 d-none d-lg-block bg-blue text-white pt-5 p-4" id="aside-admin">
+                    <a class="text-white" href="../menuadministrador.html"><h5 class="mb-3">Menú Admin</h5></a>
+                    <ul class="nav flex-column">
+                        <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../portatiles/portatiles.html">Portátiles</a></li>
+                        <li class="nav-item"><a class="nav-link text-white"
+                                href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="./../logacciones/logacciones.html">Log
+                                de Acciones</a></li>
+                        <hr class="my-3">
+                        <h6 class="text-white">Tablas auxiliares</h6>
+                        <ul class="nav flex-column ps-3">
+                            <li class="nav-item"><a class="nav-link text-white"
+                                    href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                            <li class="nav-item"><a class="nav-link text-white"
+                                    href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                            <li class="nav-item"><a class="nav-link text-white"
+                                    href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                    de Espacios</a></li>
+                            <li class="nav-item"><a class="nav-link text-white"
+                                    href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                    de Reservas</a></li>
+                        </ul>
+                    </ul>
+                </aside>
+
+                <!-- CONTENIDO -->
+                <section class="flex-grow-1 ms-3 p-3 p-lg-4 mt-lg-4">
+
+                    <!-- Botón menú SOLO en móvil/tablet -->
+                    <div class="d-lg-none mb-3">
+                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#adminOffcanvas" aria-controls="adminOffcanvas">
+                            <i class="bi bi-list"></i> Menú Admin
+                        </button>
+                    </div>
+
+                    <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
+                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
+                        aria-labelledby="adminOffcanvasLabel">
+                        <div class="offcanvas-header mb-0 pb-1">
+                            <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                aria-label="Cerrar"></button>
+                        </div>
+
+                        <div class="offcanvas-body mt-0 pt-0">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../usuarios/usuarios.html">Usuarios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../portatiles/portatiles.html">Portátiles</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../reservaspermanentes/menu.html">Reservas Permanentes</a></li>
+                                <li class="nav-item"><a class="nav-link text-black"
+                                        href="./../logacciones/logacciones.html">Log de Acciones</a></li>
+                                <hr class="my-3">
+                                <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <ul class="nav flex-column ps-3">
+                                    <li class="nav-item"><a class="nav-link text-black"
+                                            href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black"
+                                            href="./../tablasauxiliares/plantas/plantas.html">Plantas</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black"
+                                            href="./../tablasauxiliares/caracteristicasespacio/caracteristicasespacio.html">Características
+                                            de Espacios</a></li>
+                                    <li class="nav-item"><a class="nav-link text-black"
+                                            href="./../tablasauxiliares/necesidadesreserva/necesidadesreserva.html">Necesidades
+                                            de Reservas</a></li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center my-4">
+                        <h2>Importar reservas permanentes</h2>
+                    </div>
+                    <form id="importForm" class="bg-light border-0 rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center" enctype="multipart/form-data">
+
+                        <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
+                        <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
+                        <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
+
+                        <button type="submit" id="importarcsv" class="btn bg-azul text-white p-3 px-5 mt-5 border-0 rounded-4 fs-4 fw-bold">
+                            Subir CSV
+                        </button>
+                    </form>
+
+                    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
+                        <button onclick="window.history.back()" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i
+                                class="bi bi-caret-left-fill"></i> Volver</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+        <script type="module">
+            import { mostrarToast } from "/frontend/javascript/permanentes/get.js";
+            document.getElementById('id_usuario').value=sessionStorage.getItem("id_usuario");
+            document.getElementById('correo_usuario').value=sessionStorage.getItem("correo");
+
+            document.getElementById('importForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                let form = document.getElementById('importForm');
+                let formData = new FormData(form);
+
+                if(document.getElementById('id_usuario').value!=sessionStorage.getItem("id_usuario")){
+                    mostrarToast('Error al importar', 'danger');
+                    return;
+                }
+                if(document.getElementById('correo_usuario').value!=sessionStorage.getItem("correo")){
+                    mostrarToast('Error al importar', 'danger');
+                    return;
+                }
+                try {
+                    let file=document.getElementById('archivo').files[0];
+
+                    if (file.name.endsWith('.xlsx')) {
+
+                        let reader = new FileReader();
+
+                        let csv = await new Promise((resolve, reject) => {
+                            reader.onload = function (evt) {
+                                let data = new Uint8Array(evt.target.result);
+                                let workbook = XLSX.read(data, { type: 'array' });
+
+                                let sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+                                let csv = XLSX.utils.sheet_to_csv(sheet);
+
+                                resolve(csv);
+                            };
+
+                            reader.onerror = reject;
+                            reader.readAsArrayBuffer(file);
+                        });
+
+                        formData.append(
+                            "archivo",
+                            new Blob([csv], { type: "text/csv" }),
+                            "archivo.csv"
+                        );
+
+                    } else {
+                        formData.append("archivo", file);
+                    }
+                    
+                    let res = await fetch(`${API}/reservas_permanentes/importar`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    let data = await res.json();
+                    console.log(data);
+
+                    if(!res.ok){
+                        mostrarToast('Error al subir el CSV', 'danger');
+                        return;
+                    }
+
+                    mostrarToast('Se han importado '+data.data.importadas+' reservas permanentes correctamente', 'success');
+                } catch (err) {
+                    console.error(err);
+                    mostrarToast('Error al subir el CSV', 'danger');
+                }
+            });
+        </script>
+    </body>
+</html>

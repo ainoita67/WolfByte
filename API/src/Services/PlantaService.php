@@ -67,6 +67,8 @@ class PlantaService
      */
     public function createPlanta(int $idEdificio, array $data): array
     {
+        $data['nombre_planta']=ucfirst(trim($data['nombre_planta']));
+
         // Validar datos - INCLUYE nombre_planta
         $validatedData = Validator::validate($data, [
             'numero_planta' => 'required|int|min:-10|max:100',
@@ -111,6 +113,8 @@ class PlantaService
      */
     public function updatePlanta(int $numeroPlantaActual, int $idEdificio, array $data): array
     {
+        $data['nombre_planta']=ucfirst(trim($data['nombre_planta']));
+        
         // Validar parámetros
         Validator::validate([
             'numero_planta_actual' => $numeroPlantaActual,

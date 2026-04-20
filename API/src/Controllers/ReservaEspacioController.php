@@ -8,6 +8,7 @@ use Core\Response;
 use Services\ReservaEspacioService;
 use Services\NecesidadReservaService;
 use Services\LogAccionesService;
+use Services\MailService;
 use Throwable;
 use Validation\ValidationException;
 
@@ -16,12 +17,14 @@ class ReservaEspacioController
     private ReservaEspacioService $service;
     private NecesidadReservaService $serviceNecesidad;
     private LogAccionesService $serviceLog;
+    private MailService $serviceMail;
 
     public function __construct()
     {
         $this->service = new ReservaEspacioService();
         $this->serviceNecesidad = new NecesidadReservaService();
         $this->serviceLog = new LogAccionesService();
+        $this->serviceMail = new MailService();
     }
 
     public function index(Request $req, Response $res): void
@@ -63,11 +66,15 @@ class ReservaEspacioController
         try {
             $data = $req->getBody();
             $log['id_usuario_actor']=$data['id_usuario'];
+            if(!$data['correo']){
+                throw new \Exception("No se ha podido obtener el correo del usuario");
+            }
             $reserva = $this->service->createReserva($data);
             if($data['necesidades']){
                 $this->serviceNecesidad->updateNecesidad((int)$reserva['id_reserva'], $data);
             }
             $log['id_reserva']=$reserva['id_reserva'];
+            $this->serviceMail->createMail($data['correo'], "createreservaespacio");
             $this->serviceLog->createLog("Creación de reserva", $log);
             if(count($this->serviceNecesidad->getNecesidadById((int)$reserva['id_reserva']))>0){
                 $this->serviceLog->createLog("Asignación de necesidades", $log);

@@ -148,7 +148,7 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         return;
     }
     
-    select.innerHTML = '<option value="" selected disabled>Seleccionar edificio</option>';
+    select.innerHTML = '<option value="" selected disabled>Seleccione un edificio</option>';
     
     if (!edificios || edificios.length === 0) {
         console.warn("No hay edificios cargados, intentando cargarlos...");

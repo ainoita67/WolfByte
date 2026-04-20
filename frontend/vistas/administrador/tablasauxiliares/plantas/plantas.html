@@ -155,15 +155,15 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Crear planta</h5>
+                    <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear planta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formCrearPlanta">
+                <form id="formCrearPlanta">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Edificio</label>
                             <select class="form-select" name="edificio" id="selectEdificioCrear" required>
-                                <option value="">Seleccionar edificio</option>
+                                <option value="">Seleccione un edificio</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -176,16 +176,14 @@
                             <input type="text" class="form-control" name="nombre_planta" id="nombrePlantaCrear" required
                                 placeholder="Ej: Planta baja, Primera planta...">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formCrearPlanta" class="btn btn-success">
-                        <i class="bi bi-check2"></i> Crear
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Crear planta</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -200,15 +198,15 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formEditarPlanta">
+                <form id="formEditarPlanta">
+                    <div class="modal-body">
                         <input type="hidden" id="editar_numero_original" name="numero_original">
                         <input type="hidden" id="editar_edificio_original" name="edificio_original">
 
                         <div class="mb-3">
                             <label class="form-label">Edificio</label>
                             <select class="form-select" name="edificio" id="editarSelectEdificio" required disabled>
-                                <option value="">Seleccionar edificio</option>
+                                <option value="">Seleccione un edificio</option>
                             </select>
                             <small class="text-muted">El edificio no se puede modificar</small>
                         </div>
@@ -222,14 +220,14 @@
                             <input type="text" class="form-control" name="nombre_planta" id="editarNombrePlanta"
                                 required>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formEditarPlanta" class="btn bg-primary text-white">
-                        <i class="bi bi-check-lg"></i> Actualizar planta
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Guardar cambios</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
