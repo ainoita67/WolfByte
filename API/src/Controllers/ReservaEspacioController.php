@@ -65,6 +65,9 @@ class ReservaEspacioController
     {
         try {
             $data = $req->getBody();
+            if(!$data['correo']){
+                throw new \Exception('Error al crear la reserva');
+            }
             $log['id_usuario_actor']=$data['id_usuario'];
             if(!$data['correo']){
                 throw new \Exception("No se ha podido obtener el correo del usuario");
