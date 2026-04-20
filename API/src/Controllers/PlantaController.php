@@ -91,7 +91,7 @@ class PlantaController
             // Obtener número de planta del query parameter
             $numeroPlanta = $req->getParam('numero_planta');
             
-            if (!$numeroPlanta) {
+            if ((!$numeroPlanta&&$numeroPlanta!=='0')) {
                 $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }
@@ -117,7 +117,7 @@ class PlantaController
             // Obtener número de planta del query parameter
             $numeroPlanta = $req->getParam('numero_planta');
             
-            if (!$numeroPlanta) {
+            if ((!$numeroPlanta&&$numeroPlanta!=='0')) {
                 $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }
@@ -141,7 +141,7 @@ class PlantaController
             // Obtener número de planta del query parameter
             $numeroPlanta = $req->getParam('numero_planta');
             
-            if (!$numeroPlanta) {
+            if ((!$numeroPlanta&&$numeroPlanta!=='0')) {
                 $res->status(400)->json(['error' => "El parámetro 'numero_planta' es requerido"]);
                 return;
             }

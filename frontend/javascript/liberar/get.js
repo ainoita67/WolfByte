@@ -17,7 +17,7 @@ function obtenerEdificios(){
         }else{
             let optionseleccionar = document.createElement("option");
             optionseleccionar.value = "";
-            optionseleccionar.textContent = "Seleccionar edificio";
+            optionseleccionar.textContent = "Seleccione un edificio";
             optionseleccionar.selected = true;
             optionseleccionar.disabled = true;
             selectedificios.appendChild(optionseleccionar);

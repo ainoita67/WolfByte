@@ -451,7 +451,7 @@ function configurarBotones() {
 function actualizarSelectEdificios() {
     const edificioSelect = document.getElementById("crearEdificio");
     if (edificioSelect) {
-        edificioSelect.innerHTML = '<option value="" selected disabled>Seleccionar edificio</option>';
+        edificioSelect.innerHTML = '<option value="" selected disabled>Seleccione un edificio</option>';
         
         if (Object.keys(edificios).length === 0) {
             const option = document.createElement('option');

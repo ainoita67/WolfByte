@@ -10,7 +10,8 @@ export async function createPermanente(reserva) {
         id_recurso: reserva.recurso,
         activo: 1,
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
-        id_usuario: sessionStorage.getItem("id_usuario")
+        id_usuario: sessionStorage.getItem("id_usuario"),
+        correo: sessionStorage.getItem("correo")
     };
     
     // Validación mínima antes de enviar

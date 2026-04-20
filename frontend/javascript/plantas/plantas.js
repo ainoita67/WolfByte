@@ -47,7 +47,7 @@ function obtenerNombreEdificio(idEdificio) {
 }
 
 // Función para mostrar notificaciones toast
-function mostrarToast(mensaje, tipo = 'exito') {
+function mostrarToast(mensaje, tipo) {
     let toastContainer = document.getElementById('toastContainer');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
@@ -58,8 +58,17 @@ function mostrarToast(mensaje, tipo = 'exito') {
     }
     
     const toastId = 'toast-' + Date.now();
-    const bgColor = tipo === 'exito' ? 'bg-success' : 'bg-danger';
-    const icono = tipo === 'exito' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
+
+    let bgClass='bg-success';
+    let textColor='text-white';
+    if(tipo=='warning'){
+        bgClass='bg-warning';
+        textColor='text-black';
+    }else if(tipo=='danger'){
+        bgClass='bg-danger';
+        textColor='text-white';
+    }
+    const icono = tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
     
     const toastHTML = `
         <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
@@ -127,8 +136,8 @@ function obtenerPlantas() {
                 const card = document.createElement("div");
                 card.className = "col-12 col-md-6 col-lg-4 mb-4";
                 
-                const numeroPlanta = planta.numero_planta || 'N/A';
-                const nombrePlanta = planta.nombre_planta || 'Sin nombre';
+                const numeroPlanta = planta.numero_planta;
+                const nombrePlanta = planta.nombre_planta;
                 const idEdificio = planta.id_edificio;
                 const nombreEdificio = planta.nombre_edificio || obtenerNombreEdificio(idEdificio);
                 const totalEspacios = planta.total_espacios || 0;
@@ -217,7 +226,7 @@ function abrirModalEditar(numero, idEdificio, nombre, nombreEdificio) {
 function actualizarSelectEdificiosEditar() {
     const edificioSelect = document.getElementById('editarSelectEdificio');
     if (edificioSelect) {
-        edificioSelect.innerHTML = '<option value="">Seleccionar edificio</option>';
+        edificioSelect.innerHTML = '<option value="">Seleccione un edificio</option>';
         
         const entries = Object.entries(edificios);
         if (entries.length === 0) {
@@ -242,7 +251,7 @@ function actualizarSelectEdificios() {
     const edificioSelect = document.querySelector("#formCrearPlanta select[name='edificio']");
     if (edificioSelect) {
         const valorActual = edificioSelect.value;
-        edificioSelect.innerHTML = '<option value="">Seleccionar edificio</option>';
+        edificioSelect.innerHTML = '<option value="">Seleccione un edificio</option>';
         
         const entries = Object.entries(edificios);
         if (entries.length === 0) {
@@ -291,13 +300,13 @@ document.addEventListener("DOMContentLoaded", function() {
             const nombrePlanta = nombreInput?.value;
             
             if (!idEdificio || !numero || !nombrePlanta) {
-                mostrarToast('Completa todos los campos', 'error');
+                mostrarToast('Completa todos los campos', 'danger');
                 return;
             }
             
             const numeroInt = parseInt(numero);
             if (isNaN(numeroInt) || numeroInt < -10 || numeroInt > 100) {
-                mostrarToast('El número de planta debe estar entre -10 y 100', 'error');
+                mostrarToast('El número de planta debe estar entre -10 y 100', 'danger');
                 return;
             }
             
@@ -327,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(() => {
                 const nombreEdificio = edificios[idEdificio] || 'desconocido';
-                mostrarToast(`Planta ${numero} (${nombrePlanta}) creada correctamente en ${nombreEdificio}`, 'exito');
+                mostrarToast(`Planta ${numero} (${nombrePlanta}) creada correctamente en ${nombreEdificio}`, 'success');
                 
                 // Cerrar modal
                 const modalElement = document.getElementById("modalCrear");
@@ -344,7 +353,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(err => {
                 console.error('Error:', err);
-                mostrarToast(err.message, 'error');
+                mostrarToast(err.message, 'danger');
             })
             .finally(() => {
                 if (submitBtn) {
@@ -366,13 +375,13 @@ document.addEventListener("DOMContentLoaded", function() {
             const nuevoNumero = parseInt(document.getElementById('editarNumeroPlanta').value);
             const nuevoNombre = document.getElementById('editarNombrePlanta').value;
             
-            if (!nuevoNumero || !nuevoNombre) {
-                mostrarToast('Completa todos los campos', 'error');
+            if ((!nuevoNumero&&nuevoNumero!==0) || !nuevoNombre) {
+                mostrarToast('Complete todos los campos', 'danger');
                 return;
             }
             
             if (isNaN(nuevoNumero) || nuevoNumero < -10 || nuevoNumero > 100) {
-                mostrarToast('El número de planta debe estar entre -10 y 100', 'error');
+                mostrarToast('El número de planta debe estar entre -10 y 100', 'danger');
                 return;
             }
             
@@ -401,6 +410,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(async res => {
                 const data = await res.json();
+                console.log(data);
                 if (!res.ok) {
                     const errorMsg = data.error || data.message || `Error ${res.status}`;
                     throw new Error(errorMsg);
@@ -409,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(() => {
                 const nombreEdificio = edificios[idEdificio] || 'desconocido';
-                mostrarToast(`Planta actualizada correctamente en ${nombreEdificio}`, 'exito');
+                mostrarToast(`Planta actualizada correctamente en ${nombreEdificio}`, 'success');
                 
                 // Cerrar modal
                 const modalElement = document.getElementById("modalEditar");
@@ -426,12 +436,12 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(err => {
                 console.error('Error:', err);
-                mostrarToast(err.message, 'error');
+                mostrarToast(err.message, 'danger');
             })
             .finally(() => {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Actualizar planta';
+                    submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Guardar cambios';
                 }
             });
         });

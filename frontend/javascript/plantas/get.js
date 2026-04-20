@@ -168,7 +168,7 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
                     <div class="mb-3">
                         <label class="form-label fw-bold">Edificio</label>
                         <select class="form-select" id="edificioSelect" required>
-                            <option value="">Seleccionar edificio</option>
+                            <option value="">Seleccione un edificio</option>
                             <option value="1">Loscos</option>
                             <option value="2">Ram</option>
                         </select>

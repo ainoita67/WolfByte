@@ -10,18 +10,21 @@ use Throwable;
 use Services\PortatilService;
 use Services\ReservaPortatilService;
 use Services\LogAccionesService;
+use Services\MailService;
 
 class PortatilController
 {
     private PortatilService $service;
     private ReservaPortatilService $serviceReserva;
     private LogAccionesService $serviceLog;
+    private MailService $serviceMail;
 
     public function __construct()
     {
         $this->service = new PortatilService();
         $this->serviceReserva = new ReservaPortatilService();
         $this->serviceLog = new LogAccionesService();
+        $this->serviceMail = new MailService();
     }
 
     /**
@@ -194,9 +197,13 @@ class PortatilController
     {
         try {
             $data = $req->getBody();
+            if(!$data['correo']){
+                throw new \Exception("No se ha podido obtener el correo del usuario");
+            }
             $log['id_usuario_actor']=$data['id_usuario'];
             $reserva = $this->serviceReserva->createReserva($data);
             $log['id_reserva']=$reserva['id_reserva'];
+            $this->serviceMail->createMail($data['correo'], "createreservaportatil");
             $this->serviceLog->createLog("Creación de reserva", $log);
             $res->status(201)->json(
                 ['id' => $reserva['id_reserva']],
