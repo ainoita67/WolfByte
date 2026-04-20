@@ -183,8 +183,8 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formCrearPortatil">
+                <form id="formCrearPortatil">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">ID del carro</label>
                             <input type="text" class="form-control" id="crearId" name="crearId" placeholder="Ej: P4"
@@ -199,7 +199,7 @@
                         <div class="mb-3">
                             <label class="form-label">Edificio</label>
                             <select class="form-select" id="crearEdificio" name="crearEdificio" required>
-                                <option value="">Seleccionar edificio</option>
+                                <option value="">Seleccione un edificio</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -216,16 +216,14 @@
                             <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="1"
                                 max="100" required>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formCrearPortatil" class="btn btn-success">
-                        <i class="bi bi-check-lg me-1"></i> Crear carro
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg me-1"></i> Cancelar
-                    </button>
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear carro</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -242,8 +240,8 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formEditarPortatil">
+                <form id="formEditarPortatil">
+                    <div class="modal-body">
                         <input type="hidden" id="editId" name="editId">
                         <input type="hidden" id="editIdEdificio" name="editIdEdificio">
                         <input type="hidden" id="editNumeroPlanta" name="editNumeroPlanta">
@@ -274,16 +272,14 @@
                                 <option value="0">Inactivo</option>
                             </select>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formEditarPortatil" class="btn btn-primary">
-                        <i class="bi bi-check-lg me-1"></i> Actualizar carro
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg me-1"></i> Cancelar
-                    </button>
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -308,8 +304,8 @@
                     <p class="fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg me-1"></i> Cerrar
+                    <button type="button" class="btn bg-lightgrey text-dark px-4" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cerrar
                     </button>
                 </div>
             </div>

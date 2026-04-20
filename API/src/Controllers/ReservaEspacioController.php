@@ -69,12 +69,15 @@ class ReservaEspacioController
                 throw new \Exception('Error al crear la reserva');
             }
             $log['id_usuario_actor']=$data['id_usuario'];
+            if(!$data['correo']){
+                throw new \Exception("No se ha podido obtener el correo del usuario");
+            }
             $reserva = $this->service->createReserva($data);
             if($data['necesidades']){
                 $this->serviceNecesidad->updateNecesidad((int)$reserva['id_reserva'], $data);
             }
             $log['id_reserva']=$reserva['id_reserva'];
-            $this->serviceMail->createMail($data['correo'], 'una creación de reserva', 'Creación de reserva');
+            $this->serviceMail->createMail($data['correo'], "createreservaespacio");
             $this->serviceLog->createLog("Creación de reserva", $log);
             if(count($this->serviceNecesidad->getNecesidadById((int)$reserva['id_reserva']))>0){
                 $this->serviceLog->createLog("Asignación de necesidades", $log);

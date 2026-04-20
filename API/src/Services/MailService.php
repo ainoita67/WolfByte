@@ -44,14 +44,32 @@ class MailService
     /**
      * Crear un correo
      */
-    public function createMail(string $correo, string $accion, string $titulo)
+    public function createMail(string $correo, string $accion)
     {
         try {
             $mail = $this->createMailer($correo);
             $fechahora=date('Y-m-d H:i:s');
             $fecha = date('d-m-Y', strtotime($fechahora));
             $hora = date('H:i', strtotime($fechahora));
-            $mail->Body = 'Se ha detectado '.$accion.' de '.$correo.' en la aplicación el día '.$fecha.' a las '.$hora.'.';
+            $reservaBody='Se ha creado una nueva reserva de '.$correo.' en la aplicación el día '.$fecha.' a las '.$hora.'.';
+            $acciones=[
+                'login' => [
+                    'titulo' => 'Inicio de sesión',
+                    'body' => "Se ha detectado un inicio de sesión de $correo en la aplicación el día $fecha a las $hora."
+                ],
+                'createreserva' => ['titulo' => 'Creación de reserva', 'body' => $reservaBody],
+                'createreservaespacio' => ['titulo' => 'Creación de reserva de espacio', 'body' => $reservaBody],
+                'createreservaportatil' => ['titulo' => 'Creación de reserva de portátiles', 'body' => $reservaBody],
+                'createreservapermanente' => ['titulo' => 'Creación de reserva permanente', 'body' => $reservaBody],
+                'importar' => [
+                    'titulo' => 'Importación de reservas permanentes',
+                    'body' => "Se han importado reservas permanentes con la cuenta de $correo en la aplicación el día $fecha a las $hora."
+                ]
+            ];
+            if (isset($acciones[$accion])) {
+                $titulo = $acciones[$accion]['titulo'];
+                $mail->Body = $acciones[$accion]['body'];
+            }
             $mail->Subject = ucfirst($titulo);
             $mail->send();
         } catch (Throwable $e) {

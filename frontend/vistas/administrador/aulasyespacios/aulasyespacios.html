@@ -159,8 +159,8 @@
                         <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear nuevo espacio</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="formCrearEspacio">
+                    <form id="formCrearEspacio">
+                        <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">ID del espacio</label>
@@ -177,7 +177,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Edificio</label>
                                     <select class="form-select selectEdificio" id="crearEdificio" required>
-                                        <option value="">Seleccionar edificio</option>
+                                        <option value="">Seleccione un edificio</option>
                                     </select>
                                 </div>
 
@@ -219,14 +219,14 @@
                                     <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" form="formCrearEspacio" class="btn btn-success text-white">
-                            <i class="bi bi-check-lg"></i> Crear
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer g-4">
+                            <div class="d-flex justify-content-between ps-2 col-12">
+                                <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear espacio</button>
+                                <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -239,8 +239,8 @@
                         <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar espacio</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="formEditarEspacio">
+                    <form id="formEditarEspacio">
+                        <div class="modal-body">
                             <input type="hidden" id="editId">
 
                             <div class="row">
@@ -258,7 +258,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Edificio</label>
                                     <select class="form-select selectEdificio" id="editEdificio" required>
-                                        <option value="">Seleccionar edificio</option>
+                                        <option value="">Seleccione un edificio</option>
                                     </select>
                                 </div>
 
@@ -300,14 +300,14 @@
                                     <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" form="formEditarEspacio" class="btn btn-warning">
-                            <i class="bi bi-check-lg"></i> Actualizar
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer g-4">
+                            <div class="d-flex justify-content-between ps-2 col-12">
+                                <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
+                                <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -60,7 +60,7 @@ class AuthController
 
         $log['id_usuario_actor']=(int)$user['id_usuario'];
         $log['id_usuario']=(int)$user['id_usuario'];
-        $this->serviceMail->createMail($user['correo'], 'un inicio de sesión', 'Inicio de sesión');
+        $this->serviceMail->createMail($payload['email'], 'login');
         $this->serviceLog->createLog('Login de usuario', $log);
         $response->json(['token' => $token], 'Login correcto');
     }

@@ -129,7 +129,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>Características</h2>
                     <button class="btn btn-success" id="btnCrear">
-                        <i class="bi bi-plus-circle"></i> Crear Característica
+                        <i class="bi bi-plus-circle"></i> Crear característica
                     </button>
                 </div>
 
@@ -152,30 +152,28 @@
     <div class="modal fade" id="modalCrearCaracteristica" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
+                <div class="modal-header bg-light text-dark">
                     <h5 class="modal-title">
                         <i class="bi bi-plus-circle"></i> Crear Característica
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formCrearCaracteristica">
+                <form id="formCrearCaracteristica">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Nombre de la característica</label>
                             <input type="text" class="form-control" id="crearNombre" placeholder="Ej. Proyector HD"
                                 required maxlength="100">
                             <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formCrearCaracteristica" class="btn btn-success">
-                        <i class="bi bi-check2"></i> Crear
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear característica</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -190,8 +188,8 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="formEditarCaracteristica">
+                <form id="formEditarCaracteristica">
+                    <div class="modal-body">
                         <input type="hidden" id="editId">
                         <div class="mb-3">
                             <label class="form-label">Nombre de la característica</label>
@@ -199,17 +197,14 @@
                                 required maxlength="100">
                             <div class="form-text">Mínimo 3 caracteres, máximo 100</div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="formEditarCaracteristica" class="btn btn-primary text-white">
-                        <i class="bi bi-check2"></i> Guardar cambios
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancelar
-                    </button>
-
-                </div>
+                    </div>
+                    <div class="modal-footer g-4">
+                        <div class="d-flex justify-content-between ps-2 col-12">
+                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

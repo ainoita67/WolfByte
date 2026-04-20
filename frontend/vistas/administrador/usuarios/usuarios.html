@@ -163,8 +163,8 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <form class="row g-4" id="formCrearUsuario">
+                            <form id="formCrearUsuario">
+                                <div class="modal-body row g-4">
                                     <div class="col-md-6">
                                         <label class="form-label">Nombre *</label>
                                         <input type="text" class="form-control" id="nombreCrear" required>
@@ -173,11 +173,10 @@
                                         <label class="form-label">Correo Electrónico *</label>
                                         <input type="email" class="form-control" id="correoCrear" required>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label class="form-label">Rol *</label>
                                         <select class="form-select" id="selectRolCrear" required></select>
                                     </div>
-                                    <div class="col-md-6"></div>
                                     <div class="col-md-6">
                                         <label class="form-label">Nueva Contraseña *</label>
                                         <input type="password" class="form-control" id="passCrear" required>
@@ -186,15 +185,15 @@
                                         <label class="form-label">Confirmar Contraseña *</label>
                                         <input type="password" class="form-control" id="pass2Crear" required>
                                     </div>
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
+                                </div>
+                                <div class="modal-footer g-4">
+                                    <div class="d-flex justify-content-between ps-2 col-12">
+                                        <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear usuario</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <div id="crearUserErrors" class="alert alert-danger d-none"></div>
-                            </div>
+                                    <div id="crearUserErrors" class="alert alert-danger d-none"></div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -209,8 +208,8 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <form class="row g-4" id="formEditarUsuario">
+                            <form id="formEditarUsuario">
+                                <div class="modal-body row g-4">
                                     <div class="col-md-6">
                                         <label class="form-label">ID</label>
                                         <input type="text" class="form-control" id="idEditar" required readonly>
@@ -235,15 +234,14 @@
                                         <label class="form-label">Confirmar Contraseña</label>
                                         <input type="password" class="form-control" id="pass2Editar">
                                     </div>
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="enviar w-100 text-light p-2">Guardar</button>
+                                </div>
+                                <div class="modal-footer g-4">
+                                    <div class="d-flex justify-content-between ps-2 col-12">
+                                        <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
                                 <div id="editarUserErrors" class="alert alert-danger d-none"></div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -322,7 +320,7 @@
             if (!roles) {
                 roles = await getRoles();
             }
-            select.innerHTML = `<option value="" disabled ${selectedIdRol ? "" : "selected"}>Seleccionar Rol</option>`;
+            select.innerHTML = `<option value="" disabled ${selectedIdRol ? "" : "selected"}>Seleccione un rol</option>`;
 
             Object.entries(roles).forEach(([idRol, nombreRol]) => {
                 const option = document.createElement("option");

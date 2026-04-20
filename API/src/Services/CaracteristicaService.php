@@ -47,6 +47,8 @@ class CaracteristicaService
 
     public function createCaracteristica(array $input): array
     {
+        $input['nombre']=ucfirst(trim($input['nombre']));
+
         $data = Validator::validate($input, [
             'nombre' => 'required|string|min:3|max:30|regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/',
         ], [
@@ -68,6 +70,8 @@ class CaracteristicaService
 
     public function updateCaracteristica(int $id, array $input): array
     {
+        $input['nombre']=ucfirst(trim($input['nombre']));
+        
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
