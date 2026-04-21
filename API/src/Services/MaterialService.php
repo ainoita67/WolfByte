@@ -58,7 +58,7 @@ class MaterialService
         // Preparar los datos con valores por defecto
         $data = [
             'id_recurso' => $input['id_recurso'] ?? '',
-            'descripcion' => $input['descripcion'] ?? '',
+            'descripcion' => ucfirst(trim($input['descripcion'])) ?? '',
             'unidades' => $input['unidades'] ?? 0,
             'activo' => isset($input['activo']) ? 
                     (filter_var($input['activo'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0) : 1,
@@ -99,7 +99,7 @@ class MaterialService
         
         // Validar cada campo si está presente
         if (isset($input['descripcion'])) {
-            $data['descripcion'] = (string)$input['descripcion'];
+            $data['descripcion'] = ucfirst(trim((string)$input['descripcion']));
         }
         
         if (isset($input['unidades'])) {

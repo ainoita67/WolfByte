@@ -67,6 +67,8 @@ class PortatilService
      */
     public function createMaterial(array $input): array
     {
+        $input['descripcion']=ucfirst(trim($input['descripcion']));
+
         $data = Validator::validate($input, [
             'id_recurso' => 'required|string|min:1|max:10',
             'descripcion' => 'required|string|min:3|max:255',
@@ -114,6 +116,8 @@ class PortatilService
         Validator::validate(['id' => $id], [
             'id' => 'required|string|min:1|max:10'
         ]);
+        
+        $input['descripcion']=ucfirst(trim($input['descripcion']));
 
         $data = Validator::validate($input, [
             'descripcion' => 'required|string|min:3|max:255',

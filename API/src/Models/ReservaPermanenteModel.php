@@ -81,8 +81,8 @@ class ReservaPermanenteModel
         try {
             $this->db
                 ->query("
-                    INSERT INTO Reserva_permanente (inicio, fin, comentario, activo, id_recurso, dia_semana)
-                    VALUES (:inicio, :fin, :comentario, :activo, :id_recurso, :dia_semana)
+                    INSERT INTO Reserva_permanente (inicio, fin, comentario, activo, id_recurso, dia_semana, unidades)
+                    VALUES (:inicio, :fin, :comentario, :activo, :id_recurso, :dia_semana, :unidades)
                 ")
                 ->bind(':inicio',       $data['inicio'])
                 ->bind(':fin',          $data['fin'])
@@ -90,6 +90,7 @@ class ReservaPermanenteModel
                 ->bind(':activo',       $data['activo'])
                 ->bind(':id_recurso',   $data['id_recurso'])
                 ->bind(':dia_semana',    $data['dia_semana'])
+                ->bind(':unidades',    $data['unidades'] ?? null)
                 ->execute();
 
             return $this->findById((int)$this->db->lastId());
