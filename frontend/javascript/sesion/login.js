@@ -1,8 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    document.getElementById('iniciosesion').classList.remove('mt-5');
-    document.getElementById('enviandoformulario').classList.remove('d-none');
+    document.getElementById('iniciosesion').setAttribute("disabled", true);
+    document.getElementById('cargandologin').classList.remove('d-none');
     const email = document.getElementById('usuario').value.trim();
     const password = document.getElementById('clave').value;
 
