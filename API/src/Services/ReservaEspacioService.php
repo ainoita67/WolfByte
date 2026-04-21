@@ -104,7 +104,8 @@ class ReservaEspacioService
 
         return [
             'id_reserva' => $reserva['id_reserva'],
-            'message' => 'Reserva creada correctamente'
+            'message' => 'Reserva creada correctamente',
+            'data' => $this->serviceReserva->getReservaById((int)$reserva['id_reserva']),
         ];
     }
 

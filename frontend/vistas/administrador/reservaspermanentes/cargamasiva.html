@@ -125,7 +125,18 @@
                     <div class="d-flex justify-content-between align-items-center my-4">
                         <h2>Importar reservas permanentes</h2>
                     </div>
-                    <form id="importForm" class="bg-light border-0 rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center" enctype="multipart/form-data">
+                    <form id="importForm" class="bg-light border-0 rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center position-relative" enctype="multipart/form-data">
+                        <div id="cargandoreservas"
+                            class="d-none position-absolute border rounded top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            style="z-index: 10;">
+
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Enviando formulario...</span>
+                                </div>
+                                <div class="mt-2 fw-semibold">Cargando...</div>
+                            </div>
+                        </div>
 
                         <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
                         <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
@@ -152,6 +163,9 @@
             document.getElementById('importForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
 
+                document.getElementById('cargandoreservas').classList.remove('d-none');
+                    document.getElementById('importarcsv').disabled = true;
+                
                 let form = document.getElementById('importForm');
                 let formData = new FormData(form);
 
@@ -200,6 +214,9 @@
                         method: 'POST',
                         body: formData
                     });
+
+                    document.getElementById('cargandoreservas').classList.add('d-none');
+                    document.getElementById('importarcsv').disabled = false;
 
                     let data = await res.json();
                     console.log(data);
