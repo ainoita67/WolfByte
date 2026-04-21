@@ -190,8 +190,8 @@ class ReservaEspacioModel
                     WHERE rep.id_recurso = :espacio1
                     AND rep.dia_semana = :diasemana
                     AND rep.activo = 1
-                    AND rep.inicio <= :horafin
-                    AND rep.fin >= :horainicio
+                    AND rep.inicio < :horafin
+                    AND rep.fin > :horainicio
                     AND lp.id_liberacion_puntual IS NULL
                 ) 
                 +
@@ -202,8 +202,8 @@ class ReservaEspacioModel
                     ON re.id_reserva = r.id_reserva
                     WHERE re.id_espacio = :espacio2
                     AND r.id_reserva != :id
-                    AND r.inicio <= :fin
-                    AND r.fin >= :inicio
+                    AND r.inicio < :fin
+                    AND r.fin > :inicio
                     AND r.autorizada != 0
                 ) AS totalreservas;
             ")
