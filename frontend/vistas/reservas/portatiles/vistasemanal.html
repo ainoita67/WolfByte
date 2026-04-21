@@ -107,6 +107,7 @@
 <script type="module">
     
 import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";
+import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
 // cojer id de la url
 
 let horainicio = 8;
@@ -214,12 +215,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!modal.result) return;
 
                 if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
-                    alert("No se han rellenado los campos obligatorios");
+                    mostrarToast("No se han rellenado los campos obligatorios", 'danger');
                     return;
                 }
 
                 if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
-                    alert("No se han reservado unidades válidas");
+                    mostrarToast("No se han reservado unidades válidas", 'danger');
                     return;
                 }
 
@@ -264,7 +265,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let fechaactual=new Date();
                 let inicio=new Date(evento.start);
                 if(fechaactual>=inicio){
-                    alert("No se pueden crear reservas en el pasado");
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
                     return;
                 }
 
@@ -304,9 +305,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!response.ok) {
                     const err = await response.json();
                     const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
-                    alert(mensaje);
+                    mostrarToast(mensaje, 'danger');
                     return;
                 }
+                mostrarToast("Reserva creada correctamente", 'success')
+
                 const nuevosEventos = await generarEventos(idAula, carrito.unidades);
                 dp.events.list = nuevosEventos;
                 dp.update();
@@ -351,17 +354,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (!modal.result) return;
 
                     if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
-                        alert("No se han rellenado los campos obligatorios");
+                        mostrarToast("No se han rellenado los campos obligatorios", 'danger');
                         return;
                     }
 
                     if(isNaN(modal.result.unidades)){
-                        alert("Las unidades deben ser un número");
+                        mostrarToast("Las unidades deben ser un número", 'danger');
                         return;
                     }
 
                     if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
-                        alert("No se han reservado unidades válidas");
+                        mostrarToast("No se han reservado unidades válidas", 'danger');
                         return;
                     }
 
@@ -402,7 +405,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     let fechaactual=new Date();
                     let inicio=new Date(evento.start);
                     if(fechaactual>=inicio){
-                        alert("No se pueden modificar reservas en el pasado");
+                        mostrarToast("No se pueden modificar reservas en el pasado", 'danger');
                         return;
                     }
 
@@ -443,12 +446,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (!response.ok) {
                         const err = res
                         const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "Error al actualizar la reserva";
-                        alert(mensaje);
+                        mostrarToast(mensaje, 'danger');
                         return;
                     }else if(res.data.status=="no_changes"){
-                        alert("No han habido cambios");
+                        mostrarToast("No han habido cambios", 'warning');
                     }else{
-                        alert("Reserva actualizada correctamente");
+                        mostrarToast("Reserva actualizada correctamente", 'success');
                     }
 
                     const nuevosEventos = await generarEventos(idAula, carrito.unidades);

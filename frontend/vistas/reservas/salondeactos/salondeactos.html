@@ -103,6 +103,7 @@
         <script type="module">
 
         import { generarEventosSegunRecurso } from "/frontend/javascript/salon-actos/crud.js";
+        import {mostrarToast} from '/frontend/javascript/reservas/crud.js'
 
         const idRecurso = "salon";
 
@@ -205,7 +206,7 @@
                 let fechaactual=new Date();
                 let inicio=new Date(evento.start);
                 if(fechaactual>=inicio){
-                    alert("No se pueden crear reservas en el pasado");
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
                     return;
                 }
 
@@ -238,8 +239,10 @@
                 document.getElementById('cargandoreservas').classList.add('d-none');
                 
                 if (!response.ok) {
-                    alert("Error creando la reserva");
+                    mostrarToast("Error creando la reserva", 'danger');
                     return;
+                }else{
+                    mostrarToast("Reserva creada correctamente", 'success')
                 }
 
                 const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
@@ -326,7 +329,7 @@
                         let fechaactual=new Date();
                         let inicio=new Date(evento.start);
                         if(fechaactual>=inicio){
-                            alert("No se pueden modificar reservas en el pasado");
+                            mostrarToast("No se pueden modificar reservas en el pasado", 'danger');
                             return;
                         }
 
@@ -360,12 +363,12 @@
                         let res = await response.json()
                         
                         if (!response.ok) {
-                            alert("Error actualizando la reserva");
+                            mostrarToast("Error actualizando la reserva", 'danger');
                             return;
                         }else if(res.data.status=="no_changes"){
-                            alert("No han habido cambios");
+                            mostrarToast("No han habido cambios", 'warning');
                         }else{
-                            alert("Reserva actualizada correctamente");
+                            mostrarToast("Reserva actualizada correctamente", 'success');
                         }
 
                         const nuevosEventos = await generarEventosSegunRecurso(idRecurso);

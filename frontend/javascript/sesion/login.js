@@ -1,8 +1,9 @@
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    document.getElementById('iniciosesion').setAttribute("disabled", true);
+    document.getElementById('iniciosesion').disabled=true;
     document.getElementById('cargandologin').classList.remove('d-none');
+
     const email = document.getElementById('usuario').value.trim();
     const password = document.getElementById('clave').value;
 
@@ -26,6 +27,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         window.location.href = '/frontend/vistas/menu.html';
 
     } catch (error) {
-        alert(error.message);
+        document.getElementById('mostrarerror').textContent = error.message;
+        document.getElementById('mostrarerror').classList.remove('d-none');
+        document.getElementById('iniciosesion').classList.remove('mt-5');
     }
+    document.getElementById('iniciosesion').disabled=false;
+    document.getElementById('cargandologin').classList.add('d-none');
 });

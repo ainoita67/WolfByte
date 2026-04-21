@@ -97,7 +97,7 @@ class MailService
                 $mail->send();
             }
         } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+            throw new \Exception("Error interno al autenticar el correo electrónico", 500);
         }
     }
 }
