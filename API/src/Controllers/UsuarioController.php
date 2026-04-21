@@ -73,6 +73,109 @@ class UsuarioController
         }
     }
 
+    /**
+     * POST /user/importar
+     * Importa usuarios desde un CSV
+     */
+    public function importar(Request $req, Response $res): void
+    {
+        try {
+            if (!isset($_FILES['archivo'])) {
+                throw new ValidationException("No se ha enviado ningún archivo");
+            }
+            if (!isset($_POST['id_usuario'])||!isset($_POST['correo_usuario'])) {
+                throw new ValidationException("Error al obtener el usuario");
+            }
+
+            $file = $_FILES['archivo'];
+
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                throw new ValidationException("Error al subir el archivo");
+            }
+
+            $tmpPath = $file['tmp_name'];
+
+            // Abrir CSV
+            if (($handle = fopen($tmpPath, 'r')) === false) {
+                throw new ValidationException("No se puede leer el CSV");
+            }
+            
+            $firstLine = fgetcsv($handle);
+
+            if ($firstLine === false) {
+                throw new ValidationException("CSV vacío o inválido");
+            }
+
+            $delimiter = str_contains(implode(',', $firstLine), ';') ? ';' : ',';
+            rewind($handle);
+
+            $header = array_map('trim', fgetcsv($handle, 0, $delimiter));
+            $resultados = [];
+
+            $dias = [
+                'lunes' => 1,
+                'martes' => 2,
+                'miercoles' => 3,
+                'miércoles' => 3,
+                'jueves' => 4,
+                'viernes' => 5,
+            ];
+
+            while (($row = fgetcsv($handle, 0, $delimiter)) !== false) {
+
+                if (count($row) !== count($header)) {
+                    continue;
+                }
+
+                $row = array_combine($header, $row);
+
+                if ($row === false) {
+                    continue;
+                }
+
+                $diasemana=trim($row['dia_semana'] ?? '');
+                if (is_numeric($diasemana)) {
+                    $dia = (int)$diasemana;
+                } else {
+                    $dia = strtolower($diasemana);
+                    $dia = $dias[$dia] ?? null;
+                }
+
+                $data = [
+                    'dia_semana' => $dia ?? null,
+                    'inicio'     => $row['inicio'] ?? null,
+                    'fin'        => $row['fin'] ?? null,
+                    'comentario' => $row['comentario'] ?? null,
+                    'id_recurso' => $row['id_recurso'] ?? null,
+                    'unidades'   => !empty($row['unidades'] ?? null) ? (int)$row['unidades'] : null,
+                    'activo'     => 1
+                ];
+
+                $data['activo']=1;
+
+                $reserva = $this->service->createReservaPermanente($data);
+                $log['id_reserva_permanente']=$reserva['id_reserva_permanente'];
+                $resultados[] = $reserva;
+                $log['id_usuario_actor'] = $_POST['id_usuario'];
+                $this->serviceLog->createLog("Creación de reserva permanente", $log);
+            }
+
+            fclose($handle);
+            $this->serviceMail->createMail($_POST['correo_usuario'], 'importar');
+
+            $res->status(201)->json([
+                "importadas" => count($resultados),
+                "datos" => $resultados
+            ]);
+            $res->status(201)->json($reserva);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+
     // Actualizar usuario
     public function update(Request $req, Response $res, string $id): void
     {
