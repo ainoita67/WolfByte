@@ -77,7 +77,11 @@ class ReservaEspacioController
                 $this->serviceNecesidad->updateNecesidad((int)$reserva['id_reserva'], $data);
             }
             $log['id_reserva']=$reserva['id_reserva'];
-            $this->serviceMail->createMail($data['correo'], "createreservaespacio");
+            if($reserva['autorizada']==1){
+                $this->serviceMail->createMail($data['correo'], "createreservaespacio");
+            }else{
+                $this->serviceMail->createMail($data['correo'], "solicitudreserva");
+            }
             $this->serviceLog->createLog("Creación de reserva", $log);
             if(count($this->serviceNecesidad->getNecesidadById((int)$reserva['id_reserva']))>0){
                 $this->serviceLog->createLog("Asignación de necesidades", $log);
@@ -137,8 +141,10 @@ class ReservaEspacioController
             }
             if($autorizada!==$reserva['data']['autorizada']){
                 if($reserva['data']['autorizada']===1){
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'autorizacion');
                     $this->serviceLog->createLog('Autorización de reserva', $log);
                 }else if($reserva['data']['autorizada']===0){
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'cancelacion');
                     $this->serviceLog->createLog('Cancelación de reserva', $log);
                 }
             }

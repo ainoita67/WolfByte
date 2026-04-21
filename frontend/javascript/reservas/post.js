@@ -212,6 +212,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
         let arraynecesidades = (necesidades||[]).filter(valor => valor !== '').map(id => ({ id_necesidad: id }));
+        document.getElementById('cargandoreserva').classList.remove('d-none');
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
@@ -235,7 +236,9 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
                 tipo: "Reserva_espacio"
             })
         })
+        document.getElementById('cargandoreserva').classList.add('d-none');
         let response = await res.json();
+        
         if (response.status == "success"){
             return 1;
         }else{
@@ -253,6 +256,7 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
 //API Editar reservas de tipo portátil
 async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
+        document.getElementById('cargandoreserva').classList.remove('d-none');
         let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
             method: "PUT",
             headers: {
@@ -276,8 +280,9 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
                 tipo: "Reserva_material"
             })
         })
+        document.getElementById('cargandoreserva').classList.add('d-none');
         let response = await res.json();
-        console.log("Respuesta al modificar reserva portátil:", response);
+        
         if (response.status == "success") {
             return 1;
         } else {
