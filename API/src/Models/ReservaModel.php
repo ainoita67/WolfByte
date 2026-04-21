@@ -111,7 +111,7 @@ class ReservaModel
     public function findById(int $id): array|false
     {
         return $this->db
-            ->query("SELECT * FROM Reserva WHERE id_reserva = :id")
+            ->query("SELECT r.*, u.correo FROM Reserva r JOIN Usuario u ON r.id_usuario=u.id_usuario WHERE id_reserva = :id")
             ->bind(':id', $id)
             ->fetch();
     }
