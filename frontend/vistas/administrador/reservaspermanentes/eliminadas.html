@@ -160,9 +160,9 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Header -->
-                <div class="modal-header">
-                    <h2 class="modal-title">Mostrar reserva</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> Detalles de reserva</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <!-- Body / Formulario -->
@@ -179,7 +179,7 @@
         </div>
     </div>
 
-
+    <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
     <script type="module">
         import { getReservasInactivas, mostrarToast } from "/frontend/javascript/permanentes/get.js";
         import { updatePermanente, desactivePermanente } from "/frontend/javascript/permanentes/put.js";
@@ -278,8 +278,13 @@
             const reserva = reservas.find(r => r.id === id);
             if (!reserva) return mostrarToasr("Reserva no encontrada", "danger");
 
-            const ok = confirm(`¿Seguro que deseas restaurar la reserva del recurso ${reserva.recurso}?`);
-            if (!ok) return;
+            const confirmar = await DayPilot.Modal.confirm(`¿Seguro que desea restaurar la reserva del recurso ${reserva.recurso}?`);
+            
+            if (!confirmar) return;
+
+            if (confirmar.canceled) {
+                return;
+            }
 
             try {
                 let response=await desactivePermanente(reserva.id);

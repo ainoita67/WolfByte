@@ -167,9 +167,9 @@
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title">Crear usuario</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            <div class="modal-header bg-success text-white">
+                                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear usuario</h2>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <form id="formCrearUsuario">
@@ -212,8 +212,8 @@
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title">Importar usuarios</h2>
+                            <div class="modal-header bg-info text-dark">
+                                <h5 class="modal-title"><i class="bi bi-upload"></i> Importar usuarios</h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -253,8 +253,8 @@
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title">Editar usuario</h2>
+                            <div class="modal-header bg-warning text-dark">
+                                <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar usuario</h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -302,9 +302,9 @@
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="modal-title">Mostrar usuario</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> Detalles de usuario</h2>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body row g-4">
@@ -326,6 +326,7 @@
 
         <footer id="footer"></footer>
 
+        <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
         <script type="module">
             import { getUsuarios, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
@@ -373,12 +374,12 @@
                                 </button>
                                 <button 
                                     type="button" 
-                                    class="btn btn-sm btn-success text-white" 
+                                    class="btn btn-sm btn-warning text-dark" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#modalEditar" 
                                     data-id="${usuario.id_usuario}" 
                                     title="Editar">
-                                    <i class="bi bi-pencil-square"></i>
+                                    <i class="bi bi-pencil"></i>
                                 </button>
                                 <button 
                                     type="button" 
@@ -605,13 +606,17 @@
                     return;
                 }
 
-                const ok = confirm(
-                    `¿Seguro que deseas desactivar al usuario:\n\n` +
-                    `${user.nombre} (${user.correo})?\n\n` +
+                const confirmar = await DayPilot.Modal.confirm(
+                    `¿Seguro que desea desactivar al usuario:<br>` +
+                    `${user.nombre} (${user.correo})?<br><br>` +
                     `Esta acción se puede revertir.`
                 );
+				
+				if (!confirmar) return;
 
-                if (!ok) return;
+				if (confirmar.canceled) {
+					return;
+				}
 
                 try {
                     await desactiveUser(user);

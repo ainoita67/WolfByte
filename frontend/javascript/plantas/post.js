@@ -1,6 +1,7 @@
 // plantas/post.js
 const API_BASE = localStorage.getItem('API_BASE') || 'http://192.168.13.202:80';
 const API_PLANTAS = `${API_BASE}/API/plantas`;
+import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
 
 // Mapeo de nombres de edificio a IDs
 const edificioToId = {
@@ -14,7 +15,7 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
     const nuevoNumeroPlanta = document.getElementById("numeroPlantaInput")?.value;
     
     if (!nuevoNumeroPlanta) {
-        alert("El número de planta es obligatorio");
+        mostrarToast("El número de planta es obligatorio", 'danger');
         return;
     }
     
@@ -49,7 +50,7 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
     })
     .then(response => {
         console.log("Respuesta:", response);
-        alert("✅ Planta actualizada correctamente");
+        mostrarToast("Planta actualizada correctamente", 'success');
         
         const modal = bootstrap.Modal.getInstance(document.getElementById("modalEditar"));
         if (modal) modal.hide();
@@ -58,7 +59,7 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
     })
     .catch(err => {
         console.error("Error:", err);
-        alert(`❌ Error al actualizar: ${err.message}`);
+        mostrarToast(`Error al actualizar: ${err.message}`, 'danger');
     })
     .finally(() => {
         if (submitBtn) {
@@ -82,12 +83,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const idEdificio = edificioToId[nombreEdificio];
             
             if (!idEdificio) {
-                alert("Edificio no válido");
+                mostrarToast("Edificio no válido", 'danger');
                 return;
             }
             
             if (!numeroPlanta) {
-                alert("El número de planta es obligatorio");
+                mostrarToast("El número de planta es obligatorio", 'danger');
                 return;
             }
             
@@ -121,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => {
                 console.log("Respuesta:", response);
-                alert("✅ Planta creada correctamente");
+                mostrarToast("Planta creada correctamente", 'success');
                 
                 const modal = bootstrap.Modal.getInstance(document.getElementById("modalCrear"));
                 if (modal) modal.hide();
@@ -131,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .catch(err => {
                 console.error("Error:", err);
-                alert(`❌ Error al crear: ${err.message}`);
+                mostrarToast(`Error al crear: ${err.message}`, 'danger');
             })
             .finally(() => {
                 if (submitBtn) {

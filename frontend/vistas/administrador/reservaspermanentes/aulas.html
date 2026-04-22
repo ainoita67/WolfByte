@@ -151,9 +151,6 @@
 
             const data = await getAulas();
             crearTarjetas(data);
-
-            console.log(sessionStorage.getItem("id_usuario"));
-
         });
 
         function crearTarjetas(data, caracteristicasSeleccionadas = []) {
