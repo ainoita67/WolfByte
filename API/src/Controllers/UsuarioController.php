@@ -9,16 +9,19 @@ use Validation\ValidationException;
 use Throwable;
 use Services\UsuarioService;
 use Services\LogAccionesService;
+use Services\MailService;
 
 class UsuarioController
 {
     private UsuarioService $service;
     private LogAccionesService $serviceLog;
+    private MailService $serviceMail;
 
     public function __construct()
     {
         $this->service = new UsuarioService();
         $this->serviceLog = new LogAccionesService();
+        $this->serviceMail = new MailService();
     }
 
     // Listar usuarios activos
@@ -86,6 +89,8 @@ class UsuarioController
             if (!isset($_POST['id_usuario'])||!isset($_POST['correo_usuario'])) {
                 throw new ValidationException("Error al obtener el usuario");
             }
+            
+            $log['id_usuario_actor']=$_POST['id_usuario'];
 
             $file = $_FILES['archivo'];
 
@@ -112,13 +117,15 @@ class UsuarioController
             $header = array_map('trim', fgetcsv($handle, 0, $delimiter));
             $resultados = [];
 
-            $dias = [
-                'lunes' => 1,
-                'martes' => 2,
-                'miercoles' => 3,
-                'miércoles' => 3,
-                'jueves' => 4,
-                'viernes' => 5,
+            $rol = [
+                'extra' => 10,
+                'extraescolar' => 10,
+                'comun' => 20,
+                'común' => 20,
+                'admin' => 30,
+                'administrador' => 30,
+                'superadmin' => 40,
+                'superadministrador' => 40
             ];
 
             while (($row = fgetcsv($handle, 0, $delimiter)) !== false) {
@@ -133,38 +140,39 @@ class UsuarioController
                     continue;
                 }
 
-                $diasemana=trim($row['dia_semana'] ?? '');
-                if (is_numeric($diasemana)) {
-                    $dia = (int)$diasemana;
+                $id_rol=trim($row['id_rol'] ?? $row['rol'] ?? '');
+                if (is_numeric($id_rol)) {
+                    $rol = strtolower($id_rol);
+                    $rol = (int)$id_rol;
                 } else {
-                    $dia = strtolower($diasemana);
-                    $dia = $dias[$dia] ?? null;
+                    $rol = $id_rol[$rol] ?? null;
                 }
 
                 $data = [
-                    'dia_semana' => $dia ?? null,
-                    'inicio'     => $row['inicio'] ?? null,
-                    'fin'        => $row['fin'] ?? null,
-                    'comentario' => $row['comentario'] ?? null,
-                    'id_recurso' => $row['id_recurso'] ?? null,
-                    'unidades'   => !empty($row['unidades'] ?? null) ? (int)$row['unidades'] : null,
-                    'activo'     => 1
+                    'id_rol'        => $rol ?? null,
+                    'correo'        => $row['correo'] ?? null,
+                    'nombre'        => $row['nombre'] ?? null,
+                    'contrasena'    => $row['contrasenya'] ?? $row['contrasena'] ?? null,
+                    'token'         => $token['correo'] ?? null,
+                    'expira_token'  => $expira_token['correo'] ?? null
                 ];
 
-                $data['activo']=1;
+                $data['usuario_activo']=1;
 
-                $reserva = $this->service->createReservaPermanente($data);
-                $log['id_reserva_permanente']=$reserva['id_reserva_permanente'];
-                $resultados[] = $reserva;
-                $log['id_usuario_actor'] = $_POST['id_usuario'];
-                $this->serviceLog->createLog("Creación de reserva permanente", $log);
+                $usuario = $this->service->createUsuario($data);
+                $log['id_usuario']=$usuario['id'];
+                $resultados[] = $usuario;
+                $this->serviceLog->createLog('Creación de usuario', $log);
             }
 
             fclose($handle);
-            $this->serviceMail->createMail($_POST['correo_usuario'], 'importar');
+
+            if(count($resultados)>0){
+                $this->serviceMail->createMail($_POST['correo_usuario'], 'usuarios');
+            }
 
             $res->status(201)->json([
-                "importadas" => count($resultados),
+                "importados" => count($resultados),
                 "datos" => $resultados
             ]);
             $res->status(201)->json($reserva);
@@ -187,7 +195,7 @@ class UsuarioController
             if($usuario['status']!='no_changes'){
                 $this->serviceLog->createLog('Modificación de usuario', $log);
             }
-            $res->status(200)->json([], $usuario['message']);
+            $res->status(200)->json($usuario);
         } catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors]);
         } catch (Throwable $e) {

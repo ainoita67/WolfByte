@@ -79,15 +79,19 @@ class MailService
                 ],
                 'autorizacion' => [
                     'titulo' => 'Autorización de reserva',
-                    'body' => "Se autorizado una reserva de $correo en la aplicación el día $fecha a las $hora"
+                    'body' => "Se ha autorizado una reserva de $correo en la aplicación el día $fecha a las $hora"
                 ],
                 'cancelacion' => [
                     'titulo' => 'Cancelación de reserva',
-                    'body' => "Se cancelado una reserva de $correo en la aplicación el día $fecha a las $hora"
+                    'body' => "Se ha cancelado una reserva de $correo en la aplicación el día $fecha a las $hora"
                 ],
                 'importar' => [
                     'titulo' => 'Importación de reservas permanentes',
                     'body' => "Se han importado reservas permanentes con la cuenta de $correo en la aplicación el día $fecha a las $hora."
+                ],
+                'usuarios' => [
+                    'titulo' => 'Importación de usuarios',
+                    'body' => "Se han importado usuarios con la cuenta de $correo en la aplicación el día $fecha a las $hora."
                 ]
             ];
             if (isset($acciones[$accion])) {
