@@ -152,9 +152,9 @@
 				tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
-						<div class="modal-header">
-							<h2 class="modal-title">Mostrar usuario</h2>
-							<button type="button" class="btn-close" data-bs-dismiss="modal"
+						<div class="modal-header bg-primary text-white">
+							<h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> Detalles de usuario</h2>
+							<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
 								aria-label="Close"></button>
 						</div>
 						<div class="modal-body row g-4">
@@ -175,6 +175,7 @@
 
         <footer id="footer"></footer>
 
+		<script src="../../../assets/daypilot/daypilot-all.min.js"></script>
 		<script type="module">
 			import { getInactivos, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
 			import { desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js";
@@ -273,24 +274,28 @@
 
 				const user = usuarios.find(u => Number(u.id_usuario) === id);
 				if (!user) {
-				alert("Usuario no encontrado.");
+				mostrarToast("Usuario no encontrado", 'danger');
 				return;
 				}
 
-				const ok = confirm(
-				`¿Seguro que deseas activar al usuario:\n\n` +
-				`${user.nombre} (${user.correo})?\n\n` +
+				const confirmar = await DayPilot.Modal.confirm(
+				`¿Seguro que desea activar al usuario:<br>` +
+				`${user.nombre} (${user.correo})?<br><br>` +
 				`Esta acción se puede revertir.`
 				);
 
-				if (!ok) return;
+				if (!confirmar) return;
+
+				if (confirmar.canceled) {
+					return;
+				}
 
 				try {
 				await desactiveUser(user);
 				await refrescarTabla();
-				alert("Usuario activado correctamente.");
+				mostrarToast("Usuario activado correctamente", 'success');
 				} catch (err) {
-				alert(err?.message ?? "Error al activar el usuario.");
+				mostrarToast(err?.message ?? "Error al activar el usuario", 'danger');
 				}
 			});
 
