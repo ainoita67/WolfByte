@@ -226,10 +226,21 @@
                         return;
                     }
 
-                    mostrarToast('Se han importado '+data.data.importadas+' reservas permanentes correctamente', 'success');
+                    if(data.data.importadas>0){
+                        if(data.data.importadas==1){
+                            mostrarToast('Se ha importado '+data.data.importadas+' reserva permanente correctamente', 'success');
+                        }else{
+                            mostrarToast('Se han importado '+data.data.importadas+' reservas permanentes correctamente', 'success');
+                        }
+                    }else{
+                        mostrarToast('No se han importado reservas permanentes', 'warning');
+                    }
                 } catch (err) {
                     console.error(err);
                     mostrarToast('Error al subir el CSV', 'danger');
+
+                    document.getElementById('cargandoreservas').classList.add('d-none');
+                    document.getElementById('importarcsv').disabled = false;
                 }
             });
         </script>

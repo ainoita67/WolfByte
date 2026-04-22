@@ -172,7 +172,10 @@ class ReservaPermanenteController
             }
 
             fclose($handle);
-            $this->serviceMail->createMail($_POST['correo_usuario'], 'importar');
+
+            if(count($resultados)>0){
+                $this->serviceMail->createMail($_POST['correo_usuario'], 'importar');
+            }
 
             $res->status(201)->json([
                 "importadas" => count($resultados),
