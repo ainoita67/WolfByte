@@ -53,7 +53,7 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-12 mb-3">
-                                        <label class="form-label" for="caracteristicas">Características</label>
+                                        <label class="text-dark form-label" for="caracteristicas">Características</label>
                                         <select class="form-select" id="caracteristicas" multiple size="3">
                                             <!-- Opciones generadas dinámicamente -->
                                         </select>
@@ -61,15 +61,15 @@
                                     </div>
                                     
                                     <div class="col-12 col-md-6 mb-3">
-                                        <label class="form-label" for="f_fecha">Fecha</label>
+                                        <label class="text-dark form-label" for="f_fecha">Fecha</label>
                                         <input type="date" class="form-control" id="f_fecha">
                                     </div>
                                     <div class="col-12 col-md-3 mb-3">
-                                        <label class="form-label" for="f_hora_inicio">Hora inicio</label>
+                                        <label class="text-dark form-label" for="f_hora_inicio">Hora inicio</label>
                                         <input type="time" class="form-control" id="f_hora_inicio">
                                     </div>
                                     <div class="col-12 col-md-3 mb-3">
-                                        <label class="form-label" for="f_hora_fin">Hora fin</label>
+                                        <label class="text-dark form-label" for="f_hora_fin">Hora fin</label>
                                         <input type="time" class="form-control" id="f_hora_fin">
                                     </div>
                                 </div>
@@ -152,7 +152,7 @@ function crearTarjetas(data, caracteristicasSeleccionadas = []) {
         let card = document.createElement("div");
         card.className = "card h-100 p-0 m-0 reserva-card text-center";
         card.innerHTML = `
-            <div class="card-body bg-secondary-subtle">No se han encontrado espacios</div>
+            <div class="card-body bg-secondary-subtle">No se han encontrado aulas</div>
         `;
         contenedor.appendChild(card);
     }else{

@@ -40,7 +40,8 @@ export async function getCarritosDisponibles(fecha, hora_inicio, hora_fin) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         fecha: fecha,
@@ -81,7 +82,8 @@ export async function getCarritos() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       //horas fijas para mostrar la disponibilidad total de portátiles, sin importar la hora real
       body: JSON.stringify({

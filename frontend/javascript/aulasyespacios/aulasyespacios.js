@@ -12,7 +12,8 @@ async function getCaracteristicasEspacio(id){
         const response = await fetch(API_BASE+"/espacios/"+id+"/caracteristicas", {
             method: "GET",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -35,7 +36,8 @@ async function getCaracteristicas(){
         const response = await fetch(API_BASE+"/caracteristicas", {
             method: "GET",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -62,7 +64,8 @@ async function getEspacios() {
         const response = await fetch(URL, {
             method: "GET",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -101,7 +104,8 @@ async function getEdificios() {
         const response = await fetch(URL, {
             method: "GET",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -306,7 +310,7 @@ function mostrarEspacios(espacios) {
         contenedor.innerHTML = `
             <div class="col-12 text-center py-5">
                 <i class="bi bi-inbox fs-1 text-muted"></i>
-                <p class="text-muted mt-3">No hay espacios para mostrar</p>
+                <p class="text-dark text-muted mt-3">No hay espacios para mostrar</p>
                 <button class="btn btn-success mt-2" onclick="window.abrirModalCrear()">
                     <i class="bi bi-plus-circle"></i> Crear primer espacio
                 </button>
@@ -653,7 +657,8 @@ async function guardarEspacio(evento) {
                 method: "PUT",
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(datos)
             });
@@ -668,7 +673,8 @@ async function guardarEspacio(evento) {
                     method: "DELETE",
                     headers: {
                         "Accept": "application/json",
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
                 });
@@ -681,7 +687,8 @@ async function guardarEspacio(evento) {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
                 });
@@ -702,7 +709,8 @@ async function guardarEspacio(evento) {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(datos)
             });
@@ -714,7 +722,8 @@ async function guardarEspacio(evento) {
                     method: "POST",
                     headers: {
                         "Accept": "application/json",
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
                 });
@@ -771,7 +780,7 @@ async function cargarTodosLosDatos() {
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Cargando...</span>
                     </div>
-                    <p class="mt-2">Cargando espacios...</p>
+                    <p class="text-dark mt-2">Cargando espacios...</p>
                 </div>
             `;
         }
@@ -790,8 +799,8 @@ async function cargarTodosLosDatos() {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-exclamation-triangle-fill text-danger fs-1"></i>
-                    <p class="text-danger mt-3">Error al cargar los espacios</p>
-                    <p class="text-muted">${error.message}</p>
+                    <p class="text-dark text-danger mt-3">Error al cargar los espacios</p>
+                    <p class="text-dark text-muted">${error.message}</p>
                     <button class="btn btn-primary mt-2" onclick="location.reload()">
                         <i class="bi bi-arrow-clockwise"></i> Reintentar
                     </button>

@@ -17,7 +17,7 @@
             if (rol!=30&&rol!=40) {
                 console.warn('Acceso denegado - Rol:', rol);
                 alert('No tienes permisos para acceder al panel de administrador');
-                window.location.replace(BASE + '/menu.html');
+                window.location.replace(BASE + '/vistas/menu.html');
             }else{
                 const script1 = document.createElement("script");
                 script1.src = BASE + "/javascript/includes.js";
@@ -87,7 +87,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -105,7 +105,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -178,8 +178,8 @@
                         </div>
                     </div>
                     <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                        <button onclick="window.history.back()" class="bg-azul border-0 rounded-pill p-1 px-3 me-5 text-light"><i
-                                class="bi bi-caret-left-fill"></i> Volver</button>
+                        <a onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 me-5 text-light"><i
+                                class="bi bi-caret-left-fill"></i> Volver</a>
                     </div>
                 </section>
             </div>
@@ -198,13 +198,13 @@
 
                     <!-- Body / Formulario -->
                     <div class="modal-body">
-                        <p class="m-1">ID: <span id="idMostrar"></span></p>
-                        <p class="m-1">Recurso: <span id="recursoMostrar"></span></p>
-                        <p class="m-1">Día de la semana: <span id="diaMostrar"></span></p>
-                        <p class="m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
-                        <p class="m-1">Hora de Fin: <span id="finMostrar"></span></p>
-                        <p class="m-1">Comentario: <span id="comentarioMostrar"></span></p>
-                        <p class="m-1" id="pUnidadesMostrar">Unidades: <span id="unidadesMostrar"></span></p>
+                        <p class="text-dark m-1">ID: <span id="idMostrar"></span></p>
+                        <p class="text-dark m-1">Recurso: <span id="recursoMostrar"></span></p>
+                        <p class="text-dark m-1">Día de la semana: <span id="diaMostrar"></span></p>
+                        <p class="text-dark m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
+                        <p class="text-dark m-1">Hora de Fin: <span id="finMostrar"></span></p>
+                        <p class="text-dark m-1">Comentario: <span id="comentarioMostrar"></span></p>
+                        <p class="text-dark m-1" id="pUnidadesMostrar">Unidades: <span id="unidadesMostrar"></span></p>
                     </div>
                 </div>
             </div>
@@ -226,17 +226,17 @@
                         <div class="modal-body row g-4">
 
                             <div class="col-md-6">
-                                <label class="form-label">ID</label>
+                                <label class="text-dark form-label">ID</label>
                                 <input type="text" class="form-control" id="idEditar" required readonly>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Recurso</label>
+                                <label class="text-dark form-label">Recurso</label>
                                 <input type="text" class="form-control" id="recursoEditar" required readonly>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label">Día de la semana</label>
+                                <label class="text-dark form-label">Día de la semana</label>
                                 <select name="diaEditar" class="form-select" id="diaEditar" class="form-select" required>
                                     <option value="" disabled>Seleccione un día</option>
                                     <option value="1">Lunes</option>
@@ -248,7 +248,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Hora inicio</label>
+                                <label class="text-dark form-label">Hora inicio</label>
                                 <select type="time" class="form-select" id="inicioEditar" required>
                                     <option value="" disabled>Seleccione hora de inicio</option>
                                     <option value="1">08:50</option>
@@ -262,7 +262,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Hora fin</label>
+                                <label class="text-dark form-label">Hora fin</label>
                                 <select type="time" class="form-select" id="finEditar" required>
                                     <option value="" disabled>Seleccione hora de fin</option>
                                     <option value="1">09:40</option>
@@ -276,12 +276,12 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label">Comentario</label>
+                                <label class="text-dark form-label">Comentario</label>
                                 <input type="text" class="form-control" id="comentarioEditar">
                             </div>
 
                             <div class="col-md-12" id="div_editarunidades">
-                                <label class="form-label">Unidades</label>
+                                <label class="text-dark form-label">Unidades</label>
                                 <input type="number" id="unidadesEditar" class="form-control" min="1">
                             </div>
                         </div>
@@ -311,12 +311,12 @@
                     <form id="formCrearReserva">
                         <div class="modal-body row g-4">
                             <div class="col-md-6">
-                                <label class="form-label">Recurso</label>
+                                <label class="text-dark form-label">Recurso</label>
                                 <input type="text" class="form-control" id="recursoCrear" readonly>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Día de la semana</label>
+                                <label class="text-dark form-label">Día de la semana</label>
                                 <select id="diaCrear" class="form-select" required>
                                     <option value="" disabled selected>Seleccione un día</option>
                                     <option value="1">Lunes</option>
@@ -328,7 +328,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Hora inicio</label>
+                                <label class="text-dark form-label">Hora inicio</label>
                                 <select type="time" class="form-select" id="inicioCrear" required>
                                     <option value="" disabled selected>Seleccione hora de inicio</option>
                                     <option value="1">08:50</option>
@@ -342,7 +342,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label">Hora fin</label>
+                                <label class="text-dark form-label">Hora fin</label>
                                 <select type="time" class="form-select" id="finCrear" required>
                                     <option value="" disabled selected>Seleccione hora de fin</option>
                                     <option value="1">09:40</option>
@@ -356,12 +356,12 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label">Comentario</label>
+                                <label class="text-dark form-label">Comentario</label>
                                 <input type="text" class="form-control" id="comentarioCrear">
                             </div>
 
                             <div class="col-md-12" id="div_crearunidades">
-                                <label class="form-label">Unidades</label>
+                                <label class="text-dark form-label">Unidades</label>
                                 <input type="number" id="unidadesCrear" class="form-control">
                             </div>
                         </div>

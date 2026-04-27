@@ -18,7 +18,7 @@
         if (rol!=30&&rol!=40) {
             console.warn('Acceso denegado - Rol:', rol);
             alert('No tienes permisos para acceder al panel de administrador');
-            window.location.replace(BASE + '/menu.html');
+            window.location.replace(BASE + '/vistas/menu.html');
         }else{
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -108,7 +108,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -126,7 +126,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -157,7 +157,7 @@
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Cargando...</span>
                         </div>
-                        <p class="mt-2">Cargando materiales...</p>
+                        <p class="text-dark mt-2">Cargando materiales...</p>
                     </div>
                 </div>
 
@@ -183,24 +183,24 @@
                 <form id="formCrearPortatil">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">ID del carro</label>
+                            <label class="text-dark form-label">ID del carro</label>
                             <input type="text" class="form-control" id="crearId" name="crearId" placeholder="Ej: P4"
                                 required>
                             <small class="text-muted">Identificador único (ej: P1, P2, P3...)</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nombre del carro</label>
+                            <label class="text-dark form-label">Nombre del carro</label>
                             <input type="text" class="form-control" id="crearCarro" name="crearCarro"
                                 placeholder="Ej: Carro 4" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-dark form-label">Edificio</label>
                             <select class="form-select" id="crearEdificio" name="crearEdificio" required>
                                 <option value="">Seleccione un edificio</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Planta</label>
+                            <label class="text-dark form-label">Planta</label>
                             <select class="form-select" id="crearPlanta" name="crearPlanta" required>
                                 <option value="">Seleccionar planta</option>
                                 <option value="Planta baja">Planta baja</option>
@@ -209,7 +209,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de portátiles</label>
+                            <label class="text-dark form-label">Número de portátiles</label>
                             <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="1"
                                 max="100" required>
                         </div>
@@ -241,26 +241,26 @@
                         <input type="hidden" id="editNumeroPlanta" name="editNumeroPlanta">
 
                         <div class="mb-3">
-                            <label class="form-label">Nombre del carro</label>
+                            <label class="text-dark form-label">Nombre del carro</label>
                             <input type="text" class="form-control" id="editCarro" name="editCarro" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-dark form-label">Edificio</label>
                             <input type="text" class="form-control" id="editEdificio" name="editEdificio" readonly>
                             <small class="text-muted">El edificio no se puede modificar</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Planta</label>
+                            <label class="text-dark form-label">Planta</label>
                             <input type="text" class="form-control" id="editPlanta" name="editPlanta" readonly>
                             <small class="text-muted">La planta no se puede modificar</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de portátiles</label>
+                            <label class="text-dark form-label">Número de portátiles</label>
                             <input type="number" class="form-control" id="editUnidades" name="editUnidades" min="1"
                                 max="100" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Estado</label>
+                            <label class="text-dark form-label">Estado</label>
                             <select class="form-select" id="editEstado" name="editEstado" required>
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
@@ -288,11 +288,11 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
-                    <p class="fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
-                    <p class="fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
-                    <p class="fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
-                    <p class="fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
+                    <p class="text-dark fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
+                    <p class="text-dark fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
+                    <p class="text-dark fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
+                    <p class="text-dark fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
+                    <p class="text-dark fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn bg-lightgrey text-dark px-4" data-bs-dismiss="modal">

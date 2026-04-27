@@ -17,7 +17,8 @@ export async function insertUser(user) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({nombre: body.nombre, correo: body.correo, contrasena: body.contrasena, id_rol: body.id_rol, id_usuario_actor: usuario})
     });

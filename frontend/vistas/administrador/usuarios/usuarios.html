@@ -13,11 +13,16 @@
         <script>
             const rol = Number(sessionStorage.getItem("rol"));
                 
-            // Admin (30) y super-admin (40) pueden acceder
-            if (rol!=30&&rol!=40) {
+            // Super-admin (40) puede acceder
+            if (rol!=40) {
                 console.warn('Acceso denegado - Rol:', rol);
-                alert('No tienes permisos para acceder al panel de administrador');
-                window.location.replace(BASE + '/menu.html');
+                if(rol==30){
+                    alert('No tienes permisos para acceder a este apartado');
+                    window.location.replace(BASE + '/vistas/administrador/menuadministrador.html');
+                }else{
+                    alert('No tienes permisos para acceder al panel de administrador');
+                    window.location.replace(BASE + '/vistas/menu.html');
+                }
             }else{
                 const script1 = document.createElement("script");
                 script1.src = BASE + "/javascript/includes.js";
@@ -88,7 +93,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -106,7 +111,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -124,7 +129,7 @@
                     </div>
 
                     <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                        <a href="../menuadministrador.html" class="btn bg-blue text-white rounded-pill px-4 fs-5">
+                        <a href="../menuadministrador.html" class="btn bg-blue text-white rounded-pill px-3 fs-5">
                             <i class="bi bi-caret-left-fill"></i> Volver
                         </a>
                     </div>
@@ -175,23 +180,23 @@
                             <form id="formCrearUsuario">
                                 <div class="modal-body row g-4">
                                     <div class="col-md-6">
-                                        <label class="form-label">Nombre *</label>
+                                        <label class="text-dark form-label">Nombre *</label>
                                         <input type="text" class="form-control" id="nombreCrear" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Correo Electrónico *</label>
+                                        <label class="text-dark form-label">Correo Electrónico *</label>
                                         <input type="email" class="form-control" id="correoCrear" required>
                                     </div>
                                     <div class="col-md-12">
-                                        <label class="form-label">Rol *</label>
+                                        <label class="text-dark form-label">Rol *</label>
                                         <select class="form-select" id="selectRolCrear" required></select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Nueva Contraseña *</label>
+                                        <label class="text-dark form-label">Nueva Contraseña *</label>
                                         <input type="password" class="form-control" id="passCrear" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Confirmar Contraseña *</label>
+                                        <label class="text-dark form-label">Confirmar Contraseña *</label>
                                         <input type="password" class="form-control" id="pass2Crear" required>
                                     </div>
                                 </div>
@@ -234,7 +239,7 @@
                                 <div class="modal-body row g-4 justify-content-center">
                                     <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
                                     <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
-                                    <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
+                                    <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-dark text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
                                 </div>
                                 <div class="modal-footer g-4">
                                     <div class="d-flex justify-content-between ps-2 col-12">
@@ -261,27 +266,27 @@
                             <form id="formEditarUsuario">
                                 <div class="modal-body row g-4">
                                     <div class="col-md-6">
-                                        <label class="form-label">ID</label>
+                                        <label class="text-dark form-label">ID</label>
                                         <input type="text" class="form-control" id="idEditar" required readonly>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Nombre *</label>
+                                        <label class="text-dark form-label">Nombre *</label>
                                         <input type="text" class="form-control" id="nombreEditar" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Correo Electrónico *</label>
+                                        <label class="text-dark form-label">Correo Electrónico *</label>
                                         <input type="email" class="form-control" id="correoEditar" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Rol *</label>
+                                        <label class="text-dark form-label">Rol *</label>
                                         <select class="form-select" id="selectRolEditar" required></select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Nueva Contraseña</label>
+                                        <label class="text-dark form-label">Nueva Contraseña</label>
                                         <input type="password" class="form-control" id="passEditar">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label">Confirmar Contraseña</label>
+                                        <label class="text-dark form-label">Confirmar Contraseña</label>
                                         <input type="password" class="form-control" id="pass2Editar">
                                     </div>
                                 </div>
@@ -308,10 +313,10 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body row g-4">
-                                <p class="m-1 fw-bold mt-3">ID: <span id="idMostrar" class="fw-light"></span></p>
-                                <p class="m-1 fw-bold">Nombre: <span id="nombreMostrar" class="fw-light"></span></p>
-                                <p class="m-1 fw-bold">Correo electrónico: <span id="correoMostrar" class="fw-light"></span></p>
-                                <p class="m-1 fw-bold">Rol: <span id="rolMostrar" class="fw-light"></span></p>
+                                <p class="text-dark m-1 fw-bold mt-3">ID: <span id="idMostrar" class="fw-light"></span></p>
+                                <p class="text-dark m-1 fw-bold">Nombre: <span id="nombreMostrar" class="fw-light"></span></p>
+                                <p class="text-dark m-1 fw-bold">Correo electrónico: <span id="correoMostrar" class="fw-light"></span></p>
+                                <p class="text-dark m-1 fw-bold">Rol: <span id="rolMostrar" class="fw-light"></span></p>
                             </div>
                             <div class="modal-footer g-4">
                                 <div class="d-flex justify-content-end ps-2 col-12">
@@ -346,7 +351,7 @@
                 if (!Array.isArray(usuarios) || usuarios.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="5" class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-dark py-4">
                                 No hay usuarios activos para mostrar
                             </td>
                         </tr>
@@ -621,7 +626,7 @@
                 try {
                     await desactiveUser(user);
                     await refrescarTabla();
-                    mostrarToast("Usuario desactivado correctamente", 'danger');
+                    mostrarToast("Usuario desactivado correctamente", 'success');
                 } catch (err) {
                     mostrarToast(err?.message ?? "Error al desactivar el usuario", 'danger');
                 }
@@ -682,6 +687,9 @@
                     
                     let res = await fetch(`${API}/user/importar`, {
                         method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
                         body: formData
                     });
 
@@ -695,6 +703,7 @@
                         return;
                     }
 
+                    refrescarTabla();
                     if(data.data.importados>0){
                         if(data.data.importados==1){
                             mostrarToast('Se ha importado '+data.data.importados+' usuario correctamente', 'success');

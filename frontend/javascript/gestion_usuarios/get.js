@@ -5,7 +5,12 @@ let rolesCache = null;
 
 export async function getUsuarios() {
   try {
-    const response = await fetch(`${API}/user`);
+    const response = await fetch(`${API}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    
     if (!response.ok) throw new Error("Error al obtener usuarios");
 
     const json = await response.json();
@@ -41,7 +46,11 @@ export async function getUsuarios() {
 
 export async function getInactivos() {
   try {
-    const response = await fetch(`${API}/user/inactivos`);
+    const response = await fetch(`${API}/user/inactivos`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     if (!response.ok) throw new Error("Error al obtener usuarios");
 
     const json = await response.json();
@@ -78,7 +87,11 @@ export async function getInactivos() {
 export async function getRoles() {
   if (rolesCache) return rolesCache;
   try {
-    const response = await fetch(`${API}/rol`);
+    const response = await fetch(`${API}/rol`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener roles");
 
     const json = await response.json();

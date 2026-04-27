@@ -64,7 +64,7 @@ class EspacioService
         $data = Validator::validate($input, [
             'id_recurso' => 'required|string|min:1|max:10',
             'descripcion' => 'required|string|min:1|max:255',
-            'numero_planta' => 'required|int|min:0|max:20',
+            'numero_planta' => 'required|int|min:-10|max:20',
             'id_edificio' => 'required|int|min:1',
             'es_aula' => 'int|in:0,1',  // Cambiado de 'required|boolean' a solo 'boolean'
             'activo' => 'int|in:0,1',
@@ -124,7 +124,7 @@ class EspacioService
         $data = Validator::validate($input, [
             'id_recurso' => 'required|string|min:1|max:10',
             'descripcion' => 'required|string|min:1|max:255',
-            'numero_planta' => 'required|int|min:0|max:20',
+            'numero_planta' => 'required|int|min:-10|max:20',
             'id_edificio' => 'required|int|min:1',
             'es_aula' => 'int|in:0,1',  // Cambiado de 'required|boolean' a solo 'boolean'
             'activo' => 'int|in:0,1',

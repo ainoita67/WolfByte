@@ -11,7 +11,8 @@ function obtenerLogs(npagina=1){
     fetch(window.location.origin+"/API/logacciones", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(datos)
     })
@@ -94,7 +95,7 @@ function mostrarPaginacion(npagina=1, max=1){
     divPaginacion.innerHTML=`
         <button class="btn btn-primary border-0 rounded-pill" id="btninicio"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></button>
         <button class="btn btn-primary border-0 rounded-pill ms-3" id="btnantes"><i class="bi bi-caret-left-fill"></i></button>
-        <p class="p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
+        <p class="text-dark p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
         <button class="btn btn-primary border-0 rounded-pill me-3" id="btndespues"><i class="bi bi-caret-right-fill"></i></button>
         <button class="btn btn-primary border-0 rounded-pill" id="btnfin"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></button>
     `
@@ -163,7 +164,11 @@ function activarFiltrarLog(){
     formfiltrar.addEventListener("submit", async function(e){
         try{
             e.preventDefault();
-            let res=await fetch(window.location.origin+"/API/logacciones");
+            let res=await fetch(window.location.origin+"/API/logacciones", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             let response=await res.json();
             let logs=response.data;
 
@@ -260,7 +265,11 @@ function formatearFecha(stringFecha){
 
 //API Obtener tipos de log para filtrar
 function obtenerTipoLogsSelect(){
-    fetch(window.location.origin+"/API/tipolog")
+    fetch(window.location.origin+"/API/tipolog", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let tiposLog = response.data;
@@ -285,7 +294,11 @@ function obtenerTipoLogsSelect(){
 
 //API Obtener tipos de log para filtrar
 function obtenerUsuariosSelect(){
-    fetch(window.location.origin+"/API/user")
+    fetch(window.location.origin+"/API/user", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let usuarios = response.data;

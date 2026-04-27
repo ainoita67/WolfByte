@@ -35,7 +35,10 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
     
     fetch(`${API_PLANTAS}/${idEdificio}?numero_planta=${numeroPlantaOriginal}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify(datos)
     })
     .then(res => {
@@ -107,7 +110,10 @@ document.addEventListener("DOMContentLoaded", function() {
             
             fetch(`${API_PLANTAS}/${idEdificio}`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(datos)
             })
             .then(res => {

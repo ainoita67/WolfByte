@@ -25,7 +25,8 @@ function activarCrearIncidencia() {
         fetch(window.location.origin+"/API/incidencias/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: usuario, id_recurso: id_recurso })
         })
@@ -152,7 +153,8 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
     fetch(window.location.origin+"/API/incidencias/"+id, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: usuario, id_recurso: id_recurso })
     })

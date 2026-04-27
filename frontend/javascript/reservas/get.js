@@ -54,11 +54,11 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
 
             divReserva.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
-                    <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
-                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
-                    <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
-                    <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
-                    ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
+                    <p class="text-dark fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
+                    <p class="text-dark mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
+                    <p class="text-dark mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
+                    <p class="text-dark mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
+                    ${reserva.unidades !== null ? `<p class="text-dark mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
                 </div>
             `;
 

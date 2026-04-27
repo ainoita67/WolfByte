@@ -34,7 +34,8 @@ export async function updateUser(user) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({nombre: body.nombre, correo: body.correo, contrasena: body.contrasena, id_rol: body.id_rol, usuario_activo: body.usuario_activo, id_usuario_actor: usuario})
     });
@@ -77,7 +78,8 @@ export async function updateUserPassword(user) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({password: user.contrasena, id_usuario_actor: usuario})
     });
@@ -114,7 +116,8 @@ export async function desactiveUser(user) {
     const response = await fetch(`${API}/user/${id}`, {
       method: "PATCH",
       headers: {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({id_usuario_actor: usuario})
     });

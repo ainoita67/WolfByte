@@ -18,7 +18,7 @@
         if (rol!=30&&rol!=40) {
             console.warn('Acceso denegado - Rol:', rol);
             alert('No tienes permisos para acceder al panel de administrador');
-            window.location.replace(BASE + '/menu.html');
+            window.location.replace(BASE + '/vistas/menu.html');
         }else{
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -89,7 +89,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -107,7 +107,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -132,8 +132,8 @@
                     </div>
 
                     <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                        <button onclick="window.history.back()" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i
-                                class="bi bi-caret-left-fill"></i> Volver</button>
+                        <a onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i
+                                class="bi bi-caret-left-fill"></i> Volver</a>
                     </div>
                 </div>
             </section>
@@ -155,61 +155,73 @@
         function crearTarjetas(carros) {
             const contenedor = document.querySelector(".contenedor-carros");
             contenedor.innerHTML = "";
-
-            carros.forEach(carro => {
-
+    
+            if(!carros||carros.length==0){
                 const col = document.createElement("div");
-                col.className = "col-12 col-md-6 col-lg-4";
-
-                /* CARD */
-                const card = document.createElement("div");
-                card.className = "carro-card h-100 d-flex flex-column";
-
-                /* TÍTULO */
-                const h3 = document.createElement("h3");
-                h3.textContent = `${carro.id} - ${carro.descripcion}`;
-
-                /* BODY */
-                const body = document.createElement("div");
-                body.className = "carro-body";
-
-                /* INFO */
-                const info = document.createElement("div");
-                info.className = "carro-info";
-                const strong = document.createElement("strong");
-                strong.textContent = carro.edificio;
-                info.appendChild(strong);
-                info.append(` ${carro.planta}`);
-                const info2 = document.createElement("div");
-                info2.className = "carro-info";
-                const strong2 = document.createElement("strong");
-                strong2.textContent = carro.totales;
-                info2.append(`Portátiles: `);
-                info2.appendChild(strong2);
-
-                body.appendChild(info);
-                body.appendChild(info2);
-                /* FOOTER */
-                const footer = document.createElement("div");
-                footer.className = "carro-footer";
-
-                const btn = document.createElement("button");
-                btn.className = "btn bg-azul text-light w-100 btn-reservar";
-                btn.innerHTML = `<i class="bi bi-calendar-check"></i> Reservas Permanentes`;
-
-                /* REDIRECCIÓN */
-                btn.addEventListener("click", () => {
-                    const id = carro.id;
-                    window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
-                });
-                footer.appendChild(btn);
-
-                card.appendChild(h3);
-                card.appendChild(body);
-                card.appendChild(footer);
-                col.appendChild(card);
+                col.className = "row mt-4";
+                const carro = document.createElement("div");
+                carro.className = "card h-100 col-md-8 offset-md-2 p-0 reserva-card text-center";
+                carro.innerHTML = `
+                    <div class="card-body bg-secondary-subtle">No se han encontrado carros de portátiles</div>
+                `;
+                col.appendChild(carro);
                 contenedor.appendChild(col);
-            });
+            }else{
+                carros.forEach(carro => {
+
+                    const col = document.createElement("div");
+                    col.className = "col-12 col-md-6 col-lg-4";
+
+                    /* CARD */
+                    const card = document.createElement("div");
+                    card.className = "carro-card h-100 d-flex flex-column";
+
+                    /* TÍTULO */
+                    const h3 = document.createElement("h3");
+                    h3.textContent = `${carro.id} - ${carro.descripcion}`;
+
+                    /* BODY */
+                    const body = document.createElement("div");
+                    body.className = "carro-body";
+
+                    /* INFO */
+                    const info = document.createElement("div");
+                    info.className = "carro-info";
+                    const strong = document.createElement("strong");
+                    strong.textContent = carro.edificio;
+                    info.appendChild(strong);
+                    info.append(` ${carro.planta}`);
+                    const info2 = document.createElement("div");
+                    info2.className = "carro-info";
+                    const strong2 = document.createElement("strong");
+                    strong2.textContent = carro.totales;
+                    info2.append(`Portátiles: `);
+                    info2.appendChild(strong2);
+
+                    body.appendChild(info);
+                    body.appendChild(info2);
+                    /* FOOTER */
+                    const footer = document.createElement("div");
+                    footer.className = "carro-footer";
+
+                    const btn = document.createElement("button");
+                    btn.className = "btn bg-azul text-light w-100 btn-reservar";
+                    btn.innerHTML = `<i class="bi bi-calendar-check"></i> Reservas Permanentes`;
+
+                    /* REDIRECCIÓN */
+                    btn.addEventListener("click", () => {
+                        const id = carro.id;
+                        window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                    });
+                    footer.appendChild(btn);
+
+                    card.appendChild(h3);
+                    card.appendChild(body);
+                    card.appendChild(footer);
+                    col.appendChild(card);
+                    contenedor.appendChild(col);
+                });
+            }
         }
     </script>
     <footer id="footer"></footer>

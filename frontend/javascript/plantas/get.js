@@ -37,7 +37,7 @@ function obtenerPlantas() {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
-            <p class="mt-2 text-muted">Cargando plantas...</p>
+            <p class="text-dark mt-2 text-muted">Cargando plantas...</p>
         </div>
     `;
     
@@ -58,7 +58,7 @@ function obtenerPlantas() {
                 contenedor.innerHTML = `
                     <div class="col-12 text-center py-5">
                         <i class="bi bi-building fs-1 text-muted"></i>
-                        <p class="text-muted mt-3">No hay plantas registradas</p>
+                        <p class="text-dark text-muted mt-3">No hay plantas registradas</p>
                         <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
                             <i class="bi bi-plus-circle"></i> Crear primera planta
                         </button>
@@ -88,11 +88,11 @@ function obtenerPlantas() {
                             <h5 class="card-title">
                                 <i class="bi bi-building"></i> ${nombreEdificio}
                             </h5>
-                            <p class="mb-1">
+                            <p class="text-dark mb-1">
                                 <i class="bi bi-door-open"></i> ID Edificio: 
                                 <span class="badge bg-secondary">${idEdificio}</span>
                             </p>
-                            <p class="mb-1">
+                            <p class="text-dark mb-1">
                                 <i class="bi bi-grid"></i> Espacios: 
                                 <span class="badge bg-primary">${totalEspacios}</span>
                             </p>
@@ -121,7 +121,7 @@ function obtenerPlantas() {
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                     <h5 class="mt-3 text-danger">Error al cargar las plantas</h5>
-                    <p class="text-muted">${err.message}</p>
+                    <p class="text-dark text-muted">${err.message}</p>
                     <button class="btn btn-primary mt-2" onclick="obtenerPlantas()">
                         <i class="bi bi-arrow-clockwise"></i> Reintentar
                     </button>
@@ -141,7 +141,7 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
-            <p class="mt-2">Cargando datos de la planta...</p>
+            <p class="text-dark mt-2">Cargando datos de la planta...</p>
         </div>
     `;
     
@@ -166,7 +166,7 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
                     <input type="hidden" id="numeroPlantaOriginal" value="${numeroPlanta}">
                     
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Edificio</label>
+                        <label class="text-dark form-label fw-bold">Edificio</label>
                         <select class="form-select" id="edificioSelect" required>
                             <option value="">Seleccione un edificio</option>
                             <option value="1">Loscos</option>
@@ -175,19 +175,19 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
                         <small class="text-muted">No se puede cambiar el edificio, solo la planta</small>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Número de Planta</label>
+                        <label class="text-dark form-label fw-bold">Número de Planta</label>
                         <input type="number" class="form-control" id="numeroPlantaInput" 
                                value="${planta.numero_planta}" required>
                         <div class="form-text">Ingresa el nuevo número de planta</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Información adicional</label>
+                        <label class="text-dark form-label fw-bold">Información adicional</label>
                         <div class="bg-light p-3 rounded">
-                            <p class="mb-1"><strong>ID Edificio:</strong> ${planta.id_edificio}</p>
-                            <p class="mb-1"><strong>Edificio:</strong> ${planta.nombre_edificio}</p>
-                            <p class="mb-1"><strong>Total recursos:</strong> ${planta.total_recursos || 0}</p>
-                            <p class="mb-1"><strong>Total espacios:</strong> ${planta.total_espacios || 0}</p>
-                            <p class="mb-0"><strong>Total materiales:</strong> ${planta.total_materiales || 0}</p>
+                            <p class="text-dark mb-1"><strong>ID Edificio:</strong> ${planta.id_edificio}</p>
+                            <p class="text-dark mb-1"><strong>Edificio:</strong> ${planta.nombre_edificio}</p>
+                            <p class="text-dark mb-1"><strong>Total recursos:</strong> ${planta.total_recursos || 0}</p>
+                            <p class="text-dark mb-1"><strong>Total espacios:</strong> ${planta.total_espacios || 0}</p>
+                            <p class="text-dark mb-0"><strong>Total materiales:</strong> ${planta.total_materiales || 0}</p>
                         </div>
                     </div>
                 </form>

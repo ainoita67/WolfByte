@@ -18,7 +18,7 @@
         if (rol!=30&&rol!=40) {
             console.warn('Acceso denegado - Rol:', rol);
             alert('No tienes permisos para acceder al panel de administrador');
-            window.location.replace(BASE + '/menu.html');
+            window.location.replace(BASE + '/vistas/menu.html');
         }else{
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -88,7 +88,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -106,7 +106,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -136,7 +136,7 @@
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Cargando...</span>
                         </div>
-                        <p class="mt-2">Cargando plantas...</p>
+                        <p class="text-dark mt-2">Cargando plantas...</p>
                     </div>
                 </div>
 
@@ -161,25 +161,25 @@
                 <form id="formCrearPlanta">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-dark form-label">Edificio</label>
                             <select class="form-select" name="edificio" id="selectEdificioCrear" required>
                                 <option value="">Seleccione un edificio</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de Planta</label>
+                            <label class="text-dark form-label">Número de Planta</label>
                             <input type="number" class="form-control" name="numero_planta" id="numeroPlantaCrear"
                                 required min="-10" max="100">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nombre de la Planta</label>
+                            <label class="text-dark form-label">Nombre de la Planta</label>
                             <input type="text" class="form-control" name="nombre_planta" id="nombrePlantaCrear" required
                                 placeholder="Ej: Planta baja, Primera planta...">
                         </div>
                     </div>
                     <div class="modal-footer g-4">
                         <div class="d-flex justify-content-between ps-2 col-12">
-                            <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Crear planta</button>
+                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear planta</button>
                             <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </div>
@@ -202,19 +202,19 @@
                         <input type="hidden" id="editar_edificio_original" name="edificio_original">
 
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-dark form-label">Edificio</label>
                             <select class="form-select" name="edificio" id="editarSelectEdificio" required disabled>
                                 <option value="">Seleccione un edificio</option>
                             </select>
                             <small class="text-muted">El edificio no se puede modificar</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de Planta</label>
+                            <label class="text-dark form-label">Número de Planta</label>
                             <input type="number" class="form-control" name="numero_planta" id="editarNumeroPlanta"
                                 required min="-10" max="100">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nombre de la Planta</label>
+                            <label class="text-dark form-label">Nombre de la Planta</label>
                             <input type="text" class="form-control" name="nombre_planta" id="editarNombrePlanta"
                                 required>
                         </div>

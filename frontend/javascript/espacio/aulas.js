@@ -1,6 +1,10 @@
 export async function getAulas() {
   try {
-    const response = await fetch(`${API}/aulas`);
+    const response = await fetch(`${API}/aulas`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener aulas");
 
     const json = await response.json();
@@ -20,7 +24,8 @@ export async function getAulasDisponibles(fecha, hora_inicio, hora_fin) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         fecha: fecha,

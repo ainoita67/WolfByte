@@ -18,7 +18,7 @@
         if (rol!=30&&rol!=40) {
             console.warn('Acceso denegado - Rol:', rol);
             alert('No tienes permisos para acceder al panel de administrador');
-            window.location.replace(BASE + '/menu.html');
+            window.location.replace(BASE + '/vistas/menu.html');
         }else{
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -89,7 +89,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -107,7 +107,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -129,12 +129,18 @@
                 </div>
                 <div class="contenedor-aulas">
 
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                        <p class="text-dark mt-2">Cargando edificios...</p>
+                    </div>
 
                 </div>
 
                 <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                    <button onclick="window.history.back()" class="bg-azul border-0 rounded-pill p-1 px-3 ms-5 text-light"><i
-                            class="bi bi-caret-left-fill"></i> Volver</button>
+                    <a onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i
+                            class="bi bi-caret-left-fill"></i> Volver</a>
                 </div>
             </section>
         </div>
@@ -150,6 +156,7 @@
         document.addEventListener("DOMContentLoaded", async () => {
 
             const data = await getAulas();
+            
             crearTarjetas(data);
         });
 
@@ -157,52 +164,62 @@
             const contenedor = document.querySelector(".contenedor-aulas");
             contenedor.innerHTML = ""; // limpiar contenido estático
             // data = { edificio: { planta: [aulas] } }
-            for (const [edificio, plantas] of Object.entries(data)) {
+            
+            if(!data||data.length===0){
+                const aulas = document.createElement("div");
+                aulas.className = "card h-100 p-0 reserva-card text-center";
+                aulas.innerHTML = `
+                    <div class="card-body bg-secondary-subtle">No se han encontrado aulas</div>
+                `;
+                contenedor.appendChild(aulas);
+            }else{
+                for (const [edificio, plantas] of Object.entries(data)) {
 
-                // --- Tarjeta edificio ---
-                const edificioCard = document.createElement("div");
-                edificioCard.className = "edificio-card";
+                    // --- Tarjeta edificio ---
+                    const edificioCard = document.createElement("div");
+                    edificioCard.className = "edificio-card";
 
-                const tituloEdificio = document.createElement("h3");
-                tituloEdificio.textContent = edificio.toUpperCase();
-                edificioCard.appendChild(tituloEdificio);
+                    const tituloEdificio = document.createElement("h3");
+                    tituloEdificio.textContent = edificio.toUpperCase();
+                    edificioCard.appendChild(tituloEdificio);
 
-                // --- Plantas ---
-                for (const [planta, aulas] of Object.entries(plantas)) {
+                    // --- Plantas ---
+                    for (const [planta, aulas] of Object.entries(plantas)) {
 
-                    const plantaDiv = document.createElement("div");
-                    plantaDiv.className = "planta";
+                        const plantaDiv = document.createElement("div");
+                        plantaDiv.className = "planta";
 
-                    const plantaTitulo = document.createElement("span");
-                    plantaTitulo.className = "planta-titulo";
-                    plantaTitulo.textContent = planta;
-                    plantaDiv.appendChild(plantaTitulo);
+                        const plantaTitulo = document.createElement("span");
+                        plantaTitulo.className = "planta-titulo";
+                        plantaTitulo.textContent = planta;
+                        plantaDiv.appendChild(plantaTitulo);
 
-                    const aulasDiv = document.createElement("div");
-                    aulasDiv.className = "aulas";
+                        const aulasDiv = document.createElement("div");
+                        aulasDiv.className = "aulas";
 
-                    // --- Botones de aulas ---
-                    aulas.forEach(aula => {
-                        const btn = document.createElement("button");
-                        btn.id = aula.id_recurso;
-                        btn.className = "aula";
-                        btn.textContent = aula.id_recurso;
+                        // --- Botones de aulas ---
+                        aulas.forEach(aula => {
+                            const btn = document.createElement("button");
+                            btn.id = aula.id_recurso;
+                            btn.className = "aula";
+                            btn.textContent = aula.id_recurso;
 
-                        btn.title = aula.descripcion;
+                            btn.title = aula.descripcion;
 
-                        // REDIRECCIÓN
-                        btn.addEventListener("click", () => {
-                            const id = aula.id_recurso;
-                            window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                            // REDIRECCIÓN
+                            btn.addEventListener("click", () => {
+                                const id = aula.id_recurso;
+                                window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                            });
+                            aulasDiv.appendChild(btn);
                         });
-                        aulasDiv.appendChild(btn);
-                    });
 
-                    plantaDiv.appendChild(aulasDiv);
-                    edificioCard.appendChild(plantaDiv);
+                        plantaDiv.appendChild(aulasDiv);
+                        edificioCard.appendChild(plantaDiv);
+                    }
+
+                    contenedor.appendChild(edificioCard);
                 }
-
-                contenedor.appendChild(edificioCard);
             }
         }
 

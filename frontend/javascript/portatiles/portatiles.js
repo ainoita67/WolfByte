@@ -258,7 +258,7 @@ async function obtenerMateriales() {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
-            <p class="mt-2">Cargando materiales...</p>
+            <p class="text-dark mt-2">Cargando materiales...</p>
         </div>
     `;
     
@@ -292,7 +292,7 @@ async function obtenerMateriales() {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-laptop fs-1 text-muted"></i>
-                    <p class="text-muted mt-3">No hay carros de portátiles registrados</p>
+                    <p class="text-dark text-muted mt-3">No hay carros de portátiles registrados</p>
                     <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
                         <i class="bi bi-plus-circle"></i> Crear primer carro
                     </button>
@@ -333,18 +333,18 @@ async function obtenerMateriales() {
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-6">
-                                <p class="mb-1"><strong>Edificio:</strong></p>
-                                <p class="text-muted">${nombreEdificio}</p>
+                                <p class="text-dark mb-1"><strong>Edificio:</strong></p>
+                                <p class="text-dark text-muted">${nombreEdificio}</p>
                             </div>
                             <div class="col-6">
-                                <p class="mb-1"><strong>Planta:</strong></p>
-                                <p class="text-muted">${nombrePlanta}</p>
+                                <p class="text-dark mb-1"><strong>Planta:</strong></p>
+                                <p class="text-dark text-muted">${nombrePlanta}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-                                <p class="mb-1"><strong>Nº portátiles:</strong></p>
-                                <p class="fs-4 text-primary">${unidades}</p>
+                                <p class="text-dark mb-1"><strong>Nº portátiles:</strong></p>
+                                <p class="text-dark fs-4 text-primary">${unidades}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end gap-2">
@@ -386,7 +386,7 @@ async function obtenerMateriales() {
             <div class="col-12 text-center py-5">
                 <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                 <h5 class="mt-3 text-danger">Error de conexión</h5>
-                <p class="text-muted">No se pudo conectar con el servidor</p>
+                <p class="text-dark text-muted">No se pudo conectar con el servidor</p>
                 <button class="btn btn-primary mt-2" onclick="obtenerMateriales()">
                     <i class="bi bi-arrow-clockwise"></i> Reintentar
                 </button>

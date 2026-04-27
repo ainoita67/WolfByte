@@ -1,6 +1,10 @@
 //API Obtener recursos para filtrar
 function obtenerRecursosSelect(){
-    fetch(window.location.origin+"/API/recurso")
+    fetch(window.location.origin+"/API/recurso", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let recursos = response.data;
@@ -40,7 +44,11 @@ window.obtenerRecursosSelect = obtenerRecursosSelect;
 
 export async function getInfoRecurso(id_recurso) {
   try {
-    const response = await fetch(`${API}/recurso/${id_recurso}`);
+    const response = await fetch(`${API}/recurso/${id_recurso}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     if (!response.ok) throw new Error("Error al obtener informacion del recurso");
 
     const json = await response.json();
