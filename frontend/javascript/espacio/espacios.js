@@ -2,7 +2,7 @@ export async function getEspacio(id) {
   try {
     const response = await fetch(`${API}/espacios/${id}`, {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -36,7 +36,11 @@ export async function getEspacio(id) {
 
 export async function getOtrosEspacios() {
   try {
-    const response = await fetch(`${API}/otrosespacios`);
+    const response = await fetch(`${API}/otrosespacios`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener Otros Espacios");
 
     const json = await response.json();
@@ -56,7 +60,8 @@ export async function getOtrosEspaciosDisponibles(fecha, hora_inicio, hora_fin) 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         fecha: fecha,

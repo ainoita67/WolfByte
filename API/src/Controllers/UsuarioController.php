@@ -168,7 +168,7 @@ class UsuarioController
             fclose($handle);
 
             if(count($resultados)>0){
-                $this->serviceMail->createMail($_POST['correo_usuario'], 'usuarios');
+                //$this->serviceMail->createMail($_POST['correo_usuario'], 'usuarios');
             }
 
             $res->status(201)->json([

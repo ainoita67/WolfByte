@@ -18,7 +18,7 @@
         if (rol!=30&&rol!=40) {
             console.warn('Acceso denegado - Rol:', rol);
             alert('No tienes permisos para acceder al panel de administrador');
-            window.location.replace(BASE + '/menu.html');
+            window.location.replace(BASE + '/vistas/menu.html');
         }else{
             const script1 = document.createElement("script");
             script1.src = BASE + "/javascript/includes.js";
@@ -94,7 +94,7 @@
             </aside>
 
             <!-- CONTENIDO -->
-            <section class="flex-grow-1 ms-3 p-3 p-lg-4 mt-lg-5 pt-5">
+            <section class="flex-grow-1 ms-3 p-3 p-lg-4 pb-lg-5 mt-lg-5 pt-5 mb-5">
 
                 <!-- Botón menú SOLO en móvil/tablet -->
                 <div class="d-lg-none mb-3">
@@ -108,7 +108,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -126,7 +126,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -155,9 +155,9 @@
                 <div id="portatilesContainer" class="row g-4">
                     <div class="col-12 text-center py-5">
                         <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Cargando...</span>
+                            <span class="visually-hidden text-black">Cargando...</span>
                         </div>
-                        <p class="mt-2">Cargando materiales...</p>
+                        <p class="text-black mt-2">Cargando materiales...</p>
                     </div>
                 </div>
 
@@ -183,24 +183,24 @@
                 <form id="formCrearPortatil">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">ID del carro</label>
+                            <label class="text-black form-label">ID del carro</label>
                             <input type="text" class="form-control" id="crearId" name="crearId" placeholder="Ej: P4"
                                 required>
                             <small class="text-muted">Identificador único (ej: P1, P2, P3...)</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Nombre del carro</label>
+                            <label class="text-black form-label">Nombre del carro</label>
                             <input type="text" class="form-control" id="crearCarro" name="crearCarro"
                                 placeholder="Ej: Carro 4" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-black form-label">Edificio</label>
                             <select class="form-select" id="crearEdificio" name="crearEdificio" required>
                                 <option value="">Seleccione un edificio</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Planta</label>
+                            <label class="text-black form-label">Planta</label>
                             <select class="form-select" id="crearPlanta" name="crearPlanta" required>
                                 <option value="">Seleccionar planta</option>
                                 <option value="Planta baja">Planta baja</option>
@@ -209,15 +209,15 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de portátiles</label>
+                            <label class="text-black form-label">Número de portátiles</label>
                             <input type="number" class="form-control" id="crearUnidades" name="crearUnidades" min="1"
                                 max="100" required>
                         </div>
                     </div>
                     <div class="modal-footer g-4">
                         <div class="d-flex justify-content-between ps-2 col-12">
-                            <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear carro</button>
-                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Crear carro</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </div>
                 </form>
@@ -229,7 +229,7 @@
     <div class="modal fade" id="modalEditar" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
+                <div class="modal-header bg-warning text-black">
                     <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar carro de portátiles</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
@@ -241,26 +241,26 @@
                         <input type="hidden" id="editNumeroPlanta" name="editNumeroPlanta">
 
                         <div class="mb-3">
-                            <label class="form-label">Nombre del carro</label>
+                            <label class="text-black form-label">Nombre del carro</label>
                             <input type="text" class="form-control" id="editCarro" name="editCarro" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Edificio</label>
+                            <label class="text-black form-label">Edificio</label>
                             <input type="text" class="form-control" id="editEdificio" name="editEdificio" readonly>
                             <small class="text-muted">El edificio no se puede modificar</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Planta</label>
+                            <label class="text-black form-label">Planta</label>
                             <input type="text" class="form-control" id="editPlanta" name="editPlanta" readonly>
                             <small class="text-muted">La planta no se puede modificar</small>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Número de portátiles</label>
+                            <label class="text-black form-label">Número de portátiles</label>
                             <input type="number" class="form-control" id="editUnidades" name="editUnidades" min="1"
                                 max="100" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Estado</label>
+                            <label class="text-black form-label">Estado</label>
                             <select class="form-select" id="editEstado" name="editEstado" required>
                                 <option value="1">Activo</option>
                                 <option value="0">Inactivo</option>
@@ -270,7 +270,7 @@
                     <div class="modal-footer g-4">
                         <div class="d-flex justify-content-between ps-2 col-12">
                             <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
-                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </div>
                 </form>
@@ -288,14 +288,14 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
-                    <p class="fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
-                    <p class="fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
-                    <p class="fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
-                    <p class="fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
+                    <p class="text-black fw-bold">Carro: <span class="fw-light" id="mostrarCarro"></span></p>
+                    <p class="text-black fw-bold">Edificio: <span class="fw-light" id="mostrarEdificio"></span></p>
+                    <p class="text-black fw-bold">Planta: <span class="fw-light" id="mostrarPlanta"></span></p>
+                    <p class="text-black fw-bold">Unidades: <span class="fw-light" id="mostrarUnidades"></span></p>
+                    <p class="text-black fw-bold">Estado: <span class="fw-light" id="mostrarEstado"></span></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-lightgrey text-dark px-4" data-bs-dismiss="modal">
+                    <button type="button" class="btn bg-lightgrey text-black px-4" data-bs-dismiss="modal">
                         <i class="bi bi-x-lg"></i> Cerrar
                     </button>
                 </div>

@@ -1,6 +1,10 @@
 //API Obtener espacios
 function obtenerEspaciosSelect(idSeleccionado=null){
-    fetch(window.location.origin+"/API/espacios")
+    fetch(window.location.origin+"/API/espacios", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let espacios = response.data;

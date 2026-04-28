@@ -34,13 +34,14 @@ export async function updateUser(user) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({nombre: body.nombre, correo: body.correo, contrasena: body.contrasena, id_rol: body.id_rol, usuario_activo: body.usuario_activo, id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);
-
+console.log(json);
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
 
@@ -77,7 +78,8 @@ export async function updateUserPassword(user) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({password: user.contrasena, id_usuario_actor: usuario})
     });
@@ -114,20 +116,21 @@ export async function desactiveUser(user) {
     const response = await fetch(`${API}/user/${id}`, {
       method: "PATCH",
       headers: {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({id_usuario_actor: usuario})
     });
 
     const json = await response.json().catch(() => null);
-
+    
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
       const msg =
         formatted ||
         json?.message ||
         `Error al desactivar usuario (HTTP ${response.status})`;
-      throw new Error(msg);
+      console.error(msg);
     }
 
     return json;

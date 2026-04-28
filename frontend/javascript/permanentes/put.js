@@ -32,7 +32,8 @@ export async function updatePermanente(reserva) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(body)
     });
@@ -65,7 +66,8 @@ export async function desactivePermanente(id) {
     const response = await fetch(`${API}/reservas_permanentes/${id}/activar`, {
       method: "PATCH",
       headers: {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ id_usuario: usuario })
     });
@@ -94,7 +96,8 @@ export async function desactivarTodo() {
     const response = await fetch(`${API}/reservas_permanentes/desactivar_todo`, {
       method: "PATCH",
       headers: {
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ id_usuario: usuario })
     });

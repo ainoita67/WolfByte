@@ -42,7 +42,7 @@
             </div>
             <div class="pt-4 row">
                 <div class="col-lg-6">
-                    <p class="fw-bold mb-3">Selecciona un recurso para notificar su incidencia:</p>
+                    <p class="fw-bold mb-3">Seleccione un recurso para notificar su incidencia:</p>
 
                     <div class="mb-3 espacio">
                         <input type="radio" name="tipo" id="espacio">
@@ -91,38 +91,38 @@
                             <div class="row g-3">
                                 <!-- Fecha -->
                                 <div class="col-md-4">
-                                    <label class="form-label">Fecha</label>
+                                    <label class="text-black form-label">Fecha</label>
                                     <input type="datetime-local" step="1" class="form-control" id="createFecha" name="fecha" readonly required>
                                 </div>
 
                                 <!-- ID -->
                                 <div class="col-md-4">
-                                    <label class="form-label">ID del recurso</label>
+                                    <label class="text-black form-label">ID del recurso</label>
                                     <input type="text" class="form-control" id="createIdRecurso" name="id" readonly required>
                                 </div>
 
                                 <!-- Recurso -->
                                 <div class="col-md-4">
-                                    <label class="form-label">Nombre del recurso</label>
+                                    <label class="text-black form-label">Nombre del recurso</label>
                                     <input type="text" class="form-control" id="createRecurso" name="recurso" readonly required>
                                 </div>
 
                                 <!-- Titulo -->
                                 <div class="col-12">
-                                    <label class="form-label">Título</label>
+                                    <label class="text-black form-label">Título</label>
                                     <input type="text" class="form-control" id="createTitulo" name="titulo" required>
                                 </div>
 
                                 <!-- Descripcion -->
                                 <div class="col-12">
-                                    <label class="form-label">Descripción</label>
+                                    <label class="text-black form-label">Descripción</label>
                                     <textarea class="form-control" id="createDescripcionIncidencia" name="descripcion" rows="3" required></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
                             <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Reportar incidencia</button>
-                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -158,6 +158,8 @@
             }
 
             const espacio = document.getElementById("espacio");
+            const portatiles = document.getElementById("portatiles");
+            const todos = document.getElementById("todos");
             const divedificio = document.getElementById("divedificio");
             const selectedificio = document.getElementById("selectedificio");
             const divplanta = document.getElementById("divplanta");
@@ -177,7 +179,7 @@
                         selectplanta.value = "";
                         if(portatiles.checked){
                             obtenerPortatiles();
-                        }else{
+                        }else if(todos.checked){
                             obtenerRecursos();
                         }
                     }

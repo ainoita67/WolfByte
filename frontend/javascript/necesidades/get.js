@@ -6,7 +6,11 @@ function capitalizar(string) {
 
 //API Obtener necesidades
 function obtenerNecesidades(){
-    fetch(window.location.origin+"/API/necesidades")
+    fetch(window.location.origin+"/API/necesidades", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let necesidades = response.data;
@@ -27,10 +31,10 @@ function obtenerNecesidades(){
                 card.innerHTML = `
                     <div class="card text-center shadow-sm overflow-hidden h-100">
                         <div class="bg-blue card-head rounded-top">
-                            <p class="fs-6 text-light m-0 pt-2">ID: ${necesidad.id_necesidad}</p>
+                            <p class="fs-6 text-light m-0 py-2"><i class="bi bi-tag"></i> ID: ${necesidad.id_necesidad}</p>
                         </div>
                         <div class="card-body">
-                            <p class="fs-5 card-title">${necesidad.nombre}</p>
+                            <p class="text-black fs-5 card-title">${necesidad.nombre}</p>
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-sm bg-warning text-black"
@@ -52,7 +56,11 @@ function obtenerNecesidades(){
 
 //API Obtener necesidades para filtrar
 function obtenerNecesidadesSelectMultiple(){
-    fetch(window.location.origin+"/API/necesidades")
+    fetch(window.location.origin+"/API/necesidades", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let necesidades = response.data;

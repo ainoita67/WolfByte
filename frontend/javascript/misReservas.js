@@ -1,7 +1,11 @@
 function obtenerMisReservas(){
     usuario=sessionStorage.getItem("id_usuario");
     console.log(window.location.origin+"/API/mis-reservas/"+usuario);
-    fetch(window.location.origin+"/API/mis-reservas/"+usuario)
+    fetch(window.location.origin+"/API/mis-reservas/"+usuario, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let reservas = response.data;
@@ -46,17 +50,17 @@ function mostrarMisReservas(reservas, tarjetasReservas){
 
             divReserva.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
-                    <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
-                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
-                    <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
-                    <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
-                    ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
+                    <p class="text-black fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
+                    <p class="text-black mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
+                    ${reserva.unidades !== null ? `<p class="text-black mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
                 </div>
             `;
             if(reserva.autorizada=="1"){
                 divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado aceptado text-light pt-2 ps-3 fs-6">Aceptado</div>';
             }else if(reserva.autorizada=="0"){
-                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado text-dark pt-2 ps-3 fs-6">Rechazado</div>';
+                divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado rechazado text-black pt-2 ps-3 fs-6">Rechazado</div>';
             }else{
                 divReserva.innerHTML=divReserva.innerHTML+'<div class="aceptado-rechazado text-light pt-2 ps-3 fs-6">En proceso</div>';
             }
@@ -289,10 +293,12 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
 async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, actividad, necesidades, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
         let arraynecesidades = (necesidades||[]).filter(valor => valor !== '').map(id => ({ id_necesidad: id }));
+        document.getElementById('cargandoreservas').classList.remove('d-none');
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 id_espacio: id_recurso,
@@ -312,6 +318,7 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
                 tipo: "Reserva_espacio"
             })
         })
+        document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
         console.log("Respuesta al modificar reserva espacio:", response);
         if (response.status == "success"){
@@ -331,10 +338,12 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
 //API Editar reservas de tipo portátil
 async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones){
     try{
+        document.getElementById('cargandoreservas').classList.remove('d-none');
         let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 id_material: id_recurso,
@@ -354,6 +363,7 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
                 tipo: "Reserva_material"
             })
         })
+        document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
         console.log("Respuesta al modificar reserva portátil:", response);
         if (response.status == "success") {

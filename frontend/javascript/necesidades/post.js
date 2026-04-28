@@ -8,7 +8,8 @@ document.getElementById("formCrearNecesidad").addEventListener("submit", functio
     fetch(window.location.origin+"/API/necesidades", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
             nombre: nombre
@@ -49,10 +50,13 @@ document.getElementById("formEditarNecesidad").addEventListener("submit", functi
     let nombre = document.getElementById("editNombre").value.trim();
     if (!nombre) return;
     nombre = capitalizar(nombre);
+    console.log(window.location.origin+"/API/necesidades/"+necesidadSeleccionadaId)
+    console.log(token);
     fetch(window.location.origin+"/API/necesidades/"+necesidadSeleccionadaId, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ nombre: nombre })
     })

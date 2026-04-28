@@ -102,14 +102,27 @@ class ReservaPermanenteService
         }
 
         $recurso=$this->serviceRecurso->getRecursoById($data['id_recurso']);
-        if($recurso['tipo']=="Espacio"&&!$data['unidades']){
+        if($recurso['tipo']=="Espacio"&&(!$data['unidades']||$data['unidades']<=0)){
             $data['unidades']==null;
         }
         if($recurso['tipo']=="Espacio"&&$data['unidades']>0){
             throw new \Exception("Los espacios no pueden tener unidades");
         }
-        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null)){
+        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null||$data['unidades']<=0)){
             throw new \Exception("Los materiales deben tener unidades");
+        }
+
+        $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+        if($recurso['tipo']=="Espacio"){
+            if(!$this->model->getEspacioFecha($data, 0)){
+                
+                throw new \Exception("El espacio ya está reservado entre ese horario<br>".$mensaje);
+            }
+        }
+        if($recurso['tipo']=="Material"){
+            if($data['unidades']>$this->model->getUnidadesFecha($data, 0)){
+                throw new \Exception("No hay suficientes unidades entre ese horario<br>".$mensaje);
+            }
         }
         
         if (empty($data['id_recurso'])) {
@@ -127,7 +140,7 @@ class ReservaPermanenteService
         $idreserva = Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
-
+        
         if($input['activo']=="true"||$input['activo']=="1"||$input['activo']==1){
             $input['activo']=1;
         }else{
@@ -149,14 +162,26 @@ class ReservaPermanenteService
         }
 
         $recurso=$this->serviceRecurso->getRecursoById($data['id_recurso']);
-        if($recurso['tipo']=="Espacio"&&!$data['unidades']){
+        if($recurso['tipo']=="Espacio"&&(!$data['unidades']||$data['unidades']<=0)){
             $data['unidades']==null;
         }
         if($recurso['tipo']=="Espacio"&&$data['unidades']>0){
             throw new \Exception("Los espacios no pueden tener unidades");
         }
-        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null)){
+        if($recurso['tipo']=="Material"&&(!$data['unidades']||$data['unidades']==null||$data['unidades']<=0)){
             throw new \Exception("Los materiales deben tener unidades");
+        }
+        
+        $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+        if($recurso['tipo']=="Espacio"){
+            if(!$this->model->getEspacioFecha($data, (int)$idreserva['id'])){
+                throw new \Exception("El espacio ya está reservado entre ese horario<br>".$mensaje);
+            }
+        }
+        if($recurso['tipo']=="Material"){
+            if($data['unidades']>$this->model->getUnidadesFecha($data, (int)$idreserva['id'])){
+                throw new \Exception("No hay suficientes unidades entre ese horario<br>".$mensaje);
+            }
         }
         
         if (empty($data['id_recurso'])) {
@@ -189,6 +214,32 @@ class ReservaPermanenteService
 
         if(empty($data['id'])) {
             throw new ValidationException("ID es obligatorio");
+        }
+
+        $reserva=$this->getReservaPermanenteById($id);
+
+        $recurso=$this->serviceRecurso->getRecursoById($reserva['id_recurso']);
+        if($recurso['tipo']=="Espacio"&&(!$reserva['unidades']||$reserva['unidades']<=0)){
+            $reserva['unidades']==null;
+        }
+        if($recurso['tipo']=="Espacio"&&$reserva['unidades']>0){
+            throw new \Exception("Los espacios no pueden tener unidades");
+        }
+        if($recurso['tipo']=="Material"&&(!$reserva['unidades']||$reserva['unidades']==null||$reserva['unidades']<=0)){
+            throw new \Exception("Los materiales deben tener unidades");
+        }
+
+        $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+        if($recurso['tipo']=="Espacio"){
+            if(!$this->model->getEspacioFecha($reserva, (int)$data['id'])){
+                throw new \Exception("El espacio ya está reservado entre ese horario<br>".$mensaje);
+            }
+        }
+        if($recurso['tipo']=="Material"){
+            if($reserva['unidades']>$this->model->getUnidadesFecha($reserva, (int)$data['id'])){
+                $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+                throw new \Exception("No hay suficientes unidades entre ese horario<br>".$mensaje);
+            }
         }
 
         if($activar){

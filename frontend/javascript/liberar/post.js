@@ -28,7 +28,11 @@ function activarLiberar() {
 
 
 async function obtenerReservas(){
-    let res=await fetch(window.location.origin+"/API/reservas_permanentes");
+    let res=await fetch(window.location.origin+"/API/reservas_permanentes", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     let response = await res.json();
     return response.data;
 }
@@ -36,7 +40,11 @@ async function obtenerReservas(){
 
 
 async function obtenerLiberaciones(){
-    let res=await fetch(window.location.origin+"/API/liberaciones");
+    let res=await fetch(window.location.origin+"/API/liberaciones", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     let response = await res.json();
     return response.data;
 }
@@ -63,7 +71,8 @@ async function comprobarLiberacion(fecha, reservaLiberar){
 
 
 async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaFin){
-    let reservas=await obtenerReservas()
+    let reservas=[];
+    reservas=await obtenerReservas();
 
     let fechaInicio=formatearFecha(fecha, horaInicio);
     let fechaFin=formatearFecha(fecha, horaFin);
@@ -100,7 +109,8 @@ async function liberarReserva(observaciones=null, aula, fecha, horaInicio, horaF
                             let res = await fetch(window.location.origin+"/API/liberaciones/", {
                                 method: "POST",
                                 headers: {
-                                    "Content-Type": "application/json"
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${token}`
                                 },
                                 body: JSON.stringify({inicio: fecha+" "+reservaLiberar.inicio, fin: fecha+" "+reservaLiberar.fin, comentario: observaciones, id_reserva: null, id_reserva_permanente: reservaLiberar.id_reserva_permanente, unidades: reservaLiberar.unidades, id_usuario_actor: usuario})
                             })

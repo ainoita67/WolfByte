@@ -88,6 +88,36 @@ class ReservaPermanenteController
      * POST /reservas_permanentes
      * Crea una nueva reserva permanente
      */
+    public function store(Request $req, Response $res): void
+    {
+        try {
+            $data=$req->getBody();
+
+            $data['activo']=1;
+
+            $reserva = $this->service->createReservaPermanente($data);
+            $log['id_reserva_permanente']=$reserva['id_reserva_permanente'];
+            $resultados[] = $reserva;
+            $log['id_usuario_actor'] = $data['id_usuario'];
+            $this->serviceMail->createMail($data['correo'], 'createreservapermanente');
+            $this->serviceLog->createLog("Creación de reserva permanente", $log);
+
+            $res->status(201)->json([
+                "importadas" => count($resultados),
+                "datos" => $resultados
+            ]);
+            $res->status(201)->json($reserva);
+        } catch (ValidationException $e) {
+            $res->errorJson($e->getMessage(), 422);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), 500);
+        }
+    }
+
+    /**
+     * POST /reservas_permanentes
+     * Crea una nueva reserva permanente
+     */
     public function importar(Request $req, Response $res): void
     {
         try {
