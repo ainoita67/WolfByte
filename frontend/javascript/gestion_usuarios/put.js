@@ -41,7 +41,7 @@ export async function updateUser(user) {
     });
 
     const json = await response.json().catch(() => null);
-
+console.log(json);
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
 
@@ -123,14 +123,14 @@ export async function desactiveUser(user) {
     });
 
     const json = await response.json().catch(() => null);
-
+    
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
       const msg =
         formatted ||
         json?.message ||
         `Error al desactivar usuario (HTTP ${response.status})`;
-      throw new Error(msg);
+      console.error(msg);
     }
 
     return json;

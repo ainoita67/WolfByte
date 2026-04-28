@@ -79,7 +79,7 @@
                 </aside>
 
                 <!-- CONTENIDO -->
-                <section class="flex-grow-1 ms-3 p-3 p-lg-4 pt-5">
+                <section class="flex-grow-1 ms-3 p-3 p-lg-4 pb-lg-5 pt-5 mb-5">
 
                     <!-- Botón menú SOLO en móvil/tablet -->
                     <div class="d-lg-none mb-3">
@@ -93,7 +93,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -111,7 +111,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -180,30 +180,30 @@
                             <form id="formCrearUsuario">
                                 <div class="modal-body row g-4">
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Nombre *</label>
+                                        <label class="text-black form-label">Nombre *</label>
                                         <input type="text" class="form-control" id="nombreCrear" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Correo Electrónico *</label>
+                                        <label class="text-black form-label">Correo Electrónico *</label>
                                         <input type="email" class="form-control" id="correoCrear" required>
                                     </div>
                                     <div class="col-md-12">
-                                        <label class="text-dark form-label">Rol *</label>
+                                        <label class="text-black form-label">Rol *</label>
                                         <select class="form-select" id="selectRolCrear" required></select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Nueva Contraseña *</label>
+                                        <label class="text-black form-label">Nueva Contraseña *</label>
                                         <input type="password" class="form-control" id="passCrear" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Confirmar Contraseña *</label>
+                                        <label class="text-black form-label">Confirmar Contraseña *</label>
                                         <input type="password" class="form-control" id="pass2Crear" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer g-4">
                                     <div class="d-flex justify-content-between ps-2 col-12">
                                         <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Crear usuario</button>
-                                        <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
                                     <div id="crearUserErrors" class="alert alert-danger d-none"></div>
                                 </div>
@@ -217,7 +217,7 @@
                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header bg-info text-dark">
+                            <div class="modal-header bg-info text-black">
                                 <h5 class="modal-title"><i class="bi bi-upload"></i> Importar usuarios</h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -232,19 +232,19 @@
                                         <div class="spinner-border text-primary" role="status">
                                             <span class="visually-hidden">Enviando formulario...</span>
                                         </div>
-                                        <div class="mt-2 fw-semibold">Cargando...</div>
+                                        <div class="mt-2 fw-semibold text-black">Cargando...</div>
                                     </div>
                                 </div>
 
                                 <div class="modal-body row g-4 justify-content-center">
                                     <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
                                     <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
-                                    <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-dark text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
+                                    <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-black text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
                                 </div>
                                 <div class="modal-footer g-4">
                                     <div class="d-flex justify-content-between ps-2 col-12">
                                         <button type="submit" id="importarcsv" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Importar usuarios</button>
-                                        <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
                                     <div id="crearUserErrors" class="alert alert-danger d-none"></div>
                                 </div>
@@ -258,7 +258,7 @@
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header bg-warning text-dark">
+                            <div class="modal-header bg-warning text-black">
                                 <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar usuario</h2>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -266,34 +266,34 @@
                             <form id="formEditarUsuario">
                                 <div class="modal-body row g-4">
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">ID</label>
+                                        <label class="text-black form-label">ID</label>
                                         <input type="text" class="form-control" id="idEditar" required readonly>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Nombre *</label>
+                                        <label class="text-black form-label">Nombre *</label>
                                         <input type="text" class="form-control" id="nombreEditar" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Correo Electrónico *</label>
+                                        <label class="text-black form-label">Correo Electrónico *</label>
                                         <input type="email" class="form-control" id="correoEditar" required>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Rol *</label>
+                                        <label class="text-black form-label">Rol *</label>
                                         <select class="form-select" id="selectRolEditar" required></select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Nueva Contraseña</label>
+                                        <label class="text-black form-label">Nueva Contraseña</label>
                                         <input type="password" class="form-control" id="passEditar">
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="text-dark form-label">Confirmar Contraseña</label>
+                                        <label class="text-black form-label">Confirmar Contraseña</label>
                                         <input type="password" class="form-control" id="pass2Editar">
                                     </div>
                                 </div>
                                 <div class="modal-footer g-4">
                                     <div class="d-flex justify-content-between ps-2 col-12">
                                         <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
-                                        <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                        <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
                                     <div id="editarUserErrors" class="alert alert-danger d-none"></div>
                                 </div>
@@ -313,14 +313,14 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body row g-4">
-                                <p class="text-dark m-1 fw-bold mt-3">ID: <span id="idMostrar" class="fw-light"></span></p>
-                                <p class="text-dark m-1 fw-bold">Nombre: <span id="nombreMostrar" class="fw-light"></span></p>
-                                <p class="text-dark m-1 fw-bold">Correo electrónico: <span id="correoMostrar" class="fw-light"></span></p>
-                                <p class="text-dark m-1 fw-bold">Rol: <span id="rolMostrar" class="fw-light"></span></p>
+                                <p class="text-black m-1 fw-bold mt-3">ID: <span id="idMostrar" class="fw-light"></span></p>
+                                <p class="text-black m-1 fw-bold">Nombre: <span id="nombreMostrar" class="fw-light"></span></p>
+                                <p class="text-black m-1 fw-bold">Correo electrónico: <span id="correoMostrar" class="fw-light"></span></p>
+                                <p class="text-black m-1 fw-bold">Rol: <span id="rolMostrar" class="fw-light"></span></p>
                             </div>
                             <div class="modal-footer g-4">
                                 <div class="d-flex justify-content-end ps-2 col-12">
-                                    <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </div>
                         </div>
@@ -351,7 +351,7 @@
                 if (!Array.isArray(usuarios) || usuarios.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="5" class="text-center text-dark py-4">
+                            <td colspan="5" class="text-center text-black py-4">
                                 No hay usuarios activos para mostrar
                             </td>
                         </tr>
@@ -379,7 +379,7 @@
                                 </button>
                                 <button 
                                     type="button" 
-                                    class="btn btn-sm btn-warning text-dark" 
+                                    class="btn btn-sm btn-warning text-black" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#modalEditar" 
                                     data-id="${usuario.id_usuario}" 
@@ -576,7 +576,7 @@
                     }
                 } catch (err) {
                     showFormError("editarUserErrors", err?.message ?? "Error inesperado");
-                    mostrarToast('Error al editar el usuario', 'danger');
+                    mostrarToast(err?.message ?? 'Error al editar el usuario', 'danger');
                 }
             });
 
@@ -624,9 +624,13 @@
 				}
 
                 try {
-                    await desactiveUser(user);
-                    await refrescarTabla();
-                    mostrarToast("Usuario desactivado correctamente", 'success');
+                    let json=await desactiveUser(user);
+                    if(json.status=='error'){
+                        mostrarToast(json.message ?? "Error al desactivar el usuario", 'danger');
+                    }else{
+                        await refrescarTabla();
+                        mostrarToast("Usuario desactivado correctamente", 'success');
+                    }
                 } catch (err) {
                     mostrarToast(err?.message ?? "Error al desactivar el usuario", 'danger');
                 }

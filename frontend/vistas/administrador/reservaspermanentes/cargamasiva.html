@@ -87,7 +87,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -105,7 +105,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -127,20 +127,20 @@
                     </div>
                     <form id="importForm" class="bg-light border-0 rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center position-relative" enctype="multipart/form-data">
                         <div id="cargandoreservas"
-                            class="d-none position-absolute border rounded top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            class="d-none position-absolute border rounded-5 top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
                             style="z-index: 10;">
 
                             <div class="text-center">
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Enviando formulario...</span>
                                 </div>
-                                <div class="mt-2 fw-semibold">Cargando...</div>
+                                <div class="mt-2 fw-semibold text-black">Cargando...</div>
                             </div>
                         </div>
 
                         <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
                         <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
-                        <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-center text-dark col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
+                        <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-center text-black col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
 
                         <button type="submit" id="importarcsv" class="btn bg-azul text-white p-3 px-5 mt-5 border-0 rounded-4 fs-4 fw-bold">
                             Subir CSV
@@ -212,6 +212,9 @@
                     
                     let res = await fetch(`${API}/reservas_permanentes/importar`, {
                         method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
                         body: formData
                     });
 
@@ -222,7 +225,7 @@
                     console.log(data);
 
                     if(!res.ok){
-                        mostrarToast('Error al subir el CSV', 'danger');
+                        mostrarToast(data.message ?? 'Error al subir el CSV', 'danger');
                         return;
                     }
 

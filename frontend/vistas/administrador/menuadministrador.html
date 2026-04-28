@@ -76,7 +76,7 @@
                     <!-- OFFCANVAS MENÚ (solo móvil/tablet) -->
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas" aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
                         </div>
 
@@ -88,7 +88,7 @@
                                 <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/menu.html">Reservas Permanentes</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/edificios/edificios.html">Edificios</a></li>
                                     <li class="nav-item"><a class="nav-link text-black" href="tablasauxiliares/plantas/plantas.html">Plantas</a></li>
@@ -164,7 +164,7 @@
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
 
-                            <div class="modal-header bg-warning text-dark">
+                            <div class="modal-header bg-warning text-black">
                                 <h5 class="modal-title" id="modalincidenciaTitulo"><i class="bi bi-plus-circle"></i> Editar incidencia</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
@@ -175,48 +175,48 @@
 
                                         <!-- ID -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="incidencia_id">ID</label>
+                                            <label class="text-black form-label" for="incidencia_id">ID</label>
                                             <input type="number" class="form-control" id="incidencia_id" name="id" readonly required>
                                             <small class="text-muted">El ID no se puede modificar</small>
                                         </div>
 
                                         <!-- Fecha -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="incidencia_fecha">Fecha</label>
+                                            <label class="text-black form-label" for="incidencia_fecha">Fecha</label>
                                             <input type="datetime-local" step="1" class="form-control" id="incidencia_fecha" name="fecha" readonly required>
                                             <small class="text-muted">La fecha de creación no se puede modificar</small>
                                         </div>
 
                                         <!-- Recurso -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="incidencia_recurso">Recurso</label>
+                                            <label class="text-black form-label" for="incidencia_recurso">Recurso</label>
                                             <input type="text" class="form-control" id="incidencia_recurso" name="recurso" readonly required>
                                             <small class="text-muted">El recurso no se puede modificar</small>
                                         </div>
 
                                         <!-- Titulo -->
                                         <div class="col-12">
-                                            <label class="text-dark form-label" for="incidencia_titulo">Título</label>
+                                            <label class="text-black form-label" for="incidencia_titulo">Título</label>
                                             <input type="text" class="form-control" id="incidencia_titulo" name="titulo" required>
                                         </div>
 
                                         <!-- Descripcion -->
                                         <div class="col-12">
-                                            <label class="text-dark form-label" for="incidencia_descripcion">Descripción</label>
+                                            <label class="text-black form-label" for="incidencia_descripcion">Descripción</label>
                                             <textarea class="form-control" id="incidencia_descripcion" name="descripcion" rows="3" required></textarea>
                                         </div>
 
                                         <!-- Usuario -->
                                         <div class="col-md-4">
                                             <input type="hidden" class="form-control" id="incidencia_id_usuario" name="idusuario" readonly required>
-                                            <label class="text-dark form-label" for="incidencia_usuario">Usuario</label>
+                                            <label class="text-black form-label" for="incidencia_usuario">Usuario</label>
                                             <input type="text" class="form-control" id="incidencia_usuario" name="usuario" readonly required>
                                             <small class="text-muted">El usuario no se puede modificar</small>
                                         </div>
 
                                         <!-- Estado -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="incidencia_estado">Estado</label>
+                                            <label class="text-black form-label" for="incidencia_estado">Estado</label>
                                             <select class="form-select" id="incidencia_estado" name="estado" required>
                                                 <option value="Abierta">Abierta</option>
                                                 <option value="En proceso">En proceso</option>
@@ -226,7 +226,7 @@
 
                                         <!-- Prioridad -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="incidencia_prioridad">Prioridad</label>
+                                            <label class="text-black form-label" for="incidencia_prioridad">Prioridad</label>
                                             <select class="form-select" id="incidencia_prioridad" name="prioridad" required>
                                                 <option value="Baja">Baja</option>
                                                 <option value="Media">Media</option>
@@ -237,7 +237,7 @@
                                 </div>
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar cambios</button>
-                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>
@@ -257,26 +257,26 @@
                                     <div class="row g-4">
                                         <!-- Fecha inicio -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="filtrarFechaInicio">Fecha inicio</label>
+                                            <label class="text-black form-label" for="filtrarFechaInicio">Fecha inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaInicio" name="filtrarFechaInicio">
                                         </div>
 
                                         <!-- Fecha fin -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="filtrarFechaFin">Fecha fin</label>
+                                            <label class="text-black form-label" for="filtrarFechaFin">Fecha fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaFin" name="filtrarFechaFin">
                                         </div>
 
                                         <!-- Recurso -->
                                         <div class="col-md-4">
-                                            <label class="text-dark form-label" for="filtrarRecurso">Recurso</label>
+                                            <label class="text-black form-label" for="filtrarRecurso">Recurso</label>
                                             <select class="form-select filtrarRecurso" id="filtrarRecurso" name="filtrarRecurso">
                                             </select>
                                         </div>
 
                                         <!-- Prioridad -->
                                         <div class="col-md-6 pe-3">
-                                            <label class="text-dark form-label" for="filtrarPrioridad">Prioridad</label>
+                                            <label class="text-black form-label" for="filtrarPrioridad">Prioridad</label>
                                             <select class="form-select" id="filtrarPrioridad" name="filtrarPrioridad">
                                                 <option value="Todos" selected>Todos</option>
                                                 <option value="Alta">Alta</option>
@@ -287,7 +287,7 @@
 
                                         <!-- Estado -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarEstado">Estado</label>
+                                            <label class="text-black form-label" for="filtrarEstado">Estado</label>
                                             <select class="form-select" id="filtrarEstado" name="filtrarEstado">
                                                 <option value="Todos" selected>Todos</option>
                                                 <option value="Abierta">Abierta</option>
@@ -300,7 +300,7 @@
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                     <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>
@@ -311,7 +311,7 @@
                 <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
-                            <div class="modal-header bg-warning text-dark">
+                            <div class="modal-header bg-warning text-black">
                                 <h5 class="modal-title" id="modalReservaTitulo">Editar reserva</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
@@ -325,7 +325,7 @@
                                         <div class="spinner-border text-primary" role="status">
                                             <span class="visually-hidden">Enviando formulario...</span>
                                         </div>
-                                        <div class="mt-2 fw-semibold">Cargando...</div>
+                                        <div class="mt-2 fw-semibold text-black">Cargando...</div>
                                     </div>
                                 </div>
                                 <div class="modal-body container-fluid">
@@ -339,33 +339,33 @@
                                                     <button type="button" class="col-12 btn btn-danger border rounded-pill text-light fs-5" id="btnDenegarReserva"><i class="bi bi-x-lg"></i> Denegar</button>
                                                 </div>
                                             </div>
-                                            <p class="text-dark fs-5 mb-0">Editar reserva</p>
+                                            <p class="text-black fs-5 mb-0">Editar reserva</p>
                                         </div>
                                         <input type="hidden" id="reserva_autorizada" name="autorizada">
                                         <!-- ID reserva -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label">ID Reserva</label>
+                                            <label class="text-black form-label">ID Reserva</label>
                                             <input type="number" class="form-control" id="reserva_id" name="reserva_id" required readonly>
                                             <small class="text-muted">El ID no se puede modificar</small>
                                         </div>
 
                                         <!-- Fecha creación -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_f_creacion">F. creación</label>
+                                            <label class="text-black form-label" for="reserva_f_creacion">F. creación</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" required readonly>
                                             <small class="text-muted">La fecha de creación no se puede modificar</small>
                                         </div>
 
                                         <!-- Inicio -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_inicio">Inicio</label>
+                                            <label class="text-black form-label" for="reserva_inicio">Inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio" required>
                                             <small class="text-muted">La fecha de inicio no se puede modificar</small>
                                         </div>
 
                                         <!-- Fin -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_fin">Fin</label>
+                                            <label class="text-black form-label" for="reserva_fin">Fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin" required>
                                             <small class="text-muted">La fecha fin no se puede modificar</small>
                                         </div>
@@ -373,26 +373,26 @@
                                         <!-- Espacio/Portátil -->
                                         <div class="col-lg-6">
                                             <input type="hidden" id="reserva_tipo" name="tipo" required readonly>
-                                            <label class="text-dark form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
+                                            <label class="text-black form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
                                             <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil" required readonly>
                                             <small class="text-muted">El tipo de recurso no se puede modificar</small>
                                         </div>
 
                                         <!-- Asignatura -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_asignatura">Asignatura</label>
+                                            <label class="text-black form-label" for="reserva_asignatura">Asignatura</label>
                                             <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
                                         </div>
 
                                         <!-- Grupo -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_grupo">Grupo</label>
+                                            <label class="text-black form-label" for="reserva_grupo">Grupo</label>
                                             <input type="text" class="form-control" id="reserva_grupo" name="grupo" required>
                                         </div>
 
                                         <!-- Profesor -->
                                         <div class="col-lg-6">
-                                            <label class="text-dark form-label" for="reserva_profesor">Profesor</label>
+                                            <label class="text-black form-label" for="reserva_profesor">Profesor</label>
                                             <input type="text" class="form-control" id="reserva_profesor" name="profesor" required>
                                         </div>
 
@@ -400,33 +400,33 @@
                                         <div id="div_reserva_usuario">
                                             <input type="hidden" id="reserva_id_usuario" name="id_usuario" required readonly>
                                             <input type="hidden" id="reserva_id_usuario_autoriza" name="id_usuario_autoriza" required readonly>
-                                            <label class="text-dark form-label" for="reserva_usuario">Usuario</label>
+                                            <label class="text-black form-label" for="reserva_usuario">Usuario</label>
                                             <input type="text" class="form-control" id="reserva_usuario" name="usuario" required readonly>
                                             <small class="text-muted">El usuario no se puede modificar</small>
                                         </div>
 
                                         <!-- Unidades -->
                                         <div class="col-lg-6" id="div_reserva_unidades">
-                                            <label class="text-dark form-label" for="reserva_unidades">Unidades</label>
+                                            <label class="text-black form-label" for="reserva_unidades">Unidades</label>
                                             <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0" required>
                                         </div>
 
                                         <!-- Espacio en el que se usa -->
                                         <div class="col-lg-6" id="div_reserva_espacio_uso">
-                                            <label class="text-dark form-label">Espacio en el que se usa</label>
+                                            <label class="text-black form-label">Espacio en el que se usa</label>
                                             <select class="form-select selectEspacio" id="reserva_espacio_uso" name="espacio_uso" required>
                                             </select>
                                         </div>
 
                                         <!-- Actividad -->
                                         <div class="col-lg-6" id="div_reserva_actividad">
-                                            <label class="text-dark form-label" for="reserva_actividad">Actividad</label>
+                                            <label class="text-black form-label" for="reserva_actividad">Actividad</label>
                                             <input type="text" class="form-control" id="reserva_actividad" name="actividad" required>
                                         </div>
 
                                         <!-- Necesidades -->
                                         <div class="col-12" id="div_reserva_necesidades">
-                                            <label class="text-dark form-label" for="reserva_necesidades">Necesidades</label>
+                                            <label class="text-black form-label" for="reserva_necesidades">Necesidades</label>
                                             <select class="form-select selectMultipleNecesidad" id="reserva_necesidades" name="necesidades" multiple size="4">
                                             </select>
                                             <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
@@ -434,14 +434,14 @@
 
                                         <!-- Observaciones -->
                                         <div class="col-12">
-                                            <label class="text-dark form-label" for="reserva_observaciones">Observaciones</label>
+                                            <label class="text-black form-label" for="reserva_observaciones">Observaciones</label>
                                             <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="submit" class="col-5 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar cambios</button>
-                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-5 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>
@@ -461,20 +461,20 @@
                                     <div class="row g-4">
                                         <!-- Recurso -->
                                         <div class="col-md-12">
-                                            <label class="text-dark form-label" for="filtrarRecursoAutorizar">Recurso</label>
+                                            <label class="text-black form-label" for="filtrarRecursoAutorizar">Recurso</label>
                                             <select class="form-select filtrarRecurso" id="filtrarRecursoAutorizar" name="filtrarRecursoAutorizar">
                                             </select>
                                         </div>
 
                                         <!-- Fecha inicio -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarFechaInicioAutorizar">Fecha inicio</label>
+                                            <label class="text-black form-label" for="filtrarFechaInicioAutorizar">Fecha inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaInicioAutorizar" name="filtrarFechaInicioAutorizar">
                                         </div>
 
                                         <!-- Fecha fin -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarFechaFinAutorizar">Fecha fin</label>
+                                            <label class="text-black form-label" for="filtrarFechaFinAutorizar">Fecha fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaFinAutorizar" name="filtrarFechaFinAutorizar">
                                         </div>
                                     </div>
@@ -482,7 +482,7 @@
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                     <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>
@@ -502,26 +502,26 @@
                                     <div class="row g-4">
                                         <!-- Fecha inicio -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarFechaInicioProximas">Fecha inicio</label>
+                                            <label class="text-black form-label" for="filtrarFechaInicioProximas">Fecha inicio</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaInicioProximas" name="filtrarFechaInicioProximas">
                                         </div>
 
                                         <!-- Fecha fin -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarFechaFinProximas">Fecha fin</label>
+                                            <label class="text-black form-label" for="filtrarFechaFinProximas">Fecha fin</label>
                                             <input type="datetime-local" step="1" class="form-control" id="filtrarFechaFinProximas" name="filtrarFechaFinProximas">
                                         </div>
 
                                         <!-- Recurso -->
                                         <div class="col-md-6">
-                                            <label class="text-dark form-label" for="filtrarRecursoProximas">Recurso</label>
+                                            <label class="text-black form-label" for="filtrarRecursoProximas">Recurso</label>
                                             <select class="form-select filtrarRecurso" id="filtrarRecursoProximas" name="filtrarRecursoProximas">
                                             </select>
                                         </div>
 
                                         <!-- Tipo -->
                                         <div class="col-md-6 pe-3">
-                                            <label class="text-dark form-label" for="filtrarTipoProximas">Tipo</label>
+                                            <label class="text-black form-label" for="filtrarTipoProximas">Tipo</label>
                                             <select class="form-select" id="filtrarTipoProximas" name="filtrarTipoProximas">
                                                 <option value="Todos" selected>Todos</option>
                                                 <option value="Espacio">Espacio</option>
@@ -533,7 +533,7 @@
                                 <div class="modal-footer d-flex justify-content-between">
                                     <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Aplicar filtros</button>
                                     <button type="reset" class="col-3 btn bg-verde border rounded-pill text-light"><i class="bi bi-arrow-clockwise"></i> Restablecer</button>
-                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                    <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                 </div>
                             </form>
                         </div>

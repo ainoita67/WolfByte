@@ -75,7 +75,7 @@
             </aside>
 
             <!-- CONTENIDO -->
-            <section class="flex-grow-1 ms-3 p-3 p-lg-4 mt-lg-5 pt-5">
+            <section class="flex-grow-1 ms-3 p-3 p-lg-4 pb-lg-5 mt-lg-5 pt-5 mb-5">
 
                 <!-- Botón menú SOLO en móvil/tablet -->
                 <div class="d-lg-none mb-3">
@@ -89,7 +89,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -107,7 +107,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -149,6 +149,9 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             const data = await getOtrosEspacios();
+            if(!data){
+                data=[];
+            }
             crearTarjetas(data);
         });
 
@@ -156,50 +159,60 @@
             const contenedor = document.querySelector(".contenedor-aulas");
             contenedor.innerHTML = ""; // limpiar contenido estático
             // data = { edificio: { planta: [aulas] } }
-            for (const [edificio, plantas] of Object.entries(data)) {
+    
+            if(!data||data.length==0){
+                let card = document.createElement("div");
+                card.className = "card h-100 p-0 m-0 reserva-card text-center";
+                card.innerHTML = `
+                    <div class="card-body bg-secondary-subtle">No se han encontrado espacios</div>
+                `;
+                contenedor.appendChild(card);
+            }else{
+                for (const [edificio, plantas] of Object.entries(data)) {
 
-                // --- Tarjeta edificio ---
-                const edificioCard = document.createElement("div");
-                edificioCard.className = "edificio-card";
+                    // --- Tarjeta edificio ---
+                    const edificioCard = document.createElement("div");
+                    edificioCard.className = "edificio-card";
 
-                const tituloEdificio = document.createElement("h3");
-                tituloEdificio.textContent = edificio.toUpperCase();
-                edificioCard.appendChild(tituloEdificio);
+                    const tituloEdificio = document.createElement("h3");
+                    tituloEdificio.textContent = edificio.toUpperCase();
+                    edificioCard.appendChild(tituloEdificio);
 
-                // --- Plantas ---
-                for (const [planta, aulas] of Object.entries(plantas)) {
+                    // --- Plantas ---
+                    for (const [planta, aulas] of Object.entries(plantas)) {
 
-                    const plantaDiv = document.createElement("div");
-                    plantaDiv.className = "planta";
+                        const plantaDiv = document.createElement("div");
+                        plantaDiv.className = "planta";
 
-                    const plantaTitulo = document.createElement("span");
-                    plantaTitulo.className = "planta-titulo";
-                    plantaTitulo.textContent = planta;
-                    plantaDiv.appendChild(plantaTitulo);
+                        const plantaTitulo = document.createElement("span");
+                        plantaTitulo.className = "planta-titulo";
+                        plantaTitulo.textContent = planta;
+                        plantaDiv.appendChild(plantaTitulo);
 
-                    const aulasDiv = document.createElement("div");
-                    aulasDiv.className = "aulas";
+                        const aulasDiv = document.createElement("div");
+                        aulasDiv.className = "aulas";
 
-                    // --- Botones de aulas ---
-                    aulas.forEach(aula => {
-                        const btn = document.createElement("button");
-                        btn.id = aula.id_recurso;
-                        btn.className = "aula";
-                        btn.textContent = aula.id_recurso + (aula.descripcion ? ` - ${aula.descripcion}` : "");
+                        // --- Botones de aulas ---
+                        aulas.forEach(aula => {
+                            const btn = document.createElement("button");
+                            btn.id = aula.id_recurso;
+                            btn.className = "aula";
+                            btn.textContent = aula.id_recurso + (aula.descripcion ? ` - ${aula.descripcion}` : "");
 
-                        // REDIRECCIÓN
-                        btn.addEventListener("click", () => {
-                            const id = aula.id_recurso;
-                            window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                            // REDIRECCIÓN
+                            btn.addEventListener("click", () => {
+                                const id = aula.id_recurso;
+                                window.location.href = `${BASE}/vistas/administrador/reservaspermanentes/listado.html?id=${encodeURIComponent(id)}`;
+                            });
+                            aulasDiv.appendChild(btn);
                         });
-                        aulasDiv.appendChild(btn);
-                    });
 
-                    plantaDiv.appendChild(aulasDiv);
-                    edificioCard.appendChild(plantaDiv);
+                        plantaDiv.appendChild(aulasDiv);
+                        edificioCard.appendChild(plantaDiv);
+                    }
+
+                    contenedor.appendChild(edificioCard);
                 }
-
-                contenedor.appendChild(edificioCard);
             }
         }
 

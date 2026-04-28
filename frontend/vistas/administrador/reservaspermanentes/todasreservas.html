@@ -74,7 +74,7 @@
             </aside>
 
             <!-- CONTENIDO -->
-            <section class="flex-grow-1 ms-3 p-3 p-lg-4 mt-lg-4">
+            <section class="flex-grow-1 ms-3 p-3 p-lg-4 pb-lg-5 mt-lg-5 pt-5 mb-5">
 
                 <!-- Botón menú SOLO en móvil/tablet -->
                 <div class="d-lg-none mb-3">
@@ -88,7 +88,7 @@
                 <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                     aria-labelledby="adminOffcanvasLabel">
                     <div class="offcanvas-header mb-0 pb-1">
-                        <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                        <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                             aria-label="Cerrar"></button>
                     </div>
@@ -106,7 +106,7 @@
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                             <hr class="my-3">
-                            <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                            <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -130,8 +130,8 @@
                     </button>
                 </div>
 
-                <div class="table-responsive mb-5">
-                    <table class="table table-bordered table-striped text-center align-middle tabla-cabecera mb-5">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center align-middle tabla-cabecera">
                         <thead>
                             <tr>
                                 <th>Recurso</th>
@@ -162,7 +162,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Header -->
-                <div class="modal-header bg-warning text-dark">
+                <div class="modal-header bg-warning text-black">
                     <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar reserva</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -171,17 +171,17 @@
                 <form id="formEditarReserva">
                     <div class="modal-body row g-4">
                         <div class="col-md-6">
-                            <label class="text-dark form-label">ID</label>
+                            <label class="text-black form-label">ID</label>
                             <input type="text" class="form-control" id="idEditar" required readonly>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="text-dark form-label">Recurso</label>
+                            <label class="text-black form-label">Recurso</label>
                             <input type="text" class="form-control" id="recursoEditar" required readonly>
                         </div>
 
                         <div class="col-md-12">
-                            <label class="text-dark form-label">Día de la semana</label>
+                            <label class="text-black form-label">Día de la semana</label>
                             <select name="diaEditar" id="diaEditar" class="form-select" required>
                                 <option value="" disabled>Seleccione un día</option>
                                 <option value="1">Lunes</option>
@@ -193,29 +193,29 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="text-dark form-label">Hora de Inicio</label>
+                            <label class="text-black form-label">Hora de Inicio</label>
                             <input type="time" class="form-control" id="inicioEditar" required>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="text-dark form-label">Hora de Fin</label>
+                            <label class="text-black form-label">Hora de Fin</label>
                             <input type="time" class="form-control" id="finEditar" required>
                         </div>
 
                         <div class="col-md-12">
-                            <label class="text-dark form-label">Comentario</label>
+                            <label class="text-black form-label">Comentario</label>
                             <input type="text" class="form-control" id="comentarioEditar">
                         </div>
 
                         <div class="col-md-12" id="div_editarunidades">
-                            <label class="text-dark form-label">Unidades</label>
+                            <label class="text-black form-label">Unidades</label>
                             <input type="number" class="form-control" id="unidadesEditar">
                         </div>
                     </div>
                     <div class="modal-footer g-4">
                         <div class="d-flex justify-content-between ps-2 col-12">
                             <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
-                            <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                            <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                         </div>
                         <div id="editarUserErrors" class="alert alert-danger d-none"></div>
                     </div>
@@ -238,13 +238,13 @@
 
                 <!-- Body / Formulario -->
                 <div class="modal-body">
-                    <p class="text-dark m-1">ID: <span id="idMostrar"></span></p>
-                    <p class="text-dark m-1">Recurso: <span id="recursoMostrar"></span></p>
-                    <p class="text-dark m-1">Día de la semana: <span id="diaMostrar"></span></p>
-                    <p class="text-dark m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
-                    <p class="text-dark m-1">Hora de Fin: <span id="finMostrar"></span></p>
-                    <p class="text-dark m-1">Comentario: <span id="comentarioMostrar"></span></p>
-                    <p class="text-dark m-1">Unidades: <span id="unidadesMostrar"></span></p>
+                    <p class="text-black m-1">ID: <span id="idMostrar"></span></p>
+                    <p class="text-black m-1">Recurso: <span id="recursoMostrar"></span></p>
+                    <p class="text-black m-1">Día de la semana: <span id="diaMostrar"></span></p>
+                    <p class="text-black m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
+                    <p class="text-black m-1">Hora de Fin: <span id="finMostrar"></span></p>
+                    <p class="text-black m-1">Comentario: <span id="comentarioMostrar"></span></p>
+                    <p class="text-black m-1">Unidades: <span id="unidadesMostrar"></span></p>
                 </div>
             </div>
         </div>
@@ -318,7 +318,7 @@
                 let row = document.createElement("tr");
                 row.className = "text-start";
                 row.innerHTML = `
-                    <td colspan="${numColumnas}" class="p-3">No se han encontrado reservas</td>
+                    <td colspan="${numColumnas}" class="p-3">No se han encontrado reservas permanentes</td>
                 `;
                 tbody.appendChild(row);
             }else{
@@ -431,38 +431,6 @@
                 mostrarToast(err?.message ?? "Error al actualizar la reserva", "danger");
             }
         }
-
-        // Delegación de eventos para eliminar reservas
-        document.addEventListener("click", async (e) => {
-            const btn = e.target.closest(".btn-eliminar");
-            if (!btn) return;
-
-            const id = Number(btn.dataset.id);
-            const reserva = reservas.find(r => r.id === id);
-            if (!reserva) return mostrarToast("Reserva no encontrada", "danger");
-
-            const confirmar = await DayPilot.Modal.confirm(`¿Seguro que desea eliminar la reserva del recurso ${reserva.recurso}?`);
-            
-            if (!confirmar) return;
-
-            if (confirmar.canceled) {
-                return;
-            }
-
-            try {
-                await desactivePermanente(reserva.id);
-
-                // Actualizar array local
-                reservas = await getReservas();
-                rellenarTablaReservas(reservas);
-                mostrarToast("Reserva eliminada correctamente", "success");
-            } catch (err) {
-                console.error(err);
-                let msg=err?.message ?? "Error al eliminar la reserva"
-                mostrarToast(msg, "danger");
-            }
-        });
-
     </script>
 </body>
 

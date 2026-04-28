@@ -107,9 +107,9 @@ function obtenerPlantas() {
     contenedor.innerHTML = `
         <div class="col-12 text-center py-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+                <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="text-dark mt-2">Cargando plantas...</p>
+            <p class="text-black mt-2">Cargando plantas...</p>
         </div>
     `;
     
@@ -131,7 +131,7 @@ function obtenerPlantas() {
                 contenedor.innerHTML = `
                     <div class="col-12 text-center py-5">
                         <i class="bi bi-building fs-1 text-muted"></i>
-                        <p class="text-dark text-muted mt-3">No hay plantas registradas</p>
+                        <p class="text-black text-muted mt-3">No hay plantas registradas</p>
                         <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
                             <i class="bi bi-plus-circle"></i> Crear primera planta
                         </button>
@@ -154,18 +154,18 @@ function obtenerPlantas() {
                     <div class="card shadow-sm h-100">
                         <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">${nombreEdificio}</h5>
-                            <span class="badge bg-light text-dark">Planta ${numeroPlanta}</span>
+                            <span class="badge bg-light text-black">Planta ${numeroPlanta}</span>
                         </div>
                         <div class="card-body">
                             <h6 class="card-subtitle mb-3 text-muted">${nombrePlanta}</h6>
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <p class="text-dark mb-1"><strong>ID Edificio:</strong></p>
-                                    <p class="text-dark fs-5 text-muted">${idEdificio}</p>
+                                    <p class="text-black mb-1"><strong>ID Edificio:</strong></p>
+                                    <p class="text-black fs-5 text-muted">${idEdificio}</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="text-dark mb-1"><strong>Espacios:</strong></p>
-                                    <p class="text-dark fs-5 text-primary">${totalEspacios}</p>
+                                    <p class="text-black mb-1"><strong>Espacios:</strong></p>
+                                    <p class="text-black fs-5 text-primary">${totalEspacios}</p>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
@@ -201,7 +201,7 @@ function obtenerPlantas() {
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                     <h5 class="mt-3 text-danger">Error de conexión</h5>
-                    <p class="text-dark text-muted">${error.message}</p>
+                    <p class="text-black text-muted">${error.message}</p>
                     <button class="btn btn-primary mt-2" onclick="obtenerPlantas()">
                         <i class="bi bi-arrow-clockwise"></i> Reintentar
                     </button>

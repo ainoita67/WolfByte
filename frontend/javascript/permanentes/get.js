@@ -39,7 +39,11 @@ export async function getReservas() {
 
 export async function getReservasInactivas() {
   try {
-    const response = await fetch(`${API}/reservas_permanentes/inactivas`);
+    const response = await fetch(`${API}/reservas_permanentes/inactivas`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener reservas");
 
     const json = await response.json();

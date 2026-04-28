@@ -15,29 +15,29 @@ function cargarCSS(href) {
 
 function cargarHeadHTML(url, callback) {
     fetch(url)
-        .then(r => r.text())
-        .then(html => {
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
+    .then(r => r.text())
+    .then(html => {
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
 
-            // Insertar solo meta y link
-            temp.querySelectorAll('meta, link, title').forEach(el => document.head.appendChild(el));
+        // Insertar solo meta y link
+        temp.querySelectorAll('meta, link, title').forEach(el => document.head.appendChild(el));
 
-            // Para scripts, los añadimos por separado
-            temp.querySelectorAll('script').forEach(s => {
-                if(s.src) {
-                    // Si el src ya es una URL absoluta (http, https) no concatenamos BASE
-                    const src = s.src.startsWith('http') ? s.src : BASE + s.getAttribute('src');
-                    cargarScript(src);
-                }
-                else {
-                    eval(s.textContent);
-                }
-            });
+        // Para scripts, los añadimos por separado
+        temp.querySelectorAll('script').forEach(s => {
+            if(s.src) {
+                // Si el src ya es una URL absoluta (http, https) no concatenamos BASE
+                const src = s.src.startsWith('http') ? s.src : BASE + s.getAttribute('src');
+                cargarScript(src);
+            }
+            else {
+                eval(s.textContent);
+            }
+        });
 
-            if(callback) callback();
-        })
-        .catch(e => console.error("Error cargando head", e));
+        if(callback) callback();
+    })
+    .catch(e => console.error("Error cargando head", e));
 }
 
 function cargarHTML(pagina, selector, callback) {
@@ -46,12 +46,12 @@ function cargarHTML(pagina, selector, callback) {
     if (!contenedor) return;
 
     fetch(pagina)
-        .then(response => response.text())
-        .then(html => {
-            contenedor.innerHTML = html;
-            if (callback) callback();
-        })
-        .catch(e => console.error("Error cargando", pagina, e));
+    .then(response => response.text())
+    .then(html => {
+        contenedor.innerHTML = html;
+        if (callback) callback();
+    })
+    .catch(e => console.error("Error cargando", pagina, e));
 }
 
 // includes.js

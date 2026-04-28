@@ -1,6 +1,10 @@
 export async function getPermanentesRecurso(idRecurso) {
   try {
-    const response = await fetch(`${API}/reserva-permanente/espacio/${idRecurso}`);
+    const response = await fetch(`${API}/reserva-permanente/espacio/${idRecurso}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener reservas permanentes");
 
     const json = await response.json();

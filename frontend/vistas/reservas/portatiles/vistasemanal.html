@@ -58,7 +58,7 @@
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Enviando reserva...</span>
                                 </div>
-                                <div class="mt-2 fw-semibold">Cargando...</div>
+                                <div class="mt-2 fw-semibold text-black">Cargando...</div>
                             </div>
                         </div>
 
@@ -119,7 +119,7 @@ let horafin = 15;
 async function cargarEspacios() {
     const res = await fetch(`${API}/espacios`, {
         headers: {
-            "Authorization": "Bearer " + localStorage.getItem("token")
+            Authorization: `Bearer ${token}`
         }
     });
     const json = await res.json();
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token")
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({
                         asignatura: modal.result.asignatura,
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer " + localStorage.getItem("token")
+                            Authorization: `Bearer ${token}`
                         },
                         body: JSON.stringify({
                             asignatura: modal.result.asignatura,
@@ -508,7 +508,7 @@ async function cargarInfoCarrito(carrito) {
 
 
             <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
-                <a id="btnVolver" class="bg-azul border-0 rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+                <a id="btnVolver" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
         <footer id="footer"></footer>

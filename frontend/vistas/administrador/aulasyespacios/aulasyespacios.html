@@ -89,7 +89,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -107,7 +107,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -136,9 +136,9 @@
                         <!-- Aquí se generarán las tarjetas dinámicamente -->
                         <div class="col-12 text-center py-5">
                             <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Cargando...</span>
+                                <span class="visually-hidden text-black">Cargando...</span>
                             </div>
-                            <p class="text-dark mt-2">Cargando espacios...</p>
+                            <p class="text-black mt-2">Cargando espacios...</p>
                         </div>
                     </div>
 
@@ -163,33 +163,33 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">ID del espacio</label>
+                                    <label class="text-black form-label">ID del espacio</label>
                                     <input type="text" class="form-control" id="crearId" placeholder="Ej: A101" required>
                                     <small class="text-muted">Identificador único</small>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Descripción</label>
+                                    <label class="text-black form-label">Descripción</label>
                                     <input type="text" class="form-control" id="crearDescripcion"
                                         placeholder="Ej: Aula de informática" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Edificio</label>
+                                    <label class="text-black form-label">Edificio</label>
                                     <select class="form-select selectEdificio" id="crearEdificio" required>
                                         <option value="">Seleccione un edificio</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3" id="divcrearplanta">
-                                    <label class="text-dark form-label">Planta</label>
+                                    <label class="text-black form-label">Planta</label>
                                     <select class="form-select" id="crearPlanta" required>
                                         <option value="" selected disabled>Seleccione un edificio primero</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Tipo</label>
+                                    <label class="text-black form-label">Tipo</label>
                                     <select class="form-select" id="crearTipo" required>
                                         <option value="1">Aula</option>
                                         <option value="0">Otro espacio</option>
@@ -197,7 +197,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Estado</label>
+                                    <label class="text-black form-label">Estado</label>
                                     <select class="form-select" id="crearEstado" required>
                                         <option value="1">Activo</option>
                                         <option value="0">Inactivo</option>
@@ -205,7 +205,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="text-dark form-label">¿Requiere autorización de reserva? (Espacio especial)</label>
+                                    <label class="text-black form-label">¿Requiere autorización de reserva? (Espacio especial)</label>
                                     <select class="form-select" id="crearEspecial" required>
                                         <option value="1">Sí, requiere que un administrador lo autorice</option>
                                         <option value="0" selected>No, no requiere que un administrador lo autorice</option>
@@ -213,7 +213,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="text-dark form-label">Características</label>
+                                    <label class="text-black form-label">Características</label>
                                     <select class="form-select" id="crearCaracteristicas" multiple>
                                     </select>
                                     <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
@@ -223,7 +223,7 @@
                         <div class="modal-footer g-4">
                             <div class="d-flex justify-content-between ps-2 col-12">
                                 <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Crear espacio</button>
-                                <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -235,7 +235,7 @@
         <div class="modal fade" id="modalEditar" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header bg-warning text-dark">
+                    <div class="modal-header bg-warning text-black">
                         <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar espacio</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
@@ -245,32 +245,32 @@
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">ID del espacio</label>
+                                    <label class="text-black form-label">ID del espacio</label>
                                     <input type="text" class="form-control" id="editIdDisplay" disabled>
                                     <small class="text-muted">El ID no se puede modificar</small>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Descripción</label>
+                                    <label class="text-black form-label">Descripción</label>
                                     <input type="text" class="form-control" id="editDescripcion" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Edificio</label>
+                                    <label class="text-black form-label">Edificio</label>
                                     <select class="form-select selectEdificio" id="editEdificio" required>
                                         <option value="">Seleccione un edificio</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3" id="diveditarplanta">
-                                    <label class="text-dark form-label">Planta</label>
+                                    <label class="text-black form-label">Planta</label>
                                     <select class="form-select" id="editPlanta" required>
                                         <option value="" selected disabled>Seleccione un edificio primero</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Tipo</label>
+                                    <label class="text-black form-label">Tipo</label>
                                     <select class="form-select" id="editTipo" required>
                                         <option value="1">Aula</option>
                                         <option value="0">Otro espacio</option>
@@ -278,7 +278,7 @@
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label class="text-dark form-label">Estado</label>
+                                    <label class="text-black form-label">Estado</label>
                                     <select class="form-select" id="editEstado" required>
                                         <option value="1">Activo</option>
                                         <option value="0">Inactivo</option>
@@ -286,7 +286,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="text-dark form-label">¿Requiere autorización de reserva? (Espacio especial)</label>
+                                    <label class="text-black form-label">¿Requiere autorización de reserva? (Espacio especial)</label>
                                     <select class="form-select" id="editEspecial" required>
                                         <option value="1">Sí, requiere que un administrador lo autorice</option>
                                         <option value="0">No, no requiere que un administrador lo autorice</option>
@@ -294,7 +294,7 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="text-dark form-label">Características</label>
+                                    <label class="text-black form-label">Características</label>
                                     <select class="form-select" id="editCaracteristicas" multiple>
                                     </select>
                                     <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
@@ -304,7 +304,7 @@
                         <div class="modal-footer g-4">
                             <div class="d-flex justify-content-between ps-2 col-12">
                                 <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
-                                <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                             </div>
                         </div>
                     </form>
@@ -328,7 +328,7 @@
                         <p><strong>Tipo:</strong> <span id="verTipo"></span></p>
                         <p><strong>Estado:</strong> <span id="verEstado"></span></p>
                         <p><strong>Especial:</strong> <span id="verEspecial"></span></p>
-                        <p class="text-dark mb-0"><strong>Características:</strong> <span id="verCaracteristicas"></span></p>
+                        <p class="text-black mb-0"><strong>Características:</strong> <span id="verCaracteristicas"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" id="btnEditarDesdeVer" data-id="">Editar</button>

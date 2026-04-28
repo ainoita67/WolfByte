@@ -2,7 +2,7 @@ export async function getCarrito(id) {
   try {
     const response = await fetch(`${API}/material/${id}`, {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        Authorization: `Bearer ${token}`
       }
     });
 

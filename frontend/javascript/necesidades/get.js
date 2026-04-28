@@ -34,7 +34,7 @@ function obtenerNecesidades(){
                             <p class="fs-6 text-light m-0 py-2"><i class="bi bi-tag"></i> ID: ${necesidad.id_necesidad}</p>
                         </div>
                         <div class="card-body">
-                            <p class="text-dark fs-5 card-title">${necesidad.nombre}</p>
+                            <p class="text-black fs-5 card-title">${necesidad.nombre}</p>
                         </div>
                         <div class="card-footer text-end">
                             <button class="btn btn-sm bg-warning text-black"

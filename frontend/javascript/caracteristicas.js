@@ -99,10 +99,10 @@ function showCaracteristicas(caracteristicas) {
         tarjeta.innerHTML = `
             <div class="card text-center shadow-sm overflow-hidden h-100">
                 <div class="bg-azul card-head rounded-top">
-                    <p class="text-dark fs-6 text-light m-0 py-2">ID: ${caracteristica.id_caracteristica}</p>
+                    <p class="text-black fs-6 text-light m-0 py-2">ID: ${caracteristica.id_caracteristica}</p>
                 </div>
                 <div class="card-body d-flex flex-column">
-                    <p class="text-dark fs-5 card-title flex-grow-1">${caracteristicaObj.getNombre()}</p>
+                    <p class="text-black fs-5 card-title flex-grow-1">${caracteristicaObj.getNombre()}</p>
                     <div class="card-footer text-end border-0 bg-transparent">
                         <button class="btn btn-sm bg-azul text-light btn-editar" 
                                 data-id="${caracteristica.id_caracteristica}"

@@ -214,7 +214,11 @@ function obtenerRecursos(){
 
 //API Obtener portatiles para crear incidencia
 function obtenerPortatiles(){
-    fetch(window.location.origin+"/API/material/activos")
+    fetch(window.location.origin+"/API/material/activos", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let portatiles = response.data;
@@ -307,7 +311,7 @@ function obtenerEspaciosPorEdificio(edificio){
     if(!edificio||edificio<=0){
         return obtenerEspacios();
     }else{
-        fetch(window.location.origin+"/API/recurso/", {
+        fetch(window.location.origin+"/API/espacios/activos", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -458,7 +462,7 @@ function obtenerEspaciosPorPlanta(edificio, planta=-100){
     }else if(!planta||planta<=-100){
         return obtenerEspaciosPorEdificio(edificio);
     }else{
-        fetch(window.location.origin+"/API/recurso/", {
+        fetch(window.location.origin+"/API/espacios/activos", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -582,11 +586,11 @@ function mostrarIncidenciasTarjetas(incidencias, limite){
                 divIncidencia.setAttribute("data-id", incidencia.id_incidencia);
                 divIncidencia.innerHTML = `
                     <div class="card-body bg-secondary-subtle">
-                        <p class="text-dark fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
-                        <p class="text-dark fw-bold mb-0">${incidencia.titulo}</p>
-                        <p class="text-dark mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
-                        <p class="text-dark mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
-                        <p class="text-dark mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
+                        <p class="text-black fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
+                        <p class="text-black fw-bold mb-0">${incidencia.titulo}</p>
+                        <p class="text-black mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
+                        <p class="text-black mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
+                        <p class="text-black mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
                     </div>
                 `;
                 if(incidencia.estado=="Abierta"){
@@ -653,7 +657,11 @@ function formatearFecha(stringFecha){
 
 function obtenerMisIncidencias(){
     usuario=sessionStorage.getItem("id_usuario");
-    fetch(window.location.origin+"/API/incidencias/usuario/"+usuario)
+    fetch(window.location.origin+"/API/incidencias/usuario/"+usuario, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let incidencias = response.data;
@@ -699,11 +707,11 @@ function mostrarMisIncidencias(incidencias){
             divIncidencia.setAttribute("data-titulo", incidencia.titulo);
             divIncidencia.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
-                    <p class="text-dark fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
-                    <p class="text-dark fw-bold mb-0">${incidencia.titulo}</p>
-                    <p class="text-dark mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
-                    <p class="text-dark mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
-                    <p class="text-dark mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
+                    <p class="text-black fw-bold mb-0">Incidencia #${incidencia.id_incidencia}</p>
+                    <p class="text-black fw-bold mb-0">${incidencia.titulo}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">Fecha: </span>${formatearFecha(incidencia.fecha)}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">Prioridad: </span>${capitalizar(incidencia.prioridad)}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">Estado: </span>${capitalizar(incidencia.estado)}</p>
                 </div>
             `;
             if(incidencia.estado=="Abierta"){

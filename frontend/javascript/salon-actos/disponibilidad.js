@@ -2,7 +2,11 @@ import { obtenerSeptiembre } from "./horario_permanente.js";
 
 export async function getLiberacionesRecurso(idRecurso) {
   try {
-    const response = await fetch(`${API}/liberaciones/recurso/${idRecurso}`);
+    const response = await fetch(`${API}/liberaciones/recurso/${idRecurso}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
     if (!response.ok) throw new Error("Error al obtener liberaciones");
 
     const json = await response.json();

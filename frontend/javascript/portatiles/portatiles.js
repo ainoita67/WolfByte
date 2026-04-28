@@ -54,7 +54,7 @@ function mostrarToast(mensaje, tipo = 'success') {
         titulo = 'Error';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
-        textColor='text-dark'
+        textColor='text-black'
         iconClass = 'bi-exclamation-circle-fill';
         titulo = 'Advertencia';
     } else if (tipo === 'info') {
@@ -103,7 +103,11 @@ function mostrarToast(mensaje, tipo = 'success') {
 async function cargarEdificios() {
     try {
         console.log('Cargando edificios desde:', API_EDIFICIOS);
-        const response = await fetch(API_EDIFICIOS);
+        const response = await fetch(API_EDIFICIOS, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!response.ok) throw new Error('Error al cargar edificios');
         const respuesta = await response.json();
         
@@ -144,7 +148,10 @@ async function crearMaterial(data) {
         
         const response = await fetch(API_PORTATILES_MATERIALES, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify(data)
         });
         
@@ -197,7 +204,10 @@ async function actualizarMaterial(id, data) {
         
         const response = await fetch(url, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
             body: JSON.stringify(data)
         });
         
@@ -256,14 +266,18 @@ async function obtenerMateriales() {
     contenedor.innerHTML = `
         <div class="col-12 text-center py-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+                <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="text-dark mt-2">Cargando materiales...</p>
+            <p class="text-black mt-2">Cargando materiales...</p>
         </div>
     `;
     
     try {
-        const response = await fetch(API_PORTATILES_MATERIALES);
+        const response = await fetch(API_PORTATILES_MATERIALES, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         console.log('Status de respuesta:', response.status);
         
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
@@ -292,7 +306,7 @@ async function obtenerMateriales() {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-laptop fs-1 text-muted"></i>
-                    <p class="text-dark text-muted mt-3">No hay carros de portátiles registrados</p>
+                    <p class="text-black text-muted mt-3">No hay carros de portátiles registrados</p>
                     <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
                         <i class="bi bi-plus-circle"></i> Crear primer carro
                     </button>
@@ -333,18 +347,18 @@ async function obtenerMateriales() {
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-6">
-                                <p class="text-dark mb-1"><strong>Edificio:</strong></p>
-                                <p class="text-dark text-muted">${nombreEdificio}</p>
+                                <p class="text-black mb-1"><strong>Edificio:</strong></p>
+                                <p class="text-black text-muted">${nombreEdificio}</p>
                             </div>
                             <div class="col-6">
-                                <p class="text-dark mb-1"><strong>Planta:</strong></p>
-                                <p class="text-dark text-muted">${nombrePlanta}</p>
+                                <p class="text-black mb-1"><strong>Planta:</strong></p>
+                                <p class="text-black text-muted">${nombrePlanta}</p>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-                                <p class="text-dark mb-1"><strong>Nº portátiles:</strong></p>
-                                <p class="text-dark fs-4 text-primary">${unidades}</p>
+                                <p class="text-black mb-1"><strong>Nº portátiles:</strong></p>
+                                <p class="text-black fs-4 text-primary">${unidades}</p>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end gap-2">
@@ -386,7 +400,7 @@ async function obtenerMateriales() {
             <div class="col-12 text-center py-5">
                 <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                 <h5 class="mt-3 text-danger">Error de conexión</h5>
-                <p class="text-dark text-muted">No se pudo conectar con el servidor</p>
+                <p class="text-black text-muted">No se pudo conectar con el servidor</p>
                 <button class="btn btn-primary mt-2" onclick="obtenerMateriales()">
                     <i class="bi bi-arrow-clockwise"></i> Reintentar
                 </button>
@@ -545,7 +559,11 @@ ready(function() {
                 console.log('Verificando planta:', { idEdificio, numeroPlanta });
                 
                 // Intentar obtener la planta directamente
-                const plantaCheckResponse = await fetch(`${API_BASE}/plantas/${idEdificio}?numero_planta=${numeroPlanta}`);
+                const plantaCheckResponse = await fetch(`${API_BASE}/plantas/${idEdificio}?numero_planta=${numeroPlanta}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 
                 if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
                     console.log('Planta no encontrada, creándola...');
@@ -553,7 +571,10 @@ ready(function() {
                     // Crear la planta
                     const crearPlantaResponse = await fetch(`${API_BASE}/planta/${idEdificio}`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`
+                        },
                         body: JSON.stringify({
                             numero_planta: numeroPlanta,
                             nombre_planta: nombrePlanta

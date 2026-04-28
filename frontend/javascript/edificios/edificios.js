@@ -29,7 +29,7 @@ function mostrarToast(mensaje, tipo = 'success') {
         bgClass = 'bg-danger';
     }else if (tipo === 'warning'){
         bgClass = 'bg-warning';
-        textColor = 'text-dark';
+        textColor = 'text-black';
     }else if (tipo === 'info'){
         bgClass = 'bg-info';
     }
@@ -85,9 +85,9 @@ async function cargarEdificios() {
     contenedor.innerHTML = `
         <div class="col-12 text-center py-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+                <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="text-dark mt-2">Cargando edificios...</p>
+            <p class="text-black mt-2">Cargando edificios...</p>
         </div>
     `;
     
@@ -116,7 +116,7 @@ async function cargarEdificios() {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-building fs-1 text-muted"></i>
-                    <p class="text-dark text-muted mt-3">No hay edificios registrados</p>
+                    <p class="text-black text-muted mt-3">No hay edificios registrados</p>
                     <button class="btn btn-success mt-2" onclick="abrirModalCrear()">
                         <i class="bi bi-plus-circle"></i> Crear primer edificio
                     </button>
@@ -137,7 +137,7 @@ async function cargarEdificios() {
                         <h5 class="card-title mb-0">${edificio.nombre_edificio}</h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-dark card-text">
+                        <p class="text-black card-text">
                             <strong>ID:</strong> ${edificio.id_edificio}
                         </p>
                         <div class="d-flex justify-content-end gap-2 mt-3">
@@ -162,7 +162,7 @@ async function cargarEdificios() {
             <div class="col-12 text-center py-5">
                 <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                 <h5 class="mt-3 text-danger">Error de conexión</h5>
-                <p class="text-dark text-muted">${err.message}</p>
+                <p class="text-black text-muted">${err.message}</p>
                 <button class="btn btn-primary mt-3" onclick="cargarEdificios()">
                     <i class="bi bi-arrow-clockwise"></i> Reintentar
                 </button>

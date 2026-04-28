@@ -53,7 +53,7 @@
                                 <div class="spinner-border text-primary" role="status">
                                     <span class="visually-hidden">Enviando reserva...</span>
                                 </div>
-                                <div class="mt-2 fw-semibold">Cargando...</div>
+                                <div class="mt-2 fw-semibold text-black">Cargando...</div>
                             </div>
                         </div>
 
@@ -173,7 +173,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (!modal.result) return;
 
-                let arraynecesidades = await fetch(`${API}/necesidades`);
+                let arraynecesidades = await fetch(`${API}/necesidades`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 let resnecesidades = await arraynecesidades.json()
                 
                 const campos = [
@@ -228,7 +232,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token")
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({
                         asignatura: modal.result.asignatura,
@@ -293,7 +297,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                             <b>Observaciones:</b> ${evento.observaciones || "-"}
                     `;
 
-                    let necesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`);
+                    let necesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                     let resnecesidades = await necesidadesreserva.json();
                     if(!resnecesidades||!resnecesidades.data||resnecesidades.data.length==0){
                         html=html+'</div>';
@@ -323,11 +331,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                     
                     if (!modal.result) return;
 
-                    let arraynecesidades = await fetch(`${API}/necesidades`);
+                    let arraynecesidades = await fetch(`${API}/necesidades`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                     let resnecesidades = await arraynecesidades.json();
                     console.log(resnecesidades.data);
 
-                    let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`);
+                    let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
                     let necesidadesreserva = await resnecesidadesreserva.json();
                     const idsSeleccionados = necesidadesreserva.data.map(n => n.id_necesidad);
                     
@@ -369,7 +385,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
-                            "Authorization": "Bearer " + localStorage.getItem("token")
+                            Authorization: `Bearer ${token}`
                         },
                         body: JSON.stringify({
                             asignatura: modal.result.asignatura,
@@ -462,7 +478,7 @@ async function cargarInfoAula(id) {
 </script>
 
             <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
-                <a id="btnVolver" class="bg-azul border-0 rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+                <a id="btnVolver" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
             </div>
         </main>
         <footer id="footer"></footer>

@@ -73,7 +73,7 @@
                 </aside>
 
                 <!-- CONTENIDO -->
-                <section class="flex-grow-1 ms-3 p-3 p-lg-4 mt-lg-5 pt-5">
+                <section class="flex-grow-1 ms-3 p-3 p-lg-4 pb-lg-5 mt-lg-5 pt-5 mb-5">
 
                     <!-- Botón menú SOLO en móvil/tablet -->
                     <div class="d-lg-none mb-3">
@@ -87,7 +87,7 @@
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminOffcanvas"
                         aria-labelledby="adminOffcanvasLabel">
                         <div class="offcanvas-header mb-0 pb-1">
-                            <p class="text-dark offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
+                            <p class="text-black offcanvas-title fs-5" id="adminOffcanvasLabel">Menú Admin</p>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
                                 aria-label="Cerrar"></button>
                         </div>
@@ -105,7 +105,7 @@
                                 <li class="nav-item"><a class="nav-link text-black"
                                         href="./../logacciones/logacciones.html">Log de Acciones</a></li>
                                 <hr class="my-3">
-                                <p class="text-dark text-dark fs-6 mb-0">Tablas auxiliares</p>
+                                <p class="text-black text-black fs-6 mb-0">Tablas auxiliares</p>
                                 <ul class="nav flex-column ps-3">
                                     <li class="nav-item"><a class="nav-link text-black"
                                             href="./../tablasauxiliares/edificios/edificios.html">Edificios</a></li>
@@ -198,13 +198,13 @@
 
                     <!-- Body / Formulario -->
                     <div class="modal-body">
-                        <p class="text-dark m-1">ID: <span id="idMostrar"></span></p>
-                        <p class="text-dark m-1">Recurso: <span id="recursoMostrar"></span></p>
-                        <p class="text-dark m-1">Día de la semana: <span id="diaMostrar"></span></p>
-                        <p class="text-dark m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
-                        <p class="text-dark m-1">Hora de Fin: <span id="finMostrar"></span></p>
-                        <p class="text-dark m-1">Comentario: <span id="comentarioMostrar"></span></p>
-                        <p class="text-dark m-1" id="pUnidadesMostrar">Unidades: <span id="unidadesMostrar"></span></p>
+                        <p class="text-black m-1">ID: <span id="idMostrar"></span></p>
+                        <p class="text-black m-1">Recurso: <span id="recursoMostrar"></span></p>
+                        <p class="text-black m-1">Día de la semana: <span id="diaMostrar"></span></p>
+                        <p class="text-black m-1">Hora de Inicio: <span id="inicioMostrar"></span></p>
+                        <p class="text-black m-1">Hora de Fin: <span id="finMostrar"></span></p>
+                        <p class="text-black m-1">Comentario: <span id="comentarioMostrar"></span></p>
+                        <p class="text-black m-1" id="pUnidadesMostrar">Unidades: <span id="unidadesMostrar"></span></p>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <!-- Header -->
-                    <div class="modal-header bg-warning text-dark">
+                    <div class="modal-header bg-warning text-black">
                         <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar reserva</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -226,17 +226,17 @@
                         <div class="modal-body row g-4">
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">ID</label>
+                                <label class="text-black form-label">ID</label>
                                 <input type="text" class="form-control" id="idEditar" required readonly>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Recurso</label>
+                                <label class="text-black form-label">Recurso</label>
                                 <input type="text" class="form-control" id="recursoEditar" required readonly>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="text-dark form-label">Día de la semana</label>
+                                <label class="text-black form-label">Día de la semana</label>
                                 <select name="diaEditar" class="form-select" id="diaEditar" class="form-select" required>
                                     <option value="" disabled>Seleccione un día</option>
                                     <option value="1">Lunes</option>
@@ -248,7 +248,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Hora inicio</label>
+                                <label class="text-black form-label">Hora inicio</label>
                                 <select type="time" class="form-select" id="inicioEditar" required>
                                     <option value="" disabled>Seleccione hora de inicio</option>
                                     <option value="1">08:50</option>
@@ -262,26 +262,26 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Hora fin</label>
+                                <label class="text-black form-label">Hora fin</label>
                                 <select type="time" class="form-select" id="finEditar" required>
                                     <option value="" disabled>Seleccione hora de fin</option>
                                     <option value="1">09:40</option>
-                                    <option value="2">10:30</option>
+                                    <option value="2">10:35</option>
                                     <option value="3">11:30</option>
                                     <option value="4">12:00</option>
-                                    <option value="5">12:30</option>
+                                    <option value="5">12:50</option>
                                     <option value="6">13:45</option>
                                     <option value="7">14:40</option>
                                 </select>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="text-dark form-label">Comentario</label>
+                                <label class="text-black form-label">Comentario</label>
                                 <input type="text" class="form-control" id="comentarioEditar">
                             </div>
 
                             <div class="col-md-12" id="div_editarunidades">
-                                <label class="text-dark form-label">Unidades</label>
+                                <label class="text-black form-label">Unidades</label>
                                 <input type="number" id="unidadesEditar" class="form-control" min="1">
                             </div>
                         </div>
@@ -289,7 +289,7 @@
                         <div class="modal-footer g-4">
                             <div class="d-flex justify-content-between px-2 col-12">
                                 <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
-                                <button type="button" class="col-5 btn bg-lightgrey text-dark" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
+                                <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                             </div>
                             <div id="editarUserErrors" class="alert alert-danger d-none"></div>
                         </div>
@@ -305,18 +305,29 @@
 
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear reserva permanente</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
 
-                    <form id="formCrearReserva">
+                    <form id="formCrearReserva">                        
+                        <div id="cargandoreservas"
+                            class="d-none position-absolute top-0 start-0 border-0 rounded-1 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            style="z-index: 10;">
+
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Enviando reserva...</span>
+                                </div>
+                                <div class="mt-2 fw-semibold text-black text-black">Cargando...</div>
+                            </div>
+                        </div>
                         <div class="modal-body row g-4">
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Recurso</label>
+                                <label class="text-black form-label">Recurso</label>
                                 <input type="text" class="form-control" id="recursoCrear" readonly>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Día de la semana</label>
+                                <label class="text-black form-label">Día de la semana</label>
                                 <select id="diaCrear" class="form-select" required>
                                     <option value="" disabled selected>Seleccione un día</option>
                                     <option value="1">Lunes</option>
@@ -328,7 +339,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Hora inicio</label>
+                                <label class="text-black form-label">Hora inicio</label>
                                 <select type="time" class="form-select" id="inicioCrear" required>
                                     <option value="" disabled selected>Seleccione hora de inicio</option>
                                     <option value="1">08:50</option>
@@ -342,33 +353,33 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="text-dark form-label">Hora fin</label>
+                                <label class="text-black form-label">Hora fin</label>
                                 <select type="time" class="form-select" id="finCrear" required>
                                     <option value="" disabled selected>Seleccione hora de fin</option>
                                     <option value="1">09:40</option>
-                                    <option value="2">10:30</option>
+                                    <option value="2">10:35</option>
                                     <option value="3">11:30</option>
                                     <option value="4">12:00</option>
-                                    <option value="5">12:30</option>
+                                    <option value="5">12:50</option>
                                     <option value="6">13:45</option>
                                     <option value="7">14:40</option>
                                 </select>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="text-dark form-label">Comentario</label>
+                                <label class="text-black form-label">Comentario</label>
                                 <input type="text" class="form-control" id="comentarioCrear">
                             </div>
 
                             <div class="col-md-12" id="div_crearunidades">
-                                <label class="text-dark form-label">Unidades</label>
+                                <label class="text-black form-label">Unidades</label>
                                 <input type="number" id="unidadesCrear" class="form-control">
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <div class="col-md-12 row d-flex justify-content-between px-2">
-                                <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal">
+                                <button type="submit" class="enviar col-5 text-light p-2">
                                     <i class="bi bi-check2"></i> Crear reserva
                                 </button>
                                 <button type="button" class="btn bg-lightgrey col-5 text-black p-2" data-bs-dismiss="modal">
@@ -403,10 +414,10 @@
 
             const horaFin = {
                 1: "09:40:00",
-                2: "10:30:00",
+                2: "10:35:00",
                 3: "11:30:00",
                 4: "12:00:00",
-                5: "12:30:00",
+                5: "12:50:00",
                 6: "13:45:00",
                 7: "14:40:00"
             }
@@ -470,7 +481,7 @@
                     let row = document.createElement("tr");
                     row.className = "text-start";
                     row.innerHTML = `
-                        <td colspan="${numColumnas}" class="p-3">No se han encontrado reservas</td>
+                        <td colspan="${numColumnas}" class="p-3">No se han encontrado reservas permanentes</td>
                     `;
                     tbody.appendChild(row);
                 }else{
@@ -543,10 +554,10 @@
 
                 const finToIndex = {
                     "09:40:00": 1,
-                    "10:30:00": 2,
+                    "10:35:00": 2,
                     "11:30:00": 3,
                     "12:00:00": 4,
-                    "12:30:00": 5,
+                    "12:50:00": 5,
                     "13:45:00": 6,
                     "14:40:00": 7
                 }
@@ -618,7 +629,7 @@
                     // Cerrar modal
                     bootstrap.Modal.getInstance(document.getElementById("modalEditar")).hide();
                     
-                    if(json.data.status="no_changes"){
+                    if(json.data.status=="no_changes"){
                         mostrarToast("No han habido cambios en la reserva permanente", "warning")
                     }else{
                         mostrarToast("Reserva permanente actualizada correctamente", "success");
@@ -666,7 +677,7 @@
 
                     document.getElementById("formCrearReserva").reset();
 
-                    mostrarToast("Reserva creada correctamente", "success");
+                    mostrarToast("Reserva permanente creada correctamente", "success");
 
                 } catch (err) {
 
@@ -700,7 +711,7 @@
                     // Actualizar array local
                     reservas = await getReservasRecurso(idRecurso);
                     rellenarTablaReservas(reservas);
-                    mostrarToast("Reserva eliminada correctamente", "success");
+                    mostrarToast("Reserva permanente eliminada correctamente", "success");
                 } catch (err) {
                     console.error(err);
                     mostrarToast(err?.message ?? "Error al eliminar la reserva", "danger");
