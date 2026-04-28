@@ -177,4 +177,16 @@ class UsuarioModel
 
         return $result ? (bool) $result['usuario_activo'] : false;
     }
+
+    /**
+     * Contar superadministradores activos
+     */
+    public function countSuperAdmin(): int
+    {
+        $result = $this->db
+            ->query("SELECT COUNT(*) AS nSuperAdmin FROM Usuario WHERE usuario_activo=1 AND id_rol=40")
+            ->fetch();
+
+        return $result['nSuperAdmin'];
+    }
 }

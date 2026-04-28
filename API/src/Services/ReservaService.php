@@ -60,10 +60,6 @@ class ReservaService
     {
         $reservas = $this->model->getReservasPendientes();
 
-        if (!$reservas||count($reservas)==0) {
-            throw new ValidationException("Reservas no encontradas");
-        }
-
         return $reservas;
     }
 
@@ -73,10 +69,6 @@ class ReservaService
     public function getReservasProximas(): array
     {
         $reservas = $this->model->getReservasProximas();
-
-        if (!$reservas||count($reservas)==0) {
-            throw new ValidationException("Reservas no encontradas");
-        }
 
         return $reservas;
     }

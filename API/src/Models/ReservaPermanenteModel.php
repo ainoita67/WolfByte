@@ -197,4 +197,71 @@ class ReservaPermanenteModel
             throw new \Exception("Error al desactivar las reservas permanentes");
         }
     }
+
+
+    public function getUnidadesFecha(array $data, int $idreserva): int
+    {
+        try{
+            //Suma unidades de reservas y de reservas permanentes y resta de liberaciones
+            $filas=$this->db
+                ->query("SELECT
+                        m.unidades AS materialunidades,
+                            (SELECT IFNULL(SUM(rp.unidades),0)-IFNULL(SUM(lp.unidades),0)
+                            FROM Reserva_permanente rp
+                            LEFT JOIN Liberacion_puntual lp ON rp.id_reserva_permanente=lp.id_reserva_permanente
+                            WHERE rp.id_recurso=:material1 AND rp.activo=1 AND rp.dia_semana=:diasemana
+                            AND rp.inicio<:horafin AND rp.fin>:horainicio AND rp.id_reserva_permanente!=:id)
+                        AS totalunidades
+                    FROM Material m
+                    WHERE m.id_material=:material2
+                ")
+                ->bind(':diasemana', $data['dia_semana'])
+                ->bind(':horainicio', $data['inicio'])
+                ->bind(':horafin', $data['fin'])
+                ->bind(':id', $idreserva)
+                ->bind(':material1', $data['id_recurso'])
+                ->bind(':material2', $data['id_recurso'])
+                ->fetch();
+            
+            return $filas['materialunidades']-$filas['totalunidades'];
+        } catch (PDOException $e) {
+            throw new \Exception($e->getMessage());
+            throw new \Exception("Error al crear o actualizar reservas del portátil");
+        }
+    }
+
+    public function getEspacioFecha(array $data, int $id): bool
+    {
+        try{
+            $filas=$this->db
+            ->query("SELECT
+                (
+                    SELECT COUNT(*) 
+                    FROM Reserva_permanente rep
+                    LEFT JOIN Liberacion_puntual lp
+                    ON lp.id_reserva_permanente = rep.id_reserva_permanente
+                    WHERE rep.id_recurso = :espacio
+                    AND rep.dia_semana = :diasemana
+                    AND rep.activo = 1
+                    AND rep.inicio < :horafin
+                    AND rep.fin > :horainicio
+                    AND lp.id_liberacion_puntual IS NULL
+                    AND rep.id_reserva_permanente!=:id
+                ) AS totalreservas;
+            ")
+            ->bind(':diasemana', $data['dia_semana'])
+            ->bind(':horainicio', $data['inicio'])
+            ->bind(':horafin', $data['fin'])
+            ->bind(':espacio', $data['id_recurso'])
+            ->bind(':id', $id)
+            ->fetch();
+            
+            if($filas['totalreservas']>0){
+                return false;
+            }
+            return true;
+        } catch (PDOException $e) {
+            throw new \Exception("Error al crear o actualizar reservas del espacio");
+        }
+    }
 }

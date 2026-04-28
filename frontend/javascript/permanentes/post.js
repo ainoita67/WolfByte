@@ -18,16 +18,21 @@ export async function createPermanente(reserva) {
     if (!body.dia_semana || !body.inicio || !body.fin || !body.id_recurso) {
       throw new Error("createPermanente: faltan campos obligatorios (dia_semana, inicio, fin, recurso)");
     }
+    
+    document.getElementById('cargandoreservas').classList.remove('d-none');
 
     const response = await fetch(`${API}/reservas_permanentes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(body)
     });
 
+    document.getElementById('cargandoreservas').classList.add('d-none');
+    
     const json = await response.json().catch(() => null);
 
      if (!response.ok) {

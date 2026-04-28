@@ -24,7 +24,8 @@ function activarCrearReserva() {
         fetch(window.location.origin+"/API/reservas/", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: usuario, id_recurso: id_recurso })
         })
@@ -216,7 +217,8 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
         let res=await fetch(window.location.origin+"/API/reservaEspacio/"+id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 id_espacio: id_recurso,
@@ -260,7 +262,8 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
         let res = await fetch(window.location.origin+"/API/portatiles/reservas/"+id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
                 id_material: id_recurso,

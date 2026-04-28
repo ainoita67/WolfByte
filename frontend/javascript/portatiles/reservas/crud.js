@@ -5,7 +5,7 @@ export async function cargarReservas(idRecurso) {
     try {
         const res = await fetch(`${API}/reservaMaterial/material/${idRecurso}`, {
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
+                Authorization: `Bearer ${token}`
             }
         });
 

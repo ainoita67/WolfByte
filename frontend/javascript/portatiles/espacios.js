@@ -2,7 +2,7 @@ export async function getEspacio(id) {
   try {
     const response = await fetch(`${API}/espacios/${id}`, {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        Authorization: `Bearer ${token}`
       }
     });
 
@@ -40,7 +40,8 @@ export async function getOtrosEspaciosDisponibles(fecha, hora_inicio, hora_fin) 
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         fecha: fecha,

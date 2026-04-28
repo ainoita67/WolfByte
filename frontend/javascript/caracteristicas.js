@@ -56,7 +56,8 @@ async function getCaracteristicasFromApi() {
     let response = await fetch(URL_GET_CARACTERISTICAS, {
         method: "GET",
         headers: {
-            "Accept": "application/json"
+            "Accept": "application/json",
+            Authorization: `Bearer ${token}`
         }
     });
 
@@ -77,13 +78,14 @@ function showCaracteristicas(caracteristicas) {
     }
 
     contenedor.innerHTML = '';
-
+    
     if (caracteristicas.length === 0) {
-        contenedor.innerHTML = `
-            <div class="col-12 text-center">
-                <p class="text-muted">No hay características registradas</p>
-            </div>
+        const card = document.createElement("div");
+        card.className = "card h-100 p-0 reserva-card text-center";
+        card.innerHTML = `
+            <div class="card-body bg-secondary-subtle">No se han encontrado características</div>
         `;
+        contenedor.appendChild(card);
         return;
     }
 
@@ -97,10 +99,10 @@ function showCaracteristicas(caracteristicas) {
         tarjeta.innerHTML = `
             <div class="card text-center shadow-sm overflow-hidden h-100">
                 <div class="bg-azul card-head rounded-top">
-                    <p class="fs-6 text-light m-0 py-2">ID: ${caracteristica.id_caracteristica}</p>
+                    <p class="text-black fs-6 text-light m-0 py-2">ID: ${caracteristica.id_caracteristica}</p>
                 </div>
                 <div class="card-body d-flex flex-column">
-                    <p class="fs-5 card-title flex-grow-1">${caracteristicaObj.getNombre()}</p>
+                    <p class="text-black fs-5 card-title flex-grow-1">${caracteristicaObj.getNombre()}</p>
                     <div class="card-footer text-end border-0 bg-transparent">
                         <button class="btn btn-sm bg-azul text-light btn-editar" 
                                 data-id="${caracteristica.id_caracteristica}"
@@ -191,7 +193,8 @@ async function eliminarCaracteristica(id, nombre) {
         const response = await fetch(URL_ELIMINAR_CARACTERISTICA, {
             method: "DELETE",
             headers: {
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
 
@@ -249,7 +252,8 @@ async function editarCaracteristica(id, nombre) {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(datosActualizados)
         });
@@ -377,7 +381,8 @@ function enviarDatosCaracteristicas(datosCaracteristica) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            "Accept": "application/json",
+            Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(datosCaracteristica)
     })

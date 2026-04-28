@@ -7,7 +7,11 @@ function capitalizar(string) {
 // Menú administrador tarjetas de reservas
 
 function obtenerReservasAutorizar(){
-    fetch(window.location.origin+"/API/reservas-pendientes")
+    fetch(window.location.origin+"/API/reservas-pendientes", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let reservas = response.data;
@@ -18,9 +22,14 @@ function obtenerReservasAutorizar(){
 }
 
 function obtenerReservasProximas(){
-    fetch(window.location.origin+"/API/reservas-proximas")
+    fetch(window.location.origin+"/API/reservas-proximas", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
+        console.log(response)
         let reservas = response.data;
         let tarjetasReservas = document.getElementById("tarjetasReservasProximas");
         if(!tarjetasReservas) return;
@@ -54,11 +63,11 @@ function mostrarReservasTarjetas(reservas, tarjetasReservas){
 
             divReserva.innerHTML = `
                 <div class="card-body bg-secondary-subtle">
-                    <p class="fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
-                    <p class="mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
-                    <p class="mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
-                    <p class="mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
-                    ${reserva.unidades !== null ? `<p class="mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
+                    <p class="text-black fw-bold mb-0">Reserva #${reserva.id_reserva}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">${tipo}: </span>${reserva.id_recurso}
+                    <p class="text-black mb-0"><span class="fw-bold">Fecha inicio: </span>${formatearFecha(reserva.inicio)}</p>
+                    <p class="text-black mb-0"><span class="fw-bold">Fecha fin: </span>${formatearFecha(reserva.fin)}</p>
+                    ${reserva.unidades !== null ? `<p class="text-black mb-0"><span class="fw-bold">Unidades: </span>${reserva.unidades}</p>` : ''}
                 </div>
             `;
 
@@ -166,7 +175,11 @@ function activarFiltrarReservasAutorizar(){
     if(!formfiltrar) return;
     formfiltrar.addEventListener("submit", function(e){
     e.preventDefault();
-    fetch(window.location.origin+"/API/reservas-pendientes")
+    fetch(window.location.origin+"/API/reservas-pendientes", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
         .then(res => res.json())
         .then(response => {
             let reservas = response.data;
@@ -187,8 +200,12 @@ function activarFiltrarReservasProximas(){
     let formfiltrar = document.getElementById("formFiltrarReservasProximas");
     if(!formfiltrar) return;
     formfiltrar.addEventListener("submit", function(e){
-    e.preventDefault();
-    fetch(window.location.origin+"/API/reservas-proximas")
+        e.preventDefault();
+        fetch(window.location.origin+"/API/reservas-proximas", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(response => {
             let reservas = response.data;

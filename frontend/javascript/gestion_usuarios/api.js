@@ -7,7 +7,11 @@ const API_URL = "http://192.168.13.202/IKER";
 
 async function getUsuarios() {
     try {
-        const response = await fetch(`${API_URL}/user`);
+        const response = await fetch(`${API_URL}/user`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!response.ok) throw new Error('Error al obtener usuarios');
 
         const json = await response.json();

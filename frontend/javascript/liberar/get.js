@@ -1,6 +1,10 @@
 //API Obtener edificios para crear liberación
 function obtenerEdificios(){
-    fetch(window.location.origin+"/API/edificios")
+    fetch(window.location.origin+"/API/edificios", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let edificios = response.data;
@@ -37,7 +41,11 @@ function obtenerEdificios(){
 
 //API Obtener plantas para crear liberación
 function obtenerPlantas(edificio){
-    fetch(window.location.origin+"/API/plantas/"+edificio)
+    fetch(window.location.origin+"/API/plantas/"+edificio, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
     .then(res => res.json())
     .then(response => {
         let plantas = response.data;
@@ -73,13 +81,17 @@ function obtenerPlantas(edificio){
 
 
 //API Obtener espacios para crear liberación
-function obtenerAulas(edificio=-1, planta=-1){
+function obtenerAulas(edificio=-100, planta=-100){
     if(!edificio||edificio<=0){
         return obtenerEdificios();
-    }else if(!planta||planta<0){
+    }else if(!planta||planta<-10){
         return obtenerPlantas(edificio);
     }else{
-        fetch(window.location.origin+"/API/espacios/")
+        fetch(window.location.origin+"/API/espacios/", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         .then(res => res.json())
         .then(response => {
             let aulas = response.data;
@@ -119,9 +131,9 @@ function obtenerAulas(edificio=-1, planta=-1){
 }
 
 
-function obtenerFechas(edificio=-1, planta=-1, aula=-1){
+function obtenerFechas(edificio=-100, planta=-100, aula=-100){
     let divfechas = document.querySelectorAll(".divfechahora");
-    if(!edificio||edificio<=0||!planta||planta<0||!aula||aula<=0){
+    if(!edificio||edificio<=0||!planta||planta<-10||!aula||aula<=0){
         divfechas.forEach(divfecha => {
             divfecha.classList.remove("d-block");
             divfecha.classList.add("d-none");
@@ -129,7 +141,7 @@ function obtenerFechas(edificio=-1, planta=-1, aula=-1){
 
         if(!edificio||edificio<=0){
             return obtenerEdificios();
-        }else if(!planta||planta<0){
+        }else if(!planta||planta<-10){
             return obtenerPlantas(edificio);
         }else if(!aula||aula<=0){
             return obtenerAulas(edificio, planta);

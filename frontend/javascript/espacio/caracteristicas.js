@@ -1,6 +1,10 @@
 export async function getCaracteristicas() {
   try {
-    const response = await fetch(`${API}/caracteristicas`);
+    const response = await fetch(`${API}/caracteristicas`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (!response.ok) throw new Error("Error al obtener caracteristicas");
 
     const json = await response.json();

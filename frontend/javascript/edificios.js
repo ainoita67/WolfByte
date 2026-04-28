@@ -115,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`${API_BASE}/API/edificios`, {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
             
@@ -135,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('No hay edificios');
                 contenedor.innerHTML = `
                     <div class="col-12 text-center py-5">
-                        <p class="text-muted mt-3">No hay edificios registrados</p>
+                        <p class="text-black text-muted mt-3">No hay edificios registrados</p>
                     </div>
                 `;
                 return;
@@ -156,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h5 class="card-title mb-0">${edificio.nombre_edificio}</h5>
                         </div>
                         <div class="card-body">
-                            <p class="card-text">
+                            <p class="text-black card-text">
                                 <strong>ID:</strong> ${edificio.id_edificio}
                             </p>
                             <div class="d-flex justify-content-end gap-2 mt-3">
@@ -182,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contenedor.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <h5 class="mt-3 text-danger">Error al cargar edificios</h5>
-                    <p class="text-muted">${err.message}</p>
+                    <p class="text-black text-muted">${err.message}</p>
                     <button class="btn btn-primary mt-3" onclick="location.reload()">
                         Reintentar
                     </button>
@@ -451,7 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await fetch(`${API_BASE}/API/edificios`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({ nombre_edificio: nombre })
                 });
@@ -542,7 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await fetch(`${API_BASE}/API/edificios/${id}`, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify({ nombre_edificio: nombre })
                 });

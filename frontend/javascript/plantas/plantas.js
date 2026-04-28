@@ -9,7 +9,11 @@ let edificios = {};
 // Función para obtener los edificios de la API
 async function cargarEdificios() {
     try {
-        const response = await fetch(API_EDIFICIOS);
+        const response = await fetch(API_EDIFICIOS, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!response.ok) throw new Error('Error al cargar edificios');
         const respuesta = await response.json();
         
@@ -103,13 +107,17 @@ function obtenerPlantas() {
     contenedor.innerHTML = `
         <div class="col-12 text-center py-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+                <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="mt-2">Cargando plantas...</p>
+            <p class="text-black mt-2">Cargando plantas...</p>
         </div>
     `;
     
-    fetch(API_PLANTAS)
+    fetch(API_PLANTAS, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
         .then(response => {
             if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
             return response.json();
@@ -123,7 +131,7 @@ function obtenerPlantas() {
                 contenedor.innerHTML = `
                     <div class="col-12 text-center py-5">
                         <i class="bi bi-building fs-1 text-muted"></i>
-                        <p class="text-muted mt-3">No hay plantas registradas</p>
+                        <p class="text-black text-muted mt-3">No hay plantas registradas</p>
                         <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
                             <i class="bi bi-plus-circle"></i> Crear primera planta
                         </button>
@@ -146,18 +154,18 @@ function obtenerPlantas() {
                     <div class="card shadow-sm h-100">
                         <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">${nombreEdificio}</h5>
-                            <span class="badge bg-light text-dark">Planta ${numeroPlanta}</span>
+                            <span class="badge bg-light text-black">Planta ${numeroPlanta}</span>
                         </div>
                         <div class="card-body">
                             <h6 class="card-subtitle mb-3 text-muted">${nombrePlanta}</h6>
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <p class="mb-1"><strong>ID Edificio:</strong></p>
-                                    <p class="fs-5 text-muted">${idEdificio}</p>
+                                    <p class="text-black mb-1"><strong>ID Edificio:</strong></p>
+                                    <p class="text-black fs-5 text-muted">${idEdificio}</p>
                                 </div>
                                 <div class="col-6">
-                                    <p class="mb-1"><strong>Espacios:</strong></p>
-                                    <p class="fs-5 text-primary">${totalEspacios}</p>
+                                    <p class="text-black mb-1"><strong>Espacios:</strong></p>
+                                    <p class="text-black fs-5 text-primary">${totalEspacios}</p>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end gap-2">
@@ -193,7 +201,7 @@ function obtenerPlantas() {
                 <div class="col-12 text-center py-5">
                     <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
                     <h5 class="mt-3 text-danger">Error de conexión</h5>
-                    <p class="text-muted">${error.message}</p>
+                    <p class="text-black text-muted">${error.message}</p>
                     <button class="btn btn-primary mt-2" onclick="obtenerPlantas()">
                         <i class="bi bi-arrow-clockwise"></i> Reintentar
                     </button>
@@ -320,7 +328,10 @@ document.addEventListener("DOMContentLoaded", function() {
             
             fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify({ 
                     numero_planta: numeroInt,
                     nombre_planta: nombrePlanta
@@ -330,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const data = await res.json();
                 if (!res.ok) {
                     const errorMsg = data.error || data.message || `Error ${res.status}`;
-                    throw new Error(errorMsg);
+                    throw new Error(errorMsg+": Revise que la planta introducida no exista");
                 }
                 return data;
             })
@@ -405,7 +416,10 @@ document.addEventListener("DOMContentLoaded", function() {
             
             fetch(url, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
                 body: JSON.stringify(datosActualizar)
             })
             .then(async res => {
@@ -413,7 +427,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log(data);
                 if (!res.ok) {
                     const errorMsg = data.error || data.message || `Error ${res.status}`;
-                    throw new Error(errorMsg);
+                    throw new Error(errorMsg+": Revise que no haya recursos asociados a la planta");
                 }
                 return data;
             })

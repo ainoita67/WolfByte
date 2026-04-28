@@ -2,7 +2,7 @@ export async function getEspacio(id) {
   try {
     const response = await fetch(`${API}/espacios/${id}`, {
       headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
+        Authorization: `Bearer ${token}`
       }
     });
 

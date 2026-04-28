@@ -105,6 +105,13 @@ class UsuarioService
             'id' => 'required|int|min:1'
         ]);
 
+        if($nSuperAdmin=$this->model->countSuperAdmin()<=1){
+            $usuario=$this->getUsuarioById((int)$id);
+            if($usuario['id_rol']==40&&$input['id_rol']!=40){
+                throw new \Exception("Debe haber siempre un superadministrador");
+            }
+        }
+
         $data = Validator::validate($input, [
             'nombre'         => 'required|string|min:3|max:100',
             'correo'         => 'required|email|max:150',
@@ -144,16 +151,19 @@ class UsuarioService
         Validator::validate(['id' => $id], [
             'id' => 'required|int|min:1'
         ]);
-
-        try {
-            $isActive = $this->model->isActive($id);
-            if (!$isActive) {
-                $result = $this->model->setActive($id);
-            } else {
-                $result = $this->model->setInactive($id);
+        
+        $isActive = $this->model->isActive($id);
+        if (!$isActive) {
+            $result = $this->model->setActive($id);
+        } else {
+            if($nSuperAdmin=$this->model->countSuperAdmin()<=1){
+                $usuario=$this->getUsuarioById((int)$id);
+                if($usuario['id_rol']==40){
+                    throw new \Exception("Debe haber siempre un superadministrador");
+                }
             }
-        } catch (Throwable $e) {
-            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+            
+            $result = $this->model->setInactive($id);
         }
 
         if (!$result) {

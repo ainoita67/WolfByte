@@ -38,8 +38,13 @@ main div.divvolver{
     border: 0 !important;
 }
 
+main div.divvolver a{
+    border: 1px solid #E6F5F0;
+}
+
 main div.divvolver *{
     pointer-events: auto !important;
+    cursor: pointer;
 }
 
 footer{
