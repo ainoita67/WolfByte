@@ -204,7 +204,7 @@ async function eliminarCaracteristica(id, nombre) {
 
         const result = await response.json();
         console.log(MENSAJE_ELIMINACION_CORRECTA, result);
-        mostrarAlerta(MENSAJE_ELIMINACION_CORRECTA, "success");
+        mostrarToast(MENSAJE_ELIMINACION_CORRECTA, "success");
         
         // Recargar la lista
         const caracteristicas = await getCaracteristicasFromApi();
@@ -212,7 +212,7 @@ async function eliminarCaracteristica(id, nombre) {
         
     } catch (error) {
         console.error(error);
-        mostrarAlerta(MENSAJE_ELIMINACION_INCORRECTA, "danger");
+        mostrarToast(MENSAJE_ELIMINACION_INCORRECTA, "danger");
     }
 }
 
@@ -233,7 +233,7 @@ async function editarCaracteristica(id, nombre) {
     const validator = validarNombreCaracteristica(nombre);
     
     if (!validator.getisValid()) {
-        mostrarAlerta(validator.getmessageError(), "warning");
+        mostrarToast(validator.getmessageError(), "warning");
         return;
     }
 
@@ -264,7 +264,7 @@ async function editarCaracteristica(id, nombre) {
 
         const result = await response.json();
         console.log(MENSAJE_EDICION_CORRECTA, result);
-        mostrarAlerta(MENSAJE_EDICION_CORRECTA, "success");
+        mostrarToast(MENSAJE_EDICION_CORRECTA, "success");
         
         // Cerrar modal
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEditar'));
@@ -276,7 +276,7 @@ async function editarCaracteristica(id, nombre) {
         
     } catch (error) {
         console.error(error);
-        mostrarAlerta(MENSAJE_EDICION_INCORRECTA, "danger");
+        mostrarToast(MENSAJE_EDICION_INCORRECTA, "danger");
     }
 }
 
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .catch(error => {
             console.error("Error cargando características:", error);
-            mostrarAlerta("Error al cargar las características", "danger");
+            mostrarToast("Error al cargar las características", "danger");
         });
 
     // Configurar formulario de creación
@@ -337,7 +337,7 @@ function manejarEnvioFormulario(evento) {
     const validator = validarNombreCaracteristica(nombreCaracteristica);
     
     if (!validator.getisValid()) {
-        mostrarAlerta(validator.getmessageError(), "warning");
+        mostrarToast(validator.getmessageError(), "warning");
         return;
     }
 
@@ -354,7 +354,7 @@ function manejarEnvioFormulario(evento) {
     enviarDatosCaracteristicas(objetoCaracteristica)
         .then(response => {
             console.log("Respuesta:", response);
-            mostrarAlerta(MENSAJE_INSERCION_CORRECTA, "success");
+            mostrarToast(MENSAJE_INSERCION_CORRECTA, "success");
 
             formulario.reset();
             
@@ -370,7 +370,7 @@ function manejarEnvioFormulario(evento) {
         })
         .catch(error => {
             console.error(error);
-            mostrarAlerta(MENSAJE_INSERCION_INCORRECTA, "danger");
+            mostrarToast(MENSAJE_INSERCION_INCORRECTA, "danger");
         });
 }
 
@@ -400,7 +400,7 @@ function enviarDatosCaracteristicas(datosCaracteristica) {
 
 // ************ ALERTAS  ****************** //
 
-function mostrarAlerta(mensaje, tipo = "info") {
+function mostrarToast(mensaje, tipo = "info") {
     // Crear contenedor de alertas si no existe
     let alertContainer = document.getElementById('alert-container');
     if (!alertContainer) {

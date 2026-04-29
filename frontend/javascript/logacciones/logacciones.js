@@ -95,7 +95,7 @@ function mostrarPaginacion(npagina=1, max=1){
     divPaginacion.innerHTML=`
         <button class="btn btn-primary border-0 rounded-pill" id="btninicio"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></button>
         <button class="btn btn-primary border-0 rounded-pill ms-3" id="btnantes"><i class="bi bi-caret-left-fill"></i></button>
-        <p class="text-black p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
+        <p class="p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
         <button class="btn btn-primary border-0 rounded-pill me-3" id="btndespues"><i class="bi bi-caret-right-fill"></i></button>
         <button class="btn btn-primary border-0 rounded-pill" id="btnfin"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></button>
     `

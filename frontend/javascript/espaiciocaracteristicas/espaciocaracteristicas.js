@@ -116,7 +116,7 @@ async function crearCaracteristica(nombre) {
             }
         }
 
-        mostrarAlerta(`${MENSAJE_CREACION_CORRECTA}`, 'success');
+        mostrarToast(`${MENSAJE_CREACION_CORRECTA}`, 'success');
         
         // Cerrar modal
         const modalElement = document.getElementById('modalCrearCaracteristica');
@@ -133,7 +133,7 @@ async function crearCaracteristica(nombre) {
         
     } catch (error) {
         console.error("Error creando:", error);
-        mostrarAlerta(`${error.message || MENSAJE_CREACION_ERROR}`, 'danger');
+        mostrarToast(`${error.message || MENSAJE_CREACION_ERROR}`, 'danger');
         return false;
     }
 }
@@ -146,7 +146,7 @@ function abrirModalEdicion(id, nombre) {
     const editNombre = document.getElementById('editNombre');
     
     if (!modalElement || !editId || !editNombre) {
-        mostrarAlerta("Error: No se encontró el modal de edición", "danger");
+        mostrarToast("Error: No se encontró el modal de edición", "danger");
         return;
     }
     
@@ -185,9 +185,9 @@ async function editarCaracteristica(id, nombre) {
         }
 
         if (result.status === 'no_changes') {
-            mostrarAlerta("No se realizaron cambios en el nombre", "info");
+            mostrarToast("No se realizaron cambios en el nombre", "info");
         } else {
-            mostrarAlerta(`${MENSAJE_EDICION_CORRECTA}`, "success");
+            mostrarToast(`${MENSAJE_EDICION_CORRECTA}`, "success");
         }
         
         // Cerrar modal
@@ -205,7 +205,7 @@ async function editarCaracteristica(id, nombre) {
         
     } catch (error) {
         console.error("Error editando:", error);
-        mostrarAlerta(`${error.message}`, 'danger');
+        mostrarToast(`${error.message}`, 'danger');
         return false;
     }
 }
@@ -253,7 +253,7 @@ async function eliminarCaracteristica(id, nombre) {
             }
         }
 
-        mostrarAlerta(`${nombre} - ${MENSAJE_ELIMINACION_CORRECTA}`, 'success');
+        mostrarToast(`${nombre} - ${MENSAJE_ELIMINACION_CORRECTA}`, 'success');
         
         // Cerrar modal
         const modalElement = document.getElementById('modalConfirmarEliminar');
@@ -268,7 +268,7 @@ async function eliminarCaracteristica(id, nombre) {
         
     } catch (error) {
         console.error("Error eliminando:", error);
-        mostrarAlerta(`${error.message || MENSAJE_ELIMINACION_ERROR}`, 'danger');
+        mostrarToast(`${error.message || MENSAJE_ELIMINACION_ERROR}`, 'danger');
     }
 }
 
@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             const validator = validarNombreCaracteristica(nombre);
             if (!validator.getisValid()) {
-                mostrarAlerta(validator.getmessageError(), "warning");
+                mostrarToast(validator.getmessageError(), "warning");
                 return;
             }
             
@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             const validator = validarNombreCaracteristica(nombre);
             if (!validator.getisValid()) {
-                mostrarAlerta(validator.getmessageError(), "warning");
+                mostrarToast(validator.getmessageError(), "warning");
                 return;
             }
             
@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 // ************ ALERTAS ****************** //
 
-function mostrarAlerta(mensaje, tipo = "info") {
+function mostrarToast(mensaje, tipo = "info") {
     let alertContainer = document.getElementById('alert-container');
     if (!alertContainer) {
         alertContainer = document.createElement('div');

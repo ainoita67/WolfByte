@@ -6,25 +6,112 @@ function capitalizar(string) {
 
 // VER INCIDENCIAS
 
+let incidenciasFiltradas=[];
+let paginacion=25
+
 //API Obtener ver incidencias
-function obtenerVerIncidencias(){
-    fetch(window.location.origin+"/API/incidencias", {
+function obtenerVerIncidencias(npagina=1){
+    let datos={
+        'page': npagina,
+        'perPage': paginacion
+    }
+
+    fetch(window.location.origin+"/API/incidencias/paginadas", {
+        method: "POST",
         headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify(datos)
     })
     .then(res => res.json())
     .then(response => {
-        let incidencias = response.data;
-        mostrarIncidencias(incidencias);
+        let logs = response.data;
+        mostrarIncidencias(logs.data);
+        mostrarPaginacion(logs.currentPage, logs.totalPages, paginacion);
     });
 }
 
 
-function mostrarIncidencias(incidencias){
-    if(incidencias){
-        incidencias=incidencias.reverse();
+function mostrarPaginacion(npagina=1, max=1){
+    let divPaginacion=document.getElementById("paginacion");
+    divPaginacion.classList.add("ps-3", "mt-3", "mb-5", "d-flex");
+    divPaginacion.innerHTML=`
+        <button class="btn btn-primary border-0 rounded-pill" id="btninicio"><i class="bi bi-caret-left-fill"></i><i class="bi bi-caret-left-fill"></i></button>
+        <button class="btn btn-primary border-0 rounded-pill ms-3" id="btnantes"><i class="bi bi-caret-left-fill"></i></button>
+        <p class="p-0 px-2 m-0 mx-2 fs-5">Página ${npagina}</p>
+        <button class="btn btn-primary border-0 rounded-pill me-3" id="btndespues"><i class="bi bi-caret-right-fill"></i></button>
+        <button class="btn btn-primary border-0 rounded-pill" id="btnfin"><i class="bi bi-caret-right-fill"></i><i class="bi bi-caret-right-fill"></i></button>
+    `
+
+    let btninicio=document.getElementById("btninicio");
+    let btnantes=document.getElementById("btnantes");
+    let btndespues=document.getElementById("btndespues");
+    let btnfin=document.getElementById("btnfin");
+    
+    if(npagina<=1){
+        btnantes.disabled=true;
+        btninicio.disabled=true;
     }
+    if(npagina>=max){
+        btndespues.disabled=true;
+        btnfin.disabled=true;
+    }
+
+    btninicio.addEventListener("click", function(){
+        if(npagina>1){
+            if(incidenciasFiltradas.length>0){
+                obtenerPaginaIncidencias(1);
+            }else{
+                obtenerVerIncidencias(1);
+            }
+        }
+    })
+
+    btnantes.addEventListener("click", function(){
+        if(npagina>1){
+            if(incidenciasFiltradas.length>0){
+                obtenerPaginaIncidencias(npagina-1);
+            }else{
+                obtenerVerIncidencias(npagina-1);
+            }
+        }
+    })
+
+    btndespues.addEventListener("click", function(){
+        if(npagina<max){
+            if(incidenciasFiltradas.length>0){
+                obtenerPaginaIncidencias(npagina+1);
+            }else{
+                obtenerVerIncidencias(npagina+1);
+            }
+        }
+    })
+
+    btnfin.addEventListener("click", function(){
+        if(npagina<max){
+            if(incidenciasFiltradas.length>0){
+                obtenerPaginaIncidencias(max);
+            }else{
+                obtenerVerIncidencias(max);
+            }
+        }
+    })
+}
+
+
+function obtenerPaginaIncidencias(npagina=1) {
+    let inicio = (npagina - 1) * paginacion;
+    let fin = inicio + paginacion;
+    let incidenciasPagina = incidenciasFiltradas.slice(inicio, fin);
+
+    mostrarIncidencias(incidenciasPagina);
+
+    let totalPaginas = Math.ceil(incidenciasFiltradas.length / paginacion);
+    mostrarPaginacion(npagina, totalPaginas, paginacion);
+}
+
+function mostrarIncidencias(incidencias){
     let tablaverincidencias = document.getElementById("verIncidenciasTableBody");
     tablaverincidencias.innerHTML = "";
     if(!incidencias||incidencias.length === 0){
@@ -96,6 +183,9 @@ function activarFiltrarIncidencia(tipo, limite=5){
             .then(res => res.json())
             .then(response => {
             let incidencias = response.data;
+            if(tipo=="tabla"){
+                incidencias=incidencias.reverse();
+            }
 
             let recurso = document.getElementById("filtrarRecurso").value;
             let prioridad = document.getElementById("filtrarPrioridad").value;
@@ -138,7 +228,7 @@ function activarFiltrarIncidencia(tipo, limite=5){
             })
 
             if(tipo=="tabla"){
-                mostrarIncidencias(incidenciasFiltradas);
+                obtenerPaginaIncidencias(1, incidenciasFiltradas);
             }else if(tipo=="card"){
                 mostrarIncidenciasTarjetas(incidenciasFiltradas, limite);
             }

@@ -167,7 +167,11 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
             // Limpiar input
             formeditar.reset();
 
-            mostrarToast("Incidencia actualizada correctamente", "success");
+            if (response.data.status === "no_changes") {
+                mostrarToast("No han habido cambios", "warning");
+            }else{
+                mostrarToast("Incidencia actualizada correctamente", "success");
+            }
         } else {
             mostrarToast("Error al actualizar la incidencia", "danger");
         }
@@ -190,12 +194,14 @@ function mostrarToast(mensaje, tipo = 'success') {
     
     let bgClass = 'bg-success';
     let textColor = 'text-white';
+    let btnClose = 'btn-close-white';
     
     if (tipo === 'error'||tipo === 'danger') {
         bgClass = 'bg-danger';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
         textColor = 'text-black';
+        btnClose = '';
     } else if (tipo === 'info') {
         bgClass = 'bg-info';
     }
@@ -206,7 +212,7 @@ function mostrarToast(mensaje, tipo = 'success') {
                 <div class="toast-body">
                     ${mensaje}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close ${btnClose} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     `;

@@ -134,7 +134,7 @@ class ReservaEspacioController
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);
-            
+
             $log['id_reserva']=$reserva['data']['id_reserva'];
             if($reserva['status']=='updated'){
                 $this->serviceLog->createLog('Modificación de reserva', $log);
@@ -148,10 +148,12 @@ class ReservaEspacioController
                     $this->serviceLog->createLog('Cancelación de reserva', $log);
                 }
             }
+            
             if(!$coincide){
                 $reserva['status']='updated';
             }
-            $res->status(200)->json($reserva);
+            
+            $res->status(200)->json($reserva, $reserva['status']);
         } catch (ValidationException $e) {
             $res->errorJson($e->getMessage(), 422);
         } catch (Throwable $e) {

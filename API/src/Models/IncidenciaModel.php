@@ -28,6 +28,40 @@ class IncidenciaModel
     }
 
 
+    /**
+     * Obtener todas las incidencias por páginas
+     */
+    public function allPaginadas(array $data=[]): array
+    {
+        $page = $data['page'] ?? 1;
+        $perPage = $data['perPage'] ?? 25;
+        $offset = ($page - 1) * $perPage;
+
+        return $this->db
+            ->query("SELECT * FROM Incidencia i
+                ORDER BY i.id_incidencia DESC
+                LIMIT :inicio, :fin
+            ")
+            ->bind(':inicio', $offset)
+            ->bind(':fin', $perPage)
+            ->fetchAll();
+    }
+
+
+    public function totalpaginas(array $data=[]): int
+    {
+        $perPage = $data['perPage'] ?? null;
+        $totalRows = $this->db->query("SELECT COUNT(*) AS total FROM Incidencia")->fetch()['total'];
+
+        if($perPage!==null){
+            $totalPages = ceil($totalRows / $perPage);
+            return (int)$totalPages;
+        }else{
+            return $totalRows;
+        }
+    }
+
+
     public function findById(int $id): array|false{
         return $this->db
             ->query("SELECT * FROM Incidencia WHERE id_incidencia=:id")

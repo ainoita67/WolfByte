@@ -39,7 +39,10 @@ function mostrarMisReservas(reservas, tarjetasReservas){
                 });
             }else{
                 divReserva.addEventListener("click", function(){
-                    mostrarToast("No se puede modificar una reserva cancelada o denegada", "danger");
+                    mostrarDatosModal(reserva);
+
+                    let modal = new bootstrap.Modal(document.getElementById("modalVerReserva"));
+                    modal.show();
                 });
             }
 
@@ -66,7 +69,11 @@ function mostrarMisReservas(reservas, tarjetasReservas){
             }
 
             divReserva.addEventListener("click", function(){
-                mostrarDatosModal(reserva);
+                if(reserva.autorizada!==0){
+                    mostrarDatosModal(reserva);
+                }else{
+                    mostrarVerDatosModal(reserva);
+                }
             });
 
             div.appendChild(divReserva);
@@ -155,6 +162,77 @@ function mostrarDatosModal(reserva){
         document.getElementById("div_reserva_necesidades").classList.add('d-none');
     }
 }
+
+
+function mostrarVerDatosModal(reserva){
+    let ulNecesidades = document.getElementById("ver_reserva_necesidades");
+    ulNecesidades.innerHTML='';
+    
+    if(reserva.tipo == "Reserva_espacio"){
+        let necesidades=[];
+
+        if(typeof reserva.necesidades === "string"){
+            necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+        }
+
+        if(!necesidades||necesidades.length==0){
+            document.getElementById("p_ver_necesidades").classList.add('d-none');
+        }else{
+            necesidades.forEach(nec => {
+                let li=document.createElement('li');
+                li.classList.add('text-black')
+                li.textContent=nec;
+                ulNecesidades.appendChild(li);
+            });
+            document.getElementById("p_ver_necesidades").classList.remove('d-none');
+        }
+    }
+
+    let autorizada='Denegada';
+    if(reserva.autorizada==null){
+        autorizada='Pendiente';
+    }else if(reserva.autorizada==1){
+        autorizada='Autorizada';
+    }
+    
+    document.getElementById("ver_reserva_id").textContent = reserva.id_reserva;
+    document.getElementById("ver_reserva_f_creacion").textContent = reserva.f_creacion;
+    document.getElementById("ver_reserva_inicio").textContent = reserva.inicio;
+    document.getElementById("ver_reserva_fin").textContent = reserva.fin;
+    document.getElementById("ver_reserva_espacio_portatil").textContent = reserva.id_recurso;
+    document.getElementById("ver_reserva_asignatura").textContent = reserva.asignatura;
+    document.getElementById("ver_reserva_grupo").textContent = reserva.grupo;
+    document.getElementById("ver_reserva_profesor").textContent = reserva.profesor;
+    document.getElementById("ver_reserva_usuario").textContent = reserva.nombreusuario;
+    
+    document.getElementById("ver_reserva_unidades").textContent = reserva.unidades ?? '-';
+    document.getElementById("ver_reserva_espacio_uso").textContent = reserva.usaenespacio ?? '-';
+    document.getElementById("ver_reserva_actividad").textContent = reserva.actividad ?? '-';
+    document.getElementById("ver_reserva_observaciones").textContent = reserva.observaciones ?? '-';
+                    
+    if (reserva.tipo == 'Reserva_espacio') {
+        document.getElementById("p_ver_unidades").classList.add('d-none');
+        document.getElementById("reserva_unidades").required = false;
+        document.getElementById("p_ver_espacio_uso").classList.add('d-none');
+        document.getElementById("reserva_espacio_uso").required = false;
+        document.getElementById("p_ver_actividad").classList.remove('d-none');
+        document.getElementById("reserva_actividad").required = true;
+        if(!necesidades||necesidades.length==0){
+            document.getElementById("p_ver_necesidades").classList.add('d-none');
+        }else{
+            document.getElementById("p_ver_necesidades").classList.remove('d-none');
+        }
+    } else {
+        document.getElementById("p_ver_unidades").classList.remove('d-none');
+        document.getElementById("reserva_unidades").required = true;
+        document.getElementById("p_ver_espacio_uso").classList.remove('d-none');
+        document.getElementById("reserva_espacio_uso").required = true;
+        document.getElementById("p_ver_actividad").classList.add('d-none');
+        document.getElementById("reserva_actividad").required = false;
+        document.getElementById("p_ver_necesidades").classList.add('d-none');
+    }
+}
+
 
 
 

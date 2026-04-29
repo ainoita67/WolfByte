@@ -31,13 +31,29 @@ class IncidenciaController
     
     /**
      * GET /incidencias
-     * aqui se ejecuta la funcion getallincidencias el objeto service que se acaba de crear y la respuesta con el codigo de estado y transformando el array de profesores a json
+     * aqui se ejecuta la funcion getallincidencias el objeto service que se acaba de crear y la respuesta con el codigo de estado y transformando el array de incidencias a json
      */
     public function index(Request $req, Response $res): void
     {
         try {
             $incidencias = $this->service->getAllIncidencias();
             $res->status(200)->json($incidencias);
+        } catch (Throwable $e) {
+            $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    
+    /**
+     * POST /incidencias/paginadas
+     * Se obtienen las incidencias por páginas
+     */
+    public function indexPaginado(Request $req, Response $res): void
+    {
+        try {
+            $data=$req->getBody() ?? [];
+            $incidencia = $this->service->getIncidencia($data);
+            $res->status(200)->json($incidencia);
         } catch (Throwable $e) {
             $res->errorJson($e->getMessage(), $e->getCode() ?: 500);
         }
@@ -105,7 +121,7 @@ class IncidenciaController
             $result = $this->service->updateIncidencia((int)$id, $data);
             //depende de lo recibido del servicio envia no_changes o updated
             if ($result['status'] === 'no_changes') {
-                $res->status(200)->json([], $result['message']);
+                $res->status(200)->json($result);
                 return;
             }else{
                 $log['id_incidencia']=(int)$id;
@@ -113,7 +129,7 @@ class IncidenciaController
                 $this->serviceLog->createLog('Modificación de incidencia', $log);
             }
 
-            $res->status(200)->json([], $result['message']);
+            $res->status(200)->json($result);
         }
         catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors], "Errores de validación");
