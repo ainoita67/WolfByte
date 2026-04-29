@@ -479,7 +479,7 @@ async function abrirModalEditar(id) {
     
     const espacio = espaciosGlobal.find(e => e.id_recurso === id);
     if (!espacio) {
-        mostrarAlerta("Error: No se encontraron los datos del espacio", "danger");
+        mostrarToast("Error: No se encontraron los datos del espacio", "danger");
         return;
     }
     
@@ -631,7 +631,7 @@ async function guardarEspacio(evento) {
     es_aula = tipo === "1";
     
     if (!id_recurso || !descripcion || !id_edificio || numero_planta === '') {
-        mostrarAlerta("Por favor, complete todos los campos requeridos", "warning");
+        mostrarToast("Por favor, complete todos los campos requeridos", "warning");
         return;
     }
     
@@ -700,7 +700,7 @@ async function guardarEspacio(evento) {
             let caracteristicasdespues=await getCaracteristicasEspacio(id);
 
             if(JSON.stringify(caracteristicasantes) !== JSON.stringify(caracteristicasdespues)) {
-                mostrarAlerta(
+                mostrarToast(
                     "Características actualizadas correctamente",
                     "success"
                 );
@@ -748,12 +748,12 @@ async function guardarEspacio(evento) {
         }
         
         if(response.status==200&&!cambios){
-            mostrarAlerta(
+            mostrarToast(
                 "No han habido cambios",
                 "warning"
             );
         }else if(response.status!=200){
-            mostrarAlerta(
+            mostrarToast(
                 esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
                 "success"
             );
@@ -767,7 +767,7 @@ async function guardarEspacio(evento) {
         
     } catch (error) {
         console.error("Error guardando espacio:", error);
-        mostrarAlerta(error.message, "danger");
+        mostrarToast(error.message, "danger");
     }
 }
 
@@ -825,7 +825,7 @@ function limpiarBackdrops() {
 
 // ************  ALERTAS ****************** //
 
-function mostrarAlerta(mensaje, tipo = "info") {
+function mostrarToast(mensaje, tipo = "info") {
     let alertContainer = document.getElementById('alert-container');
     if (!alertContainer) {
         alertContainer = document.createElement('div');

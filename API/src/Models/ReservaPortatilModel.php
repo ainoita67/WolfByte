@@ -188,7 +188,8 @@ class ReservaPortatilModel
                             WHERE r.tipo='Reserva_material' AND m.id_material=:material1
                             AND ((r.inicio>:fin1 AND r.fin<:inicio1)
                             OR (r.inicio=:inicio2 AND r.fin=:fin2))
-                            AND r.id_reserva!=:id)
+                            AND r.id_reserva!=:id
+                            AND r.autorizada!=0)
                             +
                             (SELECT IFNULL(SUM(rp.unidades),0)-IFNULL(SUM(lp.unidades),0)
                             FROM Reserva_permanente rp

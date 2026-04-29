@@ -23,6 +23,7 @@ $router->post('/logout', 'Controllers\\AuthController@logout');
 
 // INCIDENCIAS
 $router->protected('GET', '/incidencias', 'Controllers\\IncidenciaController@index', [30, 40]); // Nos devuelven todas la incidencias de la base de datos
+$router->protected('POST', '/incidencias/paginadas', 'Controllers\\IncidenciaController@indexPaginado', [30, 40]);
 $router->protected('GET', '/incidencias/recurso/{id_recurso}', 'Controllers\\IncidenciaController@showByRecurso', [30, 40]); //Nos devuelven todas la incidencias de la base de datos del recurso que  pasemos por parámetro (no implementar)
 $router->protected('GET', '/incidencias/usuario/{id_usuario}', 'Controllers\\IncidenciaController@showByUsuario', [10, 20, 30, 40]); // Nos devuelven todas la incidencias de la base de datos que haya creado el usuario del que se pase el id
 $router->protected('POST', '/incidencias', 'Controllers\\IncidenciaController@store', [10, 20, 30, 40]); // Se envían los datos de una incidencia para añadirla a nuestra base de datos
