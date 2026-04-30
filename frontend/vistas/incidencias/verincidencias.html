@@ -238,6 +238,11 @@
             </div>
         </div>
         <script type="module" src="/frontend/javascript/recursos/get.js"></script>
+        <script type="module">
+            import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+            window.mostrarToast = mostrarToast;        
+        </script>
         <script>
             const scriptget = document.createElement("script");
             scriptget.src = BASE + "/javascript/incidencias/get.js";

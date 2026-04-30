@@ -38,7 +38,7 @@ class EdificioModel
             return $this->db
                 ->query("SELECT * FROM Edificio WHERE lower(nombre_edificio) = lower(:nombre)")
                 ->bind(':nombre', $nombre)
-                ->fetch();
+                ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al buscar edificio: " . $e->getMessage());
         }
@@ -88,7 +88,7 @@ class EdificioModel
     public function update(int $id, array $data): array
     {
         try {
-            if($this->findByNombre($data['nombre_edificio'])) {
+            if(count($this->findByNombre($data['nombre_edificio'])) > 1) {
                 throw new \Exception("El edificio con ese nombre ya existe");
             }else{
                 $this->db
@@ -97,10 +97,9 @@ class EdificioModel
                     ->bind(':id', $id)
                     ->execute();
 
-                $edificio=$this->findById($id);
                 $edificio['cambios']=$this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
                 return $edificio;
-            }            
+            }
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar edificio: " . $e->getMessage());
         }

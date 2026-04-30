@@ -138,6 +138,10 @@ class PlantaModel
         try {
             $this->db->beginTransaction();
 
+            $afectadosRecurso=0;
+            $afectadosPlanta=0;
+            $afectadosNombre=0;
+
             // Si se quiere cambiar el número de planta
             if (isset($data['nuevo_numero_planta'])) {
                 $nuevoNumero = (int)$data['nuevo_numero_planta'];
@@ -159,6 +163,7 @@ class PlantaModel
                     ->bind(':numero_actual', $numeroPlantaActual)
                     ->bind(':id_edificio', $idEdificio)
                     ->execute();
+                $afectadosRecurso = $this->db->rowCount();
 
                 // Actualizar el número de planta
                 $this->db
@@ -172,6 +177,7 @@ class PlantaModel
                     ->bind(':numero_actual', $numeroPlantaActual)
                     ->bind(':id_edificio', $idEdificio)
                     ->execute();
+                $afectadosPlanta = $this->db->rowCount();
 
                 $numeroPlantaActual = $nuevoNumero; // Actualizar para el siguiente paso
             }
@@ -189,10 +195,15 @@ class PlantaModel
                     ->bind(':numero_planta', $numeroPlantaActual)
                     ->bind(':id_edificio', $idEdificio)
                     ->execute();
+
+                    $afectadosNombre = $this->db->rowCount();
             }
 
             $this->db->commit();
-            return true;
+            if($afectadosRecurso>0||$afectadosPlanta>0||$afectadosNombre>0){
+                return true;
+            }
+            return false;
         } catch (\Exception $e) {
             $this->db->rollback();
             throw new \Exception("Error al actualizar planta: " . $e->getMessage());

@@ -39,6 +39,18 @@ class NecesidadService
             throw new ValidationException("El nombre de la necesidad es obligatorio");
         }
 
-        return $this->model->update($id, Validator::capitalizar($data['nombre']));
+        if($this->model->update($id, Validator::capitalizar($data['nombre']))){
+            return [
+                'status' => 'updated',
+                'message' => 'La necesidad ha sido actualizada',
+                'data' => $this->model->findByNombre($data['nombre'])
+            ];
+        }
+
+        return [
+            'status' => 'no_changes',
+            'message' => 'No han habido cambios',
+            'data' => $this->model->findByNombre($data['nombre'])
+        ];
     }
 }

@@ -32,7 +32,6 @@ async function getUsuarios() {
             rol: obtenerNombreRol(u.id_rol)
         }));
 
-        console.log("usuarios filtrados y mapeados", usuarios);
         return usuarios;
     } catch (error) {
         console.error(error);

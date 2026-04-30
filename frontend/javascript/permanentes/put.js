@@ -26,8 +26,6 @@ export async function updatePermanente(reserva) {
       throw new Error("Faltan campos obligatorios (recurso, dia de la semana, hora de inicio y hora de fin)");
     }
 
-    console.log("Enviando PUT con body:",reserva.id, body);
-
     const response = await fetch(`${API}/reservas_permanentes/${reserva.id}`, {
       method: "PUT",
       headers: {

@@ -309,7 +309,6 @@
                         }
                     });
                     let resnecesidades = await arraynecesidades.json();
-                    console.log(resnecesidades.data);
 
                     let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
                         headers: {

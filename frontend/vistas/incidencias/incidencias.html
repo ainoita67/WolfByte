@@ -130,8 +130,12 @@
         </div>
 
 
-        <!-- RELLENAR MODAL -->
+        <script type="module">
+            import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
 
+            window.mostrarToast = mostrarToast;        
+        </script>
+        <!-- RELLENAR MODAL -->
         <script>
             const scriptget = document.createElement("script");
             scriptget.src = BASE + "/javascript/incidencias/get.js";

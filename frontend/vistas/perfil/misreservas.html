@@ -203,6 +203,11 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
             <script type="module" src="/frontend/javascript/recursos/get.js"></script>
+            <script type="module">
+                import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+                window.mostrarToast = mostrarToast;        
+            </script>
             <script>
                 const scriptgetreservas = document.createElement("script");
                 scriptgetreservas.src = BASE + "/javascript/misReservas.js";

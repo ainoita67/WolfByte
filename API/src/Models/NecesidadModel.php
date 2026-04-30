@@ -38,7 +38,7 @@ class NecesidadModel
             return $this->db
                 ->query("SELECT * FROM Necesidad WHERE lower(nombre) = lower(:nombre)")
                 ->bind(':nombre', $nombre)
-                ->fetch();
+                ->fetchAll();
         } catch (PDOException $e) {
             throw new \Exception("Error al buscar la necesidad");
         }
@@ -71,11 +71,13 @@ class NecesidadModel
     /**
      * Actualizar necesidad
      */
-    public function update(int $id, string $nombre): array
+    public function update(int $id, string $nombre): bool
     {
         try {
-            if($this->findByNombre($nombre)) {
+            if(count($this->findByNombre($nombre))>1) {
                 throw new \Exception("La necesidad con ese nombre ya existe");
+            }else if(count($this->findByNombre($nombre))==1){
+                return false;
             }else{
                 $this->db
                     ->query("
@@ -87,7 +89,7 @@ class NecesidadModel
                     ->bind(':id', $id)
                     ->execute();
 
-                return $this->findByNombre($nombre);
+                return true;
             }
         } catch (PDOException $e) {
             throw new \Exception("Error al actualizar la necesidad");

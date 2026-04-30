@@ -82,12 +82,14 @@ export function mostrarToast(mensaje, tipo = 'success') {
     
     let bgClass = 'bg-success';
     let textColor = 'text-white';
+    let btnClose = 'btn-close-white';
     
     if (tipo === 'error'||tipo === 'danger') {
         bgClass = 'bg-danger';
     } else if (tipo === 'warning') {
         bgClass = 'bg-warning';
         textColor = 'text-black';
+        btnClose = 'btn-close-black';
     } else if (tipo === 'info') {
         bgClass = 'bg-info';
     }
@@ -98,7 +100,7 @@ export function mostrarToast(mensaje, tipo = 'success') {
                 <div class="toast-body">
                     ${mensaje}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close ${btnClose} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     `;
@@ -109,7 +111,7 @@ export function mostrarToast(mensaje, tipo = 'success') {
     const toast = new bootstrap.Toast(toastElement, {
         animation: true,
         autohide: true,
-        delay: 3000
+        delay: 4000
     });
     
     toast.show();

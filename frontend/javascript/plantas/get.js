@@ -2,8 +2,6 @@
 const API_BASE = localStorage.getItem('API_BASE') || 'http://192.168.13.202:80';
 const API_PLANTAS = `${API_BASE}/API/plantas`;
 
-console.log('API Plantas URL:', API_PLANTAS);
-
 // Obtener lista de edificios (para mapear nombres a IDs)
 async function obtenerIdEdificio(nombreEdificio) {
     const edificios = {
@@ -24,11 +22,9 @@ function obtenerNombreEdificio(idEdificio) {
 }
 
 function obtenerPlantas() {
-    console.log("Obteniendo plantas desde:", API_PLANTAS);
-    
     const contenedor = document.getElementById("plantasContainer");
     if (!contenedor) {
-        console.error("No se encontró el contenedor plantasContainer");
+        console.error("No se ha encontrado el contenedor plantasContainer");
         return;
     }
     
@@ -51,8 +47,6 @@ function obtenerPlantas() {
             return res.json();
         })
         .then(response => {
-            console.log("Respuesta de API:", response);
-            
             // La API devuelve directamente el array de plantas
             const plantas = Array.isArray(response) ? response : [];
             
@@ -135,8 +129,6 @@ function obtenerPlantas() {
 }
 
 function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
-    console.log(`Cargando datos - Edificio: ${idEdificio}, Planta: ${numeroPlanta}`);
-    
     const modalBody = document.getElementById("modalEditarBody");
     if (!modalBody) return;
     
@@ -165,9 +157,7 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
             if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
             return res.json();
         })
-        .then(planta => {
-            console.log("Datos de la planta:", planta);
-            
+        .then(planta => {            
             modalBody.innerHTML = `
                 <form id="formEditarPlanta">
                     <input type="hidden" id="edificioIdHidden" value="${idEdificio}">
@@ -236,6 +226,5 @@ function cargarDatosPlantaParaEditar(idEdificio, numeroPlanta) {
 
 // Inicializar
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("DOM cargado, obteniendo plantas...");
     setTimeout(obtenerPlantas, 300);
 });

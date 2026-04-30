@@ -98,7 +98,6 @@ class PlantaController
 
             $data = $req->getBody();
             $planta = $this->service->updatePlanta((int)$numeroPlanta, (int)$idEdificio, $data);
-            // Devolver la planta actualizada directamente
             $res->status(200)->json($planta);
         } catch (ValidationException $e) {
             $res->status(422)->json(['error' => $e->getErrors()]);

@@ -141,21 +141,29 @@ class PlantaService
             }
 
             // Actualizar la planta
-            $success = $this->model->update($numeroPlantaActual, $idEdificio, $validatedData);
-            
-            if (!$success) {
-                throw new \Exception("No se pudo actualizar la planta", 500);
-            }
+            $update = $this->model->update($numeroPlantaActual, $idEdificio, $validatedData);
 
             // Obtener detalles actualizados
             $nuevoNumero = $validatedData['nuevo_numero_planta'] ?? $numeroPlantaActual;
             $planta = $this->model->getDetails($nuevoNumero, $idEdificio);
-            
+                        
             if (!$planta) {
                 throw new \Exception("Planta actualizada pero no se pudo obtener sus datos", 500);
             }
 
-            return $planta;
+            if ($update) {
+                return [
+                    'status' => 'updated',
+                    'message' => 'Planta actualizada correctamente',
+                    'data' => $planta
+                ];
+            }
+
+            return [
+                'status' => 'no_changes',
+                'message' => 'No se realizaron cambios en la planta',
+                'data' => $planta
+            ];
         } catch (ValidationException $e) {
             throw $e;
         } catch (Throwable $e) {

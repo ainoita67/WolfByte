@@ -10,7 +10,6 @@ const edificioToId = {
 };
 
 function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
-    console.log(`Guardando cambios - Edificio: ${idEdificio}, Planta original: ${numeroPlantaOriginal}`);
     
     const nuevoNumeroPlanta = document.getElementById("numeroPlantaInput")?.value;
     
@@ -22,10 +21,7 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
     // Preparar datos según lo que espera tu API
     const datos = {
         nuevo_numero_planta: parseInt(nuevoNumeroPlanta)
-    };
-    
-    console.log("Enviando datos:", datos);
-    console.log("URL:", `${API_PLANTAS}/${idEdificio}?numero_planta=${numeroPlantaOriginal}`);
+    };    
     
     const submitBtn = document.querySelector("#modalEditarBody .btn-primary");
     if (submitBtn) {
@@ -52,7 +48,6 @@ function guardarCambiosPlanta(idEdificio, numeroPlantaOriginal) {
         return res.json();
     })
     .then(response => {
-        console.log("Respuesta:", response);
         mostrarToast("Planta actualizada correctamente", 'success');
         
         const modal = bootstrap.Modal.getInstance(document.getElementById("modalEditar"));
@@ -100,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 numero_planta: parseInt(numeroPlanta)
             };
             
-            console.log(`Creando planta en edificio ${idEdificio}:`, datos);
             
             const submitBtn = this.querySelector("button[type='submit']");
             if (submitBtn) {
@@ -127,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return res.json();
             })
             .then(response => {
-                console.log("Respuesta:", response);
                 mostrarToast("Planta creada correctamente", 'success');
                 
                 const modal = bootstrap.Modal.getInstance(document.getElementById("modalCrear"));
