@@ -47,6 +47,10 @@ main div.divvolver *{
     cursor: pointer;
 }
 
+main div.divvolver a:hover{
+    border: 1px solid #E6F5F0 !important;
+}
+
 footer{
     grid-row: 3/4;
     grid-column: 1/2;

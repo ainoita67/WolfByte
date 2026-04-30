@@ -1,3 +1,4 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
 import { Caracteristica } from "./clases/Caracteristica.js";
 import { Validator } from "./clases/Validator.js";
 
@@ -6,7 +7,7 @@ const DOMAIN = "http://192.168.13.202:84/API";
 // Mensajes
 const MENSAJE_INSERCION_CORRECTA = "Característica insertada correctamente.";
 const MENSAJE_INSERCION_INCORRECTA = "Error al insertar la característica.";
-const MENSAJE_ERROR_ENCONTRAR_FORMULARIO = "Error de formularios característica";
+const MENSAJE_ERROR_ENCONTRAR_FORMULARIO = "Error de formulario de característica";
 const MENSAJE_EDICION_CORRECTA = "Característica editada correctamente.";
 const MENSAJE_EDICION_INCORRECTA = "Error al editar la característica.";
 const MENSAJE_ELIMINACION_CORRECTA = "Característica eliminada correctamente.";
@@ -72,10 +73,7 @@ async function getCaracteristicasFromApi() {
 function showCaracteristicas(caracteristicas) {
     let contenedor = document.querySelector("#contenedorTarjetas");
 
-    if (!contenedor) {
-        console.error("No se encontró el contenedor de tarjetas");
-        return;
-    }
+    if (!contenedor) return;
 
     contenedor.innerHTML = '';
     
@@ -203,7 +201,6 @@ async function eliminarCaracteristica(id, nombre) {
         }
 
         const result = await response.json();
-        console.log(MENSAJE_ELIMINACION_CORRECTA, result);
         mostrarToast(MENSAJE_ELIMINACION_CORRECTA, "success");
         
         // Recargar la lista
@@ -211,7 +208,6 @@ async function eliminarCaracteristica(id, nombre) {
         showCaracteristicas(caracteristicas);
         
     } catch (error) {
-        console.error(error);
         mostrarToast(MENSAJE_ELIMINACION_INCORRECTA, "danger");
     }
 }
@@ -245,8 +241,6 @@ async function editarCaracteristica(id, nombre) {
         nombre: caracteristicaObj.getNombre()
     };
 
-    console.log("Enviando datos actualizados:", datosActualizados);
-
     try {
         const response = await fetch(`${DOMAIN}/caracteristicas/${id}`, {
             method: "PUT",
@@ -261,9 +255,8 @@ async function editarCaracteristica(id, nombre) {
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-
         const result = await response.json();
-        console.log(MENSAJE_EDICION_CORRECTA, result);
+        
         mostrarToast(MENSAJE_EDICION_CORRECTA, "success");
         
         // Cerrar modal
@@ -327,7 +320,7 @@ function manejarEnvioFormulario(evento) {
     let inputNombre = formulario.querySelector('input[type="text"]');
 
     if (!inputNombre) {
-        console.error("No se encontró el campo de nombre");
+        mostrarToast('El campo de "nombre" intoducido no es válido', "danger");
         return;
     }
 
@@ -349,11 +342,8 @@ function manejarEnvioFormulario(evento) {
         nombre: caracteristicaObj.getNombre()
     };
 
-    console.log("Objeto característica creado:", objetoCaracteristica);
-
     enviarDatosCaracteristicas(objetoCaracteristica)
         .then(response => {
-            console.log("Respuesta:", response);
             mostrarToast(MENSAJE_INSERCION_CORRECTA, "success");
 
             formulario.reset();
@@ -393,41 +383,6 @@ function enviarDatosCaracteristicas(datosCaracteristica) {
         return response.json();
     })
     .then(jsonResponse => {
-        console.log("Respuesta del servidor:", jsonResponse);
         return jsonResponse;
     });
-}
-
-// ************ ALERTAS  ****************** //
-
-function mostrarToast(mensaje, tipo = "info") {
-    // Crear contenedor de alertas si no existe
-    let alertContainer = document.getElementById('alert-container');
-    if (!alertContainer) {
-        alertContainer = document.createElement('div');
-        alertContainer.id = 'alert-container';
-        alertContainer.className = 'position-fixed top-0 end-0 p-3';
-        alertContainer.style.zIndex = '1055';
-        document.body.appendChild(alertContainer);
-    }
-
-    // Crear alerta
-    const alertDiv = document.createElement('div');
-
-    alertDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        ${mensaje}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-
-    alertContainer.appendChild(alertDiv);
-
-    // Auto-eliminar después de 5 segundos
-    setTimeout(() => {
-        if (alertDiv.parentNode) {
-            alertDiv.classList.remove('show');
-            setTimeout(() => alertDiv.remove(), 150);
-        }
-    }, 3000);
 }

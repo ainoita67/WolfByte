@@ -1,6 +1,5 @@
 function obtenerMisReservas(){
     usuario=sessionStorage.getItem("id_usuario");
-    console.log(window.location.origin+"/API/mis-reservas/"+usuario);
     fetch(window.location.origin+"/API/mis-reservas/"+usuario, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -346,7 +345,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
             }else if(tipo=="Reserva_material"&&unidades>0){
                 resultado=await modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
             }
-            if(resultado!=1){
+            if(resultado!=1&&resultado!==0){
                 mostrarToast("Error al actualizar la reserva", 'danger');
             }else{
                 // Cerrar modal
@@ -355,7 +354,12 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
                 // Limpiar input
                 formeditar.reset();
 
-                mostrarToast("Reserva actualizada correctamente", 'success');
+                if(resultado===0){
+                    mostrarToast("No han habido cambios", 'warning');
+                }else{
+                    mostrarToast("Reserva actualizada correctamente", 'success');
+                }
+
                 // Recargar
                 obtenerMisReservas();
             }
@@ -398,8 +402,11 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
-        console.log("Respuesta al modificar reserva espacio:", response);
+        
         if (response.status == "success"){
+            if(response.data.status=='no_changes'){
+                return 0;
+            }
             return 1;
         }else{
             mostrarToast("Ya hay una reserva entre esas horas", 'warning');
@@ -443,8 +450,11 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
-        console.log("Respuesta al modificar reserva portátil:", response);
+        
         if (response.status == "success") {
+            if(response.data.status=='no_changes'){
+                return 0;
+            }
             return 1;
         } else {
             mostrarToast("No hay suficientes portátiles disponibles entre esas horas", 'warning')
@@ -484,58 +494,6 @@ function anyadirFecha(fecha){
     let ss = String(fechaFormulario.getSeconds()).padStart(2, '0');
 
     return `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
-}
-
-
-
-function mostrarToast(mensaje, tipo = 'success') {    
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    let bgClass = 'bg-success';
-    let textColor = 'text-white';
-    
-    if (tipo === 'error'||tipo === 'danger') {
-            bgClass = 'bg-danger';
-        } else if (tipo === 'warning') {
-            bgClass = 'bg-warning';
-            textColor = 'text-black';
-        } else if (tipo === 'info') {
-            bgClass = 'bg-info';
-        }
-    
-    const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ${mensaje}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, {
-        animation: true,
-        autohide: true,
-        delay: 3000
-    });
-    
-    toast.show();
-    
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
 }
 
 // Limpiar backdrop cuando el modal se cierra manualmente

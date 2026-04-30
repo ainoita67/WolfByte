@@ -74,11 +74,11 @@ class CaracteristicaController{
             $result = $this->service->updateCaracteristica((int)$id, $req->json());
             //depende de lo recibido del servicio envia no_changes o updated
             if ($result['status'] === 'no_changes') {
-                $res->status(200)->json([], $result['message']);
+                $res->status(200)->json($result, $result['message']);
                 return;
             }
 
-            $res->status(200)->json([], $result['message']);
+            $res->status(200)->json($result, $result['message']);
         }
         catch (ValidationException $e) {
             $res->status(422)->json(['errors' => $e->errors], "Errores de validación");

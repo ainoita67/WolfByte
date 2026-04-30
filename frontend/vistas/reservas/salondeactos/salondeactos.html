@@ -307,7 +307,6 @@
                             }
                         });
                         let resnecesidades = await arraynecesidades.json();
-                        console.log(resnecesidades.data);
 
                         let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
                             headers: {
@@ -341,7 +340,7 @@
                         .map(([key]) => ({
                             id_necesidad: key
                         }));
-                            console.log(seleccionadas);
+                        
                         let fechaactual=new Date();
                         let inicio=new Date(evento.start);
                         if(fechaactual>=inicio){

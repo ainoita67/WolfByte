@@ -1,3 +1,5 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
 // plantas/plantas.js
 const API_BASE = `${API}`;
 const API_PLANTAS = `${API_BASE}/plantas`;
@@ -31,10 +33,7 @@ async function cargarEdificios() {
         edificios = {};
         edificiosArray.forEach(edificio => {
             edificios[edificio.id_edificio] = edificio.nombre_edificio;
-        });
-        
-        console.log('Edificios cargados:', edificios);
-        
+        });        
         // Actualizar selects después de cargar
         actualizarSelectEdificios();
         actualizarSelectEdificiosEditar();
@@ -48,53 +47,6 @@ async function cargarEdificios() {
 
 function obtenerNombreEdificio(idEdificio) {
     return edificios[idEdificio] || 'Edificio ' + idEdificio;
-}
-
-// Función para mostrar notificaciones toast
-function mostrarToast(mensaje, tipo) {
-    let toastContainer = document.getElementById('toastContainer');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.id = 'toastContainer';
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    const toastId = 'toast-' + Date.now();
-
-    let bgClass='bg-success';
-    let textColor='text-white';
-    if(tipo=='warning'){
-        bgClass='bg-warning';
-        textColor='text-black';
-    }else if(tipo=='danger'){
-        bgClass='bg-danger';
-        textColor='text-white';
-    }
-    const icono = tipo === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
-    
-    const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="bi ${icono} me-2"></i>
-                    ${mensaje}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
-    
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
 }
 
 // Función principal para obtener plantas
@@ -280,8 +232,6 @@ function actualizarSelectEdificios() {
         if (valorActual && edificios[valorActual]) {
             edificioSelect.value = valorActual;
         }
-        
-        console.log('Select actualizado con', Object.keys(edificios).length, 'edificios');
     }
 }
 
@@ -423,18 +373,26 @@ document.addEventListener("DOMContentLoaded", function() {
                 body: JSON.stringify(datosActualizar)
             })
             .then(async res => {
-                const data = await res.json();
-                console.log(data);
                 if (!res.ok) {
-                    const errorMsg = data.error || data.message || `Error ${res.status}`;
-                    throw new Error(errorMsg+": Revise que no haya recursos asociados a la planta");
+                    const errorMsg = res.error || res.message || `Error ${res.status}`;
+                    throw new Error(errorMsg+": Revise que no haya recursos asociados a la planta u otra planta con el mismo número en el edificio");
+                }
+
+                const data = await res.json();
+
+                if(data.status == "error" || data.error) {
+                    throw new Error(data.error);
+                }
+
+                if(data.data.status == "no_changes") {
+                    mostrarToast("No se realizaron cambios en la planta", 'warning');
+                }else{
+                    const nombreEdificio = edificios[idEdificio] || 'desconocido';
+                    mostrarToast(`Planta actualizada correctamente en ${nombreEdificio}`, 'success');
                 }
                 return data;
             })
-            .then(() => {
-                const nombreEdificio = edificios[idEdificio] || 'desconocido';
-                mostrarToast(`Planta actualizada correctamente en ${nombreEdificio}`, 'success');
-                
+            .then(() => {                
                 // Cerrar modal
                 const modalElement = document.getElementById("modalEditar");
                 const modal = bootstrap.Modal.getInstance(modalElement);
@@ -449,7 +407,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 }, 100);
             })
             .catch(err => {
-                console.error('Error:', err);
                 mostrarToast(err.message, 'danger');
             })
             .finally(() => {

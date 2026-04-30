@@ -1,3 +1,5 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
 // portatiles.js
 const API_BASE = `${API}`;
 const API_PORTATILES_MATERIALES = `${API_BASE}/portatiles/materiales`;
@@ -26,92 +28,19 @@ function limpiarBackdrops() {
 }
 
 // ============================================
-// SISTEMA DE TOASTS CON BOOTSTRAP
-// ============================================
-
-function mostrarToast(mensaje, tipo = 'success') {
-    // Crear contenedor de toasts si no existe
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Crear ID único para el toast
-    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    // Determinar color e icono según el tipo
-    let bgClass = 'bg-success';
-    let textColor = 'text-white';
-    let iconClass = 'bi-check-circle-fill';
-    let titulo = 'Éxito';
-    
-    if (tipo === 'error') {
-        bgClass = 'bg-danger';
-        iconClass = 'bi-exclamation-triangle-fill';
-        titulo = 'Error';
-    } else if (tipo === 'warning') {
-        bgClass = 'bg-warning';
-        textColor='text-black'
-        iconClass = 'bi-exclamation-circle-fill';
-        titulo = 'Advertencia';
-    } else if (tipo === 'info') {
-        bgClass = 'bg-info';
-        iconClass = 'bi-info-circle-fill';
-        titulo = 'Información';
-    }
-    
-    // Crear HTML del toast
-    const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <i class="bi ${iconClass} me-2"></i>
-                    ${mensaje}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    `;
-    
-    // Añadir toast al contenedor
-    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-    // Inicializar y mostrar el toast
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, {
-        animation: true,
-        autohide: true,
-        delay: 3000
-    });
-    
-    toast.show();
-    
-    // Eliminar del DOM después de ocultarse
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
-}
-
-// ============================================
 // FUNCIONES DE API
 // ============================================
 
 // Función para obtener los edificios de la API
 async function cargarEdificios() {
     try {
-        console.log('Cargando edificios desde:', API_EDIFICIOS);
         const response = await fetch(API_EDIFICIOS, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
         if (!response.ok) throw new Error('Error al cargar edificios');
-        const respuesta = await response.json();
-        
-        console.log('Respuesta edificios completa:', respuesta);
+        const respuesta = await response.json();        
         
         let edificiosArray = [];
         if (respuesta.data && Array.isArray(respuesta.data)) {
@@ -125,13 +54,12 @@ async function cargarEdificios() {
             edificios[edificio.id_edificio] = edificio.nombre_edificio;
         });
         
-        console.log('Edificios procesados:', edificios);
         actualizarSelectEdificios();
         
         return edificios;
     } catch (error) {
         console.error('Error cargando edificios:', error);
-        mostrarToast('Error al cargar edificios: ' + error.message, 'error');
+        mostrarToast('Error al cargar edificios: ' + error.message, 'danger');
         return {};
     }
 }
@@ -143,8 +71,6 @@ function obtenerNombreEdificio(idEdificio) {
 // Función para crear un nuevo material
 async function crearMaterial(data) {
     try {
-        console.log('Creando material en:', API_PORTATILES_MATERIALES);
-        console.log('Datos:', data);
         
         const response = await fetch(API_PORTATILES_MATERIALES, {
             method: 'POST',
@@ -156,7 +82,6 @@ async function crearMaterial(data) {
         });
         
         const resultado = await response.json();
-        console.log('Respuesta:', resultado);
         
         if (!response.ok) {
             // Extraer mensaje de error de la respuesta
@@ -199,8 +124,6 @@ async function crearMaterial(data) {
 async function actualizarMaterial(id, data) {
     try {
         const url = `${API_PORTATILES_MATERIALES}/${id}`;
-        console.log('Actualizando material en:', url);
-        console.log('Datos:', data);
         
         const response = await fetch(url, {
             method: 'PUT',
@@ -212,7 +135,6 @@ async function actualizarMaterial(id, data) {
         });
         
         const resultado = await response.json();
-        console.log('Respuesta:', resultado);
         
         if (!response.ok) {
             // Extraer mensaje de error de la respuesta
@@ -254,12 +176,10 @@ async function actualizarMaterial(id, data) {
 
 // Función principal para obtener materiales
 async function obtenerMateriales() {
-    console.log('Ejecutando obtenerMateriales');
-    console.log('URL completa:', API_PORTATILES_MATERIALES);
     
     const contenedor = document.getElementById("portatilesContainer");
     if (!contenedor) {
-        console.error('ERROR: No se encontró el elemento portatilesContainer');
+        console.error('ERROR: No se ha encontrado el elemento portatilesContainer');
         return;
     }
     
@@ -268,7 +188,7 @@ async function obtenerMateriales() {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="text-black mt-2">Cargando materiales...</p>
+            <p class="mt-2">Cargando materiales...</p>
         </div>
     `;
     
@@ -278,27 +198,20 @@ async function obtenerMateriales() {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log('Status de respuesta:', response.status);
         
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
         
         const respuesta = await response.json();
-        console.log('Respuesta completa de materiales:', respuesta);
         
         let materiales = [];
         
         if (respuesta.data && Array.isArray(respuesta.data)) {
             materiales = respuesta.data;
-            console.log('Materiales encontrados en data:', materiales);
         } else if (Array.isArray(respuesta)) {
             materiales = respuesta;
-            console.log('Materiales encontrados como array directo:', materiales);
         } else {
-            console.log('Formato de respuesta no esperado:', respuesta);
         }
         
-        console.log('Materiales procesados:', materiales);
-        console.log('Número de materiales:', materiales.length);
         
         contenedor.innerHTML = '';
         
@@ -392,7 +305,6 @@ async function obtenerMateriales() {
         });
 
         configurarBotones();
-        console.log('Tarjetas mostradas correctamente');
         
     } catch (error) {
         console.error('Error detallado:', error);
@@ -406,7 +318,7 @@ async function obtenerMateriales() {
                 </button>
             </div>
         `;
-        mostrarToast('Error al cargar materiales: ' + error.message, 'error');
+        mostrarToast('Error al cargar materiales: ' + error.message, 'danger');
     }
 }
 
@@ -489,12 +401,10 @@ function actualizarSelectEdificios() {
 // ============================================
 
 ready(function() {
-    console.log('DOM cargado - inicializando portatiles.js');
     
     // Verificar que el contenedor existe
     const contenedor = document.getElementById("portatilesContainer");
     if (contenedor) {
-        console.log('Contenedor portatilesContainer encontrado');
     } else {
         console.error('Contenedor portatilesContainer NO encontrado');
     }
@@ -510,7 +420,6 @@ ready(function() {
     // Formulario de creación
     const formCrear = document.querySelector("#modalCrear form");
     if (formCrear) {
-        console.log('✅ Formulario de creación encontrado');
         
         formCrear.addEventListener("submit", async function(e) {
             e.preventDefault();
@@ -556,7 +465,6 @@ ready(function() {
             
             try {
                 // PASO 1: Verificar si la planta existe
-                console.log('Verificando planta:', { idEdificio, numeroPlanta });
                 
                 // Intentar obtener la planta directamente
                 const plantaCheckResponse = await fetch(`${API_BASE}/plantas/${idEdificio}?numero_planta=${numeroPlanta}`, {
@@ -566,7 +474,6 @@ ready(function() {
                 });
                 
                 if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
-                    console.log('Planta no encontrada, creándola...');
                     
                     // Crear la planta
                     const crearPlantaResponse = await fetch(`${API_BASE}/planta/${idEdificio}`, {
@@ -601,11 +508,9 @@ ready(function() {
                         throw new Error(mensajeError);
                     }
                     
-                    console.log('Planta creada correctamente');
                 } else if (!plantaCheckResponse.ok) {
                     throw new Error('Error al verificar la planta');
                 } else {
-                    console.log('Planta ya existe');
                 }
                 
                 let usuario=sessionStorage.getItem("id_usuario");
@@ -644,7 +549,7 @@ ready(function() {
                 }
             } catch (error) {
                 console.error('Error detallado:', error);
-                mostrarToast(error.message, 'error');
+                mostrarToast(error.message, 'danger');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -659,7 +564,6 @@ ready(function() {
     // Formulario de edición
     const formEditar = document.querySelector("#modalEditar form");
     if (formEditar) {
-        console.log('Formulario de edición encontrado');
         
         formEditar.addEventListener("submit", async function(e) {
             e.preventDefault();
@@ -721,7 +625,7 @@ ready(function() {
                     mostrarToast(`Carro "${carro}" actualizado correctamente`, 'success');
                 }
             } catch (error) {
-                mostrarToast(error.message, 'error');
+                mostrarToast(error.message, 'danger');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;

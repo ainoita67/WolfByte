@@ -255,9 +255,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.getElementById('cargandoreservas').classList.add('d-none');
                 
                 if (!response.ok) {
-                    console.log(response);
                     let res=await response.json();
-                    console.log(res);
                     mostrarToast("Error creando la reserva", 'danger');
                     return;
                 }
@@ -337,7 +335,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                         }
                     });
                     let resnecesidades = await arraynecesidades.json();
-                    console.log(resnecesidades.data);
 
                     let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
                         headers: {

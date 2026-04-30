@@ -22,8 +22,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             throw new Error(data.message || 'Error al iniciar sesión');
         }
 
-        console.log('Respuesta login:', data);
-
         localStorage.setItem('token', data.data.token);
 
         window.location.href = '/frontend/vistas/menu.html';

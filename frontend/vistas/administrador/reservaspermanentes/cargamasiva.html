@@ -222,7 +222,6 @@
                     document.getElementById('importarcsv').disabled = false;
 
                     let data = await res.json();
-                    console.log(data);
 
                     if(!res.ok){
                         mostrarToast(data.message ?? 'Error al subir el CSV', 'danger');

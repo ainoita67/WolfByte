@@ -41,7 +41,6 @@ export async function updateUser(user) {
     });
 
     const json = await response.json().catch(() => null);
-console.log(json);
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
 
