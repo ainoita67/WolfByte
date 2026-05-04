@@ -181,7 +181,7 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
     }
 }
 
-function obtenerPlantas(edificio, accion, nplanta=0){
+export function obtenerPlantas(edificio, accion, nplanta=0){
     fetch(window.location.origin+"/API/plantas/"+edificio, {
         headers: {
             Authorization: `Bearer ${token}`
