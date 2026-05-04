@@ -132,6 +132,11 @@ function activarEditarMisIncidencias(){
         let estado = document.getElementById("incidencia_estado").value;
         
         if (!id||!titulo||!id_recurso||!descripcion||!prioridad||!estado||!fecha||!id_recurso) return;
+
+        if(usuario != sessionStorage.getItem("id_usuario")){
+            mostrarToast("No se ha podido editar esta incidencia", "danger");
+            return;
+        }
         
         let modal = bootstrap.Modal.getInstance(
             document.getElementById("modalincidencia")
@@ -156,7 +161,7 @@ function modificarIncidencia(id, fecha, id_recurso, titulo, descripcion, usuario
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: usuario, id_recurso: id_recurso })
+        body: JSON.stringify({ titulo: titulo, descripcion: descripcion, fecha: fecha, prioridad: prioridad, estado: estado, id_usuario: usuario, id_usuario_actor: sessionStorage.getItem("id_usuario"), id_recurso: id_recurso })
     })
     .then(res => res.json())
     .then(response => {
