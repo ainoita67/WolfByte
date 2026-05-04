@@ -94,6 +94,11 @@
             </div>
         </main>
         <footer id="footer"></footer>
+        <script type="module">
+            import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+            window.mostrarToast = mostrarToast;        
+        </script>
         <script>
             const scriptget = document.createElement("script");
             scriptget.src = BASE + "/javascript/liberar/get.js";

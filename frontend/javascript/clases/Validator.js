@@ -84,7 +84,7 @@ class Validator {
 /* 
     // Funcion que se encarga de mostrar los mensajes de error en el HTML
 
-    function mostrarAlerta(mensaje, tipo = "info") {
+    function mostrarToast(mensaje, tipo = "info") {
         // Crear contenedor de alertas si no existe
         let alertContainer = document.getElementById('alert-container');
         if (!alertContainer) {
@@ -123,7 +123,7 @@ class Validator {
 // En la funcion que se maneje el envio de los datos tendremos que poner esto para que salga el mensaje
 
 if (!validator.getisValid()) {
-        mostrarAlerta(validator.getmessageError(), "warning");
+        mostrarToast(validator.getmessageError(), "warning");
         return;
     }
 

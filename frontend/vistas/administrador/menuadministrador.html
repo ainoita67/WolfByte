@@ -317,7 +317,7 @@
                             </div>
 
                             <form id="formReserva">
-                                <div id="cargandoreserva"
+                                <div id="cargandoreservas"
                                     class="d-none position-absolute border rounded top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
                                     style="z-index: 10;">
 
@@ -545,8 +545,14 @@
             </div>
         </main>
         <footer id="footer"></footer>
+        <script type="module">
+            import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
+
+            window.mostrarToast = mostrarToast;
+        </script>
         <script type="module" src="/frontend/javascript/recursos/get.js"></script>
         <script>
+
             const id_usuario = sessionStorage.getItem("id_usuario");
 
             const scriptgetincidencias = document.createElement("script");

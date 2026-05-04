@@ -86,7 +86,7 @@
                                 <hr>
 
                                 <p><strong>Descripción:</strong></p>
-                                <p id="info-descripcion" class="text-muted small"></p>
+                                <p id="info-descripcion" class="small"></p>
 
                                 <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
                                 <p><strong>Planta:</strong> <span id="info-planta"></span></p>
@@ -255,9 +255,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 document.getElementById('cargandoreservas').classList.add('d-none');
                 
                 if (!response.ok) {
-                    console.log(response);
                     let res=await response.json();
-                    console.log(res);
                     mostrarToast("Error creando la reserva", 'danger');
                     return;
                 }
@@ -337,7 +335,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                         }
                     });
                     let resnecesidades = await arraynecesidades.json();
-                    console.log(resnecesidades.data);
 
                     let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
                         headers: {
@@ -406,7 +403,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     });
 
                     let res = await response.json();
-                    console.log(res);
                     if (!response.ok) {
                         mostrarToast("Error actualizando la reserva", 'danger');
                         return;

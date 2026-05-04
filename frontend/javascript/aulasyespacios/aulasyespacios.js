@@ -1,3 +1,5 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
 // aulasyespacios.js
 const API_BASE = `${API}`;
 
@@ -58,9 +60,7 @@ async function getCaracteristicas(){
 async function getEspacios() {
     const URL = API_BASE + "/espacios";
 
-    try {
-        console.log("🔍 Obteniendo espacios de:", URL);
-        
+    try {        
         const response = await fetch(URL, {
             method: "GET",
             headers: {
@@ -82,10 +82,6 @@ async function getEspacios() {
             espacios = jsonData;
         }
         
-        console.log(`${espacios.length} espacios encontrados`);
-        if (espacios.length > 0) {
-            console.log("Primer espacio:", espacios[0]);
-        }
         espaciosGlobal = espacios;
         return espacios;
         
@@ -99,8 +95,6 @@ async function getEdificios() {
     const URL = API_BASE + "/edificios";
 
     try {
-        console.log("🔍 Obteniendo edificios de:", URL);
-        
         const response = await fetch(URL, {
             method: "GET",
             headers: {
@@ -123,7 +117,6 @@ async function getEdificios() {
             edificios = [];
         }
         
-        console.log(`${edificios.length} edificios encontrados:`, edificios);
         return edificios;
         
     } catch (error) {
@@ -148,7 +141,7 @@ function getNombrePlanta(numeroPlanta) {
 async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
     const select = document.getElementById(selectId);
     if (!select) {
-        console.error(`No se encontró el select con id: ${selectId}`);
+        console.error(`No se ha encontrado el select con id: ${selectId}`);
         return;
     }
     
@@ -164,9 +157,6 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         return;
     }
     
-    console.log(`Cargando ${edificios.length} edificios en select ${selectId}`);
-    console.log("Valor a seleccionar:", valorSeleccionado);
-    
     edificios.forEach(edificio => {
         const option = document.createElement('option');
         option.value = edificio.id_edificio;
@@ -175,7 +165,6 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
         // Comparar correctamente los valores
         if (valorSeleccionado !== null && String(edificio.id_edificio) === String(valorSeleccionado)) {
             option.selected = true;
-            console.log(`✅ Edificio seleccionado: ${edificio.nombre_edificio} (ID: ${edificio.id_edificio})`);
             if(selectId=='crearSelect'){
                 obtenerPlantas(edificio.id_edificio, 'crear');
             }else if(selectId=='editSelect'){
@@ -188,9 +177,7 @@ async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
     
     // Respaldo: también intentar con select.value
     if (valorSeleccionado !== null && select.value !== String(valorSeleccionado)) {
-        console.log("Intentando seleccionar con select.value...");
         select.value = String(valorSeleccionado);
-        console.log(`Valor después de select.value: ${select.value}`);
     }
 }
 
@@ -219,7 +206,7 @@ function obtenerPlantas(edificio, accion, nplanta=0){
         if(plantas.length === 0||edificio == ""||!edificio){
             let option=document.createElement("option");
             option.value="";
-            option.textContent("Seleccione un edificio primero");
+            option.textContent="Seleccione un edificio primero";
             option.selected=true;
             selectplantas.appendChild(option);
             selectplantas.disabled=true;
@@ -345,8 +332,6 @@ function mostrarEspacios(espacios) {
         espaciosPorEdificio[edificio][planta].espacios.push(espacio);
     });
     
-    console.log("Espacios organizados:", espaciosPorEdificio);
-    
     // Ordenar edificios
     const edificiosOrdenados = Object.keys(espaciosPorEdificio).sort();
     
@@ -445,15 +430,10 @@ function mostrarEspacios(espacios) {
 // ************  FUNCIONES CRUD ****************** //
 
 async function abrirModalCrear() {
-    console.log("Abriendo modal crear");
-    
     // Asegurar que los edificios están cargados
     if (edificios.length === 0) {
-        console.log("Cargando edificios...");
         await getEdificios();
     }
-    
-    console.log("Edificios cargados:", edificios);
     
     // Resetear formulario - TODOS LOS CAMPOS VACÍOS
     const form = document.getElementById('formCrearEspacio');
@@ -466,7 +446,7 @@ async function abrirModalCrear() {
     // Mostrar modal
     const modalElement = document.getElementById('modalCrear');
     if (!modalElement) {
-        console.error("No se encontró el modal con id 'modalCrear'");
+        console.error("No se ha encontrado el modal con id 'modalCrear'");
         return;
     }
     
@@ -475,21 +455,14 @@ async function abrirModalCrear() {
 }
 
 async function abrirModalEditar(id) {
-    console.log("Abriendo modal editar para ID:", id);
-    
     const espacio = espaciosGlobal.find(e => e.id_recurso === id);
     if (!espacio) {
-        mostrarAlerta("Error: No se encontraron los datos del espacio", "danger");
+        mostrarToast("Error: No se encontraron los datos del espacio", "danger");
         return;
     }
     
-    console.log("Espacio encontrado:", espacio);
-    console.log("ID Edificio a seleccionar:", espacio.id_edificio);
-    console.log("Tipo de dato:", typeof espacio.id_edificio);
-    
     // Asegurar que los edificios están cargados
     if (edificios.length === 0) {
-        console.log("Cargando edificios...");
         await getEdificios();
     }
     await cargarSelectCaracteristicasEditar(id);
@@ -503,34 +476,28 @@ async function abrirModalEditar(id) {
     const estadoSelect = document.getElementById('editEstado');
     if (estadoSelect) {
         estadoSelect.value = espacio.activo ? "1" : "0";
-        console.log("Estado seleccionado:", estadoSelect.value);
     }
 
     // Especial: sí/no
     const especialSelect = document.getElementById('editEspecial');
     if (especialSelect) {
         especialSelect.value = espacio.especial ? "1" : "0";
-        console.log("Especial seleccionado:", especialSelect.value);
     }
     
     // Tipo: aula u otro espacio
     const tipoSelect = document.getElementById('editTipo');
     if (tipoSelect) {
         tipoSelect.value = espacio.es_aula ? "1" : "0";
-        console.log("Tipo seleccionado:", tipoSelect.value);
     }
     
     // Cargar select de edificios CON el valor seleccionado
-    console.log("Cargando select de edificios con valor:", espacio.id_edificio);
     await cargarSelectEdificios('editEdificio', espacio.id_edificio);
     
     // Cargar planta
     const plantaSelect = document.getElementById('editPlanta');
     if (plantaSelect) {
-        console.log("Valor planta a seleccionar:", espacio.numero_planta);
         if (espacio.numero_planta !== undefined && espacio.numero_planta !== null) {
             plantaSelect.value = String(espacio.numero_planta);
-            console.log("Planta seleccionada:", plantaSelect.value);
             obtenerPlantas(espacio.id_edificio, 'editar', espacio.numero_planta);
         } else {
             plantaSelect.value = "";
@@ -607,7 +574,6 @@ async function guardarEspacio(evento) {
         arraycaracteristicas = caracteristicas.map(id => ({
             id_caracteristica: id
         }));
-        console.log("CREANDO - Datos del formulario:", {id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial});
     } else {
         id = document.getElementById('editId')?.value;
         id_recurso = document.getElementById('editIdDisplay')?.value;
@@ -625,13 +591,12 @@ async function guardarEspacio(evento) {
         arraycaracteristicas = caracteristicas.map(id => ({
             id_caracteristica: id
         }));
-        console.log("EDITANDO - Datos del formulario:", {id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial, arraycaracteristicas});
     }
     
     es_aula = tipo === "1";
     
     if (!id_recurso || !descripcion || !id_edificio || numero_planta === '') {
-        mostrarAlerta("Por favor, complete todos los campos requeridos", "warning");
+        mostrarToast("Por favor, complete todos los campos requeridos", "warning");
         return;
     }
     
@@ -646,8 +611,6 @@ async function guardarEspacio(evento) {
         id_usuario: usuario
     };
     
-    console.log("Enviando datos:", datos);
-    
     try {
         let response;
         let responsecaracteristicas;
@@ -656,7 +619,6 @@ async function guardarEspacio(evento) {
         
         if (!esCreacion && id) {
             url = `${API}/espacios/${id}`;
-            console.log("Actualizando espacio en:", url);
             response = await fetch(url, {
                 method: "PUT",
                 headers: {
@@ -668,11 +630,8 @@ async function guardarEspacio(evento) {
             });
             
             let caracteristicasantes=await getCaracteristicasEspacio(id);
-            console.log("CARACTERÍSTICAS");
-            console.log(caracteristicasantes);
             for (let caracteristica of caracteristicasantes) {
                 url = `${API}/espacios/${id}/caracteristicas`;
-                console.log("Creando espacio en:", url);
                 responsecaracteristicas = await fetch(url, {
                     method: "DELETE",
                     headers: {
@@ -686,7 +645,6 @@ async function guardarEspacio(evento) {
 
             for (let caracteristica of arraycaracteristicas) {
                 url = `${API}/espacios/${id}/caracteristicas`;
-                console.log("Creando espacio en:", url);
                 responsecaracteristicas = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -700,7 +658,7 @@ async function guardarEspacio(evento) {
             let caracteristicasdespues=await getCaracteristicasEspacio(id);
 
             if(JSON.stringify(caracteristicasantes) !== JSON.stringify(caracteristicasdespues)) {
-                mostrarAlerta(
+                mostrarToast(
                     "Características actualizadas correctamente",
                     "success"
                 );
@@ -708,7 +666,6 @@ async function guardarEspacio(evento) {
             }
         } else {
             url = `${API}/espacios`;
-            console.log("Creando espacio en:", url);
             response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -721,7 +678,6 @@ async function guardarEspacio(evento) {
 
             for (let caracteristica of arraycaracteristicas) {
                 url = `${API}/espacios/${datos.id_recurso}/caracteristicas`;
-                console.log("Creando espacio en:", url);
                 responsecaracteristicas = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -734,9 +690,7 @@ async function guardarEspacio(evento) {
             }
         }
         
-        console.log("Respuesta status:", response.status);
         const result = await response.json();
-        console.log("Respuesta del servidor:", result);
         
         if (!response.ok) {
             if (result.errors) {
@@ -748,12 +702,12 @@ async function guardarEspacio(evento) {
         }
         
         if(response.status==200&&!cambios){
-            mostrarAlerta(
+            mostrarToast(
                 "No han habido cambios",
                 "warning"
             );
         }else if(response.status!=200){
-            mostrarAlerta(
+            mostrarToast(
                 esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
                 "success"
             );
@@ -767,7 +721,7 @@ async function guardarEspacio(evento) {
         
     } catch (error) {
         console.error("Error guardando espacio:", error);
-        mostrarAlerta(error.message, "danger");
+        mostrarToast(error.message, "danger");
     }
 }
 
@@ -775,7 +729,6 @@ async function guardarEspacio(evento) {
 
 async function cargarTodosLosDatos() {
     try {
-        console.log("Iniciando carga de datos...");
         
         const contenedor = document.getElementById('espaciosContainer');
         if (contenedor) {
@@ -793,7 +746,6 @@ async function cargarTodosLosDatos() {
         const espacios = await getEspacios();
         mostrarEspacios(espacios);
         
-        console.log("Carga completada");
         
     } catch (error) {
         console.error("Error en carga:", error);
@@ -823,52 +775,9 @@ function limpiarBackdrops() {
     document.body.style.paddingRight = '';
 }
 
-// ************  ALERTAS ****************** //
-
-function mostrarAlerta(mensaje, tipo = "info") {
-    let alertContainer = document.getElementById('alert-container');
-    if (!alertContainer) {
-        alertContainer = document.createElement('div');
-        alertContainer.id = 'alert-container';
-        alertContainer.className = 'position-fixed top-0 end-0 p-3';
-        alertContainer.style.zIndex = '9999';
-        document.body.appendChild(alertContainer);
-    }
-
-    const alertDiv = document.createElement('div');
-    
-    const bgClass = tipo === 'success' ? 'bg-success' : 
-                    tipo === 'danger' ? 'bg-danger' : 
-                    tipo === 'warning' ? 'bg-warning' : 'bg-info';
-    
-    const textClass = tipo === 'warning' ? 'text-black' : 'text-white';
-
-    alertDiv.className = `alert ${bgClass} ${textClass} alert-dismissible fade show shadow-lg`;
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        <div class="d-flex align-items-center">
-            <i class="bi ${tipo === 'success' ? 'bi-check-circle-fill' : 
-                           tipo === 'danger' ? 'bi-exclamation-triangle-fill' : 
-                           tipo === 'warning' ? 'bi-exclamation-circle-fill' : 'bi-info-circle-fill'} me-2"></i>
-            <div>${mensaje}</div>
-            <button type="button" class="btn-close ${textClass}" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-
-    alertContainer.appendChild(alertDiv);
-
-    setTimeout(() => {
-        if (alertDiv.parentNode) {
-            alertDiv.classList.remove('show');
-            setTimeout(() => alertDiv.remove(), 150);
-        }
-    }, 5000);
-}
-
 // ************  INICIALIZACIÓN ****************** //
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM cargado, iniciando...");
     cargarTodosLosDatos();
     
     const formCrear = document.getElementById('formCrearEspacio');

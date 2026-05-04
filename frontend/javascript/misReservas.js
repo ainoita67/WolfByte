@@ -1,6 +1,5 @@
 function obtenerMisReservas(){
     usuario=sessionStorage.getItem("id_usuario");
-    console.log(window.location.origin+"/API/mis-reservas/"+usuario);
     fetch(window.location.origin+"/API/mis-reservas/"+usuario, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -39,7 +38,10 @@ function mostrarMisReservas(reservas, tarjetasReservas){
                 });
             }else{
                 divReserva.addEventListener("click", function(){
-                    mostrarToast("No se puede modificar una reserva cancelada o denegada", "danger");
+                    mostrarDatosModal(reserva);
+
+                    let modal = new bootstrap.Modal(document.getElementById("modalVerReserva"));
+                    modal.show();
                 });
             }
 
@@ -66,7 +68,11 @@ function mostrarMisReservas(reservas, tarjetasReservas){
             }
 
             divReserva.addEventListener("click", function(){
-                mostrarDatosModal(reserva);
+                if(reserva.autorizada!==0){
+                    mostrarDatosModal(reserva);
+                }else{
+                    mostrarVerDatosModal(reserva);
+                }
             });
 
             div.appendChild(divReserva);
@@ -155,6 +161,77 @@ function mostrarDatosModal(reserva){
         document.getElementById("div_reserva_necesidades").classList.add('d-none');
     }
 }
+
+
+function mostrarVerDatosModal(reserva){
+    let ulNecesidades = document.getElementById("ver_reserva_necesidades");
+    ulNecesidades.innerHTML='';
+    
+    if(reserva.tipo == "Reserva_espacio"){
+        let necesidades=[];
+
+        if(typeof reserva.necesidades === "string"){
+            necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+        }
+
+        if(!necesidades||necesidades.length==0){
+            document.getElementById("p_ver_necesidades").classList.add('d-none');
+        }else{
+            necesidades.forEach(nec => {
+                let li=document.createElement('li');
+                li.classList.add('text-black')
+                li.textContent=nec;
+                ulNecesidades.appendChild(li);
+            });
+            document.getElementById("p_ver_necesidades").classList.remove('d-none');
+        }
+    }
+
+    let autorizada='Denegada';
+    if(reserva.autorizada==null){
+        autorizada='Pendiente';
+    }else if(reserva.autorizada==1){
+        autorizada='Autorizada';
+    }
+    
+    document.getElementById("ver_reserva_id").textContent = reserva.id_reserva;
+    document.getElementById("ver_reserva_f_creacion").textContent = reserva.f_creacion;
+    document.getElementById("ver_reserva_inicio").textContent = reserva.inicio;
+    document.getElementById("ver_reserva_fin").textContent = reserva.fin;
+    document.getElementById("ver_reserva_espacio_portatil").textContent = reserva.id_recurso;
+    document.getElementById("ver_reserva_asignatura").textContent = reserva.asignatura;
+    document.getElementById("ver_reserva_grupo").textContent = reserva.grupo;
+    document.getElementById("ver_reserva_profesor").textContent = reserva.profesor;
+    document.getElementById("ver_reserva_usuario").textContent = reserva.nombreusuario;
+    
+    document.getElementById("ver_reserva_unidades").textContent = reserva.unidades ?? '-';
+    document.getElementById("ver_reserva_espacio_uso").textContent = reserva.usaenespacio ?? '-';
+    document.getElementById("ver_reserva_actividad").textContent = reserva.actividad ?? '-';
+    document.getElementById("ver_reserva_observaciones").textContent = reserva.observaciones ?? '-';
+                    
+    if (reserva.tipo == 'Reserva_espacio') {
+        document.getElementById("p_ver_unidades").classList.add('d-none');
+        document.getElementById("reserva_unidades").required = false;
+        document.getElementById("p_ver_espacio_uso").classList.add('d-none');
+        document.getElementById("reserva_espacio_uso").required = false;
+        document.getElementById("p_ver_actividad").classList.remove('d-none');
+        document.getElementById("reserva_actividad").required = true;
+        if(!necesidades||necesidades.length==0){
+            document.getElementById("p_ver_necesidades").classList.add('d-none');
+        }else{
+            document.getElementById("p_ver_necesidades").classList.remove('d-none');
+        }
+    } else {
+        document.getElementById("p_ver_unidades").classList.remove('d-none');
+        document.getElementById("reserva_unidades").required = true;
+        document.getElementById("p_ver_espacio_uso").classList.remove('d-none');
+        document.getElementById("reserva_espacio_uso").required = true;
+        document.getElementById("p_ver_actividad").classList.add('d-none');
+        document.getElementById("reserva_actividad").required = false;
+        document.getElementById("p_ver_necesidades").classList.add('d-none');
+    }
+}
+
 
 
 
@@ -268,7 +345,7 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
             }else if(tipo=="Reserva_material"&&unidades>0){
                 resultado=await modificarReservaPortatil(id, autorizada, id_recurso, asignatura, unidades, espacio_uso, fechacreacion, inicio, fin, grupo, profesor, usuario, usuarioautoriza, observaciones);
             }
-            if(resultado!=1){
+            if(resultado!=1&&resultado!==0){
                 mostrarToast("Error al actualizar la reserva", 'danger');
             }else{
                 // Cerrar modal
@@ -277,7 +354,12 @@ async function modificarReserva(id, autorizada, fechacreacion, inicio, fin, tipo
                 // Limpiar input
                 formeditar.reset();
 
-                mostrarToast("Reserva actualizada correctamente", 'success');
+                if(resultado===0){
+                    mostrarToast("No han habido cambios", 'warning');
+                }else{
+                    mostrarToast("Reserva actualizada correctamente", 'success');
+                }
+
                 // Recargar
                 obtenerMisReservas();
             }
@@ -320,8 +402,11 @@ async function modificarReservaEspacio(id, autorizada, id_recurso, asignatura, a
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
-        console.log("Respuesta al modificar reserva espacio:", response);
+        
         if (response.status == "success"){
+            if(response.data.status=='no_changes'){
+                return 0;
+            }
             return 1;
         }else{
             mostrarToast("Ya hay una reserva entre esas horas", 'warning');
@@ -365,8 +450,11 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
         let response = await res.json();
-        console.log("Respuesta al modificar reserva portátil:", response);
+        
         if (response.status == "success") {
+            if(response.data.status=='no_changes'){
+                return 0;
+            }
             return 1;
         } else {
             mostrarToast("No hay suficientes portátiles disponibles entre esas horas", 'warning')
@@ -406,58 +494,6 @@ function anyadirFecha(fecha){
     let ss = String(fechaFormulario.getSeconds()).padStart(2, '0');
 
     return `${anyo}-${mes}-${dia} ${hh}:${mm}:${ss}`;
-}
-
-
-
-function mostrarToast(mensaje, tipo = 'success') {    
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    let bgClass = 'bg-success';
-    let textColor = 'text-white';
-    
-    if (tipo === 'error'||tipo === 'danger') {
-            bgClass = 'bg-danger';
-        } else if (tipo === 'warning') {
-            bgClass = 'bg-warning';
-            textColor = 'text-black';
-        } else if (tipo === 'info') {
-            bgClass = 'bg-info';
-        }
-    
-    const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ${mensaje}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, {
-        animation: true,
-        autohide: true,
-        delay: 3000
-    });
-    
-    toast.show();
-    
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
 }
 
 // Limpiar backdrop cuando el modal se cierra manualmente

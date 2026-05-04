@@ -38,6 +38,26 @@ class IncidenciaService
         }
     }
 
+    /**
+     * Obtener las incidencias paginadas
+     */
+    public function getIncidencia(array $data=[]): array
+    {
+        try {
+            $totalPages=$this->model->totalpaginas($data);
+            $data['perPage']=$data['perPage'] ?? $totalPages;
+            $incidencias=$this->model->allPaginadas($data);
+
+            return [
+                'data' => $incidencias,
+                'totalPages' => $totalPages,
+                'currentPage' => $data['page'] ?? 1
+            ];
+        } catch (Throwable $e) {
+            throw new \Exception("Error interno en la base de datos: " . $e->getMessage(), 500);
+        }
+    }
+
     public function getIncidenciasByUsuario(string $id_usuario): array
     {
         try {

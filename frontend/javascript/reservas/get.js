@@ -29,7 +29,6 @@ function obtenerReservasProximas(){
     })
     .then(res => res.json())
     .then(response => {
-        console.log(response)
         let reservas = response.data;
         let tarjetasReservas = document.getElementById("tarjetasReservasProximas");
         if(!tarjetasReservas) return;

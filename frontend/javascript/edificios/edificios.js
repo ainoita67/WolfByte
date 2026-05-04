@@ -1,63 +1,12 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
 // edificios.js
-console.log('edificios.js cargado');
 
 const API_BASE = window.location.origin;
 
 // ============================================
 // SISTEMA DE TOASTS CON BOOTSTRAP (IGUAL QUE EN PORTÁTILES)
 // ============================================
-function mostrarToast(mensaje, tipo = 'success') {
-    console.log('Toast:', mensaje, tipo);
-    
-    // Crear contenedor de toasts si no existe
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
-        toastContainer.style.zIndex = '9999';
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Crear ID único para el toast
-    const toastId = 'toast-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-    
-    // Determinar color según el tipo
-    let bgClass = 'bg-success';
-    let textColor = 'text-white';
-    
-    if (tipo === 'error'){
-        bgClass = 'bg-danger';
-    }else if (tipo === 'warning'){
-        bgClass = 'bg-warning';
-        textColor = 'text-black';
-    }else if (tipo === 'info'){
-        bgClass = 'bg-info';
-    }
-    
-    const toastHTML = `
-        <div id="${toastId}" class="toast align-items-center ${textColor} ${bgClass} border-0 fs-6" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
-            <div class="d-flex">
-                <div class="toast-body">${mensaje}</div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    `;
-    
-    toastContainer.insertAdjacentHTML('beforeend', toastHTML);
-    
-    const toastElement = document.getElementById(toastId);
-    const toast = new bootstrap.Toast(toastElement, {
-        animation: true,
-        autohide: true,
-        delay: 3000
-    });
-    
-    toast.show();
-    
-    toastElement.addEventListener('hidden.bs.toast', function() {
-        this.remove();
-    });
-}
 
 // ============================================
 // FUNCIÓN PARA LIMPIAR BACKDROPS (IGUAL QUE EN PORTÁTILES)
@@ -74,7 +23,6 @@ function limpiarBackdrops() {
 // CARGAR EDIFICIOS
 // ============================================
 async function cargarEdificios() {
-    console.log('Iniciando carga de edificios...');
     
     const contenedor = document.getElementById('contenedorTarjetas');
     if (!contenedor) {
@@ -87,7 +35,7 @@ async function cargarEdificios() {
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden text-black">Cargando...</span>
             </div>
-            <p class="text-black mt-2">Cargando edificios...</p>
+            <p class="mt-2">Cargando edificios...</p>
         </div>
     `;
     
@@ -100,17 +48,14 @@ async function cargarEdificios() {
             }
         });
         
-        console.log('Respuesta status:', res.status);
         
         if (!res.ok) {
             throw new Error(`Error HTTP: ${res.status}`);
         }
         
         const data = await res.json();
-        console.log('Datos recibidos:', data);
 
         const edificios = data.data || data;
-        console.log('Edificios procesados:', edificios);
 
         if (!edificios || edificios.length === 0) {
             contenedor.innerHTML = `
@@ -168,7 +113,7 @@ async function cargarEdificios() {
                 </button>
             </div>
         `;
-        mostrarToast('Error al cargar edificios: ' + err.message, 'error');
+        mostrarToast('Error al cargar edificios: ' + err.message, 'danger');
     }
 }
 
@@ -187,7 +132,6 @@ function configurarBotonesEditar() {
             const id = this.dataset.id;
             const nombre = this.dataset.nombre;
             
-            console.log('Editando edificio:', id, nombre);
             
             // Rellenar el formulario
             document.getElementById('editId').value = id;
@@ -213,7 +157,6 @@ function configurarBotonesEditar() {
 // FUNCIÓN PARA ABRIR MODAL DE CREAR
 // ============================================
 function abrirModalCrear() {
-    console.log('Abriendo modal de crear');
     
     // Limpiar backdrops residuales
     limpiarBackdrops();
@@ -232,7 +175,7 @@ function abrirModalCrear() {
         modal.show();
     } else {
         console.error('Modal crear no encontrado');
-        mostrarToast('Error: No se encontró el modal de creación', 'error');
+        mostrarToast('Error: No se ha encontrado el modal de creación', 'danger');
     }
 }
 
@@ -240,28 +183,20 @@ function abrirModalCrear() {
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM cargado - Inicializando edificios.js');
     
     // Verificar elementos del DOM
     const contenedor = document.getElementById('contenedorTarjetas');
-    console.log('Contenedor encontrado:', contenedor);
     
     const modalCrear = document.getElementById('modalCrear');
     const modalEditar = document.getElementById('modalEditar');
     const formCrear = document.getElementById('formCrear');
     const formEditar = document.getElementById('formEditar');
     
-    console.log('modalCrear:', modalCrear ? 'OK' : 'NO ENCONTRADO');
-    console.log('modalEditar:', modalEditar ? 'OK' : 'NO ENCONTRADO');
-    console.log('formCrear:', formCrear ? 'OK' : 'NO ENCONTRADO');
-    console.log('formEditar:', formEditar ? 'OK' : 'NO ENCONTRADO');
-    
     // Configurar botón de crear (si existe por defecto)
     const btnCrear = document.querySelector('[data-bs-target="#modalCrear"]') || 
                      document.getElementById('btnCrearEdificio');
     
     if (btnCrear) {
-        console.log('Botón crear encontrado, configurando...');
         btnCrear.removeAttribute('data-bs-toggle');
         btnCrear.removeAttribute('data-bs-target');
         btnCrear.addEventListener('click', (e) => {
@@ -269,7 +204,6 @@ document.addEventListener('DOMContentLoaded', function() {
             abrirModalCrear();
         });
     } else {
-        console.log('No se encontró botón crear por defecto, buscando en toolbar...');
         // Buscar en el toolbar o crear uno nuevo
         const toolbar = document.querySelector('.d-flex.justify-content-between');
         if (toolbar) {
@@ -278,7 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
             nuevoBoton.innerHTML = '<i class="bi bi-plus-circle"></i> Crear edificio';
             nuevoBoton.addEventListener('click', abrirModalCrear);
             toolbar.appendChild(nuevoBoton);
-            console.log('Botón crear añadido manualmente');
         }
     }
     
@@ -286,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // FORMULARIO CREAR EDIFICIO
     // ============================================
     if (formCrear) {
-        console.log('✅ Formulario crear encontrado');
         
         // Remover event listeners anteriores
         const nuevoFormCrear = formCrear.cloneNode(true);
@@ -296,17 +228,15 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('Submit formulario crear');
             
             const nombreInput = document.getElementById('crearNombre');
             if (!nombreInput) {
                 console.error('Input nombre no encontrado');
-                mostrarToast('Error en el formulario', 'error');
+                mostrarToast('Error en el formulario', 'danger');
                 return;
             }
             
             const nombre = nombreInput.value.trim();
-            console.log('Nombre ingresado:', nombre);
             
             if (!nombre) {
                 mostrarToast('El nombre del edificio es obligatorio', 'warning');
@@ -322,8 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Creando...';
                 }
                 
-                console.log('Enviando POST a:', `${API_BASE}/API/edificios`);
-                console.log('Datos:', { nombre_edificio: nombre });
 
                 const res = await fetch(`${API_BASE}/API/edificios`, {
                     method: 'POST',
@@ -334,14 +262,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({ nombre_edificio: nombre })
                 });
 
-                console.log('Respuesta status:', res.status);
                 
                 let data;
                 let mensajeError;
                 
                 try {
                     data = await res.json();
-                    console.log('Respuesta data:', data);
                 } catch {
                     mensajeError = 'Error al procesar la respuesta del servidor';
                     throw new Error(mensajeError);
@@ -358,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error(mensajeError);
                 }
 
-                console.log('✅ Edificio creado correctamente');
                 mostrarToast('Edificio creado correctamente', 'success');
                 
                 // Cerrar modal
@@ -378,8 +303,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 await cargarEdificios();
                 
             } catch (err) {
-                console.error('❌ Error al crear:', err);
-                mostrarToast(err.message, 'error');
+                console.error('Error al crear:', err);
+                mostrarToast('Error al crear el edificio', 'danger');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -388,16 +313,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        console.log('✅ Event listener del formulario crear configurado');
     } else {
-        console.error('❌ No se encontró el formulario de crear');
+        console.error('No se ha encontrado el formulario de crear');
     }
 
     // ============================================
     // FORMULARIO EDITAR EDIFICIO
     // ============================================
     if (formEditar) {
-        console.log('✅ Formulario editar encontrado');
         
         // Remover event listeners anteriores
         const nuevoFormEditar = formEditar.cloneNode(true);
@@ -407,21 +330,19 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            console.log('Submit formulario editar');
 
             const idInput = document.getElementById('editId');
             const nombreInput = document.getElementById('editNombre');
             
             if (!idInput || !nombreInput) {
                 console.error('Inputs no encontrados');
-                mostrarToast('Error en el formulario', 'error');
+                mostrarToast('Error en el formulario', 'danger');
                 return;
             }
             
             const id = idInput.value;
             const nombre = nombreInput.value.trim();
             
-            console.log('ID:', id, 'Nombre:', nombre);
             
             if (!nombre) {
                 mostrarToast('El nombre del edificio es obligatorio', 'warning');
@@ -437,8 +358,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Actualizando...';
                 }
                 
-                console.log('Enviando PUT a:', `${API_BASE}/API/edificios/${id}`);
-                console.log('Datos:', { nombre_edificio: nombre });
 
                 const res = await fetch(`${API_BASE}/API/edificios/${id}`, {
                     method: 'PUT',
@@ -449,14 +368,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify({ nombre_edificio: nombre })
                 });
 
-                console.log('Respuesta status:', res.status);
                 
                 let data;
                 let mensajeError;
                 
                 try {
                     data = await res.json();
-                    console.log('Respuesta data:', data);
 
                     if(data.data.message.includes('existe')){
                         mostrarToast('El edificio con ese nombre ya existe', 'warning');
@@ -478,9 +395,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     throw new Error(mensajeError);
                 }
-
-                console.log('✅ Edificio actualizado correctamente');
-                mostrarToast('Edificio actualizado correctamente', 'success');
+                
+                if(data.data.status === "no_changes"){
+                    mostrarToast('No han habido cambios', 'warning');
+                }else{
+                    mostrarToast('Edificio actualizado correctamente', 'success');
+                }
                 
                 // Cerrar modal
                 const modalElement = document.getElementById('modalEditar');
@@ -496,8 +416,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 await cargarEdificios();
                 
             } catch (err) {
-                console.error('❌ Error al actualizar:', err);
-                mostrarToast(err.message, 'error');
+                mostrarToast('Error al actualizar el edificio', 'danger');
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -506,9 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        console.log('✅ Event listener del formulario editar configurado');
     } else {
-        console.error('❌ No se encontró el formulario de editar');
+        console.error('No se ha encontrado el formulario de editar');
     }
 
     // ============================================
@@ -519,7 +437,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const modal = document.getElementById(id);
         if (modal) {
             modal.addEventListener('hidden.bs.modal', function() {
-                console.log('Modal', id, 'cerrado, limpiando...');
                 const form = this.querySelector('form');
                 if (form) {
                     form.reset();
@@ -536,7 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================
     // INICIAR CARGA
     // ============================================
-    console.log('Iniciando carga de edificios...');
     setTimeout(() => {
         cargarEdificios();
     }, 500);

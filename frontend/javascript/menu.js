@@ -47,9 +47,8 @@ function generateHeaderNav(menuactivo, role) {
             },
             { texto: "Liberar aulas", href: "/vistas/liberar/liberar.html", key: "liberar" }
         ];
-        //console.log("Rol del usuario:", role); // DEBUG: Verificar el rol del usuario
         
-        if(role>=30){ // solo para admin
+        if(role==30||role==40){ // solo para admin
             menus.push({ texto: "Administrador", href: "/vistas/administrador/menuadministrador.html", key: "administrador" });
         }
 

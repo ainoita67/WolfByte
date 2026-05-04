@@ -1,5 +1,6 @@
 // caracteristicas.js
-import { Validator } from "../clases/Validator.js";
+import { Validator } from "/frontend/javascript/clases/Validator.js";
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
 
 const API_BASE = `${API}`;
 
@@ -57,7 +58,6 @@ async function getCaracteristicas() {
     const URL = API_BASE + "/caracteristicas";
 
     try {
-        console.log("Obteniendo características de:", URL);
         
         const response = await fetch(URL, {
             method: "GET",
@@ -67,18 +67,14 @@ async function getCaracteristicas() {
             }
         });
 
-        console.log("Status:", response.status);
-
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
         const jsonData = await response.json();
-        console.log("Respuesta completa:", jsonData);
         
         // IMPORTANTE: La API devuelve { status: "success", data: [...] }
         if (jsonData.data && Array.isArray(jsonData.data)) {
-            console.log(`${jsonData.data.length} características encontradas`);
             return jsonData.data;
         } else {
             console.warn("Formato inesperado:", jsonData);
@@ -116,7 +112,7 @@ async function crearCaracteristica(nombre) {
             }
         }
 
-        mostrarAlerta(`${MENSAJE_CREACION_CORRECTA}`, 'success');
+        mostrarToast(`${MENSAJE_CREACION_CORRECTA}`, 'success');
         
         // Cerrar modal
         const modalElement = document.getElementById('modalCrearCaracteristica');
@@ -133,7 +129,7 @@ async function crearCaracteristica(nombre) {
         
     } catch (error) {
         console.error("Error creando:", error);
-        mostrarAlerta(`${error.message || MENSAJE_CREACION_ERROR}`, 'danger');
+        mostrarToast(`${error.message || MENSAJE_CREACION_ERROR}`, 'danger');
         return false;
     }
 }
@@ -146,7 +142,7 @@ function abrirModalEdicion(id, nombre) {
     const editNombre = document.getElementById('editNombre');
     
     if (!modalElement || !editId || !editNombre) {
-        mostrarAlerta("Error: No se encontró el modal de edición", "danger");
+        mostrarToast("Error: No se ha encontrado el modal de edición", "danger");
         return;
     }
     
@@ -184,10 +180,10 @@ async function editarCaracteristica(id, nombre) {
             }
         }
 
-        if (result.status === 'no_changes') {
-            mostrarAlerta("No se realizaron cambios en el nombre", "info");
+        if (result.data.status === 'no_changes') {
+            mostrarToast("No se realizaron cambios en el nombre", "warning");
         } else {
-            mostrarAlerta(`${MENSAJE_EDICION_CORRECTA}`, "success");
+            mostrarToast(`${MENSAJE_EDICION_CORRECTA}`, "success");
         }
         
         // Cerrar modal
@@ -204,8 +200,7 @@ async function editarCaracteristica(id, nombre) {
         return true;
         
     } catch (error) {
-        console.error("Error editando:", error);
-        mostrarAlerta(`${error.message}`, 'danger');
+        mostrarToast(`${error.message}`, 'danger');
         return false;
     }
 }
@@ -253,7 +248,7 @@ async function eliminarCaracteristica(id, nombre) {
             }
         }
 
-        mostrarAlerta(`${nombre} - ${MENSAJE_ELIMINACION_CORRECTA}`, 'success');
+        mostrarToast(`${nombre} - ${MENSAJE_ELIMINACION_CORRECTA}`, 'success');
         
         // Cerrar modal
         const modalElement = document.getElementById('modalConfirmarEliminar');
@@ -267,8 +262,7 @@ async function eliminarCaracteristica(id, nombre) {
         await cargarCaracteristicas();
         
     } catch (error) {
-        console.error("Error eliminando:", error);
-        mostrarAlerta(`${error.message || MENSAJE_ELIMINACION_ERROR}`, 'danger');
+        mostrarToast(`${error.message || MENSAJE_ELIMINACION_ERROR}`, 'danger');
     }
 }
 
@@ -277,12 +271,7 @@ async function eliminarCaracteristica(id, nombre) {
 function mostrarCaracteristicas(caracteristicas) {
     const contenedor = document.getElementById('contenedorCaracteristicas');
     
-    if (!contenedor) {
-        console.error("No se encontró el elemento #contenedorCaracteristicas");
-        return;
-    }
-    
-    console.log("Mostrando características:", caracteristicas);
+    if (!contenedor) return;
     
     if (!caracteristicas || caracteristicas.length === 0) {
         contenedor.innerHTML = "";
@@ -319,7 +308,7 @@ function mostrarCaracteristicas(caracteristicas) {
         tarjeta.classList.add("col-12", "col-md-6", "col-lg-4", "mb-4");
         
         tarjeta.innerHTML = `
-            <div class="card text-center shadow-sm overflow-hidden h-100 border-0">
+            <div class="card text-center shadow-sm overflow-hidden h-100">
                 <div class="bg-blue card-head rounded-top py-2">
                     <p class="fs-6 text-light m-0">
                         <i class="bi bi-tag"></i> ID: ${id}
@@ -369,14 +358,9 @@ function mostrarCaracteristicas(caracteristicas) {
 
 async function cargarCaracteristicas() {
     const contenedor = document.getElementById('contenedorCaracteristicas');
-    if (!contenedor) {
-        console.error("No se encontró el contenedor");
-        return;
-    }
+    if (!contenedor) return;
     
-    try {
-        console.log("Cargando características...");
-        
+    try {        
         contenedor.innerHTML = `
             <div class="col-12 text-center py-5">
                 <div class="spinner-border text-primary" role="status">
@@ -387,7 +371,6 @@ async function cargarCaracteristicas() {
         `;
         
         const caracteristicas = await getCaracteristicas();
-        console.log("Características obtenidas:", caracteristicas);
         mostrarCaracteristicas(caracteristicas);
         
     } catch (error) {
@@ -416,9 +399,7 @@ function limpiarBackdrops() {
 
 // ************  INICIALIZACIÓN ****************** //
 
-document.addEventListener("DOMContentLoaded", async function () {
-    console.log("Inicializando gestor de características...");
-    
+document.addEventListener("DOMContentLoaded", async function () {    
     // Cargar características
     await cargarCaracteristicas();
     
@@ -442,7 +423,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             const validator = validarNombreCaracteristica(nombre);
             if (!validator.getisValid()) {
-                mostrarAlerta(validator.getmessageError(), "warning");
+                mostrarToast(validator.getmessageError(), "warning");
                 return;
             }
             
@@ -462,7 +443,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             
             const validator = validarNombreCaracteristica(nombre);
             if (!validator.getisValid()) {
-                mostrarAlerta(validator.getmessageError(), "warning");
+                mostrarToast(validator.getmessageError(), "warning");
                 return;
             }
             
@@ -507,48 +488,4 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById('editNombre').classList.remove('is-invalid');
         });
     }
-    
-    console.log("Inicialización completada");
 });
-
-// ************ ALERTAS ****************** //
-
-function mostrarAlerta(mensaje, tipo = "info") {
-    let alertContainer = document.getElementById('alert-container');
-    if (!alertContainer) {
-        alertContainer = document.createElement('div');
-        alertContainer.id = 'alert-container';
-        alertContainer.className = 'position-fixed top-0 end-0 p-3';
-        alertContainer.style.zIndex = '9999';
-        document.body.appendChild(alertContainer);
-    }
-
-    const alertDiv = document.createElement('div');
-    
-    const bgClass = tipo === 'success' ? 'bg-success' : 
-                    tipo === 'danger' ? 'bg-danger' : 
-                    tipo === 'warning' ? 'bg-warning' : 'bg-info';
-    
-    const textClass = tipo === 'warning' ? 'text-black' : 'text-white';
-
-    alertDiv.className = `alert ${bgClass} ${textClass} alert-dismissible fade show shadow-lg`;
-    alertDiv.role = 'alert';
-    alertDiv.innerHTML = `
-        <div class="d-flex align-items-center">
-            <i class="bi ${tipo === 'success' ? 'bi-check-circle-fill' : 
-                           tipo === 'danger' ? 'bi-exclamation-triangle-fill' : 
-                           tipo === 'warning' ? 'bi-exclamation-circle-fill' : 'bi-info-circle-fill'} me-2"></i>
-        <div>${mensaje}</div>
-            <button type="button" class="btn-close ${textClass === 'text-white' ? 'btn-close-white': ''}" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-
-    alertContainer.appendChild(alertDiv);
-
-    setTimeout(() => {
-        if (alertDiv.parentNode) {
-            alertDiv.classList.remove('show');
-            setTimeout(() => alertDiv.remove(), 150);
-        }
-    }, 3000);
-}

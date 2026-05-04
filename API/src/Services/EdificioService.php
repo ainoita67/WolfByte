@@ -120,7 +120,7 @@ class EdificioService
             }
             
             return[
-                'status' => 'success',
+                'status' => 'updated',
                 'data' => $edificio,
                 'message' => 'Edificio actualizado correctamente'
             ];
