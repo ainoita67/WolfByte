@@ -125,7 +125,7 @@ class IncidenciaController
                 return;
             }else{
                 $log['id_incidencia']=(int)$id;
-                $log['id_usuario_actor']=(int)$data['id_usuario'];
+                $log['id_usuario_actor']=(int)$data['id_usuario_actor'];
                 $this->serviceLog->createLog('Modificación de incidencia', $log);
             }
 
