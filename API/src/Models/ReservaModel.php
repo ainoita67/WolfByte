@@ -34,6 +34,9 @@ class ReservaModel
      */
     public function findByUsuario(int $idUsuario): array
     {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
         try{
             return $this->db
                 ->query("
@@ -65,7 +68,7 @@ class ReservaModel
                         LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                         LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                         JOIN Usuario u ON r.id_usuario = u.id_usuario
-                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND u.id_usuario=:id_usuario1
+                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND u.id_usuario=:id_usuario1
                         GROUP BY r.id_reserva
 
                         UNION ALL
@@ -94,9 +97,11 @@ class ReservaModel
                         JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                         JOIN Recurso rec ON rec.id_recurso = rp.id_material
                         JOIN Usuario u ON r.id_usuario = u.id_usuario
-                        WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND u.id_usuario=:id_usuario2
+                        WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND u.id_usuario=:id_usuario2
                     ) union_result ORDER BY inicio, id_reserva;
                 ")
+                ->bind(':fecha1', $fecha)
+                ->bind(':fecha2', $fecha)
                 ->bind(':id_usuario1', $idUsuario)
                 ->bind(':id_usuario2', $idUsuario)
                 ->fetchAll();
@@ -121,6 +126,9 @@ class ReservaModel
      */
     public function getReservasPendientes(): array|false
     {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
         return $this->db
             ->query("
                 SELECT
@@ -149,7 +157,7 @@ class ReservaModel
                 LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                 LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND r.autorizada IS NULL
                 GROUP BY r.id_reserva
 
                 UNION ALL
@@ -178,8 +186,10 @@ class ReservaModel
                 JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                 JOIN Recurso rec ON rec.id_recurso = rp.id_material
                 JOIN Usuario u ON r.id_usuario = u.id_usuario
-                WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada IS NULL
+                WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND r.autorizada IS NULL
             ")
+            ->bind(':fecha1', $fecha)
+            ->bind(':fecha2', $fecha)
             ->fetchAll();
     }
 
@@ -188,6 +198,9 @@ class ReservaModel
      */
     public function getReservasProximas(): array|false
     {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
         return $this->db
             ->query("
                 SELECT *
@@ -218,7 +231,7 @@ class ReservaModel
                     LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
                     LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
-                    WHERE r.tipo = 'Reserva_espacio' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada=1
+                    WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND r.autorizada=1
                     GROUP BY r.id_reserva
 
                     UNION ALL
@@ -247,9 +260,11 @@ class ReservaModel
                     JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
                     JOIN Recurso rec ON rec.id_recurso = rp.id_material
                     JOIN Usuario u ON r.id_usuario = u.id_usuario
-                    WHERE r.tipo = 'Reserva_material' AND r.inicio>CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid') AND r.autorizada=1
+                    WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND r.autorizada=1
                 ) union_result ORDER BY inicio, id_reserva;
             ")
+            ->bind(':fecha1', $fecha)
+            ->bind(':fecha2', $fecha)
             ->fetchAll();
     }
 
