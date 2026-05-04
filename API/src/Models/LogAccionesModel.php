@@ -114,9 +114,13 @@ class LogAccionesModel
      */
     public function create(int $tipo, array $data): int
     {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
         $this->db
             ->query("INSERT INTO Log (fecha, id_tipo_log, id_usuario, id_incidencia, id_reserva, id_recurso, id_reserva_permanente, id_liberacion_puntual, id_usuario_actor)
-            VALUES (CONVERT_TZ(NOW(), 'UTC', 'Europe/Madrid'), :id_tipo_log, :id_usuario, :id_incidencia, :id_reserva, :id_recurso, :id_reserva_permanente, :id_liberacion_puntual, :id_usuario_actor)")
+            VALUES (:fecha, :id_tipo_log, :id_usuario, :id_incidencia, :id_reserva, :id_recurso, :id_reserva_permanente, :id_liberacion_puntual, :id_usuario_actor)")
+            ->bind(':fecha', $fecha)
             ->bind(':id_tipo_log', $tipo)
             ->bind(':id_usuario', $data['id_usuario'] ?? null)
             ->bind(':id_incidencia', $data['id_incidencia'] ?? null)
