@@ -23,14 +23,14 @@ class MailService
         $mail=new PHPMailer(true);
 
         $mail->isSMTP();
-        $mail->Host      ='smtp.gmail.com';
+        $mail->Host      ='mail.cpifpbajoaragon.info';
         $mail->SMTPAuth  =true;
-        $mail->Username  ='vocabulariodaw@gmail.com';
+        $mail->Username  ='reservasies@cpifpbajoaragon.info';
         $mail->Password  ='xxxxxxxxxxxxxxxx';
         $mail->SMTPSecure='tls';
         $mail->Port      =587;
 
-        $mail->setFrom('vocabulariodaw@gmail.com', 'Vocabulario');
+        $mail->setFrom('reservasies@cpifpbajoaragon.info', 'Reservas IES Bajo Aragón');
         $mail->addAddress($email);
 
         //$mail->ContentLanguage='es';
