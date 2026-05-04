@@ -229,7 +229,7 @@ class ReservaPermanenteService
             throw new \Exception("Los materiales deben tener unidades");
         }
 
-        $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+        $mensaje="<ul class='m-0'><li>Recurso: ".$reserva['id_recurso']."</li><li>Inicio: ".$reserva['inicio']."</li><li>Fin: ".$reserva['fin']."</li></ul>";
         if($recurso['tipo']=="Espacio"){
             if(!$this->model->getEspacioFecha($reserva, (int)$data['id'])){
                 throw new \Exception("El espacio ya está reservado entre ese horario<br>".$mensaje);
