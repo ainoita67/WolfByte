@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 if(data.data.status == "no_changes") {
-                    mostrarToast("No se realizaron cambios en la planta", 'warning');
+                    mostrarToast("No han habido cambios", 'warning');
                 }else{
                     const nombreEdificio = edificios[idEdificio] || 'desconocido';
                     mostrarToast(`Planta actualizada correctamente en ${nombreEdificio}`, 'success');
