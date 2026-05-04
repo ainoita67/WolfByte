@@ -195,17 +195,14 @@
                             </div>
                             <div class="mb-3">
                                 <label class="text-black form-label">Edificio</label>
-                                <select class="form-select" id="crearEdificio" name="crearEdificio" required>
+                                <select class="form-select selectEdificio" id="crearEdificio" name="crearEdificio" required>
                                     <option value="">Seleccione un edificio</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label class="text-black form-label">Planta</label>
                                 <select class="form-select" id="crearPlanta" name="crearPlanta" required>
-                                    <option value="">Seleccionar planta</option>
-                                    <option value="Planta baja">Planta baja</option>
-                                    <option value="Primera planta">Primera planta</option>
-                                    <option value="Segunda planta">Segunda planta</option>
+                                    <option value="" selected disabled>Seleccionar planta</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -310,6 +307,29 @@
 
         <!-- Cargar el script de materiales -->
         <script src="/frontend/javascript/portatiles/portatiles.js" type="module"></script>
+
+        <script type="module">
+            import { obtenerPlantas } from "/frontend/javascript/aulasyespacios/aulasyespacios.js";
+            
+            let selectedificio=document.querySelectorAll(".selectEdificio");
+
+            function actualizarEdificio(event){
+                let select=event.target;
+                let idselect=select.id;
+                let edificio=select.value;
+
+                // Dependiendo del id puedes hacer diferentes acciones
+                if(idselect === "crearEdificio"){
+                    obtenerPlantas(edificio, 'crear');
+                } else if(idselect === "editEdificio"){
+                    obtenerPlantas(edificio, 'editar');
+                }
+            }
+
+            selectedificio.forEach(select => {
+                select.addEventListener("change", actualizarEdificio);
+            });
+        </script>
 
     </body>
 
