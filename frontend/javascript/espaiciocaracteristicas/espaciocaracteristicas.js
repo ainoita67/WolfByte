@@ -181,7 +181,7 @@ async function editarCaracteristica(id, nombre) {
         }
 
         if (result.data.status === 'no_changes') {
-            mostrarToast("No se realizaron cambios en el nombre", "warning");
+            mostrarToast("No han habido cambios", "warning");
         } else {
             mostrarToast(`${MENSAJE_EDICION_CORRECTA}`, "success");
         }
