@@ -427,32 +427,22 @@ ready(function() {
             const id = document.getElementById("crearId")?.value;
             const carro = document.getElementById("crearCarro")?.value;
             const idEdificio = parseInt(document.getElementById("crearEdificio")?.value);
-            const planta = document.getElementById("crearPlanta")?.value;
+            const numeroPlanta = document.getElementById("crearPlanta")?.value;
             const unidades = parseInt(document.getElementById("crearUnidades")?.value);
             
-            if (!id || !carro || !idEdificio || !planta || !unidades) {
-                mostrarToast('Completa todos los campos', 'warning');
+            if (!id || !carro || !idEdificio || !unidades) {
+                mostrarToast('Complete todos los campos', 'warning');
+                return;
+            }
+
+            if(numeroPlanta === "" || numeroPlanta === null || numeroPlanta === undefined) {
+                mostrarToast('Seleccione una planta', 'warning');
                 return;
             }
             
             if (unidades <= 0) {
                 mostrarToast('Las unidades deben ser mayores que 0', 'warning');
                 return;
-            }
-            
-            // Determinar número de planta
-            let numeroPlanta = 0;
-            let nombrePlanta = planta;
-            
-            if (planta.includes('baja')) {
-                numeroPlanta = 0;
-                nombrePlanta = 'Planta baja';
-            } else if (planta.includes('Primera')) {
-                numeroPlanta = 1;
-                nombrePlanta = 'Primera planta';
-            } else if (planta.includes('Segunda')) {
-                numeroPlanta = 2;
-                nombrePlanta = 'Segunda planta';
             }
             
             const submitBtn = formCrear.querySelector("button[type='submit']");
@@ -474,45 +464,12 @@ ready(function() {
                 });
                 
                 if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
-                    
-                    // Crear la planta
-                    const crearPlantaResponse = await fetch(`${API_BASE}/planta/${idEdificio}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            numero_planta: numeroPlanta,
-                            nombre_planta: nombrePlanta
-                        })
-                    });
-                    
-                    if (!crearPlantaResponse.ok) {
-                        const errorData = await crearPlantaResponse.json();
-                        let mensajeError = 'Error al crear la planta';
-                        
-                        if (errorData.error) {
-                            if (typeof errorData.error === 'string') {
-                                mensajeError = errorData.error;
-                            } else if (Array.isArray(errorData.error)) {
-                                mensajeError = errorData.error.join(', ');
-                            }
-                        }
-                        
-                        // Personalizar mensaje
-                        if (mensajeError.includes('Duplicate') || mensajeError.includes('duplicado')) {
-                            mensajeError = `La planta ${nombrePlanta} ya existe en este edificio`;
-                        }
-                        
-                        throw new Error(mensajeError);
-                    }
-                    
+                    mostrarToast('La planta seleccionada no existe en este edificio', 'danger');
+                    return;                    
                 } else if (!plantaCheckResponse.ok) {
                     throw new Error('Error al verificar la planta');
-                } else {
                 }
-                
+                               
                 let usuario=sessionStorage.getItem("id_usuario");
                 // PASO 2: Crear el material
                 const data = {
