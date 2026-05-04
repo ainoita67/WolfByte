@@ -62,7 +62,7 @@ define('TMP_SESION', 60 * 60 * 24 * 365); // 1 año
 // ----------------------------------------------------
 // CORS
 // ----------------------------------------------------
-define('CONFIG_CORS', 'http://192.168.13.202');    // Cambiar por dominio real  // CORS CONFIGURACIÓN ACTUAL (DEMASIADO PERMISIVA): Permite acceso desde CUALQUIER dominio
+define('CONFIG_CORS', 'http://192.168.13.202:82');    // Cambiar por dominio real  // CORS CONFIGURACIÓN ACTUAL (DEMASIADO PERMISIVA): Permite acceso desde CUALQUIER dominio
 
 
 // ----------------------------------------------------
