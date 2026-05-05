@@ -43,7 +43,7 @@
                 <aside class="col-2 d-none d-lg-block bg-blue text-white pt-5 p-4" id="aside-admin">
                 <h5 class="mb-3">Menú Admin</h5>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
+                        <li class="nav-item menuadminusuario"><a class="nav-link text-white" href="usuarios/usuarios.html">Usuarios</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="portatiles/portatiles.html">Portátiles</a></li>
                         <li class="nav-item"><a class="nav-link text-white" href="reservaspermanentes/menu.html">Reservas Permanentes</a></li>
@@ -82,7 +82,7 @@
 
                         <div class="offcanvas-body mt-0 pt-0">
                             <ul class="nav flex-column">
-                                <li class="nav-item"><a class="nav-link text-black" href="usuarios/usuarios.html">Usuarios</a></li>
+                                <li class="nav-item menuadminusuario"><a class="nav-link text-black" href="usuarios/usuarios.html">Usuarios</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="portatiles/portatiles.html">Portátiles</a></li>
                                 <li class="nav-item"><a class="nav-link text-black" href="reservaspermanentes/menu.html">Reservas Permanentes</a></li>
@@ -552,6 +552,9 @@
         </script>
         <script type="module" src="/frontend/javascript/recursos/get.js"></script>
         <script>
+            if(rol != 40){
+                document.getElementsByClassName("menuadminusuario")[0].classList.add("d-none");
+            }
 
             const id_usuario = sessionStorage.getItem("id_usuario");
 
