@@ -293,6 +293,38 @@
                 await guardarCambiosReserva();
             });
 
+            document.addEventListener("click", async (e) => {
+                const btn = e.target.closest(".btn-eliminar");
+                if (!btn) return;
+
+                const id = Number(btn.dataset.id);
+                const reserva = reservas.find(r => r.id === id);
+                if (!reserva) return mostrarToast("Reserva no encontrada", "danger");
+
+                const confirmar = await DayPilot.Modal.confirm(`¿Seguro que desea eliminar la reserva del recurso ${reserva.recurso}?`);
+				
+				if (!confirmar) return;
+
+				if (confirmar.canceled) {
+					return;
+				}
+
+                try {
+                    let response=await desactivePermanente(reserva.id);
+
+                    // Actualizar array local
+                    if(response.status=="success"){
+                        mostrarToast("Se han eliminado la reserva permanente correctamente", "success");
+                    }else{
+                        mostrarToast("No se ha podido eliminar la reserva permanente", "danger");
+                    }
+                    reservas = await getReservas();
+                    rellenarTablaReservas(reservas);
+                } catch (err) {
+                    mostrarToast(err?.message ?? "Error al eliminar la reserva", "danger");
+                }
+            });
+
             // Listener para desactivar todas las reservas permanentes
             document.getElementById("btnDesactivarTodo").addEventListener("click", async () => {
                 const confirmar = await DayPilot.Modal.confirm("¿Seguro que desea desactivar todas las reservas permanentes?");
