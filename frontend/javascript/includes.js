@@ -82,6 +82,9 @@ function botonesAccesibilidad() {
     // Cargar estado guardado al iniciar
     const savedFontSize = localStorage.getItem("fontSizeMain");
     if(savedFontSize) main.style.fontSize = savedFontSize;
+    document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
+        el.style.fontSize = main.style.fontSize;
+    });
 
     const highContrast = localStorage.getItem("highContrast") === "true";
     if(highContrast) body.classList.add("bg-dark", "text-white");
@@ -128,6 +131,9 @@ function botonesAccesibilidad() {
     function restablecer(){
         // Resetear estilos en el DOM
         main.style.fontSize = "1em";
+        document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
+            el.style.fontSize = main.style.fontSize;
+        });
         body.classList.remove("bg-dark", "text-white");
         main.classList.remove("bg-dark", "text-white");
         localStorage.removeItem("fontSizeMain");
@@ -156,6 +162,9 @@ function botonesAccesibilidad() {
             if(currentEm<1.5){ // límite máximo 2em
                 const newEm = currentEm + 0.1; // aumentamos 0.1em
                 main.style.fontSize = newEm + "em";
+                document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
+                    el.style.fontSize = main.style.fontSize;
+                });
                 localStorage.setItem("fontSizeMain", main.style.fontSize);
             }
         });
@@ -172,6 +181,9 @@ function botonesAccesibilidad() {
             if(currentEm>0.75){ // límite mínimo 0.5em
                 const newEm = currentEm - 0.1; // disminuimos 0.1em
                 main.style.fontSize = newEm + "em";
+                document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
+                    el.style.fontSize = main.style.fontSize;
+                });
                 localStorage.setItem("fontSizeMain", main.style.fontSize);
             }
         });
