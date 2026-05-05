@@ -207,6 +207,7 @@ a.menu:hover, button.menu:hover{
     border-radius: 25px;
     color: white;
     text-decoration: none;
+    font-size: 1.25em;
 }
 
 .menuadministrador:hover, .menuadministrador:active{
@@ -255,6 +256,11 @@ main.menu a.bg-verde, main.menu a.bg-lightgrey{
 
 a.p-menu{
     padding: 1% 0 !important;
+}
+
+.toast{
+    margin-top: 5em !important;
+    font-size: 1.1em;
 }
 
 

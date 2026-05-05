@@ -385,7 +385,11 @@ function mostrarEspacios(espacios) {
                                     ${espacio.activo ? 'Activo' : 'Inactivo'}
                                 </span>
                                 <div>
-                                    <button class="btn btn-sm btn-primary btn-ver" data-id="${espacio.id_recurso}" title="Ver">
+                                    <button class="btn btn-sm btn-primary btn-mostrar"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalVer"
+                                        data-id="${espacio.id_recurso}"
+                                        title="Ver">
                                         <i class="bi bi-eye"></i>
                                     </button>
                                     <button class="btn btn-sm btn-warning btn-editar" data-id="${espacio.id_recurso}" title="Editar">
@@ -407,7 +411,7 @@ function mostrarEspacios(espacios) {
     }
     
     // Event listeners
-    document.querySelectorAll('.btn-ver').forEach(btn => {
+    document.querySelectorAll('.btn-mostrar').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -536,17 +540,6 @@ async function verEspacio(id) {
     } else {
         verCaracteristicas.textContent = 'No';
     }
-
-    const btnEditar = document.getElementById('btnEditarDesdeVer');
-    btnEditar.dataset.id = id;
-    btnEditar.onclick = () => {
-        const modalVer = bootstrap.Modal.getInstance(document.getElementById('modalVer'));
-        modalVer.hide();
-        setTimeout(() => abrirModalEditar(id), 500);
-    };
-    
-    const modal = new bootstrap.Modal(document.getElementById('modalVer'));
-    modal.show();
 }
 
 async function guardarEspacio(evento) {
