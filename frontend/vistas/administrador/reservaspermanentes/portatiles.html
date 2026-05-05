@@ -47,7 +47,7 @@
             <aside class="col-2 d-none d-lg-block bg-blue text-white pt-5 p-4" id="aside-admin">
                 <a class="text-white" href="../menuadministrador.html"><h5 class="mb-3">Menú Admin</h5></a>
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
+                    <li class="nav-item menuadminusuario"><a class="nav-link text-white" href="./../usuarios/usuarios.html">Usuarios</a>
                     </li>
                     <li class="nav-item"><a class="nav-link text-white"
                             href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
@@ -96,7 +96,7 @@
 
                     <div class="offcanvas-body mt-0 pt-0">
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link text-black"
+                            <li class="nav-item menuadminusuario"><a class="nav-link text-black"
                                     href="./../usuarios/usuarios.html">Usuarios</a></li>
                             <li class="nav-item"><a class="nav-link text-black"
                                     href="./../aulasyespacios/aulasyespacios.html">Aulas y Espacios</a></li>
@@ -144,12 +144,13 @@
     <script type="module">
         import { getCarritos } from "/frontend/javascript/portatiles/get.js";
 
+        if(rol != 40){
+            document.getElementsByClassName("menuadminusuario")[0].classList.add("d-none");
+        }
 
         document.addEventListener("DOMContentLoaded", async () => {
-
             const data = await getCarritos();
             crearTarjetas(data);
-
         });
 
         function crearTarjetas(carros) {
