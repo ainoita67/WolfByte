@@ -1,4 +1,5 @@
 const token = localStorage.getItem('token');
+sessionStorage.setItem("url", window.location.href);
 
 if (!token) {
     console.warn('No hay token, redirigiendo a login');
