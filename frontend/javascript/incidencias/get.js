@@ -256,6 +256,14 @@ function obtenerRecursos(){
     .then(response => {
         let recursos = response.data;
 
+        let idPrincipal = 'salon';
+
+        recursos.sort((a, b) => {
+            if(a.id_recurso == idPrincipal) return -1;
+            if(b.id_recurso == idPrincipal) return 1;
+            return 0;
+        });
+
         let tablaincidencias = document.getElementById("tablaincidencias");
         tablaincidencias.innerHTML = "";
         if(recursos.length === 0){
@@ -286,7 +294,11 @@ function obtenerRecursos(){
 
                 let td = document.createElement("td");
                 td.className = "p-2 text-black cursor-pointer";
-                td.textContent = recurso.id_recurso;
+                if(recurso.id_recurso=="salon"){
+                    td.textContent = recurso.descripcion;
+                }else{
+                    td.textContent = recurso.id_recurso+" - "+recurso.descripcion;
+                }
 
                 tr.appendChild(td);
                 tablaincidencias.appendChild(tr);
@@ -333,7 +345,7 @@ function obtenerPortatiles(){
 
                 let td = document.createElement("td");
                 td.className = "p-2 text-black";
-                td.textContent = portatil.id_recurso;
+                td.textContent = portatil.id_recurso+" - "+portatil.descripcion;
 
                 tr.appendChild(td);
                 tablaincidencias.appendChild(tr);
@@ -369,6 +381,15 @@ function obtenerEspacios(){
             `;
             tablaincidencias.appendChild(card);
         }else{
+        
+            let idPrincipal = 'salon';
+
+            espacios.sort((a, b) => {
+                if(a.id_recurso == idPrincipal) return -1;
+                if(b.id_recurso == idPrincipal) return 1;
+                return 0;
+            });
+
             espacios.forEach(espacio => {
                 let tr = document.createElement("tr");
                 tr.className = "card h-100 border-0 rounded-0";
@@ -380,7 +401,11 @@ function obtenerEspacios(){
 
                 let td = document.createElement("td");
                 td.className = "p-2 text-black";
-                td.textContent = espacio.id_recurso;
+                if(espacio.id_recurso=="salon"){
+                    td.textContent = espacio.descripcion;
+                }else{
+                    td.textContent = espacio.id_recurso+" - "+espacio.descripcion;
+                }
 
                 tr.appendChild(td);
                 tablaincidencias.appendChild(tr);
@@ -409,6 +434,14 @@ function obtenerEspaciosPorEdificio(edificio){
         .then(res => res.json())
         .then(response => {
             let espacios = response.data;
+        
+            let idPrincipal = 'salon';
+
+            espacios.sort((a, b) => {
+                if(a.id_recurso == idPrincipal) return -1;
+                if(b.id_recurso == idPrincipal) return 1;
+                return 0;
+            });
 
             let tablaincidencias = document.getElementById("tablaincidencias");
             tablaincidencias.innerHTML = "";
@@ -426,7 +459,11 @@ function obtenerEspaciosPorEdificio(edificio){
 
                     let td = document.createElement("td");
                     td.className = "p-2 text-black";
-                    td.textContent = espacio.id_recurso;
+                    if(espacio.id_recurso=="salon"){
+                        td.textContent = espacio.descripcion;
+                    }else{
+                        td.textContent = espacio.id_recurso+" - "+espacio.descripcion;
+                    }
 
                     tr.appendChild(td);
                     tablaincidencias.appendChild(tr);
@@ -561,6 +598,14 @@ function obtenerEspaciosPorPlanta(edificio, planta=-100){
         .then(response => {
             let espacios = response.data;
 
+            let idPrincipal = 'salon';
+
+            espacios.sort((a, b) => {
+                if(a.id_recurso == idPrincipal) return -1;
+                if(b.id_recurso == idPrincipal) return 1;
+                return 0;
+            });
+            
             let tablaincidencias = document.getElementById("tablaincidencias");
             tablaincidencias.innerHTML = "";
 
@@ -577,7 +622,11 @@ function obtenerEspaciosPorPlanta(edificio, planta=-100){
 
                     let td = document.createElement("td");
                     td.className = "p-2 text-black";
-                    td.textContent = espacio.id_recurso;
+                    if(espacio.id_recurso=="salon"){
+                        td.textContent = espacio.descripcion;
+                    }else{
+                        td.textContent = espacio.id_recurso+" - "+espacio.descripcion;
+                    }
 
                     tr.appendChild(td);
                     tablaincidencias.appendChild(tr);

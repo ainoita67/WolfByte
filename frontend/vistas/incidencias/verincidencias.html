@@ -40,11 +40,11 @@
         <main class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="text-center mb-4">Incidencias</h2>
-                <div>
-                <button class="btn bg-verde text-white me-3" data-bs-toggle="modal" data-bs-target="#modalFiltrarIncidencias">
+                <div class="text-end">
+                <button class="btn bg-verde text-white" data-bs-toggle="modal" data-bs-target="#modalFiltrarIncidencias">
                     <i class="bi bi-filter"></i> Filtrar
                 </button>
-                <a href="incidencias.html"><button class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                <a href="incidencias.html" class="ms-3"><button class="btn btn-success text-white" data-bs-toggle="modal" data-bs-target="#modalCrear">
                     <i class="bi bi-plus-circle"></i> Crear incidencia
                 </button></a>
                 </div>
@@ -94,6 +94,9 @@
                             <p class="text-black m-1">Prioridad: <span id="verPrioridad" class="fw-light"></span></p>
                             <p class="text-black m-1">Estado: <span id="verEstado" class="fw-light"></span></p>
                         </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                     </div>
                 </div>
             </div>

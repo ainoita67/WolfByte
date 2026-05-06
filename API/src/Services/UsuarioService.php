@@ -78,7 +78,7 @@ class UsuarioService
         try {
             $existe = $this->model->emailExists($data['correo']);
             if ($existe) {
-                throw new \Exception("Ya existe un usuario con ese correo", 422);
+                throw new \Exception("Ya existe un usuario con ese correo ".$data['correo'], 422);
             }
 
             // cifrar la contraseña antes de guardarla
@@ -122,7 +122,7 @@ class UsuarioService
         try {
             $existe = $this->model->emailExistsForOtherUser($data['correo'], $id);
             if ($existe) {
-                throw new \Exception("Ya existe un usuario con ese correo", 422);
+                throw new \Exception("Ya existe un usuario con ese correo ".$data['correo'], 422);
             }
             $result = $this->model->update($id, $data);
         } catch (Throwable $e) {
