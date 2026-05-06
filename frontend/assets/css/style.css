@@ -260,6 +260,7 @@ a.p-menu{
 
 .toast{
     margin-top: 5em !important;
+    margin-bottom: -4em !important;
     font-size: 1.1em;
 }
 
