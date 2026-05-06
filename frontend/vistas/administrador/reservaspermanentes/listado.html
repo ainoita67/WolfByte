@@ -178,7 +178,7 @@
                         </div>
                     </div>
                     <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                        <a onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 me-5 text-light"><i
+                        <a onclick="window.history.back()" class="bg-azul rounded-pill p-2 px-3 me-sm-5 text-light"><i
                                 class="bi bi-caret-left-fill"></i> Volver</a>
                     </div>
                 </section>
@@ -190,13 +190,10 @@
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <!-- Header -->
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title"><i class="bi bi-info-circle-fill"></i> Detalles de reserva</h2>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
-                    <!-- Body / Formulario -->
                     <div class="modal-body">
                         <p class="text-black m-1">ID: <span id="idMostrar"></span></p>
                         <p class="text-black m-1">Recurso: <span id="recursoMostrar"></span></p>
@@ -205,6 +202,9 @@
                         <p class="text-black m-1">Hora de Fin: <span id="finMostrar"></span></p>
                         <p class="text-black m-1">Comentario: <span id="comentarioMostrar"></span></p>
                         <p class="text-black m-1" id="pUnidadesMostrar">Unidades: <span id="unidadesMostrar"></span></p>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                     </div>
                 </div>
             </div>
