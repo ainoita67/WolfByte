@@ -30,7 +30,7 @@ class Database
                 if (APP_DEBUG) {
                     error_log("PDO Error: " . $e->getMessage());
                 }
-                throw new \RuntimeException("Error de conexión a la base de datos.", 500);
+                throw new \RuntimeException("Error de conexión a la base de datos.".$dsn, 500);
             }
         }
 

@@ -160,8 +160,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const aula = await getEspacio(idAula);
             const requiereAutorizacion = aula.autorizacion;
-
+            
+            let fechaactual=new Date();
+            let inicio=new Date(evento.start.toString());
             if (evento.bloqueBase) {
+                if(fechaactual>inicio){
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                    return;
+                }
 
                 const modal = await DayPilot.Modal.form([
                     { name: "Asignatura", id: "asignatura", type: "text" },
@@ -219,8 +225,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
                 }
                 
-                let fechaactual=new Date();
-                let inicio=new Date(evento.start.toString());
+                fechaactual=new Date();
+                inicio=new Date(evento.start.toString());
                 if(fechaactual>inicio){
                     mostrarToast("No se pueden crear reservas en el pasado", 'danger');
                     return;
@@ -256,7 +262,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 
                 if (!response.ok) {
                     let res=await response.json();
-                    mostrarToast("Error creando la reserva", 'danger');
+                    mostrarToast("Error creando la reserva: Puede que ya haya una reserva entre esas horas", 'danger');
+
+                    const nuevosEventos = await generarEventos(idAula);
+                    dp.events.list = nuevosEventos;
+                    dp.update();
                     return;
                 }
 
@@ -273,7 +283,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     window.location.href =
                         `${BASE}/vistas/liberar/liberar.html?id_reserva=${idReserva}&inicio=${inicio}&fin=${fin}`;
-
                     return;
                 }
 
@@ -286,7 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     // 🔵 EDITAR RESERVA
                     // =============================
             else {
-                if(sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario){
+                if((sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario)||fechaactual>inicio){
                     let html = `
                         <div style="line-height:1.6">
                             <b>Asignatura:</b> ${evento.asignatura}<br>
@@ -312,7 +321,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
 
                     DayPilot.Modal.alert(html);
-                }else{
+                }else{                    
                     const modal = await DayPilot.Modal.form([
                         { name: "Asignatura", id: "asignatura", type: "text" },
                         { name: "Grupo", id: "grupo", type: "text" },
