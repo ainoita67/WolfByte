@@ -292,7 +292,7 @@
             }
 
             try {
-                let response=await desactivePermanente(reserva.id);
+                let response=await desactivePermanente(reserva);
                 if(response.status=="success"){
                     mostrarToast("Reserva permanente restaurada correctamente", "success");
                 }

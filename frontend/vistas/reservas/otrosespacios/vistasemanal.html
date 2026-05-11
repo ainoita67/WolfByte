@@ -155,8 +155,14 @@
             // =============================
             // 🟢 CREAR RESERVA (Disponible)
             // =============================
-
+            
+            let fechaactual=new Date();
+            let inicio=new Date(evento.start.toString());
             if (evento.bloqueBase) {
+                if(fechaactual>inicio){
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                    return;
+                }
 
                 const modal = await DayPilot.Modal.form([
                     { name: "Asignatura", id: "asignatura", type: "text" },
@@ -210,8 +216,8 @@
                     usuarioautioriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
                 }
                     
-                let fechaactual=new Date();
-                let inicio=new Date(evento.start.toString());
+                fechaactual=new Date();
+                inicio=new Date(evento.start.toString());
                 if(fechaactual>inicio){
                     mostrarToast("No se pueden crear reservas en el pasado", 'danger');
                     return;
@@ -246,10 +252,10 @@
                 document.getElementById('cargandoreservas').classList.add('d-none');
                 
                 if (!response.ok) {
-                    mostrarToast("Error creando la reserva", 'danger');
-                    return;
+                    mostrarToast("Error creando la reserva: Puede que ya haya una reserva entre esas horas", 'danger');
+                }else{
+                    mostrarToast('Reserva creada correctamente', 'success')
                 }
-                mostrarToast('Reserva creada correctamente', 'success')
 
                 const nuevosEventos = await generarEventos(idAula);
                 dp.events.list = nuevosEventos;
@@ -260,7 +266,7 @@
             // 🔵 EDITAR RESERVA
             // =============================
             else {
-                if(sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario){
+                if((sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario)||fechaactual>inicio){
                     let html = `
                         <div style="line-height:1.6">
                             <b>Asignatura:</b> ${evento.asignatura}<br>

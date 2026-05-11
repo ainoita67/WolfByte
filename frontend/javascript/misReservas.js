@@ -449,7 +449,9 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
             })
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
+                console.log(res);
         let response = await res.json();
+                console.log(response);
         
         if (response.status == "success") {
             if(response.data.status=='no_changes'){
