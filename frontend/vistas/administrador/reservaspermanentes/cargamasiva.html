@@ -125,7 +125,7 @@
                     <div class="d-flex justify-content-between align-items-center my-4">
                         <h2>Importar reservas permanentes</h2>
                     </div>
-                    <form id="importForm" class="bg-light border-0 rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center position-relative" enctype="multipart/form-data">
+                    <form id="importForm" class="bg-light border rounded-5 h-75 px-3 d-flex flex-column justify-content-center align-items-center text-center position-relative shadow-sm" enctype="multipart/form-data">
                         <div id="cargandoreservas"
                             class="d-none position-absolute border rounded-5 top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
                             style="z-index: 10;">
@@ -141,6 +141,7 @@
                         <input type="hidden" name="id_usuario" id="id_usuario" required readonly>
                         <input type="hidden" name="correo_usuario" id="correo_usuario" required readonly>
                         <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-center text-black col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
+                        <p class="text-secondary pt-2">Seleccione un archivo CSV (.csv) o Excel (.xlsx)</p>
 
                         <button type="submit" id="importarcsv" class="btn bg-azul text-white p-3 px-5 mt-5 border-0 rounded-4 fs-4 fw-bold">
                             Subir CSV
@@ -232,7 +233,12 @@
                     let data = await res.json();
 
                     if(!res.ok){
-                        mostrarToast(data.message ?? 'Error al subir el CSV', 'danger');
+                        let mensaje=data.message;
+                        if(!data.message || data.message == 'Validation failed'){
+                            mensaje = 'Error al importar el archivo: Asegúrese de que el formato sea correcto y que el archivo no esté dañado.';
+                        }
+                        
+                        mostrarToast(mensaje, 'danger');
                         return;
                     }
 
