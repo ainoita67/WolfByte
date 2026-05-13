@@ -53,13 +53,17 @@ function obtenerPlantas(edificio){
         let selectplantas = document.getElementById("selectplanta");
         selectplantas.innerHTML = "";
 
-        if(plantas.length === 0||edificio == ""||!edificio){
-            divplantas.classList.remove("d-block");
-            divplantas.classList.add("d-none");
+        divplantas.classList.remove("d-none");
+        divplantas.classList.add("d-block");
+        
+        if(!plantas||plantas.length === 0||edificio == ""||!edificio){
+            let optionplanta = document.createElement("option");
+            optionplanta.value = "";
+            optionplanta.disabled = true;
+            optionplanta.selected = true;
+            optionplanta.textContent = "No se han encontrado plantas para este edificio";
+            selectplantas.appendChild(optionplanta);
         }else{
-            divplantas.classList.remove("d-none");
-            divplantas.classList.add("d-block");
-
             let optionseleccionar = document.createElement("option");
             optionseleccionar.value = "";
             optionseleccionar.textContent = "Seleccionar planta";
@@ -118,13 +122,18 @@ function obtenerAulas(edificio=-100, planta=-100){
                     naulas++;
                 }
             });
+
+            divaulas.classList.remove("d-none");
+            divaulas.classList.add("d-block");
             
-            if(naulas === 0||edificio == ""||!edificio){
-                divaulas.classList.remove("d-block");
-                divaulas.classList.add("d-none");
-            }else{
-                divaulas.classList.remove("d-none");
-                divaulas.classList.add("d-block");
+            if(!aulas||aulas.length==0||naulas==0||edificio == ""||!edificio){
+                selectaulas.innerHTML = "";
+                let optionaula = document.createElement("option");
+                optionaula.value = "";
+                optionaula.disabled = true;
+                optionaula.selected = true;
+                optionaula.textContent = "No se han encontrado aulas para este edificio y planta";
+                selectaulas.appendChild(optionaula);
             }
         }).catch(error => console.error("<p>Error al obtener aulas por edificio</p>", error));
     }

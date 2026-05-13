@@ -32,9 +32,9 @@
     <body>
         <div id="header"></div>
         <main class="container-fluid p-5 align-content-center">
-            <div class="card p-5 shadow-sm m-5">
-                <h2 class="mb-4">Liberar aula</h2>
-                <form class="row g-4" id="formLiberar">
+            <div class="card p-5 border rounded-5 shadow-sm m-lg-5">
+                <h2 class="mb-4 p-lg-5 pb-lg-0">Liberar aula</h2>
+                <form class="row g-4 p-lg-5 pt-lg-2" id="formLiberar">
                     <div class="col-lg-4" id="divedificio">
                         <label class="text-black form-label" for="selectedificio">Edificio *</label>
                         <select id="selectedificio" name="select edificio" class="form-select" required>
@@ -122,14 +122,25 @@
             const selectplanta = document.getElementById("selectplanta");
             const divaula = document.getElementById("divaula");
             const selectaula = document.getElementById("selectaula");
+            const divfechas= document.querySelectorAll(".divfechahora");
 
             // Cuando cambia el primer select
             function actualizarEdificio(){
                 obtenerPlantas(selectedificio.value);
+                selectplanta.value = "";
+                selectaula.value = "";
+                divaula.classList.add("d-none");
+                divfechas.forEach(fecha => {
+                    fecha.classList.add("d-none");
+                });
             }
 
             function actualizarPlanta(){
                 obtenerAulas(selectedificio.value, selectplanta.value);
+                selectaula.value = "";
+                divfechas.forEach(fecha => {
+                    fecha.classList.add("d-none");
+                });
             }
 
             function actualizarAula(){
