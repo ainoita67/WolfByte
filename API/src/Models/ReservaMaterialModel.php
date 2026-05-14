@@ -51,7 +51,7 @@ class ReservaMaterialModel
                 JOIN Material m ON rp.id_material = m.id_material
                 JOIN Recurso r ON m.id_material = r.id_recurso
                 JOIN Edificio e ON r.id_edificio = e.id_edificio
-                JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio
+                JOIN Planta p ON r.numero_planta = p.numero_planta AND r.id_edificio = p.id_edificio
                 WHERE rp.id_material = :idMaterial
                 ORDER BY re.inicio ASC
             ";

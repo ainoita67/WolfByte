@@ -154,7 +154,9 @@ class ReservaPermanenteService
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
             'dia_semana'    => 'required|int|min:1|max:5',
-            'unidades'      => 'int|min:1'
+            'unidades'      => 'int|min:1',
+            'id_usuario'    => 'required|int|min:1',
+            'correo'        => 'required|email'
         ]);
 
         if($data['comentario']){
@@ -198,7 +200,7 @@ class ReservaPermanenteService
         
         return[
             'status' => "updated",
-            'message' => "Reserva actualizada correctamente",
+            'message' => "Reserva permanente actualizada correctamente",
             'data' => $this->getReservaPermanenteById($id)
         ];
     }

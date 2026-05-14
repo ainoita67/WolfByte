@@ -267,10 +267,8 @@ class PortatilController
                     }
                 }else{
                     $this->serviceLog->createLog("Modificación de reserva", $log);
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'editarreserva');
                 }
-            }else{
-                $res->status(200)->json($reserva);
-                return;
             }
 
             $res->status(200)->json($reserva);

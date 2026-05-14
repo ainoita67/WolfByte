@@ -234,6 +234,7 @@ class ReservaPermanenteController
             if($reserva['status']=="updated"){
                 $log['id_reserva_permanente']=$reserva['data']['id_reserva_permanente'];
                 $this->serviceLog->createLog("Modificación de reserva permanente", $log);
+                $this->serviceMail->createMail($data['correo'], 'editarreservapermanente');
             }
             $res->status(201)->json($reserva);
         } catch (ValidationException $e) {
