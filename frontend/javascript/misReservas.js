@@ -208,7 +208,7 @@ function mostrarVerDatosModal(reserva){
     document.getElementById("ver_reserva_espacio_uso").textContent = reserva.usaenespacio ?? '-';
     document.getElementById("ver_reserva_actividad").textContent = reserva.actividad ?? '-';
     document.getElementById("ver_reserva_observaciones").textContent = reserva.observaciones ?? '-';
-    console.log(reserva);
+    
     if (reserva.tipo == 'Reserva_espacio') {
         document.getElementById("p_ver_unidades").classList.add('d-none');
         document.getElementById("reserva_unidades").required = false;
@@ -449,9 +449,8 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
             })
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
-                console.log(res);
+        
         let response = await res.json();
-                console.log(response);
         
         if (response.status == "success") {
             if(response.data.status=='no_changes'){

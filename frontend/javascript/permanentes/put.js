@@ -10,7 +10,8 @@ export async function updatePermanente(reserva) {
         comentario: reserva.comentario?.trim() || null,
         id_recurso: reserva.recurso,
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
-        id_usuario: sessionStorage.getItem("id_usuario")
+        id_usuario: sessionStorage.getItem("id_usuario"),
+        correo: sessionStorage.getItem("correo")
       });
 
     // id_usuario es obligatorio
