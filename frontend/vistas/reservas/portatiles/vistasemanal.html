@@ -195,8 +195,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const evento = args.e.data;
             const maxDisponibles = evento.unidades_libres || 0;
+            
+            let fechaactual=new Date();
+            let inicio=new Date(evento.start.toString());
+            
             // 🟢 CREAR RESERVA (Disponible)
             if (evento.bloqueBase) {
+                if(fechaactual>inicio){
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                    return;
+                }
 
                 const modal = await DayPilot.Modal.form([
                     { name: "Asignatura", id: "asignatura", type: "text" },
@@ -262,8 +270,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const usaenespacio = modalEspacio.result.usaenespacio;
                 
-                let fechaactual=new Date();
-                let inicio=new Date(evento.start);
+                fechaactual=new Date();
+                inicio=new Date(evento.start);
                 if(fechaactual>=inicio){
                     mostrarToast("No se pueden crear reservas en el pasado", 'danger');
                     return;
@@ -317,14 +325,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // 🔵 EDITAR RESERVA
             else {
-                if(sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario){
+                if((sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario)||fechaactual>inicio){
                     const html = `
                         <div style="line-height:1.6">
                             <b>Asignatura:</b> ${evento.asignatura}<br>
                             <b>Grupo:</b> ${evento.grupo}<br>
                             <b>Profesor:</b> ${evento.profesor}<br>
                             <b>Observaciones:</b> ${evento.observaciones || "-"}<br>
-                            <b>Unidades:</b> ${evento.unidades}
+                            <b>Unidades:</b> ${evento.unidades}<br>
+                            <b>Espacio utilizado:</b> ${evento.usaenespacio == "salon" ? "Salón de actos" : evento.usaenespacio || "-"}
                         </div>
                     `;
 
@@ -402,8 +411,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     const usaenespacio = modalEspacio.result.usaenespacio;
                     
-                    let fechaactual=new Date();
-                    let inicio=new Date(evento.start);
+                    fechaactual=new Date();
+                    inicio=new Date(evento.start);
                     if(fechaactual>=inicio){
                         mostrarToast("No se pueden modificar reservas en el pasado", 'danger');
                         return;
@@ -507,8 +516,12 @@ async function cargarInfoCarrito(carrito) {
 </script>
 
 
-            <div class="divvolver container offset-md-1 offset-xl-2 p-0 pb-3 mt-0 mb-5 text-end fs-5">
-                <a id="btnVolver" class="bg-azul rounded-pill p-2 px-3 ms-5 text-light"><i class="bi bi-caret-left-fill"></i> Volver</a>
+            <div class="position-fixed bottom-0 end-0 p-3 w-auto me-2 mb-2 me-md-5 mb-md-5" style="z-index:1030; right: 0 !important;">
+                <a id="btnVolver"
+                class="btn bg-azul text-light rounded-pill px-3 fs-5" style="border: 1px solid #E6F5F0;">
+                    <i class="bi bi-caret-left-fill"></i>
+                    Volver
+                </a>
             </div>
         </main>
         <footer id="footer"></footer>

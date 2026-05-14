@@ -75,9 +75,11 @@ class ReservaPortatilModel
                         r.fin,
                         rp.unidades,
                         rp.id_material,
-                        rp.usaenespacio
+                        rp.usaenespacio,
+                        u.correo
                     FROM Reserva r
                     JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                    JOIN Usuario u ON r.id_usuario=u.id_usuario
                     WHERE rp.id_reserva_material=:id
                     ORDER BY r.inicio;
                 ")

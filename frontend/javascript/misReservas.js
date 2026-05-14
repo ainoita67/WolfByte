@@ -171,7 +171,7 @@ function mostrarVerDatosModal(reserva){
         let necesidades=[];
 
         if(typeof reserva.necesidades === "string"){
-            necesidades = reserva.necesidades ? reserva.necesidades.split(',').map(n => n.trim()) : [];
+            necesidades = reserva.nombrenecesidades ? reserva.nombrenecesidades.split(',').map(n => n.trim()) : [];
         }
 
         if(!necesidades||necesidades.length==0){
@@ -208,7 +208,7 @@ function mostrarVerDatosModal(reserva){
     document.getElementById("ver_reserva_espacio_uso").textContent = reserva.usaenespacio ?? '-';
     document.getElementById("ver_reserva_actividad").textContent = reserva.actividad ?? '-';
     document.getElementById("ver_reserva_observaciones").textContent = reserva.observaciones ?? '-';
-                    
+    
     if (reserva.tipo == 'Reserva_espacio') {
         document.getElementById("p_ver_unidades").classList.add('d-none');
         document.getElementById("reserva_unidades").required = false;
@@ -449,6 +449,7 @@ async function modificarReservaPortatil(id, autorizada, id_recurso, asignatura, 
             })
         })
         document.getElementById('cargandoreservas').classList.add('d-none');
+        
         let response = await res.json();
         
         if (response.status == "success") {

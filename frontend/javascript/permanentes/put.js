@@ -10,7 +10,8 @@ export async function updatePermanente(reserva) {
         comentario: reserva.comentario?.trim() || null,
         id_recurso: reserva.recurso,
         unidades: reserva.unidades != null ? Number(reserva.unidades) : null,
-        id_usuario: sessionStorage.getItem("id_usuario")
+        id_usuario: sessionStorage.getItem("id_usuario"),
+        correo: sessionStorage.getItem("correo")
       });
 
     // id_usuario es obligatorio
@@ -56,22 +57,22 @@ export async function updatePermanente(reserva) {
   }
 }
 
-export async function desactivePermanente(id) {
+export async function desactivePermanente(reserva) {
   try {
-    if (!id) throw new Error("desactivePermanente: falta id_reserva_permanente");
+    if (!reserva.id) throw new Error("desactivePermanente: falta id_reserva_permanente");
 
     let usuario = sessionStorage.getItem("id_usuario");
-    const response = await fetch(`${API}/reservas_permanentes/${id}/activar`, {
+    const response = await fetch(`${API}/reservas_permanentes/${reserva.id}/activar`, {
       method: "PATCH",
       headers: {
         "Accept": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ id_usuario: usuario })
+      body: JSON.stringify({ id_usuario: usuario, id_recurso: reserva.recurso })
     });
 
     const json = await response.json().catch(() => null);
-
+    
     if (!response.ok) {
       const formatted = formatErrors(json?.data?.errors);
       const msg =
@@ -80,7 +81,7 @@ export async function desactivePermanente(id) {
         `Error al desactivar reserva (HTTP ${response.status})`;
       throw new Error(msg);
     }
-
+    
     return json;
   } catch (error) {
     console.error("desactivePermanente:", error);

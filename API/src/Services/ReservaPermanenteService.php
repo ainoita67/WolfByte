@@ -154,7 +154,9 @@ class ReservaPermanenteService
             'activo'        => 'required|in:0,1',
             'id_recurso'    => 'required|string',
             'dia_semana'    => 'required|int|min:1|max:5',
-            'unidades'      => 'int|min:1'
+            'unidades'      => 'int|min:1',
+            'id_usuario'    => 'required|int|min:1',
+            'correo'        => 'required|email'
         ]);
 
         if($data['comentario']){
@@ -198,7 +200,7 @@ class ReservaPermanenteService
         
         return[
             'status' => "updated",
-            'message' => "Reserva actualizada correctamente",
+            'message' => "Reserva permanente actualizada correctamente",
             'data' => $this->getReservaPermanenteById($id)
         ];
     }
@@ -215,7 +217,6 @@ class ReservaPermanenteService
         if(empty($data['id'])) {
             throw new ValidationException("ID es obligatorio");
         }
-
         $reserva=$this->getReservaPermanenteById($id);
 
         $recurso=$this->serviceRecurso->getRecursoById($reserva['id_recurso']);
@@ -237,7 +238,7 @@ class ReservaPermanenteService
         }
         if($recurso['tipo']=="Material"){
             if($reserva['unidades']>$this->model->getUnidadesFecha($reserva, (int)$data['id'])){
-                $mensaje="<ul class='m-0'><li>Recurso: ".$data['id_recurso']."</li><li>Inicio: ".$data['inicio']."</li><li>Fin: ".$data['fin']."</li></ul>";
+                $mensaje="<ul class='m-0'><li>Recurso: ".$reserva['id_recurso']."</li><li>Inicio: ".$reserva['inicio']."</li><li>Fin: ".$reserva['fin']."</li></ul>";
                 throw new \Exception("No hay suficientes unidades entre ese horario<br>".$mensaje);
             }
         }

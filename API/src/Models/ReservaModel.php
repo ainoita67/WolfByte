@@ -59,6 +59,7 @@ class ReservaModel
                             NULL AS usaenespacio,
                             re.actividad,
                             GROUP_CONCAT(n.id_necesidad) AS necesidades,
+                            GROUP_CONCAT(n.nombre) AS nombrenecesidades,
                             r.observaciones,
                             u.id_usuario,
                             u.nombre AS nombreusuario
@@ -90,6 +91,7 @@ class ReservaModel
                             rp.usaenespacio,
                             NULL AS actividad,
                             NULL AS necesidades,
+                            NULL AS nombrenecesidades,
                             r.observaciones,
                             u.id_usuario,
                             u.nombre AS nombreusuario

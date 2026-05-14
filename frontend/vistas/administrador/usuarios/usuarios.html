@@ -128,9 +128,11 @@
                         </div>
                     </div>
 
-                    <div class="divvolver container p-0 pb-3 mt-0 mb-5 pe-4 pe-md-0 text-end fs-5">
-                        <a href="../menuadministrador.html" class="bg-azul text-white rounded-pill p-2 px-3 fs-5">
-                            <i class="bi bi-caret-left-fill"></i> Volver
+                    <div class="position-fixed bottom-0 end-0 p-3 w-auto me-2 mb-2 me-md-5 mb-md-5" style="z-index:1030; right: 0 !important;">
+                        <a href="../menuadministrador.html"
+                        class="btn bg-azul text-light rounded-pill px-3 fs-5" style="border: 1px solid #E6F5F0;">
+                            <i class="bi bi-caret-left-fill"></i>
+                            Volver
                         </a>
                     </div>
 
@@ -246,7 +248,7 @@
                                         <button type="submit" id="importarcsv" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Importar usuarios</button>
                                         <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
-                                    <div id="crearUserErrors" class="alert alert-danger d-none"></div>
+                                    <div id="importarUserErrors" class="alert alert-danger d-none"></div>
                                 </div>
                             </form>
                         </div>
@@ -292,7 +294,7 @@
                                 </div>
                                 <div class="modal-footer g-4">
                                     <div class="d-flex justify-content-between ps-2 col-12">
-                                        <button type="submit" class="enviar col-5 text-light p-2" data-bs-dismiss="modal"><i class="bi bi-check2"></i> Guardar cambios</button>
+                                        <button type="submit" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Guardar cambios</button>
                                         <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
                                     <div id="editarUserErrors" class="alert alert-danger d-none"></div>
@@ -318,10 +320,8 @@
                                 <p class="text-black m-1 fw-bold">Correo electrónico: <span id="correoMostrar" class="fw-light"></span></p>
                                 <p class="text-black m-1 fw-bold">Rol: <span id="rolMostrar" class="fw-light"></span></p>
                             </div>
-                            <div class="modal-footer g-4">
-                                <div class="d-flex justify-content-end ps-2 col-12">
-                                    <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
-                                </div>
+                            <div class="modal-footer d-flex justify-content-end">
+                                <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
                             </div>
                         </div>
                     </div>
@@ -702,12 +702,17 @@
 
                     let data = await res.json();
 
+                    refrescarTabla();
+                    
                     if(!res.ok){
-                        mostrarToast('Error al subir el CSV', 'danger');
+                        mostrarToast(
+                            data?.message ?? 'Error al subir el CSV',
+                            'danger'
+                        );
+                        showFormError("importarUserErrors", data?.message ?? "Error inesperado");
                         return;
                     }
 
-                    refrescarTabla();
                     if(data.data.importados>0){
                         if(data.data.importados==1){
                             mostrarToast('Se ha importado '+data.data.importados+' usuario correctamente', 'success');
@@ -720,6 +725,7 @@
                     document.getElementById('archivo').value='';
                 } catch (err) {
                     console.error(err);
+                    showFormError("importarUserErrors", err?.message ?? "Error inesperado");
                     mostrarToast('Error al subir el CSV', 'danger');
 
                     document.getElementById('cargandoreservas').classList.add('d-none');

@@ -259,18 +259,16 @@ class PortatilController
             if($reserva['status']!='no_changes'){
                 if($autorizada!=$reserva['data']['autorizada']){
                     if($reserva['data']['autorizada']===1){
-                    $this->serviceMail->createMail($result['correo'], 'autorizacion');
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'autorizacion');
                         $this->serviceLog->createLog('Autorización de reserva', $log);
                     }else if($reserva['data']['autorizada']===0){
-                    $this->serviceMail->createMail($result['correo'], 'cancelacion');
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'cancelacion');
                         $this->serviceLog->createLog('Cancelación de reserva', $log);
                     }
                 }else{
                     $this->serviceLog->createLog("Modificación de reserva", $log);
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'editarreserva');
                 }
-            }else{
-                $res->status(200)->json($reserva);
-                return;
             }
 
             $res->status(200)->json($reserva);

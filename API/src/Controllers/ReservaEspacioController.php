@@ -134,18 +134,20 @@ class ReservaEspacioController
             }
             
             $reserva = $this->service->updateReserva((int)$id, $data);
-
+            
             $log['id_reserva']=$reserva['data']['id_reserva'];
             if($reserva['status']=='updated'){
-                $this->serviceLog->createLog('Modificación de reserva', $log);
-            }
-            if($autorizada!==$reserva['data']['autorizada']){
-                if($reserva['data']['autorizada']===1){
-                    $this->serviceMail->createMail($reserva['data']['correo'], 'autorizacion');
-                    $this->serviceLog->createLog('Autorización de reserva', $log);
-                }else if($reserva['data']['autorizada']===0){
-                    $this->serviceMail->createMail($reserva['data']['correo'], 'cancelacion');
-                    $this->serviceLog->createLog('Cancelación de reserva', $log);
+                if($autorizada!=$reserva['data']['autorizada']){
+                    if($reserva['data']['autorizada']===1){
+                        $this->serviceMail->createMail($reserva['data']['correo'], 'autorizacion');
+                        $this->serviceLog->createLog('Autorización de reserva', $log);
+                    }else if($reserva['data']['autorizada']===0){
+                        $this->serviceMail->createMail($reserva['data']['correo'], 'cancelacion');
+                        $this->serviceLog->createLog('Cancelación de reserva', $log);
+                    }
+                }else{
+                    $this->serviceLog->createLog("Modificación de reserva", $log);
+                    $this->serviceMail->createMail($reserva['data']['correo'], 'editarreserva');
                 }
             }
             

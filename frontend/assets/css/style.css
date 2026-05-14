@@ -29,28 +29,6 @@ main{
     min-height: 75vh;
 }
 
-main div.divvolver{
-    bottom: 0 !important;
-    position: fixed !important;
-    width: 100% !important;
-    z-index: 1030 !important;
-    pointer-events: none !important;
-    border: 0 !important;
-}
-
-main div.divvolver a{
-    border: 1px solid #E6F5F0;
-}
-
-main div.divvolver *{
-    pointer-events: auto !important;
-    cursor: pointer;
-}
-
-main div.divvolver a:hover{
-    border: 1px solid #E6F5F0 !important;
-}
-
 footer{
     grid-row: 3/4;
     grid-column: 1/2;
@@ -260,6 +238,7 @@ a.p-menu{
 
 .toast{
     margin-top: 5em !important;
+    margin-bottom: -4em !important;
     font-size: 1.1em;
 }
 

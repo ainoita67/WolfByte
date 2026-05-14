@@ -71,19 +71,27 @@ class MailService
                 ],
                 'createreservapermanente' => [
                     'titulo' => 'Creación de reserva permanente',
-                    'body' => $reservaBody
+                    'body' => 'Se ha creado una nueva reserva permanente de '.$correo.' en la aplicación el día '.$fecha.' a las '.$hora.'.'
                 ],
                 'solicitudreserva' => [
                     'titulo' => 'Solicitud de reserva',
-                    'body' => "Se ha solicitado una reserva de $correo en la aplicación el día $fecha a las $hora"
+                    'body' => "Se ha solicitado una reserva de $correo en la aplicación el día $fecha a las $hora."
+                ],
+                'editarreserva' => [
+                    'titulo' => 'Modificación de reserva',
+                    'body' => "Se ha modificado una reserva de $correo en la aplicación el día $fecha a las $hora."
+                ],
+                'editarreservapermanente' => [
+                    'titulo' => 'Modificación de reserva permanente',
+                    'body' => "Desde la cuenta $correo se ha modificado una reserva permanente en la aplicación el día $fecha a las $hora."
                 ],
                 'autorizacion' => [
                     'titulo' => 'Autorización de reserva',
-                    'body' => "Se ha autorizado una reserva de $correo en la aplicación el día $fecha a las $hora"
+                    'body' => "Se ha autorizado una reserva de $correo en la aplicación el día $fecha a las $hora."
                 ],
                 'cancelacion' => [
                     'titulo' => 'Cancelación de reserva',
-                    'body' => "Se ha cancelado una reserva de $correo en la aplicación el día $fecha a las $hora"
+                    'body' => "Se ha cancelado una reserva de $correo en la aplicación el día $fecha a las $hora."
                 ],
                 'importar' => [
                     'titulo' => 'Importación de reservas permanentes',
@@ -94,9 +102,17 @@ class MailService
                     'body' => "Se han importado usuarios con la cuenta de $correo en la aplicación el día $fecha a las $hora."
                 ]
             ];
+            
+            $html='
+                <a href="https://reservasies.cpifpbajoaragon.info/frontend/vistas/menu.html">
+                    <button style="font-size: 1.4em; background-color: #274C9C; color: white; padding: 2rem; border: 0; border-radius: 25px">
+                        Acceder a la aplicación
+                    </button>
+                </a>
+            ';
             if (isset($acciones[$accion])) {
                 $titulo = $acciones[$accion]['titulo'];
-                $mail->Body = $acciones[$accion]['body'];
+                $mail->Body = '<div style="text-align: center; padding: 5%;"><p style="font-size: 1.2em;">'.$acciones[$accion]['body']."</p><br>".$html."</div>";
                 $mail->Subject = ucfirst($titulo);
                 $mail->send();
             }
