@@ -56,7 +56,7 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
-    cargarHeadHTML(BASE + "/includes/head.html", () => {
+    cargarHeadHTML(BASE + "/frontend/includes/head.html", () => {
         const linkCSS = document.createElement('link');
         linkCSS.rel = 'stylesheet';
         linkCSS.href = BASE + '/assets/css/style.css';
@@ -64,12 +64,12 @@ function generarPagina(menu, rol){
         linkCSS.onload = () => {
             aplicarAltoContraste(true);
             // Aquí el CSS ya está listo, aplicamos alto contraste si corresponde
-            cargarHTML(BASE + "/includes/header.html", "#header", () => {
+            cargarHTML(BASE + "/frontend/includes/header.html", "#header", () => {
                 generateHeaderNav(menu, rol);
                 botonesAccesibilidad();
             });
         };
-        cargarHTML(BASE + "/includes/footer.html", "#footer");
+        cargarHTML(BASE + "/frontend/includes/footer.html", "#footer");
     });
 }
 
@@ -159,7 +159,7 @@ function botonesAccesibilidad() {
             const currentPx = parseFloat(style.fontSize); // tamaño en px
             const basePx = parseFloat(window.getComputedStyle(body).fontSize); // 1em = tamaño body
             const currentEm = currentPx / basePx; // convertimos a em
-            if(currentEm<1.5){ // límite máximo 2em
+            if(currentEm<1.5){ // límite máximo 1.5em
                 const newEm = currentEm + 0.1; // aumentamos 0.1em
                 main.style.fontSize = newEm + "em";
                 document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
@@ -178,7 +178,7 @@ function botonesAccesibilidad() {
             const currentPx = parseFloat(style.fontSize); // tamaño en px
             const basePx = parseFloat(window.getComputedStyle(body).fontSize); // 1em = tamaño body
             const currentEm = currentPx / basePx; // convertimos a em
-            if(currentEm>0.75){ // límite mínimo 0.5em
+            if(currentEm>0.75){ // límite mínimo 0.75em
                 const newEm = currentEm - 0.1; // disminuimos 0.1em
                 main.style.fontSize = newEm + "em";
                 document.querySelectorAll(".form-control, .form-select, .toast, .modal-body p").forEach(el => {
