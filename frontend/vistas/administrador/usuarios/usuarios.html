@@ -7,7 +7,7 @@
         <script>const API = window.location.origin + "/API";</script>
 
         <!-- Cargar authGuard PRIMERO -->
-        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+        <script src="/frontend/javascript/sesion/authGuard.js?v=1.0.1"></script>
 
         <!-- En menuadministrador.html y otras páginas de admin -->
         <script>
@@ -25,10 +25,10 @@
                 }
             }else{
                 const script1 = document.createElement("script");
-                script1.src = BASE + "/javascript/includes.js";
+                script1.src = BASE + "/javascript/includes.js?v=1.0.1";
                 script1.onload = () => {
                     const script2 = document.createElement("script");
-                    script2.src = BASE + "/javascript/menu.js";
+                    script2.src = BASE + "/javascript/menu.js?v=1.0.1";
                     script2.onload = () => {
                         generarPagina("administrador", rol);
                     };
@@ -244,10 +244,12 @@
                                     <input type="file" name="archivo" id="archivo" accept=".csv,.xlsx" class="text-black text-center col-auto bg-lightgrey p-1" style="border: 0 !important;" required>
                                 </div>
                                 <div class="modal-footer g-4">
-                                    <div class="d-flex justify-content-between ps-2 col-12">
+                                    <div class="d-flex justify-content-between mt-2 ps-2 col-12">
                                         <button type="submit" id="importarcsv" class="enviar col-5 text-light p-2"><i class="bi bi-check2"></i> Importar usuarios</button>
                                         <button type="button" class="col-5 btn bg-lightgrey text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cancelar</button>
                                     </div>
+                                    <a href="ejemplousuarios.xlsx" class="col-12 ps-2" download><button type="button" id="descargarxlsx" class="col-12 btn bg-success text-light border-0 rounded-pill p-2"><i class="bi bi-download"></i> Descargar Excel de ejemplo</button></a>
+                                    <a href="ejemplousuarios.csv" class="col-12 ps-2" download><button type="button" id="descargarcsv" class="col-12 btn bg-success text-light border-0 rounded-pill p-2"><i class="bi bi-download"></i> Descargar CSV de ejemplo</button></a>
                                     <div id="importarUserErrors" class="alert alert-danger d-none"></div>
                                 </div>
                             </form>
@@ -331,14 +333,14 @@
 
         <footer id="footer"></footer>
 
-        <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="../../../assets/daypilot/daypilot-all.min.js?v=1.0.1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js?v=1.0.1"></script>
         <script type="module">
-            import { getUsuarios, getRoles } from "/frontend/javascript/gestion_usuarios/get.js";
-            import { insertUser } from "/frontend/javascript/gestion_usuarios/post.js";
-            import { updateUser, updateUserPassword, desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js";
-            import { Usuario } from "/frontend/javascript/clases/Usuario.js";
-            import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
+            import { getUsuarios, getRoles } from "/frontend/javascript/gestion_usuarios/get.js?v=1.0.1";
+            import { insertUser } from "/frontend/javascript/gestion_usuarios/post.js?v=1.0.1";
+            import { updateUser, updateUserPassword, desactiveUser } from "/frontend/javascript/gestion_usuarios/put.js?v=1.0.1";
+            import { Usuario } from "/frontend/javascript/clases/Usuario.js?v=1.0.1";
+            import { mostrarToast } from '/frontend/javascript/reservas/crud.js?v=1.0.1';
 
             let usuarios;
             let roles;
