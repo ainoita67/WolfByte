@@ -56,7 +56,7 @@ function cargarHTML(pagina, selector, callback) {
 
 // includes.js
 function generarPagina(menu, rol){
-    cargarHeadHTML(BASE + "/frontend/includes/head.html", () => {
+    cargarHeadHTML(BASE + "/includes/head.html", () => {
         const linkCSS = document.createElement('link');
         linkCSS.rel = 'stylesheet';
         linkCSS.href = BASE + '/assets/css/style.css';
@@ -64,12 +64,12 @@ function generarPagina(menu, rol){
         linkCSS.onload = () => {
             aplicarAltoContraste(true);
             // Aquí el CSS ya está listo, aplicamos alto contraste si corresponde
-            cargarHTML(BASE + "/frontend/includes/header.html", "#header", () => {
+            cargarHTML(BASE + "/includes/header.html", "#header", () => {
                 generateHeaderNav(menu, rol);
                 botonesAccesibilidad();
             });
         };
-        cargarHTML(BASE + "/frontend/includes/footer.html", "#footer");
+        cargarHTML(BASE + "/includes/footer.html", "#footer");
     });
 }
 
