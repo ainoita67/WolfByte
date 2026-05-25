@@ -260,20 +260,34 @@ class ReservaService
             $horainicio = date("H:i:s", strtotime($data['inicio']));
             $horafin = date("H:i:s", strtotime($data['fin']));
 
+            if(($usuario['id_rol']!=10&&$usuario['id_rol']!=20&&$usuario['id_rol']!=30&&$usuario['id_rol']!=40)){
+                throw new \Exception("No tiene permisos para reservar en ese horario");
+            }
+
             if($data['tipo']=='Reserva_material'&&($horafin>date("H:i:s", strtotime("15:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
 
             if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
+            }
+
+            if($usuario['id_rol']==10 && $horainicio>=date("H:i:s", strtotime("15:00:00")) && $horafin<=date("H:i:s", strtotime("22:00:00"))){
+                $data['autorizada']=null;
             }
 
             if($usuario['id_rol']==20&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("15:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
 
             if(($usuario['id_rol']==30||$usuario['id_rol']==40)&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
+            }
+
+            if(($usuario['id_rol']!=30 && $usuario['id_rol']!=40) &&
+            (($horainicio>=date("H:i:s", strtotime("11:30:00")) && $horainicio<date("H:i:s", strtotime("12:00:00"))) ||
+            ($horafin<=date("H:i:s", strtotime("12:00:00")) && $horafin>date("H:i:s", strtotime("11:30:00"))))){
+                $data['autorizada']=null;
             }
             
             return $this->model->create($data);
@@ -333,20 +347,24 @@ class ReservaService
             $horainicio = date("H:i:s", strtotime($data['inicio']));
             $horafin = date("H:i:s", strtotime($data['fin']));
 
+            if(($usuario['id_rol']!=10&&$usuario['id_rol']!=20&&$usuario['id_rol']!=30&&$usuario['id_rol']!=40)){
+                throw new \Exception("No tiene permisos para reservar en ese horario");
+            }
+
             if($data['tipo']=='Reserva_material'&&($horafin>date("H:i:s", strtotime("15:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
 
             if($usuario['id_rol']==10&&($horainicio<date("H:i:s", strtotime("15:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
 
             if($usuario['id_rol']==20&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("15:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
 
             if(($usuario['id_rol']==30||$usuario['id_rol']==40)&&($horainicio<date("H:i:s", strtotime("08:00:00"))||$horafin>date("H:i:s", strtotime("22:00:00")))){
-                throw new \Exception("No tienes permisos para reservar en ese horario");
+                throw new \Exception("No tiene permisos para reservar en ese horario");
             }
             
             if(!$this->model->update($id, $data)){

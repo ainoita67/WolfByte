@@ -200,7 +200,7 @@ class ReservaPermanenteService
         
         return[
             'status' => "updated",
-            'message' => "Reserva permanente actualizada correctamente",
+            'message' => "Reserva actualizada correctamente",
             'data' => $this->getReservaPermanenteById($id)
         ];
     }

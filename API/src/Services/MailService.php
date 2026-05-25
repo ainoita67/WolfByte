@@ -26,7 +26,7 @@ class MailService
         $mail->Host      ='mail.cpifpbajoaragon.info';
         $mail->SMTPAuth  =true;
         $mail->Username  ='reservasies@cpifpbajoaragon.info';
-        $mail->Password  ='xxxxxxxxxxxxxxxx';
+        $mail->Password  ='EmW_e[Qbe2INoMd[';
         $mail->SMTPSecure='tls';
         $mail->Port      =587;
 
