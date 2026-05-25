@@ -92,6 +92,7 @@ export function aplicarLiberaciones(events, liberaciones, unidadesRecurso) {
         { start: "08:50", end: "09:40" },
         { start: "09:45", end: "10:35" },
         { start: "10:40", end: "11:30" },
+        { start: "11:30", end: "12:00" },
         { start: "12:00", end: "12:50" },
         { start: "12:55", end: "13:45" },
         { start: "13:50", end: "14:40" }
