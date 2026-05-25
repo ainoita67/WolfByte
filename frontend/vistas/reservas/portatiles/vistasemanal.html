@@ -269,6 +269,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (!modalEspacio.result) return;
 
                 const usaenespacio = modalEspacio.result.usaenespacio;
+                if (!usaenespacio||usaenespacio.trim() == ""||usaenespacio==null) {
+                    mostrarToast("Debe seleccionar un espacio", 'danger');
+                    return;
+                }
                 
                 fechaactual=new Date();
                 inicio=new Date(evento.start);
@@ -410,6 +414,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (!modalEspacio.result) return;
 
                     const usaenespacio = modalEspacio.result.usaenespacio;
+                    if (!usaenespacio||usaenespacio.trim() == ""||usaenespacio==null) {
+                        mostrarToast("Debe seleccionar un espacio", 'danger');
+                        return;
+                    }
                     
                     fechaactual=new Date();
                     inicio=new Date(evento.start);

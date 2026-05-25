@@ -7,7 +7,7 @@
         <script>const API = window.location.origin + "/API";</script>
 
         <!-- Cargar authGuard PRIMERO -->
-        <script src="/frontend/javascript/sesion/authGuard.js?v=1.0.1"></script>
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
 
         <!-- En menuadministrador.html y otras páginas de admin -->
         <script>
@@ -20,10 +20,10 @@
                 window.location.replace(BASE + '/vistas/menu.html');
             }else{
                 const script1 = document.createElement("script");
-                script1.src = BASE + "/javascript/includes.js?v=1.0.1";
+                script1.src = BASE + "/javascript/includes.js";
                 script1.onload = () => {
                     const script2 = document.createElement("script");
-                    script2.src = BASE + "/javascript/menu.js?v=1.0.1";
+                    script2.src = BASE + "/javascript/menu.js";
                     script2.onload = () => {
                         generarPagina("administrador", rol);
                     };
@@ -164,9 +164,9 @@
                 </section>
             </div>
         </main>
-        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js?v=1.0.1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
         <script type="module">
-            import { mostrarToast } from '/frontend/javascript/reservas/crud.js?v=1.0.1';
+            import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
             
             if(rol != 40){
                 document.getElementsByClassName("menuadminusuario")[0].classList.add("d-none");
