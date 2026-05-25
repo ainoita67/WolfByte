@@ -1,0 +1,13 @@
+Options -Multiviews
+Options -Indexes
+
+RewriteEngine On
+
+# Capturar Authorization (JWT)
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Si no es archivo ni carpeta → index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L,QSA]

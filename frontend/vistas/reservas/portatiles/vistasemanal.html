@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            if(rol!=20&&rol!=30&&rol!=40){
+                console.warn('Acceso denegado - Rol:', rol);
+                alert('No tienes permisos para acceder a las reservas de portátiles');
+                window.location.replace(BASE + '/vistas/menu.html');
+            }else{
+                const script1 = document.createElement("script");
+                script1.src = BASE + "/javascript/includes.js";
+                script1.onload = () => {
+                    const script2 = document.createElement("script");
+                    script2.src = BASE + "/javascript/menu.js";
+                    script2.onload = () => {
+                        generarPagina("portatiles", rol);
+                    };
+                    // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                    document.head.appendChild(script2);
+                };
+                document.head.appendChild(script1);
+            }
+        </script>
+        <title>Portátiles - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main>
+            <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+            <link type="text/css" rel="stylesheet" href="../../../assets/css/calendar_green.css" />  
+            
+            <div class="container-fluid p-4">
+                <div class="row g-4">
+
+                    <aside class="d-none d-lg-block col-lg-2 mb-4"><!--vacio para dar margen--></aside>
+                    
+                    <!-- CALENDARIO -->
+                    <section class="col-12 col-lg-8 d-flex flex-column mb-2 mb-lg-5 position-relative">
+                        
+                        <div id="cargandoreservas"
+                            class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            style="z-index: 10;">
+
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Enviando reserva...</span>
+                                </div>
+                                <div class="mt-2 fw-semibold text-black">Cargando...</div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-between align-items-center mb-3">
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+                        </div>
+
+                        <div id="dp" class="shadow-sm rounded-3 p-1"></div>
+
+                    </section>
+
+                    <!-- ASIDE INFORMACIÓN -->
+                    <aside class="col-12 col-lg-2 mb-4">
+                        <div class="d-none d-lg-block" style="height: 3.5rem;"></div>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title" id="info-id">Carrito de portátiles</h5>
+                                <hr>
+
+                                <p><strong>Descripción:</strong></p>
+                                <p id="info-descripcion" class="small"></p>
+                                <p><strong>Unidades:</strong> <span id="info-unidades"></span></p>
+                                <p><strong>Edificio:</strong> <span id="info-edificio"></span></p>
+                                <p><strong>Planta:</strong> <span id="info-planta"></span></p>
+                                <p><strong>Requiere autorización:</strong> <span id="info-especial"></span></p>
+
+
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+<script type="module">
+    
+import { generarEventos } from "/frontend/javascript/portatiles/reservas/crud.js";
+import { mostrarToast } from '/frontend/javascript/reservas/crud.js';
+// cojer id de la url
+
+let horainicio = 8;
+if(sessionStorage.getItem("rol") == "10"){
+    horainicio = 15;
+}
+let horafin = 15;
+
+async function cargarEspacios() {
+    const res = await fetch(`${API}/espacios`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    const json = await res.json();
+    return json.data;
+}
+
+async function seleccionarEspacio() {
+    const espacios = await cargarEspacios();
+
+    return new Promise((resolve) => {
+        const select = document.createElement("select");
+
+        espacios.forEach(e => {
+            const option = document.createElement("option");
+            option.value = e.id_recurso;
+            option.textContent = e.descripcion;
+            select.appendChild(option);
+        });
+
+        const btn = document.createElement("button");
+        btn.textContent = "Aceptar";
+
+        btn.onclick = () => {
+            resolve(select.value);
+            document.body.removeChild(container);
+        };
+
+        const container = document.createElement("div");
+        container.appendChild(select);
+        container.appendChild(btn);
+
+        document.body.appendChild(container);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const idAula = params.get("id");
+    const carrito = await getCarrito(idAula);
+
+    const dp = new DayPilot.Calendar("dp", {
+        viewType: "WorkWeek",
+        theme: "calendar_green",
+        startDate: DayPilot.Date.today(),
+
+        locale: "es-es",            // formato europeo
+        headerDateFormat: "dd/MM/yyyy",
+        weekStarts: 1,
+
+        cellDuration: 5,
+        cellHeight: 8, 
+        businessBeginsHour: horainicio,
+        businessEndsHour: horafin,
+        eventDeleteHandling: "Disabled",
+        heightSpec: "BusinessHoursNoScroll",
+
+    
+
+        // 🎨 Cambiar cursor según tipo
+        onBeforeEventRender: function(args) {
+            args.data.cssClass = "cursor-pointer";
+
+            // Si la reserva no está autorizada, se pinta de naranja
+            if (args.data.autorizada === null) {
+                args.data.backColor = "#cc6c11"; // naranja
+                args.data.barColor = "#bb5c0f";
+            }
+        },
+
+
+        // 🧠 CLICK EN EVENTO
+        onEventClick: async function(args) {
+
+            const evento = args.e.data;
+            const maxDisponibles = evento.unidades_libres || 0;
+            
+            let fechaactual=new Date();
+            let inicio=new Date(evento.start.toString());
+            
+            // 🟢 CREAR RESERVA (Disponible)
+            if (evento.bloqueBase) {
+                if(fechaactual>inicio){
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                    return;
+                }
+
+                const modal = await DayPilot.Modal.form([
+                    { name: "Asignatura", id: "asignatura", type: "text" },
+                    { name: "Grupo", id: "grupo", type: "text" },
+                    { name: "Profesor", id: "profesor", type: "text" },
+                    { name: "Observaciones", id: "observaciones", type: "textarea" },
+                    { 
+                        name: `Cantidad de portátiles (máx ${maxDisponibles})`,
+                        id: "unidades",
+                        type: "number",
+                        min: 1,
+                        max: maxDisponibles
+                    }
+                ]);
+
+                if (!modal.result) return;
+
+                if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
+                    mostrarToast("No se han rellenado los campos obligatorios", 'danger');
+                    return;
+                }
+
+                if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
+                    mostrarToast("No se han reservado unidades válidas", 'danger');
+                    return;
+                }
+
+                const requiereAutorizacion = carrito.autorizacion;
+                const rol = parseInt(sessionStorage.getItem("rol"), 10);
+                
+                let autorizada;
+                let usuarioautoriza;
+                if (rol === 40 || rol === 30) {
+                    autorizada = 1;
+                    usuarioautoriza = sessionStorage.getItem("id_usuario");
+                } else {
+                    autorizada = requiereAutorizacion ? null : 1;
+                    usuarioautoriza = requiereAutorizacion ? null : sessionStorage.getItem("id_usuario");
+                }
+
+                const espacios = await cargarEspacios();
+                let idPrincipal = 'salon';
+
+                espacios.sort((a, b) => {
+                    if(a.id_recurso == idPrincipal) return -1;
+                    if(b.id_recurso == idPrincipal) return 1;
+                    return 0;
+                });
+
+                const modalEspacio = await DayPilot.Modal.form([
+                    {
+                        name: "Seleccione un espacio",
+                        id: "usaenespacio",
+                        type: "select",
+                        options: espacios.map(e => ({
+                            name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
+                            id: e.id_recurso
+                        }))
+                    }
+                ]);
+
+                if (!modalEspacio.result) return;
+
+                const usaenespacio = modalEspacio.result.usaenespacio;
+                
+                fechaactual=new Date();
+                inicio=new Date(evento.start);
+                if(fechaactual>=inicio){
+                    mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                    return;
+                }
+
+                let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+                document.getElementById('cargandoreservas').classList.remove('d-none');
+                const response = await fetch(`${API}/portatiles/reservas`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        asignatura: modal.result.asignatura,
+                        grupo: modal.result.grupo,
+                        profesor: modal.result.profesor,
+                        observaciones: modal.result.observaciones,
+                        f_creacion: fecha,
+                        inicio: evento.start.replace("T", " "),
+                        fin: evento.end.replace("T", " "),
+                        unidades: parseInt(modal.result.unidades),
+                        id_material: idAula,
+                        id_usuario: sessionStorage.getItem("id_usuario"),
+                        id_usuario_autoriza: usuarioautoriza,
+                        correo: sessionStorage.getItem("correo"),
+                        autorizada: autorizada,
+                        tipo: "Reserva_material",
+                        descripcion: evento.descripcion,
+                        activo: evento.activo,
+                        especial: evento.especial,
+                        numero_planta: evento.numero_planta,
+                        id_edificio: evento.id_edificio,
+                        usaenespacio: usaenespacio
+                    })
+                });
+                document.getElementById('cargandoreservas').classList.add('d-none');
+            
+                if (!response.ok) {
+                    const err = await response.json();
+                    const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "No hay suficientes portátiles disponibles";
+                    mostrarToast(mensaje, 'danger');
+                    return;
+                }
+                mostrarToast("Reserva creada correctamente", 'success')
+
+                const nuevosEventos = await generarEventos(idAula, carrito.unidades);
+                dp.events.list = nuevosEventos;
+                dp.update();
+            }
+
+            // 🔵 EDITAR RESERVA
+            else {
+                if((sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario)||fechaactual>inicio){
+                    const html = `
+                        <div style="line-height:1.6">
+                            <b>Asignatura:</b> ${evento.asignatura}<br>
+                            <b>Grupo:</b> ${evento.grupo}<br>
+                            <b>Profesor:</b> ${evento.profesor}<br>
+                            <b>Observaciones:</b> ${evento.observaciones || "-"}<br>
+                            <b>Unidades:</b> ${evento.unidades}<br>
+                            <b>Espacio utilizado:</b> ${evento.usaenespacio == "salon" ? "Salón de actos" : evento.usaenespacio || "-"}
+                        </div>
+                    `;
+
+                    DayPilot.Modal.alert(html);
+                }else{
+                    const maxDisponibles = evento.unidades_libres;
+                    const modal = await DayPilot.Modal.form([
+                        { name: "Asignatura", id: "asignatura", type: "text" },
+                        { name: "Grupo", id: "grupo", type: "text" },
+                        { name: "Profesor", id: "profesor", type: "text" },
+                        { name: "Observaciones", id: "observaciones", type: "textarea" },
+                        { 
+                            name: `Cantidad de portátiles (máx ${maxDisponibles})`,
+                            id: "unidades",
+                            type: "number",
+                            min: 1,
+                            max: maxDisponibles
+                        }
+                    ], {
+                        asignatura: evento.asignatura,
+                        grupo: evento.grupo,
+                        profesor: evento.profesor,
+                        observaciones: evento.observaciones,
+                        unidades: evento.unidades
+                    });
+
+                    if (!modal.result) return;
+
+                    if(!modal.result.asignatura||!modal.result.grupo||!modal.result.profesor||!modal.result.unidades){
+                        mostrarToast("No se han rellenado los campos obligatorios", 'danger');
+                        return;
+                    }
+
+                    if(isNaN(modal.result.unidades)){
+                        mostrarToast("Las unidades deben ser un número", 'danger');
+                        return;
+                    }
+
+                    if(modal.result.unidades<=0||modal.result.unidades>evento.unidades_libres){
+                        mostrarToast("No se han reservado unidades válidas", 'danger');
+                        return;
+                    }
+
+                    const espacios = await cargarEspacios();
+                    let idPrincipal = 'salon';
+
+                    espacios.sort((a, b) => {
+                        if(a.id_recurso == idPrincipal) return -1;
+                        if(b.id_recurso == idPrincipal) return 1;
+                        return 0;
+                    });
+
+                    let textoespacio="Salón de actos"
+                    if(evento.usaenespacio!="salon"){
+                        espacios.forEach(e => {
+                            if(evento.usaenespacio==e.id_recurso){
+                                textoespacio=e.id_recurso + " - " + e.descripcion;
+                            }
+                        });
+                    }
+                    
+                    const modalEspacio = await DayPilot.Modal.form([
+                        {
+                            name: "Seleccione un espacio (Seleccionado anteriormente: "+textoespacio+")",
+                            id: "usaenespacio",
+                            type: "select",
+                            options: espacios.map(e => ({
+                                name: e.id_recurso === 'salon' ? e.descripcion : e.id_recurso + " - " + e.descripcion,
+                                id: e.id_recurso
+                            }))
+                        }
+                    ], {usaenespacio: evento.usaenespacio});
+
+                    if (!modalEspacio.result) return;
+
+                    const usaenespacio = modalEspacio.result.usaenespacio;
+                    
+                    fechaactual=new Date();
+                    inicio=new Date(evento.start);
+                    if(fechaactual>=inicio){
+                        mostrarToast("No se pueden modificar reservas en el pasado", 'danger');
+                        return;
+                    }
+
+                    let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+                    
+                    const response = await fetch(`${API}/portatiles/reservas/${evento.id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            asignatura: modal.result.asignatura,
+                            grupo: modal.result.grupo,
+                            profesor: modal.result.profesor,
+                            observaciones: modal.result.observaciones,
+                            unidades: parseInt(modal.result.unidades),
+                            id_material: idAula,
+                            f_creacion: evento.f_creacion,
+                            inicio: evento.start.replace("T", " "),
+                            fin: evento.end.replace("T", " "),
+                            id_usuario: evento.id_usuario,
+                            id_usuario_autoriza: evento.id_usuario_autoriza,
+                            id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                            autorizada: evento.autorizada,
+                            tipo: "Reserva_material",
+                            descripcion: evento.descripcion,
+                            activo: evento.activo,
+                            especial: evento.especial,
+                            numero_planta: evento.numero_planta,
+                            id_edificio: evento.id_edificio,
+                            usaenespacio: evento.usaenespacio
+                        })
+                    });
+                    
+                    let res = await response.json();
+                    
+                    if (!response.ok) {
+                        const err = res
+                        const mensaje = err.errors?.[0] ?? err.message ?? err.error ?? "Error al actualizar la reserva";
+                        mostrarToast(mensaje, 'danger');
+                        return;
+                    }else if(res.data.status=="no_changes"){
+                        mostrarToast("No han habido cambios", 'warning');
+                    }else{
+                        mostrarToast("Reserva actualizada correctamente", 'success');
+                    }
+
+                    const nuevosEventos = await generarEventos(idAula, carrito.unidades);
+                    dp.events.list = nuevosEventos;
+                    dp.update();
+                }
+            }
+        }
+    });
+
+    cargarInfoCarrito(carrito);
+    const eventos = await generarEventos(idAula, carrito.unidades);
+
+    dp.events.list = eventos;
+    dp.init();
+
+
+    // BOTONES SEMANA ANTERIOR Y SIGUIENTE
+    document.getElementById("prevWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(-7);
+        dp.update();
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+        dp.startDate = dp.startDate.addDays(7);
+        dp.update();
+    });
+});
+
+document.getElementById("btnVolver").addEventListener("click", () => {
+    window.location.href = `${BASE}/vistas/reservas/portatiles/portatiles.html`;
+});
+
+
+import { getCarrito } from "/frontend/javascript/portatiles/get.js";
+
+async function cargarInfoCarrito(carrito) {
+
+    if (!carrito) return;
+
+    document.getElementById("info-id").textContent = 'Carrito de portátiles ' + carrito.id;
+    document.getElementById("info-descripcion").textContent = carrito.descripcion;
+    document.getElementById("info-edificio").textContent = carrito.edificio;
+    document.getElementById("info-planta").textContent = carrito.planta;
+    document.getElementById("info-unidades").textContent = carrito.unidades;
+    document.getElementById("info-especial").textContent =
+    carrito.autorizacion ? "Sí" : "No";
+
+}
+
+
+
+</script>
+
+
+            <div class="position-fixed bottom-0 end-0 p-3 w-auto me-2 mb-2 me-md-5 mb-md-5" style="z-index:1030; right: 0 !important;">
+                <a id="btnVolver"
+                class="btn bg-azul text-light rounded-pill px-3 fs-5" style="border: 1px solid #E6F5F0;">
+                    <i class="bi bi-caret-left-fill"></i>
+                    Volver
+                </a>
+            </div>
+        </main>
+        <footer id="footer"></footer>
+    </body>
+</html>

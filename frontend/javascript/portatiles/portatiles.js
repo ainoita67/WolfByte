@@ -1,0 +1,615 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+// portatiles.js
+const API_BASE = `${API}`;
+const API_PORTATILES_MATERIALES = `${API_BASE}/portatiles/materiales`;
+const API_EDIFICIOS = `${API_BASE}/edificios`;
+const API_PLANTAS = `${API_BASE}/planta`;
+
+// Variable para almacenar los edificios obtenidos de la API
+let edificios = {};
+
+// Función para esperar a que el DOM esté listo
+function ready(fn) {
+    if (document.readyState !== 'loading') {
+        fn();
+    } else {
+        document.addEventListener('DOMContentLoaded', fn);
+    }
+}
+
+// Función para limpiar backdrops residuales
+function limpiarBackdrops() {
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+}
+
+// ============================================
+// FUNCIONES DE API
+// ============================================
+
+// Función para obtener los edificios de la API
+async function cargarEdificios() {
+    try {
+        const response = await fetch(API_EDIFICIOS, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        if (!response.ok) throw new Error('Error al cargar edificios');
+        const respuesta = await response.json();        
+        
+        let edificiosArray = [];
+        if (respuesta.data && Array.isArray(respuesta.data)) {
+            edificiosArray = respuesta.data;
+        } else if (Array.isArray(respuesta)) {
+            edificiosArray = respuesta;
+        }
+        
+        edificios = {};
+        edificiosArray.forEach(edificio => {
+            edificios[edificio.id_edificio] = edificio.nombre_edificio;
+        });
+        
+        actualizarSelectEdificios();
+        
+        return edificios;
+    } catch (error) {
+        console.error('Error cargando edificios:', error);
+        mostrarToast('Error al cargar edificios: ' + error.message, 'danger');
+        return {};
+    }
+}
+
+function obtenerNombreEdificio(idEdificio) {
+    return edificios[idEdificio] || 'Edificio ' + idEdificio;
+}
+
+// Función para crear un nuevo material
+async function crearMaterial(data) {
+    try {
+        
+        const response = await fetch(API_PORTATILES_MATERIALES, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const resultado = await response.json();
+        
+        if (!response.ok) {
+            // Extraer mensaje de error de la respuesta
+            let mensajeError = 'Error al crear el carro';
+            
+            if (resultado.error) {
+                mensajeError = resultado.error;
+            } else if (resultado.message) {
+                mensajeError = resultado.message;
+            } else if (resultado.errors && Array.isArray(resultado.errors)) {
+                mensajeError = resultado.errors.join(', ');
+            }
+            
+            // Personalizar mensajes comunes
+            if (mensajeError.includes('Duplicate entry') || mensajeError.includes('duplicado')) {
+                mensajeError = `Ya existe un carro con el ID "${data.id_recurso}"`;
+            } else if (mensajeError.includes('foreign key') || mensajeError.includes('constraint fails')) {
+                if (mensajeError.includes('Planta')) {
+                    mensajeError = 'La planta seleccionada no existe en este edificio';
+                } else if (mensajeError.includes('Edificio')) {
+                    mensajeError = 'El edificio seleccionado no existe';
+                } else {
+                    mensajeError = 'Error de referencia: el edificio o planta no son válidos';
+                }
+            } else if (mensajeError.includes('SQLSTATE')) {
+                mensajeError = 'Error en la base de datos al crear el carro';
+            }
+            
+            throw new Error(mensajeError);
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error creando material:', error);
+        throw error;
+    }
+}
+
+// Función para actualizar un material
+async function actualizarMaterial(id, data) {
+    try {
+        const url = `${API_PORTATILES_MATERIALES}/${id}`;
+        
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const resultado = await response.json();
+        
+        if (!response.ok) {
+            // Extraer mensaje de error de la respuesta
+            let mensajeError = 'Error al actualizar el carro';
+            
+            if (resultado.error) {
+                mensajeError = resultado.error;
+            } else if (resultado.message) {
+                mensajeError = resultado.message;
+            } else if (resultado.errors && Array.isArray(resultado.errors)) {
+                mensajeError = resultado.errors.join(', ');
+            }
+            
+            // Personalizar mensajes comunes
+            if (mensajeError.includes('Duplicate entry') || mensajeError.includes('duplicado')) {
+                mensajeError = `Ya existe otro carro con ese ID`;
+            } else if (mensajeError.includes('foreign key') || mensajeError.includes('constraint fails')) {
+                mensajeError = 'Error de referencia: los datos no son válidos';
+            } else if (mensajeError.includes('SQLSTATE')) {
+                mensajeError = 'Error en la base de datos al actualizar';
+            } else if (mensajeError.includes('not found') || mensajeError.includes('no encontrado')) {
+                mensajeError = 'El carro que intentas actualizar no existe';
+            }
+            
+            throw new Error(mensajeError);
+        }
+        
+        return resultado.message;
+    } catch (error) {
+        console.error('Error actualizando material:', error);
+        throw error;
+    }
+}
+
+
+// ============================================
+// FUNCIONES DE INTERFAZ
+// ============================================
+
+// Función principal para obtener materiales
+async function obtenerMateriales() {
+    
+    const contenedor = document.getElementById("portatilesContainer");
+    if (!contenedor) {
+        console.error('ERROR: No se ha encontrado el elemento portatilesContainer');
+        return;
+    }
+    
+    contenedor.innerHTML = `
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden text-black">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando materiales...</p>
+        </div>
+    `;
+    
+    try {
+        const response = await fetch(API_PORTATILES_MATERIALES, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        
+        const respuesta = await response.json();
+        
+        let materiales = [];
+        
+        if (respuesta.data && Array.isArray(respuesta.data)) {
+            materiales = respuesta.data;
+        } else if (Array.isArray(respuesta)) {
+            materiales = respuesta;
+        } else {
+        }
+        
+        
+        contenedor.innerHTML = '';
+        
+        if (materiales.length === 0) {
+            contenedor.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-laptop fs-1 text-muted"></i>
+                    <p class="text-black text-muted mt-3">No hay carros de portátiles registrados</p>
+                    <button class="btn btn-success mt-2" data-bs-toggle="modal" data-bs-target="#modalCrear">
+                        <i class="bi bi-plus-circle"></i> Crear primer carro
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        materiales.forEach(material => {
+            const card = document.createElement("div");
+            card.className = "col-12 col-md-6 col-lg-4 mb-4";
+            
+            const id = material.id || material.id_recurso;
+            const descripcion = material.descripcion || `Carro ${id}`;
+            const idEdificio = material.id_edificio;
+            const nombreEdificio = material.edificio || material.nombre_edificio || obtenerNombreEdificio(idEdificio) || 'Edificio';
+            const numeroPlanta = material.numero_planta !== undefined ? material.numero_planta : 0;
+            
+            let nombrePlanta = material.planta;
+            if (!nombrePlanta) {
+                if (numeroPlanta === 0) nombrePlanta = 'Planta baja';
+                else if (numeroPlanta === 1) nombrePlanta = 'Primera planta';
+                else nombrePlanta = `Planta ${numeroPlanta}`;
+            }
+            
+            const unidades = material.unidades || 0;
+            const activo = material.activo !== undefined ? material.activo : 1;
+            
+            const estado = activo ? 'Activo' : 'Inactivo';
+            const badgeClass = activo ? 'bg-success' : 'bg-secondary';
+            
+            card.innerHTML = `
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-blue text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">${descripcion} (${id})</h5>
+                        <span class="badge ${badgeClass}">${estado}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <p class="text-black mb-1"><strong>Edificio:</strong></p>
+                                <p class="text-black text-muted">${nombreEdificio}</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="text-black mb-1"><strong>Planta:</strong></p>
+                                <p class="text-black text-muted">${nombrePlanta}</p>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <p class="text-black mb-1"><strong>Nº portátiles:</strong></p>
+                                <p class="text-black fs-4 text-primary">${unidades}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-sm btn-primary btn-mostrar"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalMostrar"
+                                data-id="${id}"
+                                data-carro="${descripcion}"
+                                data-edificio="${nombreEdificio}"
+                                data-planta="${nombrePlanta}"
+                                data-unidades="${unidades}"
+                                data-estado="${estado}">
+                                <i class="bi bi-eye"></i> Ver
+                            </button>
+                            <button class="btn btn-sm btn-warning btn-editar"
+                                data-id="${id}"
+                                data-carro="${descripcion}"
+                                data-edificio="${nombreEdificio}"
+                                data-id-edificio="${idEdificio}"
+                                data-planta="${nombrePlanta}"
+                                data-numero-planta="${numeroPlanta}"
+                                data-unidades="${unidades}"
+                                data-estado="${activo}">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            contenedor.appendChild(card);
+        });
+
+        configurarBotones();
+        
+    } catch (error) {
+        console.error('Error detallado:', error);
+        contenedor.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-exclamation-triangle fs-1 text-warning"></i>
+                <h5 class="mt-3 text-danger">Error de conexión</h5>
+                <p class="text-black text-muted">No se pudo conectar con el servidor</p>
+                <button class="btn btn-primary mt-2" onclick="obtenerMateriales()">
+                    <i class="bi bi-arrow-clockwise"></i> Reintentar
+                </button>
+            </div>
+        `;
+        mostrarToast('Error al cargar materiales: ' + error.message, 'danger');
+    }
+}
+
+function configurarBotones() {
+    // Configurar botones de editar (MANUALMENTE, sin data-bs-toggle)
+    document.querySelectorAll(".btn-editar").forEach(boton => {
+        // Quitar cualquier atributo data-bs-toggle que pueda interferir
+        boton.removeAttribute('data-bs-toggle');
+        boton.removeAttribute('data-bs-target');
+        
+        boton.addEventListener("click", function(e) {
+            e.preventDefault();
+            
+            // Rellenar el formulario
+            document.getElementById("editId").value = this.dataset.id;
+            document.getElementById("editCarro").value = this.dataset.carro;
+            document.getElementById("editEdificio").value = this.dataset.edificio;
+            document.getElementById("editIdEdificio").value = this.dataset.idEdificio;
+            document.getElementById("editPlanta").value = this.dataset.planta;
+            document.getElementById("editNumeroPlanta").value = this.dataset.numeroPlanta;
+            document.getElementById("editUnidades").value = this.dataset.unidades;
+            
+            const estadoSelect = document.getElementById("editEstado");
+            if (estadoSelect) {
+                estadoSelect.value = this.dataset.estado;
+            }
+            
+            // Limpiar backdrops residuales
+            limpiarBackdrops();
+            
+            // Abrir modal MANUALMENTE
+            const modalElement = document.getElementById("modalEditar");
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement, {
+                    keyboard: false
+                });
+                modal.show();
+            }
+        });
+    });
+    
+    
+    
+    // Configurar botones de mostrar
+    document.querySelectorAll(".btn-mostrar").forEach(boton => {
+        boton.addEventListener("click", function() {
+            document.getElementById("mostrarCarro").textContent = this.dataset.carro;
+            document.getElementById("mostrarEdificio").textContent = this.dataset.edificio;
+            document.getElementById("mostrarPlanta").textContent = this.dataset.planta;
+            document.getElementById("mostrarUnidades").textContent = this.dataset.unidades;
+            document.getElementById("mostrarEstado").textContent = this.dataset.estado;
+        });
+    });
+}
+
+function actualizarSelectEdificios() {
+    const edificioSelect = document.getElementById("crearEdificio");
+    if (edificioSelect) {
+        edificioSelect.innerHTML = '<option value="" selected disabled>Seleccione un edificio</option>';
+        
+        if (Object.keys(edificios).length === 0) {
+            const option = document.createElement('option');
+            option.value = "";
+            option.textContent = "No hay edificios disponibles";
+            option.disabled = true;
+            edificioSelect.appendChild(option);
+        } else {
+            for (const [id, nombre] of Object.entries(edificios)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = nombre;
+                edificioSelect.appendChild(option);
+            }
+        }
+    }
+}
+
+// ============================================
+// INICIALIZACIÓN
+// ============================================
+
+ready(function() {
+    
+    // Verificar que el contenedor existe
+    const contenedor = document.getElementById("portatilesContainer");
+    if (contenedor) {
+    } else {
+        console.error('Contenedor portatilesContainer NO encontrado');
+    }
+    
+    // Cargar edificios
+    cargarEdificios();
+    
+    // Cargar materiales después de un pequeño retraso
+    setTimeout(() => {
+        obtenerMateriales();
+    }, 500);
+    
+    // Formulario de creación
+    const formCrear = document.querySelector("#modalCrear form");
+    if (formCrear) {
+        
+        formCrear.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById("crearId")?.value;
+            const carro = document.getElementById("crearCarro")?.value;
+            const idEdificio = parseInt(document.getElementById("crearEdificio")?.value);
+            const numeroPlanta = document.getElementById("crearPlanta")?.value;
+            const unidades = parseInt(document.getElementById("crearUnidades")?.value);
+            
+            if (!id || !carro || !idEdificio || !unidades) {
+                mostrarToast('Complete todos los campos', 'warning');
+                return;
+            }
+
+            if(numeroPlanta === "" || numeroPlanta === null || numeroPlanta === undefined) {
+                mostrarToast('Seleccione una planta', 'warning');
+                return;
+            }
+            
+            if (unidades <= 0) {
+                mostrarToast('Las unidades deben ser mayores que 0', 'warning');
+                return;
+            }
+            
+            const submitBtn = formCrear.querySelector("button[type='submit']");
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+            
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Creando...';
+            }
+            
+            try {
+                // PASO 1: Verificar si la planta existe
+                
+                // Intentar obtener la planta directamente
+                const plantaCheckResponse = await fetch(`${API_BASE}/plantas/${idEdificio}?numero_planta=${numeroPlanta}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                
+                if (!plantaCheckResponse.ok && plantaCheckResponse.status === 404) {
+                    mostrarToast('La planta seleccionada no existe en este edificio', 'danger');
+                    return;                    
+                } else if (!plantaCheckResponse.ok) {
+                    throw new Error('Error al verificar la planta');
+                }
+                               
+                let usuario=sessionStorage.getItem("id_usuario");
+                // PASO 2: Crear el material
+                const data = {
+                    id_recurso: id,
+                    descripcion: carro,
+                    id_edificio: idEdificio,
+                    numero_planta: numeroPlanta,
+                    unidades: unidades,
+                    activo: 1,
+                    especial: 0,
+                    id_usuario: usuario
+                };
+                
+                const success = await crearMaterial(data);
+                
+                if (success) {
+                    // Cerrar modal
+                    const modalElement = document.getElementById("modalCrear");
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                    }
+                    
+                    // Limpiar backdrop
+                    limpiarBackdrops();
+                    
+                    // Resetear formulario
+                    formCrear.reset();
+                    
+                    // Recargar lista
+                    await obtenerMateriales();
+                    
+                    mostrarToast(`Carro "${carro}" creado correctamente`, 'success');
+                }
+            } catch (error) {
+                console.error('Error detallado:', error);
+                mostrarToast(error.message, 'danger');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText || '<i class="bi bi-check-lg"></i> Crear carro';
+                }
+            }
+        });
+    } else {
+        console.error('Formulario de creación NO encontrado');
+    }
+    
+    // Formulario de edición
+    const formEditar = document.querySelector("#modalEditar form");
+    if (formEditar) {
+        
+        formEditar.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const id = document.getElementById("editId")?.value;
+            const carro = document.getElementById("editCarro")?.value;
+            const unidades = parseInt(document.getElementById("editUnidades")?.value);
+            const activo = parseInt(document.getElementById("editEstado")?.value);
+            const usuario=sessionStorage.getItem("id_usuario");
+            
+            if (!id || !carro || !unidades) {
+                mostrarToast('Completa todos los campos', 'warning');
+                return;
+            }
+            
+            if (unidades <= 0) {
+                mostrarToast('Las unidades deben ser mayores que 0', 'warning');
+                return;
+            }
+            
+            const submitBtn = formEditar.querySelector("button[type='submit']");
+            const originalText = submitBtn ? submitBtn.innerHTML : '';
+            
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Actualizando...';
+            }
+            
+            const data = {
+                descripcion: carro,
+                unidades: unidades,
+                activo: activo,
+                especial: 0,
+                id_usuario: usuario
+            };
+            
+            try {
+                const estado = await actualizarMaterial(id, data);
+                
+                if (estado=='no_changes') {
+                    mostrarToast('No han habido cambios', 'warning');
+                }else if(estado=='updated'){
+                    // Cerrar modal
+                    const modalElement = document.getElementById("modalEditar");
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                    }
+                    
+                    // Limpiar backdrop
+                    limpiarBackdrops();
+                    
+                    // Resetear formulario
+                    formEditar.reset();
+                    
+                    // Recargar lista
+                    await obtenerMateriales();
+                    
+                    mostrarToast(`Carro "${carro}" actualizado correctamente`, 'success');
+                }
+            } catch (error) {
+                mostrarToast(error.message, 'danger');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText || '<i class="bi bi-check-lg"></i> Actualizar carro';
+                }
+            }
+        });
+    } else {
+        console.error('Formulario de edición NO encontrado');
+    }
+    
+    // Eventos para limpiar cuando se cierran los modales
+    const modales = ['modalCrear', 'modalEditar', 'modalMostrar'];
+    modales.forEach(id => {
+        const modal = document.getElementById(id);
+        if (modal) {
+            modal.addEventListener('hidden.bs.modal', function() {
+                const form = this.querySelector('form');
+                if (form) form.reset();
+                
+                // Forzar limpieza del backdrop
+                limpiarBackdrops();
+            });
+        }
+    });
+});
+
+// Exportar funciones globales
+window.obtenerMateriales = obtenerMateriales;
+window.cargarEdificios = cargarEdificios;

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            // Admin (30) y super-admin (40) pueden acceder
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("menu", rol);
+                };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+        <title>Mis reservas - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main class="container mt-5">
+            <h2 class="text-center mb-4">Mis reservas</h2>
+
+            <!-- TARJETAS RESERVA -->
+            <div class="row g-4 mb-5" id="misReservasTarjetas">
+            </div>
+
+            <!-- MODAL RESERVA -->
+            <div class="modal fade" id="modalReserva" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning text-black">
+                            <h5 class="modal-title" id="modalReservaTitulo"><i class="bi bi-pencil-square"></i> Editar reserva</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+
+                        <form id="formReserva">                      
+                        <div id="cargandoreservas"
+                            class="d-none position-absolute top-0 start-0 border-0 rounded-1 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            style="z-index: 10;">
+
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Enviando reserva...</span>
+                                </div>
+                                <div class="mt-2 fw-semibold text-black text-black">Cargando...</div>
+                            </div>
+                        </div>
+                            <div class="modal-body container-fluid">
+                                <div class="row g-3">
+                                    <input type="hidden" id="reserva_id_usuario_autoriza" name="reserva_id_usuario_autoriza">
+                                    <input type="hidden" id="reserva_autorizada" name="autorizada">
+                                    <!-- ID reserva -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label">ID Reserva</label>
+                                        <input type="number" class="form-control" id="reserva_id" name="reserva_id" required readonly>
+                                    </div>
+
+                                    <!-- Fecha creación -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_f_creacion">F. creación</label>
+                                        <input type="datetime-local" step="1" class="form-control" id="reserva_f_creacion" name="f_creacion" required readonly>
+                                    </div>
+
+                                    <!-- Inicio -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_inicio">Inicio</label>
+                                        <input type="datetime-local" step="1" class="form-control" id="reserva_inicio" name="inicio" required readonly>
+                                    </div>
+
+                                    <!-- Fin -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_fin">Fin</label>
+                                        <input type="datetime-local" step="1" class="form-control" id="reserva_fin" name="fin" required readonly>
+                                    </div>
+
+                                    <!-- Espacio/Portátil -->
+                                    <div class="col-lg-6">
+                                        <input type="hidden" id="reserva_tipo" name="tipo" required readonly>
+                                        <label class="text-black form-label" for="reserva_espacio_portatil">Espacio / Portátil</label>
+                                        <input type="text" class="form-control" id="reserva_espacio_portatil" name="espacio_portatil" required readonly>
+                                    </div>
+
+                                    <!-- Asignatura -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_asignatura">Asignatura</label>
+                                        <input type="text" class="form-control" id="reserva_asignatura" name="asignatura">
+                                    </div>
+
+                                    <!-- Grupo -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_grupo">Grupo</label>
+                                        <input type="text" class="form-control" id="reserva_grupo" name="grupo" required>
+                                    </div>
+
+                                    <!-- Profesor -->
+                                    <div class="col-lg-6">
+                                        <label class="text-black form-label" for="reserva_profesor">Profesor</label>
+                                        <input type="text" class="form-control" id="reserva_profesor" name="profesor" required>
+                                    </div>
+
+                                    <!-- Usuario -->
+                                    <div id="div_reserva_usuario">
+                                        <input type="hidden" id="reserva_id_usuario" name="id_usuario" required readonly>
+                                        <label class="text-black form-label" for="reserva_usuario">Usuario</label>
+                                        <input type="text" class="form-control" id="reserva_usuario" name="usuario" required readonly>
+                                    </div>
+
+                                    <!-- Unidades -->
+                                    <div class="col-lg-6" id="div_reserva_unidades">
+                                        <label class="text-black form-label" for="reserva_unidades">Unidades</label>
+                                        <input type="number" class="form-control" id="reserva_unidades" name="unidades" min="0" required>
+                                    </div>
+
+                                    <!-- Espacio en el que se usa -->
+                                    <div class="col-lg-6" id="div_reserva_espacio_uso">
+                                        <label class="text-black form-label">Espacio en el que se usa</label>
+                                        <select class="form-select selectEspacio filtrarRecurso" id="reserva_espacio_uso" name="espacio_uso" required>
+                                        </select>
+                                    </div>
+
+                                    <!-- Actividad -->
+                                    <div class="col-lg-6" id="div_reserva_actividad">
+                                        <label class="text-black form-label" for="reserva_actividad">Actividad</label>
+                                        <input type="text" class="form-control" id="reserva_actividad" name="actividad" required>
+                                    </div>
+
+                                    <!-- Necesidades -->
+                                    <div class="col-12" id="div_reserva_necesidades">
+                                        <label class="text-black form-label" for="reserva_necesidades">Necesidades</label>
+                                        <select class="form-select selectMultipleNecesidad" id="reserva_necesidades" name="necesidades" multiple size="4">
+                                        </select>
+                                        <div class="form-text">Mantén Ctrl (Windows) / Cmd (Mac) para seleccionar varias.</div>
+                                    </div>
+
+                                    <!-- Observaciones -->
+                                    <div class="col-12">
+                                        <label class="text-black form-label" for="reserva_observaciones">Observaciones</label>
+                                        <textarea class="form-control" id="reserva_observaciones" name="observaciones" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="submit" class="col-3 btn bg-azul border rounded-pill text-light"><i class="bi bi-check2"></i> Guardar cambios</button>
+                                <button type="button" class="col-3 btn btn-danger border-0 rounded-pill text-light" id="cancelarReserva"><i class="bi bi-x-lg"></i> Cancelar reserva</button>
+                                <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-caret-left-fill"></i> Salir sin guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL RESERVA -->
+            <div class="modal fade" id="modalVerReserva" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="modalReservaTitulo"><i class="bi bi-info-circle-fill"></i> Detalles de reserva</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body container-fluid">
+                            <p class="text-black fw-bold">ID Reserva: <span id="ver_reserva_id" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Fecha de creación: <span id="ver_reserva_f_creacion" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Inicio: <span id="ver_reserva_inicio" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Fin: <span id="ver_reserva_fin" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Espacio/Portatil: <span id="ver_reserva_espacio_portatil" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Asignatura: <span id="ver_reserva_asignatura" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Grupo: <span id="ver_reserva_grupo" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Profesor: <span id="ver_reserva_profesor" class="fw-light"></span></p>
+                            <p class="text-black fw-bold">Usuario: <span id="ver_reserva_usuario" class="fw-light"></span></p>
+                            <p class="text-black fw-bold" id="p_ver_unidades">Unidades: <span id="ver_reserva_unidades" class="fw-light"></span></p>
+                            <p class="text-black fw-bold" id="p_ver_espacio_uso">Espacio en el que se usa: <span id="ver_reserva_espacio_uso" class="fw-light"></span></p>
+                            <p class="text-black fw-bold" id="p_ver_actividad">Actividad: <span id="ver_reserva_actividad" class="fw-light"></span></p>
+                            <p class="text-black fw-bold" id="p_ver_observaciones">Observaciones: <span id="ver_reserva_observaciones" class="fw-light"></span></p>
+                            <p class="text-black fw-bold mb-1" id="p_ver_necesidades">Necesidades:
+                                <ul id="ver_reserva_necesidades"></ul>
+                            </p>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-end">
+                            <button type="button" class="col-3 btn bg-lightgrey border rounded-pill text-black" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RELLENAR MODAL -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+            <script type="module" src="/frontend/javascript/recursos/get.js"></script>
+            <script type="module">
+                import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+                window.mostrarToast = mostrarToast;        
+            </script>
+            <script>
+                const scriptgetreservas = document.createElement("script");
+                scriptgetreservas.src = BASE + "/javascript/misReservas.js";
+                document.head.appendChild(scriptgetreservas);
+
+                scriptgetreservas.onload = () => {
+                    obtenerMisReservas();
+                    activarEditarMisReservas();
+                }
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    obtenerRecursosSelect();
+                });
+                
+                const scriptgetnecesidades = document.createElement("script");
+                scriptgetnecesidades.src = BASE + "/javascript/necesidades/get.js";
+                document.head.appendChild(scriptgetnecesidades);
+                
+                scriptgetnecesidades.onload = () => {
+                    obtenerNecesidadesSelectMultiple();
+                };
+            </script>
+            
+            <div class="position-fixed bottom-0 end-0 p-3 w-auto me-2 mb-2 me-md-5 mb-md-5" style="z-index:1030; right: 0 !important;">
+                <a href="../menu.html"
+                class="btn bg-azul text-light rounded-pill px-3 fs-5" style="border: 1px solid #E6F5F0;">
+                    <i class="bi bi-caret-left-fill"></i>
+                    Volver
+                </a>
+            </div>
+        </main>
+        <footer id="footer"></footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    </body>
+</html>

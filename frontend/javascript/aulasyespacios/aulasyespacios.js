@@ -1,0 +1,802 @@
+import { mostrarToast } from "/frontend/javascript/reservas/crud.js";
+
+// aulasyespacios.js
+const API_BASE = `${API}`;
+
+// Variables globales
+let edificios = [];
+let espaciosGlobal = [];
+
+// ************  OBTENER DATOS ****************** //
+
+async function getCaracteristicasEspacio(id){
+    try{
+        const response = await fetch(API_BASE+"/espacios/"+id+"/caracteristicas", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const res = await response.json();
+
+        return res.data;
+    } catch (error) {
+        console.error("Error obteniendo características:", error);
+        throw error;
+    }
+}
+
+
+async function getCaracteristicas(){
+    try{
+        const response = await fetch(API_BASE+"/caracteristicas", {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const res = await response.json();
+
+        return res.data;
+    } catch (error) {
+        console.error("Error obteniendo características:", error);
+        throw error;
+    }
+}
+
+
+async function getEspacios() {
+    const URL = API_BASE + "/espacios";
+
+    try {        
+        const response = await fetch(URL, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const jsonData = await response.json();
+        
+        let espacios = [];
+        if (jsonData.data && Array.isArray(jsonData.data)) {
+            espacios = jsonData.data;
+        } else if (Array.isArray(jsonData)) {
+            espacios = jsonData;
+        }
+        
+        espaciosGlobal = espacios;
+        return espacios;
+        
+    } catch (error) {
+        console.error("Error obteniendo espacios:", error);
+        throw error;
+    }
+}
+
+async function getEdificios() {
+    const URL = API_BASE + "/edificios";
+
+    try {
+        const response = await fetch(URL, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const jsonData = await response.json();
+        
+        if (jsonData.data && Array.isArray(jsonData.data)) {
+            edificios = jsonData.data;
+        } else if (Array.isArray(jsonData)) {
+            edificios = jsonData;
+        } else {
+            edificios = [];
+        }
+        
+        return edificios;
+        
+    } catch (error) {
+        console.error("Error obteniendo edificios:", error);
+        throw error;
+    }
+}
+
+// ************  OBTENER NOMBRE DE PLANTA ****************** //
+
+function getNombrePlanta(numeroPlanta) {
+    const plantas = {
+        0: 'Planta baja',
+        1: 'Primera planta',
+        2: 'Segunda planta'
+    };
+    return plantas[numeroPlanta] || `Planta ${numeroPlanta}`;
+}
+
+// ************  CARGAR SELECTORES ****************** //
+
+async function cargarSelectEdificios(selectId, valorSeleccionado = null) {
+    const select = document.getElementById(selectId);
+    if (!select) {
+        console.error(`No se ha encontrado el select con id: ${selectId}`);
+        return;
+    }
+    
+    select.innerHTML = '<option value="" selected disabled>Seleccione un edificio</option>';
+    
+    if (!edificios || edificios.length === 0) {
+        console.warn("No hay edificios cargados, intentando cargarlos...");
+        await getEdificios();
+    }
+    
+    if (!edificios || edificios.length === 0) {
+        console.error("No se pudieron cargar los edificios");
+        return;
+    }
+    
+    edificios.forEach(edificio => {
+        const option = document.createElement('option');
+        option.value = edificio.id_edificio;
+        option.textContent = edificio.nombre_edificio;
+        
+        // Comparar correctamente los valores
+        if (valorSeleccionado !== null && String(edificio.id_edificio) === String(valorSeleccionado)) {
+            option.selected = true;
+            if(selectId=='crearSelect'){
+                obtenerPlantas(edificio.id_edificio, 'crear');
+            }else if(selectId=='editSelect'){
+                obtenerPlantas(edificio.id_edificio, 'editar');
+            }
+        }
+        
+        select.appendChild(option);
+    });
+    
+    // Respaldo: también intentar con select.value
+    if (valorSeleccionado !== null && select.value !== String(valorSeleccionado)) {
+        select.value = String(valorSeleccionado);
+    }
+}
+
+export function obtenerPlantas(edificio, accion, nplanta=0){
+    fetch(window.location.origin+"/API/plantas/"+edificio, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then(response => {
+        let plantas = response.data;
+        let divplantas;
+        let selectplantas;
+        if(accion=='crear'){
+            divplantas = document.getElementById("divcrearplanta");
+            selectplantas = document.getElementById("crearPlanta");
+        }else if(accion=='editar'){
+            divplantas = document.getElementById("diveditarplanta");
+            selectplantas = document.getElementById("editPlanta");
+        }else{
+            return;
+        }
+        selectplantas.innerHTML = "";
+
+        if(plantas.length === 0||edificio == ""||!edificio){
+            let option=document.createElement("option");
+            option.value="";
+            option.textContent="Seleccione un edificio primero";
+            option.selected=true;
+            selectplantas.appendChild(option);
+            selectplantas.disabled=true;
+        }else{
+            selectplantas.disabled=false;
+
+            if(accion=='crear'){
+                let optionseleccionar = document.createElement("option");
+                optionseleccionar.value = "";
+                optionseleccionar.textContent = "Seleccionar planta";
+                optionseleccionar.selected = true;
+                optionseleccionar.disabled = true;
+                selectplantas.appendChild(optionseleccionar);
+            }
+
+            plantas.forEach(planta => {
+                let optionplanta = document.createElement("option");
+                optionplanta.value = planta.numero_planta;
+                optionplanta.textContent = 'Planta '+planta.numero_planta;
+                if(nplanta==planta.numero_planta){
+                    optionplanta.selected=true;
+                }else{
+                    optionplanta.selected=false;
+                }
+                selectplantas.appendChild(optionplanta);
+            });
+        }
+    })
+    .catch(error => console.error("<p>Error al obtener plantas</p>", error));
+}
+
+async function cargarSelectCaracteristicasCrear(){
+    let caracteristicas=await getCaracteristicas();
+
+    let selectcrear=document.getElementById('crearCaracteristicas');
+    selectcrear.innerHTML = '';
+    let ninguna = document.createElement('option');
+    ninguna.textContent = 'Ninguna';
+    ninguna.value = '';
+    ninguna.selected = true;
+    ninguna.classList.add("border", "border-primary");
+    selectcrear.appendChild(ninguna);
+    caracteristicas.forEach(caracteristica => {
+        let option = document.createElement('option');
+        option.value = caracteristica.id_caracteristica;
+        option.textContent = caracteristica.nombre;
+        selectcrear.appendChild(option);
+    });
+}
+
+async function cargarSelectCaracteristicasEditar(id){
+    let caracteristicas=await getCaracteristicas();
+    let espacios=await getCaracteristicasEspacio(id)
+
+    let selectedit = document.getElementById('editCaracteristicas');
+    selectedit.innerHTML = '';
+    let ninguna = document.createElement('option');
+    ninguna.textContent = 'Ninguna';
+    ninguna.value = '';
+    selectedit.appendChild(ninguna);
+    let seleccionadas=false;
+    caracteristicas.forEach(caracteristica => {
+        let option = document.createElement('option');
+        option.value = caracteristica.id_caracteristica;
+        option.textContent = caracteristica.nombre;
+        if(espacios.length>0){
+            espacios.forEach(espacio => {
+                if(espacio.id_caracteristica==caracteristica.id_caracteristica){
+                    option.selected=true;
+                    option.classList.add("border", "border-primary");
+                    seleccionadas=true;
+                }
+            });
+        }
+        selectedit.appendChild(option);
+    });
+    if(!seleccionadas){
+        ninguna.selected=true;
+        ninguna.classList.add("border", "border-primary");
+    }
+}
+
+// ************  MOSTRAR ESPACIOS ****************** //
+
+function mostrarEspacios(espacios) {
+    const contenedor = document.getElementById('espaciosContainer');
+    if (!contenedor) return;
+    
+    contenedor.innerHTML = '';
+    
+    if (!espacios || espacios.length === 0) {
+        contenedor.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-inbox fs-1 text-muted"></i>
+                <p class="text-black text-muted mt-3">No hay espacios para mostrar</p>
+                <button class="btn btn-success mt-2" onclick="window.abrirModalCrear()">
+                    <i class="bi bi-plus-circle"></i> Crear primer espacio
+                </button>
+            </div>
+        `;
+        return;
+    }
+    
+    // Agrupar espacios por edificio y planta
+    const espaciosPorEdificio = {};
+    
+    espacios.forEach(espacio => {
+        const edificio = espacio.nombre_edificio || 'SIN EDIFICIO';
+        const planta = espacio.numero_planta ?? 0;
+        const nombrePlanta = espacio.nombre_planta || getNombrePlanta(planta);
+        
+        if (!espaciosPorEdificio[edificio]) {
+            espaciosPorEdificio[edificio] = {};
+        }
+        
+        if (!espaciosPorEdificio[edificio][planta]) {
+            espaciosPorEdificio[edificio][planta] = {
+                nombre: nombrePlanta,
+                espacios: []
+            };
+        }
+        
+        espaciosPorEdificio[edificio][planta].espacios.push(espacio);
+    });
+    
+    // Ordenar edificios
+    const edificiosOrdenados = Object.keys(espaciosPorEdificio).sort();
+    
+    for (const edificio of edificiosOrdenados) {
+        // Crear tarjeta de edificio
+        const edificioCol = document.createElement('div');
+        edificioCol.className = 'col-12 mb-4';
+        
+        let html = `
+            <div class="card shadow-sm">
+                <div class="card-header bg-blue text-white">
+                    <h3 class="h4 mb-0">${edificio}</h3>
+                </div>
+                <div class="card-body">
+        `;
+        
+        // Ordenar plantas por número
+        const plantasOrdenadas = Object.keys(espaciosPorEdificio[edificio])
+            .map(Number)
+            .sort((a, b) => a - b);
+        
+        for (const plantaNum of plantasOrdenadas) {
+            const plantaData = espaciosPorEdificio[edificio][plantaNum];
+            
+            html += `
+                <div class="mb-4">
+                    <h4 class="h5 text-success border-start border-success border-4 ps-2 mb-3">${plantaData.nombre}</h4>
+                    <div class="d-flex flex-wrap gap-2">
+            `;
+            
+            // Ordenar espacios por ID
+            const espaciosOrdenados = plantaData.espacios.sort((a, b) => 
+                (a.id_recurso || '').localeCompare(b.id_recurso || '')
+            );
+            
+            for (const espacio of espaciosOrdenados) {
+                const esAula = espacio.es_aula === 1 || espacio.es_aula === true;
+                const btnColor = esAula ? 'blue' : 'success';
+                const tipoTexto = esAula ? 'Aula' : 'Espacio';
+                
+                html += `
+                    <div class="card" style="width: 180px;">
+                        <div class="card-header bg-${btnColor} text-white py-2">
+                            <span class="badge bg-light text-black float-end">${tipoTexto}</span>
+                            <h6 class="mb-0">${espacio.id_recurso}</h6>
+                        </div>
+                        <div class="card-body p-2">
+                            <small class="d-block text-muted">${espacio.descripcion || 'Sin descripción'}</small>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="badge ${espacio.activo ? 'bg-success' : 'bg-secondary'}">
+                                    ${espacio.activo ? 'Activo' : 'Inactivo'}
+                                </span>
+                                <div>
+                                    <button class="btn btn-sm btn-primary btn-mostrar"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalVer"
+                                        data-id="${espacio.id_recurso}"
+                                        title="Ver">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning btn-editar" data-id="${espacio.id_recurso}" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `</div></div>`;
+        }
+        
+        html += `</div></div>`;
+        edificioCol.innerHTML = html;
+        contenedor.appendChild(edificioCol);
+    }
+    
+    // Event listeners
+    document.querySelectorAll('.btn-mostrar').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            verEspacio(id);
+        });
+    });
+    
+    document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            abrirModalEditar(id);
+        });
+    });
+    
+}
+
+// ************  FUNCIONES CRUD ****************** //
+
+async function abrirModalCrear() {
+    // Asegurar que los edificios están cargados
+    if (edificios.length === 0) {
+        await getEdificios();
+    }
+    
+    // Resetear formulario - TODOS LOS CAMPOS VACÍOS
+    const form = document.getElementById('formCrearEspacio');
+    if (form) form.reset();
+    
+    // Cargar select de edificios (SIN valor seleccionado)
+    await cargarSelectEdificios('crearEdificio');
+    await cargarSelectCaracteristicasCrear();
+    
+    // Mostrar modal
+    const modalElement = document.getElementById('modalCrear');
+    if (!modalElement) {
+        console.error("No se ha encontrado el modal con id 'modalCrear'");
+        return;
+    }
+    
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+async function abrirModalEditar(id) {
+    const espacio = espaciosGlobal.find(e => e.id_recurso === id);
+    if (!espacio) {
+        mostrarToast("Error: No se encontraron los datos del espacio", "danger");
+        return;
+    }
+    
+    // Asegurar que los edificios están cargados
+    if (edificios.length === 0) {
+        await getEdificios();
+    }
+    await cargarSelectCaracteristicasEditar(id);
+    
+    // Rellenar el formulario - TODOS LOS DATOS DEL ESPACIO
+    document.getElementById('editId').value = espacio.id_recurso;
+    document.getElementById('editIdDisplay').value = espacio.id_recurso;
+    document.getElementById('editDescripcion').value = espacio.descripcion || '';
+    
+    // Estado: activo/inactivo
+    const estadoSelect = document.getElementById('editEstado');
+    if (estadoSelect) {
+        estadoSelect.value = espacio.activo ? "1" : "0";
+    }
+
+    // Especial: sí/no
+    const especialSelect = document.getElementById('editEspecial');
+    if (especialSelect) {
+        especialSelect.value = espacio.especial ? "1" : "0";
+    }
+    
+    // Tipo: aula u otro espacio
+    const tipoSelect = document.getElementById('editTipo');
+    if (tipoSelect) {
+        tipoSelect.value = espacio.es_aula ? "1" : "0";
+    }
+    
+    // Cargar select de edificios CON el valor seleccionado
+    await cargarSelectEdificios('editEdificio', espacio.id_edificio);
+    
+    // Cargar planta
+    const plantaSelect = document.getElementById('editPlanta');
+    if (plantaSelect) {
+        if (espacio.numero_planta !== undefined && espacio.numero_planta !== null) {
+            plantaSelect.value = String(espacio.numero_planta);
+            obtenerPlantas(espacio.id_edificio, 'editar', espacio.numero_planta);
+        } else {
+            plantaSelect.value = "";
+        }
+    }
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalEditar'));
+    modal.show();
+}
+
+async function verEspacio(id) {
+    const espacio = espaciosGlobal.find(e => e.id_recurso === id);
+    if (!espacio) return;
+    
+    const nombreEdificio = espacio.nombre_edificio || 'Sin edificio';
+    const nombrePlanta = espacio.nombre_planta || getNombrePlanta(espacio.numero_planta);
+    
+    document.getElementById('verId').textContent = espacio.id_recurso;
+    document.getElementById('verDescripcion').textContent = espacio.descripcion || 'Sin descripción';
+    document.getElementById('verEdificio').textContent = nombreEdificio;
+    document.getElementById('verPlanta').textContent = nombrePlanta;
+    document.getElementById('verTipo').textContent = espacio.es_aula ? 'Aula' : 'Otro espacio';
+    document.getElementById('verEstado').textContent = espacio.activo ? 'Activo' : 'Inactivo';
+    document.getElementById('verEspecial').textContent = espacio.especial ? 'Sí' : 'No';
+    let verCaracteristicas = document.getElementById('verCaracteristicas');
+    verCaracteristicas.innerHTML = '';
+    let caracteristicas=await getCaracteristicasEspacio(espacio.id_recurso);
+    if (caracteristicas && caracteristicas.length > 0) {
+        let ul = document.createElement('ul');
+        caracteristicas.forEach(caracteristica => {
+            let li = document.createElement("li");
+            li.textContent = caracteristica.nombre;
+            ul.appendChild(li);
+        });
+        verCaracteristicas.appendChild(ul);
+    } else {
+        verCaracteristicas.textContent = 'No';
+    }
+}
+
+async function guardarEspacio(evento) {
+    evento.preventDefault();
+    
+    const esCreacion = evento.target.id === 'formCrearEspacio';
+    
+    let usuario=sessionStorage.getItem("id_usuario");
+    let id, id_recurso, descripcion, tipo, id_edificio, numero_planta, activo, especial, es_aula;
+    let caracteristicas=[];
+    let arraycaracteristicas=[];
+    
+    if (esCreacion) {
+        id_recurso = document.getElementById('crearId')?.value;
+        descripcion = document.getElementById('crearDescripcion')?.value.trim();
+        tipo = document.getElementById('crearTipo')?.value;
+        id_edificio = document.getElementById('crearEdificio')?.value;
+        numero_planta = document.getElementById('crearPlanta')?.value;
+        activo = document.getElementById('crearEstado')?.value === "1";
+        especial = document.getElementById('crearEspecial')?.value === "1";
+        caracteristicas = Array.from(document.getElementById('crearCaracteristicas').selectedOptions).map(opt => opt.value)
+        .filter(valor => valor !== '')   // opcional: quitar "Ninguna"
+        .map(valor => Number(valor));
+
+        arraycaracteristicas = caracteristicas.map(id => ({
+            id_caracteristica: id
+        }));
+    } else {
+        id = document.getElementById('editId')?.value;
+        id_recurso = document.getElementById('editIdDisplay')?.value;
+        descripcion = document.getElementById('editDescripcion')?.value.trim();
+        tipo = document.getElementById('editTipo')?.value;
+        id_edificio = document.getElementById('editEdificio')?.value;
+        numero_planta = document.getElementById('editPlanta')?.value;
+        activo = document.getElementById('editEstado')?.value === "1";
+        especial = document.getElementById('editEspecial')?.value === "1";
+        
+        caracteristicas = Array.from(document.getElementById("editCaracteristicas").selectedOptions).map(opt => opt.value)
+        .filter(valor => valor !== '')   // opcional: quitar "Ninguna"
+        .map(valor => Number(valor));
+
+        arraycaracteristicas = caracteristicas.map(id => ({
+            id_caracteristica: id
+        }));
+    }
+    
+    es_aula = tipo === "1";
+    
+    if (!id_recurso || !descripcion || !id_edificio || numero_planta === '') {
+        mostrarToast("Por favor, complete todos los campos requeridos", "warning");
+        return;
+    }
+    
+    const datos = {
+        id_recurso: id_recurso,
+        descripcion: descripcion,
+        activo: activo ? 1 : 0,
+        especial: especial ? 1 : 0,
+        numero_planta: parseInt(numero_planta),
+        id_edificio: parseInt(id_edificio),
+        es_aula: es_aula ? 1 : 0,
+        id_usuario: usuario
+    };
+    
+    try {
+        let response;
+        let responsecaracteristicas;
+        let url;
+        let cambios=false;
+        
+        if (!esCreacion && id) {
+            url = `${API}/espacios/${id}`;
+            response = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(datos)
+            });
+            
+            let caracteristicasantes=await getCaracteristicasEspacio(id);
+            for (let caracteristica of caracteristicasantes) {
+                url = `${API}/espacios/${id}/caracteristicas`;
+                responsecaracteristicas = await fetch(url, {
+                    method: "DELETE",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
+
+            for (let caracteristica of arraycaracteristicas) {
+                url = `${API}/espacios/${id}/caracteristicas`;
+                responsecaracteristicas = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
+            let caracteristicasdespues=await getCaracteristicasEspacio(id);
+
+            if(JSON.stringify(caracteristicasantes) !== JSON.stringify(caracteristicasdespues)) {
+                mostrarToast(
+                    "Características actualizadas correctamente",
+                    "success"
+                );
+                cambios=true;
+            }
+        } else {
+            url = `${API}/espacios`;
+            response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(datos)
+            });
+
+            for (let caracteristica of arraycaracteristicas) {
+                url = `${API}/espacios/${datos.id_recurso}/caracteristicas`;
+                responsecaracteristicas = await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({id_caracteristica: caracteristica.id_caracteristica, id_usuario: usuario})
+                });
+            }
+        }
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            if (result.errors) {
+                const mensajes = Object.values(result.errors).join("<br>");
+                throw new Error(mensajes);
+            } else {
+                throw new Error(result.message || `Error ${response.status}`);
+            }
+        }
+        
+        if(response.status==200&&!cambios){
+            mostrarToast(
+                "No han habido cambios",
+                "warning"
+            );
+        }else if(response.status!=200){
+            mostrarToast(
+                esCreacion ? "Espacio creado correctamente" : "Espacio actualizado correctamente",
+                "success"
+            );
+        }
+        
+        const modalId = esCreacion ? 'modalCrear' : 'modalEditar';
+        const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+        if (modal) modal.hide();
+        
+        await cargarTodosLosDatos();
+        
+    } catch (error) {
+        console.error("Error guardando espacio:", error);
+        mostrarToast(error.message, "danger");
+    }
+}
+
+// ************  CARGAR DATOS ****************** //
+
+async function cargarTodosLosDatos() {
+    try {
+        
+        const contenedor = document.getElementById('espaciosContainer');
+        if (contenedor) {
+            contenedor.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden text-black">Cargando...</span>
+                    </div>
+                    <p class="text-black mt-2">Cargando espacios...</p>
+                </div>
+            `;
+        }
+        
+        await getEdificios();
+        const espacios = await getEspacios();
+        mostrarEspacios(espacios);
+        
+        
+    } catch (error) {
+        console.error("Error en carga:", error);
+        
+        const contenedor = document.getElementById('espaciosContainer');
+        if (contenedor) {
+            contenedor.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-exclamation-triangle-fill text-danger fs-1"></i>
+                    <p class="text-black text-danger mt-3">Error al cargar los espacios</p>
+                    <p class="text-black text-muted">${error.message}</p>
+                    <button class="btn btn-primary mt-2" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise"></i> Reintentar
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+
+// ************  LIMPIAR BACKDROPS ****************** //
+
+function limpiarBackdrops() {
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+}
+
+// ************  INICIALIZACIÓN ****************** //
+
+document.addEventListener("DOMContentLoaded", function () {
+    cargarTodosLosDatos();
+    
+    const formCrear = document.getElementById('formCrearEspacio');
+    if (formCrear) {
+        formCrear.addEventListener('submit', guardarEspacio);
+    }
+    
+    const formEditar = document.getElementById('formEditarEspacio');
+    if (formEditar) {
+        formEditar.addEventListener('submit', guardarEspacio);
+    }
+    
+    const formEliminar = document.getElementById('formEliminarEspacio');
+    if (formEliminar) {
+        formEliminar.addEventListener('submit', (e) => {
+            e.preventDefault();
+            eliminarEspacio();
+        });
+    }
+    
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('hidden.bs.modal', limpiarBackdrops);
+    });
+});
+
+// Exportar funciones para uso global
+window.abrirModalCrear = abrirModalCrear;
+window.abrirModalEditar = abrirModalEditar;
+window.verEspacio = verEspacio;

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <!-- PRIMERO: Definir BASE -->
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+
+        <!-- Cargar authGuard PRIMERO -->
+        <script src="/frontend/javascript/sesion/authGuard.js"></script>
+
+        <!-- En menuadministrador.html y otras páginas de admin -->
+        <script>
+            const rol = Number(sessionStorage.getItem("rol"));
+            
+            // Admin (30) y super-admin (40) pueden acceder
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                    generarPagina("salonactos", rol);
+                };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        </script>
+        <title>Salón de actos - IES Bajo Aragón</title>
+
+        <!-- DayPilot -->
+        <script src="../../../assets/daypilot/daypilot-all.min.js"></script>
+        <link rel="stylesheet" href="../../../assets/css/calendar_green.css" />
+        <style>
+            .cursor-pointer {
+                cursor: pointer !important;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="header"></div>
+
+        <main class="container-fluid">
+            <!-- CONTENEDOR CALENDARIO -->
+
+            <div class="container p-4">
+                <div class="row">
+                <!-- NAVEGACIÓN SEMANAL -->
+                    <section class="d-flex flex-column mb-2 mb-lg-5 position-relative">
+                        
+                        <div id="cargandoreservas"
+                            class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                            style="z-index: 10;">
+
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Enviando reserva...</span>
+                                </div>
+                                <div class="mt-2 fw-semibold text-black">Cargando...</div>
+                            </div>
+                        </div>
+
+                        <div class="row d-flex justify-content-between align-items-center mt-3 mb-3">
+
+                            <button id="prevWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-left-circle fs-2"></i>
+                            </button>
+                            <h2 class="col-auto">Salón de actos</h2>
+                            <button id="nextWeek"
+                                    type="button"
+                                    class="btn btn-outline-secondary rounded-circle d-flex align-items-center justify-content-center p-0 border-0"
+                                    style="width: 2.5rem; height: 2.5rem;">
+                                <i class="bi bi-arrow-right-circle fs-2"></i>
+                            </button>
+
+                        </div>
+
+                        <!-- CALENDARIO -->
+                        <div id="dp" class="flex-grow-1"></div>
+                    </section>
+
+                </div>
+
+            </div>
+            <div class="position-fixed bottom-0 end-0 p-3 w-auto me-2 mb-2 me-md-5 mb-md-5" style="z-index:1030; right: 0 !important;">
+                <a id="btnVolver"
+                class="btn bg-azul text-light rounded-pill px-3 fs-5" style="border: 1px solid #E6F5F0;">
+                    <i class="bi bi-caret-left-fill"></i>
+                    Volver
+                </a>
+            </div>
+        </main>
+
+        <footer id="footer"></footer>
+
+
+        <!-- ============================= -->
+        <!-- SCRIPT PRINCIPAL DEL CALENDARIO -->
+        <!-- ============================= -->
+
+        <script type="module">
+
+        import { generarEventosSegunRecurso } from "/frontend/javascript/salon-actos/crud.js";
+        import { mostrarToast } from '/frontend/javascript/reservas/crud.js'
+
+        const idRecurso = "salon";
+
+        let horainicio = 8;
+        if(sessionStorage.getItem("rol") == "10"){
+            horainicio = 15;
+        }
+        let horafin = 15;
+        if(sessionStorage.getItem("rol") == "10" || sessionStorage.getItem("rol") == "30" || sessionStorage.getItem("rol") == "40"){
+            horafin = 23;
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            if (!idRecurso) {
+                console.error("No se ha recibido id del recurso en la URL");
+                return;
+            }
+
+            const dp = new DayPilot.Calendar("dp", {
+
+                viewType: "WorkWeek",
+                theme: "calendar_green",
+                startDate: DayPilot.Date.today(),
+
+                locale: "es-es",
+                headerDateFormat: "dd/MM/yyyy",
+                weekStarts: 1,
+
+                cellDuration: 5,
+                cellHeight: 8,
+                businessBeginsHour: horainicio,
+                businessEndsHour: horafin,
+
+                eventDeleteHandling: "Disabled",
+                heightSpec: "BusinessHoursNoScroll",
+
+                // 🎨 Cambiar cursor según tipo
+                onBeforeEventRender: function(args) {
+                    args.data.cssClass = "cursor-pointer";
+
+                    // Si la reserva no está autorizada, se pinta de naranja
+                    if (args.data.autorizada === null) {
+                        args.data.backColor = "#cc6c11"; // naranja
+                        args.data.barColor = "#bb5c0f";
+                    }
+                },
+
+                // 🧠 CLICK EN EVENTO
+                onEventClick: async function(args) {
+
+                    const evento = args.e.data;
+
+                    // =============================
+                    // 🟢 CREAR RESERVA (Disponible)
+                    // =============================
+
+                    let fechaactual=new Date();
+                    let inicio=new Date(evento.start.toString());
+                    
+                    if (evento.bloqueBase) {
+                        if(fechaactual>inicio){
+                            mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                            return;
+                        }
+
+                        const modal = await DayPilot.Modal.form([
+                            { name: "Asignatura", id: "asignatura", type: "text" },
+                            { name: "Grupo", id: "grupo", type: "text" },
+                            { name: "Profesor", id: "profesor", type: "text" },
+                            { name: "Actividad", id: "actividad", type: "text" },
+                            { name: "Observaciones", id: "observaciones", type: "textarea" }
+                        ]);
+
+                        if (!modal.result) return;
+
+                        let arraynecesidades = await fetch(`${API}/necesidades`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        });
+                        let resnecesidades = await arraynecesidades.json();
+                        
+                        const campos = [
+                            {
+                                name: "Seleccione las necesidades",
+                            },
+                            ...resnecesidades.data.map(n => ({
+                                name: " "+n.nombre,
+                                id: n.id_necesidad,
+                                type: "checkbox"
+                            }))
+                        ];
+
+                        const modalnecesidades = await DayPilot.Modal.form(campos, {});
+
+                        const seleccionadas = Object.entries(modalnecesidades.result)
+                        .filter(([key, value]) => value === true)
+                        .map(([key]) => ({
+                            id_necesidad: key
+                        }));
+
+                        const idusuario = sessionStorage.getItem("id_usuario");
+                        let autorizada=null;
+                        let idusuarioautoriza=null;
+                        if(sessionStorage.getItem("rol")==30||sessionStorage.getItem("rol")==40){
+                            autorizada=true;
+                            idusuarioautoriza=idusuario;
+                        }
+                            
+                        fechaactual=new Date();
+                        inicio=new Date(evento.start);
+                        if(fechaactual>=inicio){
+                            mostrarToast("No se pueden crear reservas en el pasado", 'danger');
+                            return;
+                        }
+
+                        let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+                        document.getElementById('cargandoreservas').classList.remove('d-none');
+                        const response = await fetch(`${API}/reservaEspacio`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                                asignatura: modal.result.asignatura,
+                                grupo: modal.result.grupo,
+                                profesor: modal.result.profesor,
+                                observaciones: modal.result.observaciones,
+                                f_creacion: fecha,
+                                inicio: evento.start.replace("T", " "),
+                                fin: evento.end.replace("T", " "),
+                                actividad: modal.result.actividad,
+                                id_espacio: idRecurso,
+                                id_usuario: idusuario,
+                                id_usuario_autoriza: idusuarioautoriza,
+                                correo: sessionStorage.getItem("correo"),
+                                autorizada: autorizada,
+                                necesidades: seleccionadas,
+                                tipo: "Reserva_espacio"
+                            })
+                        });
+                        document.getElementById('cargandoreservas').classList.add('d-none');
+                        
+                        if (!response.ok) {
+                            mostrarToast("Error creando la reserva: Puede que ya haya una reserva entre esas horas", 'danger');
+                        }else{
+                            mostrarToast("Reserva creada correctamente", 'success')
+                        }
+
+                        const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+                        dp.events.list = nuevosEventos;
+                        dp.update();
+                    }
+
+                    // =============================
+                    // 🔵 EDITAR RESERVA
+                    // =============================
+                    else {
+                        if((sessionStorage.getItem("rol")!=30&&sessionStorage.getItem("rol")!=40&&sessionStorage.getItem("id_usuario")!=evento.id_usuario)||fechaactual>inicio){
+                            let html = `
+                                <div style="line-height:1.6">
+                                    <b>Asignatura:</b> ${evento.asignatura}<br>
+                                    <b>Grupo:</b> ${evento.grupo}<br>
+                                    <b>Profesor:</b> ${evento.profesor}<br>
+                                    <b>Observaciones:</b> ${evento.observaciones || "-"}
+                            `;
+
+                            let necesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
+                            let resnecesidades = await necesidadesreserva.json();
+                            if(!resnecesidades||!resnecesidades.data||resnecesidades.data.length==0){
+                                html=html+'</div>';
+                            }else{
+                                html=html+'<br><b>Necesidades:</b><br><ul>'
+                                resnecesidades.data.forEach(necesidad => {
+                                    html=html+'<li>'+necesidad.nombre+'</li>'
+                                });
+                                html=html+'</ul></div>'
+                            }
+
+                            DayPilot.Modal.alert(html);
+                        }else{
+                            const modal = await DayPilot.Modal.form([
+                                { name: "Asignatura", id: "asignatura", type: "text" },
+                                { name: "Grupo", id: "grupo", type: "text" },
+                                { name: "Profesor", id: "profesor", type: "text" },
+                                { name: "Actividad", id: "actividad", type: "text" },
+                                { name: "Observaciones", id: "observaciones", type: "textarea" }
+                            ], {
+                                asignatura: evento.asignatura,
+                                grupo: evento.grupo,
+                                profesor: evento.profesor,
+                                actividad: evento.actividad,
+                                observaciones: evento.observaciones
+                            });
+                            
+                            if (!modal.result) return;
+
+                            let arraynecesidades = await fetch(`${API}/necesidades`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
+                            let resnecesidades = await arraynecesidades.json();
+
+                            let resnecesidadesreserva = await fetch(`${API}/reservas-necesidades/${evento.id}/necesidades`, {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            });
+                            let necesidadesreserva = await resnecesidadesreserva.json();
+                            const idsSeleccionados = necesidadesreserva.data.map(n => n.id_necesidad);
+                            
+                            const campos = [
+                                {
+                                    name: "Seleccione las necesidades"
+                                },
+                                ...resnecesidades.data.map(n => ({
+                                    name: " "+n.nombre,
+                                    id: String(n.id_necesidad),
+                                    type: "checkbox"
+                                }))
+                            ];
+                            
+                            const valoresIniciales = {};
+
+                            idsSeleccionados.forEach(id => {
+                                valoresIniciales[id] = true;
+                            });
+
+                            const modalnecesidades = await DayPilot.Modal.form(campos, valoresIniciales);
+
+                            const seleccionadas = Object.entries(modalnecesidades.result)
+                            .filter(([key, value]) => value === true)
+                            .map(([key]) => ({
+                                id_necesidad: key
+                            }));
+                            
+                            fechaactual=new Date();
+                            inicio=new Date(evento.start);
+                            if(fechaactual>=inicio){
+                                mostrarToast("No se pueden modificar reservas en el pasado", 'danger');
+                                return;
+                            }
+
+                            let fecha=fechaactual.toLocaleString('sv-SE', { hour12: false }).replace("T", " ");
+
+                            const response = await fetch(`${API}/reservaEspacio/${evento.id}`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Bearer ${token}`
+                                },
+                                body: JSON.stringify({
+                                    asignatura: modal.result.asignatura,
+                                    grupo: modal.result.grupo,
+                                    profesor: modal.result.profesor,
+                                    actividad: modal.result.actividad,
+                                    observaciones: modal.result.observaciones,
+                                    f_creacion: evento.f_creacion,
+                                    inicio: evento.start.replace("T", " "),
+                                    fin: evento.end.replace("T", " "),
+                                    actividad: modal.result.actividad,
+                                    id_espacio: idRecurso,
+                                    id_usuario: evento.idusuario,
+                                    id_usuario_actor: sessionStorage.getItem("id_usuario"),
+                                    autorizada: evento.autorizada,
+                                    necesidades: seleccionadas,
+                                    tipo: "Reserva_espacio"
+                                })
+                            });
+
+                            let res = await response.json()
+                            
+                            if (!response.ok) {
+                                mostrarToast("Error actualizando la reserva", 'danger');
+                                return;
+                            }else if(res.data.status=="no_changes"){
+                                mostrarToast("No han habido cambios", 'warning');
+                            }else{
+                                mostrarToast("Reserva actualizada correctamente", 'success');
+                            }
+
+                            const nuevosEventos = await generarEventosSegunRecurso(idRecurso);
+                            dp.events.list = nuevosEventos;
+                            dp.update();
+                        }
+                    }
+                }
+
+            });
+
+            try {
+                const eventos = await generarEventosSegunRecurso(idRecurso);
+                dp.events.list = eventos;
+                dp.init();
+            } catch (error) {
+                console.error("Error cargando eventos:", error);
+            }
+
+            // ====== NAVEGACIÓN SEMANAL ======
+
+            document.getElementById("prevWeek").addEventListener("click", () => {
+                dp.startDate = dp.startDate.addDays(-7);
+                dp.update();
+            });
+
+            document.getElementById("nextWeek").addEventListener("click", () => {
+                dp.startDate = dp.startDate.addDays(7);
+                dp.update();
+            });
+
+        });
+
+        // ====== BOTÓN VOLVER ======
+
+        document.getElementById("btnVolver").addEventListener("click", () => {
+            window.location.href = `${BASE}/vistas/menu.html    `;
+        });
+
+        </script>
+
+    </body>
+</html>

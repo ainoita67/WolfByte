@@ -1,0 +1,386 @@
+<?php
+declare(strict_types=1);
+
+namespace Models;
+
+use Core\DB;
+use PDOException;
+
+class ReservaModel
+{
+    private DB $db;
+
+    public function __construct()
+    {
+        $this->db = new DB();
+    }
+
+    /**
+     * Obtener reservas
+     */
+    public function getAll(): array
+    {
+        try {
+            return $this->db
+                ->query("SELECT * FROM Reserva")
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas");
+        }
+    }
+
+    /**
+     * Obtener reservas por usuario
+     */
+    public function findByUsuario(int $idUsuario): array
+    {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
+        try{
+            return $this->db
+                ->query("
+                    SELECT *
+                    FROM(
+                        SELECT
+                            r.id_reserva,
+                            r.autorizada,
+                            r.id_usuario_autoriza,
+                            r.tipo,
+                            r.f_creacion,
+                            r.inicio,
+                            r.fin,
+                            rec.descripcion AS recurso,
+                            r.asignatura,
+                            r.grupo,
+                            r.profesor,
+                            rec.id_recurso,
+                            NULL AS unidades,
+                            NULL AS usaenespacio,
+                            re.actividad,
+                            GROUP_CONCAT(n.id_necesidad) AS necesidades,
+                            GROUP_CONCAT(n.nombre) AS nombrenecesidades,
+                            r.observaciones,
+                            u.id_usuario,
+                            u.nombre AS nombreusuario
+                        FROM Reserva r
+                        JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                        JOIN Recurso rec ON rec.id_recurso = re.id_espacio
+                        LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
+                        LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                        JOIN Usuario u ON r.id_usuario = u.id_usuario
+                        WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND u.id_usuario=:id_usuario1
+                        GROUP BY r.id_reserva
+
+                        UNION ALL
+
+                        SELECT
+                            r.id_reserva,
+                            r.autorizada,
+                            r.id_usuario_autoriza,
+                            r.tipo,
+                            r.f_creacion,
+                            r.inicio,
+                            r.fin,
+                            rec.descripcion AS recurso,
+                            r.asignatura,
+                            r.grupo,
+                            r.profesor,
+                            rec.id_recurso,
+                            rp.unidades,
+                            rp.usaenespacio,
+                            NULL AS actividad,
+                            NULL AS necesidades,
+                            NULL AS nombrenecesidades,
+                            r.observaciones,
+                            u.id_usuario,
+                            u.nombre AS nombreusuario
+                        FROM Reserva r
+                        JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                        JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                        JOIN Usuario u ON r.id_usuario = u.id_usuario
+                        WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND u.id_usuario=:id_usuario2
+                    ) union_result ORDER BY inicio, id_reserva;
+                ")
+                ->bind(':fecha1', $fecha)
+                ->bind(':fecha2', $fecha)
+                ->bind(':id_usuario1', $idUsuario)
+                ->bind(':id_usuario2', $idUsuario)
+                ->fetchAll();
+        } catch (PDOException $e) {
+            throw new \Exception("Error al obtener reservas del usuario");
+        }
+    }
+
+    /**
+     * Obtener una reserva por ID
+     */
+    public function findById(int $id): array|false
+    {
+        return $this->db
+            ->query("SELECT r.*, u.correo FROM Reserva r JOIN Usuario u ON r.id_usuario=u.id_usuario WHERE id_reserva = :id")
+            ->bind(':id', $id)
+            ->fetch();
+    }
+
+    /**
+     * Obtener reservas pendientes de autorizar
+     */
+    public function getReservasPendientes(): array|false
+    {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
+        return $this->db
+            ->query("
+                SELECT
+                    r.id_reserva,
+                    r.autorizada,
+                    r.id_usuario_autoriza,
+                    r.tipo,
+                    r.f_creacion,
+                    r.inicio,
+                    r.fin,
+                    rec.descripcion AS recurso,
+                    r.asignatura,
+                    r.grupo,
+                    r.profesor,
+                    rec.id_recurso,
+                    NULL AS unidades,
+                    NULL AS usaenespacio,
+                    re.actividad,
+                    GROUP_CONCAT(n.id_necesidad) AS necesidades,
+                    r.observaciones,
+                    u.id_usuario,
+                    u.nombre AS nombreusuario
+                FROM Reserva r
+                JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                JOIN Recurso rec ON rec.id_recurso = re.id_espacio
+                LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
+                LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                JOIN Usuario u ON r.id_usuario = u.id_usuario
+                WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND r.autorizada IS NULL
+                GROUP BY r.id_reserva
+
+                UNION ALL
+
+                SELECT
+                    r.id_reserva,
+                    r.autorizada,
+                    r.id_usuario_autoriza,
+                    r.tipo,
+                    r.f_creacion,
+                    r.inicio,
+                    r.fin,
+                    rec.descripcion AS recurso,
+                    r.asignatura,
+                    r.grupo,
+                    r.profesor,
+                    rec.id_recurso,
+                    rp.unidades,
+                    rp.usaenespacio,
+                    NULL AS actividad,
+                    NULL AS necesidades,
+                    r.observaciones,
+                    u.id_usuario,
+                    u.nombre AS nombreusuario
+                FROM Reserva r
+                JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                JOIN Usuario u ON r.id_usuario = u.id_usuario
+                WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND r.autorizada IS NULL
+            ")
+            ->bind(':fecha1', $fecha)
+            ->bind(':fecha2', $fecha)
+            ->fetchAll();
+    }
+
+    /**
+     * Obtener reservas próximas al día de hoy
+     */
+    public function getReservasProximas(): array|false
+    {
+        date_default_timezone_set('Europe/Madrid');
+        $fecha = date('Y-m-d H:i:s');
+
+        return $this->db
+            ->query("
+                SELECT *
+                FROM(
+                    SELECT
+                        r.id_reserva,
+                        r.autorizada,
+                        r.id_usuario_autoriza,
+                        r.tipo,
+                        r.f_creacion,
+                        r.inicio,
+                        r.fin,
+                        rec.descripcion AS recurso,
+                        r.asignatura,
+                        r.grupo,
+                        r.profesor,
+                        rec.id_recurso,
+                        NULL AS unidades,
+                        NULL AS usaenespacio,
+                        re.actividad,
+                        GROUP_CONCAT(n.id_necesidad) AS necesidades,
+                        r.observaciones,
+                        u.id_usuario,
+                        u.nombre AS nombreusuario
+                    FROM Reserva r
+                    JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                    JOIN Recurso rec ON rec.id_recurso = re.id_espacio
+                    LEFT JOIN Necesidad_R_espacio nre ON re.id_reserva=nre.id_reserva_espacio
+                    LEFT JOIN Necesidad n ON nre.id_necesidad=n.id_necesidad
+                    JOIN Usuario u ON r.id_usuario = u.id_usuario
+                    WHERE r.tipo = 'Reserva_espacio' AND r.inicio>:fecha1 AND r.autorizada=1
+                    GROUP BY r.id_reserva
+
+                    UNION ALL
+
+                    SELECT
+                        r.id_reserva,
+                        r.autorizada,
+                        r.id_usuario_autoriza,
+                        r.tipo,
+                        r.f_creacion,
+                        r.inicio,
+                        r.fin,
+                        rec.descripcion AS recurso,
+                        r.asignatura,
+                        r.grupo,
+                        r.profesor,
+                        rec.id_recurso,
+                        rp.unidades,
+                        rp.usaenespacio,
+                        NULL AS actividad,
+                        NULL AS necesidades,
+                        r.observaciones,
+                        u.id_usuario,
+                        u.nombre AS nombreusuario
+                    FROM Reserva r
+                    JOIN Reserva_Portatiles rp ON r.id_reserva = rp.id_reserva_material
+                    JOIN Recurso rec ON rec.id_recurso = rp.id_material
+                    JOIN Usuario u ON r.id_usuario = u.id_usuario
+                    WHERE r.tipo = 'Reserva_material' AND r.inicio>:fecha2 AND r.autorizada=1
+                ) union_result ORDER BY inicio, id_reserva;
+            ")
+            ->bind(':fecha1', $fecha)
+            ->bind(':fecha2', $fecha)
+            ->fetchAll();
+    }
+
+    public function create(array $data): array
+    {
+        try{
+            $this->db
+                ->query("
+                    INSERT INTO Reserva (asignatura, autorizada, observaciones, grupo, profesor, f_creacion, inicio, fin, id_usuario, id_usuario_autoriza, tipo)
+                    VALUES (:asignatura, :autorizada, :observaciones, :grupo, :profesor, :f_creacion, :inicio, :fin, :id_usuario, :id_usuario_autoriza, :tipo)
+                ")
+                ->bind(':asignatura', $data['asignatura'])
+                ->bind(':autorizada', $data['autorizada'] ?? null)
+                ->bind(':observaciones', $data['observaciones'] ?? null)
+                ->bind(':grupo', $data['grupo'])
+                ->bind(':profesor', $data['profesor'])
+                ->bind(':f_creacion', $data['f_creacion'])
+                ->bind(':inicio', $data['inicio'])
+                ->bind(':fin', $data['fin'])
+                ->bind(':id_usuario', $data['id_usuario'])
+                ->bind(':id_usuario_autoriza', $data['id_usuario_autoriza'])
+                ->bind(':tipo', $data['tipo'])
+                ->execute();
+                
+            return $this->findById((int)$this->db->lastId());
+        } catch (PDOException $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function updateFechas(
+        int $idReserva,
+        string $inicio,
+        string $fin
+    ): void {
+        $this->db
+            ->query("
+                UPDATE Reserva
+                SET inicio = :inicio,
+                    fin = :fin
+                WHERE id_reserva = :id
+            ")
+            ->bind(':inicio', $inicio)
+            ->bind(':fin', $fin)
+            ->bind(':id', $idReserva)
+            ->execute();
+    }
+
+    public function getReservasSalonActos(): array
+    {
+        return $this->db
+            ->query("
+                SELECT 
+                    r.id_reserva,
+                    r.asignatura,
+                    r.tipo,
+                    r.autorizada,
+                    r.observaciones,
+                    r.grupo,
+                    r.profesor,
+                    r.f_creacion,
+                    r.inicio,
+                    r.fin,
+                    r.id_usuario,
+                    r.id_usuario_autoriza,
+                    r.tipo,
+                    u.nombre,
+                    u.apellidos,
+                    re.actividad,
+                    re.id_espacio
+                FROM Reserva r
+                JOIN Usuario u ON r.id_usuario = u.id_usuario
+                JOIN Reserva_espacio re ON r.id_reserva = re.id_reserva
+                WHERE re.id_espacio = 'salon'
+                ORDER BY r.inicio
+            ")
+            ->fetchAll();
+    }
+
+    public function update(int $id, array $data): bool{
+        try{
+            $this->db
+                ->query("
+                    UPDATE Reserva SET
+                    asignatura = :asignatura,
+                    autorizada = :autorizada,
+                    observaciones = :observaciones,
+                    grupo = :grupo,
+                    profesor = :profesor,
+                    f_creacion = :f_creacion,
+                    inicio = :inicio,
+                    fin = :fin,
+                    id_usuario = :id_usuario,
+                    id_usuario_autoriza = :id_usuario_autoriza,
+                    tipo = :tipo
+                    WHERE id_reserva = :id
+                ")
+                ->bind(':asignatura',           $data['asignatura'])
+                ->bind(':autorizada',           $data['autorizada'])
+                ->bind(':observaciones',        $data['observaciones'])
+                ->bind(':grupo',                $data['grupo'])
+                ->bind(':profesor',             $data['profesor'])
+                ->bind(':f_creacion',           $data['f_creacion'])
+                ->bind(':inicio',               $data['inicio'])
+                ->bind(':fin',                  $data['fin'])
+                ->bind(':id_usuario',           $data['id_usuario'])
+                ->bind(':id_usuario_autoriza',  $data['id_usuario_autoriza'])
+                ->bind(':tipo',                 $data['tipo'])
+                ->bind(':id',                   $id)
+                ->execute();
+
+            return $this->db->query("SELECT ROW_COUNT() AS affected")->fetch()['affected'] > 0;
+        } catch (PDOException $e) {
+            throw new \Exception("Error al actualizar la reserva");
+        }
+    }
+}

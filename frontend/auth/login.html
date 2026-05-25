@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <script>const BASE = window.location.origin + "/frontend";</script>
+        <script>const API = window.location.origin + "/API";</script>
+        <script>
+            const rol = sessionStorage.getItem("rol");
+            const script1 = document.createElement("script");
+            script1.src = BASE + "/javascript/includes.js";
+            script1.onload = () => {
+                const script2 = document.createElement("script");
+                script2.src = BASE + "/javascript/menu.js";
+                script2.onload = () => {
+                generarPagina("login", rol);
+                };
+                // posibles: aulas, salonactos, portatiles, espacios, incidencias, liberar, administrador
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+
+        </script>
+        <title>Inicio de sesión - IES Bajo Aragón</title>
+    </head>
+    <body>
+
+        <div id="header"></div>
+
+        <main class="p-5 row align-items-center main-content">
+            <form method="post" id="loginForm" class="card col-md-6 offset-md-3 p-5 text-center border rounded-5 shadow-sm">
+                <div id="cargandologin"
+                    class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75"
+                    style="z-index: 10;">
+
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Enviando formulario...</span>
+                        </div>
+                        <div class="mt-2 fw-semibold text-black">Cargando...</div>
+                    </div>
+                </div>
+
+                <h1 class="mb-4 fw-bold fs-3">Inicio de sesión</h1>
+
+                <div class="mb-3 text-start mt-3">
+                    <label for="usuario">Usuario</label>
+                    <input type="email" name="usuario" id="usuario" class="form-control" placeholder="&#128100 Usuario" required>
+                </div>
+
+                <div class="mb-4 text-start mt-5">
+                    <label for="clave">Clave</label>
+                    <input type="password" name="clave" id="clave" class="form-control" placeholder="&#128274 Clave" required>
+                </div>
+
+                <div id="mostrarerror" class="d-none bg-danger text-white fw-bold mb-4"></div>
+                
+                <button type="submit" id="iniciosesion" class="enviar p-2 mb-3 mt-5 fs-6">Iniciar sesión</button>
+            </form>
+        </main>
+
+        <script src="/frontend/javascript/sesion/login.js"></script>
+        <footer id="footer"></footer>
+    </body>
+</html>
